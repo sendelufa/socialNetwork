@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class Token {
+public class TokenApi {
 
   private String token;
 

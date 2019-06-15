@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class Response {
+public class ResponseApi {
 
   private String error;
   private long timestamp;

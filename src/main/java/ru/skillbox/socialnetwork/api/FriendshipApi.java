@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class Friendship {
+public class FriendshipApi {
 
   private int id;
   private int status_id;

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class ErrorDescription {
+public class ErrorDescriptionApi {
 
   private String[] error_description;
 

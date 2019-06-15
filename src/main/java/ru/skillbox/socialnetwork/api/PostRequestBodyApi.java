@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class PostRequestBody {
+public class PostRequestBodyApi {
 
   private String title;
   private String post_text;

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class NotificationType {
+public class NotificationTypeApi {
 
   private int id;
   private codes code;

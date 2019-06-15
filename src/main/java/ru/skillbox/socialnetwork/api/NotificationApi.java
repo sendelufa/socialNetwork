@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api;
 
 import java.util.Date;
 
-public class Notification {
+public class NotificationApi {
 
   private int id;
   private int type_id;

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class Tag {
+public class TagApi {
 
   private int id;
   private String tag;

@@ -1,10 +1,11 @@
 package ru.skillbox.socialnetwork.api;
 
-public class Post2Tag {
+public class AttachmentApi {
 
   private int id;
   private int post_id;
-  private int tag_id;
+  private String name;
+  private String path;
 
   public int getId() {
     return id;
@@ -22,11 +23,19 @@ public class Post2Tag {
     this.post_id = post_id;
   }
 
-  public int getTag_id() {
-    return tag_id;
+  public String getName() {
+    return name;
   }
 
-  public void setTag_id(int tag_id) {
-    this.tag_id = tag_id;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getPath() {
+    return path;
+  }
+
+  public void setPath(String path) {
+    this.path = path;
   }
 }

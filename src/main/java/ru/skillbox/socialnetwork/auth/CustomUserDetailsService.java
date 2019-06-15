@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service   // It has to be annotated with @Service.
-public class CustomUserDetailsService implements UserDetailsService  {
+public class CustomUserDetailsService implements UserDetailsService  {    // ++
 
   @Autowired
   private BCryptPasswordEncoder encoder;

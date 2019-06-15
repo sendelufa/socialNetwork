@@ -1,9 +1,10 @@
 package ru.skillbox.socialnetwork.model;
 
-import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
-
+import ru.skillbox.socialnetwork.entity.Token;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * пользователь соц. сети
@@ -15,8 +16,8 @@ public class Person {
      * ID
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**
@@ -92,12 +93,6 @@ public class Person {
     private boolean isApproved;
 
     /**
-     * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
-     */
-    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
-    private MessagesPermissionPerson messagesPermission;
-
-    /**
      * время последнего пребывания онлайн
      */
     @Column(name = "last_online_time")
@@ -108,6 +103,9 @@ public class Person {
      */
     @Column(name = "is_blocked")
     private boolean isBlocked;
+
+    @OneToMany
+    private List<Token> token = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -213,14 +211,6 @@ public class Person {
         isApproved = approved;
     }
 
-    public MessagesPermissionPerson getMessagesPermission() {
-        return messagesPermission;
-    }
-
-    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
-        this.messagesPermission = messagesPermission;
-    }
-
     public Date getLastOnlineTime() {
         return lastOnlineTime;
     }
@@ -235,5 +225,13 @@ public class Person {
 
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
+    }
+
+    public List<Token> getToken() {
+        return token;
+    }
+
+    public void setToken(List<Token> token) {
+        this.token = token;
     }
 }

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class ErrorDescription {
+public class  ErrorDescription {
 
   private String[] error_description;
 
@@ -8,7 +8,8 @@ public class ErrorDescription {
     return error_description;
   }
 
-  public void setError_description(String[] error_description) {
+  public ErrorDescription setError_description(String[] error_description) {
     this.error_description = error_description;
+    return this;
   }
 }

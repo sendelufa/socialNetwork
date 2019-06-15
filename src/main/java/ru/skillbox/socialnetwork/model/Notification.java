@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.model.enumeration;
+package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,8 +13,8 @@ public class Notification {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**

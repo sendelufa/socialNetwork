@@ -15,8 +15,8 @@ public class FriendshipStatus {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**
@@ -40,7 +40,8 @@ public class FriendshipStatus {
      * DECLINED - Запрос на добавление в друзья отклонён
      * SUBSCRIBED - Подписан
      */
-    @Column(name = "code")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "code", columnDefinition="ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED')")
     private CodeFriendshipStatus code;
 
     public int getId() {

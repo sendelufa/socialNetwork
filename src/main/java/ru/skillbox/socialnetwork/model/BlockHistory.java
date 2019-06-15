@@ -15,8 +15,8 @@ public class BlockHistory {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**
@@ -46,7 +46,8 @@ public class BlockHistory {
     /**
      * тип действия: BLOCK (блокировка) или UNBLOCK (разблокировка)
      */
-    @Column(name = "action")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "action", columnDefinition="ENUM('BLOCK', 'UNBLOCK')")
     private ActionBlockHistory action;
 
     public int getId() {

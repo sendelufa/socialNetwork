@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api;
 
 import java.util.Date;
 
-public class PersonEditBody {
+public class PersonEditBodyApi {
 
   private String first_name;
   private String last_name;

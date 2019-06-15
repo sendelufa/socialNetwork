@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api;
 
 import java.util.Date;
 
-public class Post {
+public class PostApi {
 
   private int id;
   private Date time;

@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api;
 
 import java.util.Date;
 
-public class FriendshipStatus {
+public class FriendshipStatusApi {
 
   private int id;
   private Date time;

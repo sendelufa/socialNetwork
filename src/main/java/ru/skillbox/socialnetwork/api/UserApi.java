@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api;
 
-public class User {
+public class UserApi {
 
   private int id;
   private String name;

@@ -16,6 +16,7 @@ public class Message {
      */
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**

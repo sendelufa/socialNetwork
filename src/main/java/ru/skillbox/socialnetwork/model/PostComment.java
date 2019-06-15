@@ -14,6 +14,7 @@ public class PostComment {
      */
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**

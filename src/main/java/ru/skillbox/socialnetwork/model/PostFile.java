@@ -13,6 +13,7 @@ public class PostFile {
      */
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**

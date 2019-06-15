@@ -15,7 +15,6 @@ public class Message {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
 
@@ -46,7 +45,7 @@ public class Message {
     /**
      * статус прочтения: SENT (не прочитано) и READ (прочитано)
      */
-    @Column(name = "read_status")
+    @Column(name = "read_status", columnDefinition="ENUM('SENT', 'READ')")
     private ReadStatusMessage readStatus;
 
     public int getId() {

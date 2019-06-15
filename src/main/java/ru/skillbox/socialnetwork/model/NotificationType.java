@@ -14,7 +14,6 @@ public class NotificationType {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
 
@@ -27,7 +26,7 @@ public class NotificationType {
     /**
      * Имя
      */
-    @Column(name = "name")
+    @Column(name = "name", columnDefinition = "ENUM('POST', 'POST_COMMENT', 'COMMENT_COMMENT', 'FRIEND_REQUEST', 'MESSAGE')")
     private NameNotificationType name;
 
     public int getId() {

@@ -15,7 +15,6 @@ public class Person {
      * ID
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
 
@@ -94,7 +93,7 @@ public class Person {
     /**
      * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
      */
-    @Column(name = "messages_permission")
+    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
     private MessagesPermissionPerson messagesPermission;
 
     /**

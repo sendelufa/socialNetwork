@@ -9,15 +9,17 @@ public class ErrorApi
         return error;
       }
 
-      public void setError(String error) {
+      public ErrorApi setError(String error) {
         this.error = error;
+        return this;
       }
 
       public ErrorDescriptionApi getError_description() {
         return error_description;
       }
 
-      public void setError_description(ErrorDescriptionApi error_description) {
+      public ErrorApi setError_description(ErrorDescriptionApi error_description) {
         this.error_description = error_description;
+        return this;
       }
     }

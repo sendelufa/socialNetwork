@@ -8,7 +8,8 @@ public class ErrorDescriptionApi {
     return error_description;
   }
 
-  public void setError_description(String[] error_description) {
+  public ErrorDescriptionApi setError_description(String[] error_description) {
     this.error_description = error_description;
+    return this;
   }
 }

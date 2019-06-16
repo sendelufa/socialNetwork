@@ -44,7 +44,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
       throws AuthenticationException {
 
     try {
-
+      // FIXME: 16.06.2019 работает через fasterxml, но нужно ли оставлять?
       // 1. Get credentials from request
       UserCredentials creds = new ObjectMapper().readValue(request.getInputStream(), UserCredentials.class);
 
@@ -83,7 +83,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
   }
 
   // A (temporary) class just to represent the user credentials
-  private static class UserCredentials {
+  private static class UserCredentials {  // FIXME: 16.06.2019 Выносить в отдельный класс или оставить внутренним?
     private String username, password;
 
     public String getUsername() {

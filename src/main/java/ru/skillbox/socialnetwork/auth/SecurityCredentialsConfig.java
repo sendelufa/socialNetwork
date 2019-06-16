@@ -8,14 +8,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity  // Enable security config. This annotation denotes config for spring security.
-public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
+public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {   // ++
   @Autowired
   private JwtConfig jwtConfig;
 
@@ -33,13 +31,13 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
         .and()
         // Add a filter to validate the tokens with every request
-        .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+        .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig))
         // authorization requests config
         .authorizeRequests()
         // allow all who are accessing "auth" service
         .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
         // must be an admin if trying to access admin area (authentication is also required here)
-        .antMatchers("/gallery").permitAll()
+//        .antMatchers("/gallery" + "/admin/**").hasRole("ADMIN")   //нужно ли?
         // Any other request must be authenticated
         .anyRequest().authenticated();
   }

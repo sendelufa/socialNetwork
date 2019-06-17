@@ -1,24 +1,23 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class PersonApi {
 
   private int id;
   private String first_name;
   private String last_name;
-  private Date reg_date;
-  private Date birth_date;
+  private long reg_date;
+  private long birth_date;
   private String email;
   private String phone;
   private String photo;
   private String about;
-  private String town;
+  private int town_id;
+  private int country_id;
   private messages_permissions messages_permission;
-  private String last_online_time;
-  private String is_blocked;
+  private long last_online_time;
+  private boolean is_blocked;
 
-  private enum messages_permissions {ALL, FRIENDS}
+  public enum messages_permissions {ALL, FRIENDS}
 
   public int getId() {
     return id;
@@ -44,20 +43,32 @@ public class PersonApi {
     this.last_name = last_name;
   }
 
-  public Date getReg_date() {
+  public long getReg_date() {
     return reg_date;
   }
 
-  public void setReg_date(Date reg_date) {
+  public void setReg_date(long reg_date) {
     this.reg_date = reg_date;
   }
 
-  public Date getBirth_date() {
+  public long getBirth_date() {
     return birth_date;
   }
 
-  public void setBirth_date(Date birth_date) {
+  public void setBirth_date(long birth_date) {
     this.birth_date = birth_date;
+  }
+
+  public int getTown_id() {
+    return town_id;
+  }
+
+  public long getLast_online_time() {
+    return last_online_time;
+  }
+
+  public void setLast_online_time(long last_online_time) {
+    this.last_online_time = last_online_time;
   }
 
   public String getEmail() {
@@ -92,13 +103,6 @@ public class PersonApi {
     this.about = about;
   }
 
-  public String getTown() {
-    return town;
-  }
-
-  public void setTown(String town) {
-    this.town = town;
-  }
 
   public messages_permissions getMessages_permission() {
     return messages_permission;
@@ -108,21 +112,24 @@ public class PersonApi {
     this.messages_permission = messages_permission;
   }
 
-  public String getLast_online_time() {
-    return last_online_time;
+
+  public void setTown_id(int town_id) {
+    this.town_id = town_id;
   }
 
-  public void setLast_online_time(String last_online_time) {
-    this.last_online_time = last_online_time;
+  public int getCountry_id() {
+    return country_id;
   }
 
-  public String getIs_blocked() {
+  public void setCountry_id(int country_id) {
+    this.country_id = country_id;
+  }
+
+  public boolean isIs_blocked() {
     return is_blocked;
   }
 
-  public void setIs_blocked(String is_blocked) {
+  public void setIs_blocked(boolean is_blocked) {
     this.is_blocked = is_blocked;
   }
-
-
 }

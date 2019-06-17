@@ -7,7 +7,7 @@ public class UserApi {
   private String email;
   private types type;
 
-  private enum types {MODERATOR, ADMIN}
+  public enum types {MODERATOR, ADMIN}
 
   public int getId() {
     return id;

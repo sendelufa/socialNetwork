@@ -1,13 +1,11 @@
 package ru.skillbox.socialnetwork.api;
 
-public class NotificationApi {
+public class NotificationBaseApi {
 
   private int id;
   private int type_id;
   private long sent_time;
-  private int person_id;
   private int entity_id;
-  private String contact;
   private String info;
 
   public int getId() {
@@ -34,22 +32,6 @@ public class NotificationApi {
     this.sent_time = sent_time;
   }
 
-  public String getInfo() {
-    return info;
-  }
-
-  public void setInfo(String info) {
-    this.info = info;
-  }
-
-  public int getPerson_id() {
-    return person_id;
-  }
-
-  public void setPerson_id(int person_id) {
-    this.person_id = person_id;
-  }
-
   public int getEntity_id() {
     return entity_id;
   }
@@ -58,11 +40,11 @@ public class NotificationApi {
     this.entity_id = entity_id;
   }
 
-  public String getContact() {
-    return contact;
+  public String getInfo() {
+    return info;
   }
 
-  public void setContact(String contact) {
-    this.contact = contact;
+  public void setInfo(String info) {
+    this.info = info;
   }
 }

@@ -1,17 +1,15 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class BlockHistoryApi {
 
   private int id;
-  private Date time;
+  private long time;
   private int person_id;
   private int post_id;
   private int comment_id;
   private actions action;
 
-  private enum actions {BLOCK, UNBLOCK}
+  public enum actions {BLOCK, UNBLOCK}
 
   public int getId() {
     return id;
@@ -21,11 +19,11 @@ public class BlockHistoryApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 

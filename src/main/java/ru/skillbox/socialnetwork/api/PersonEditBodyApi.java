@@ -1,20 +1,18 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class PersonEditBodyApi {
 
   private String first_name;
   private String last_name;
-  private Date birth_date;
-  private String email;
+  private long birth_date;
   private String phone;
   private String photo_id;
   private String about;
-  private String town;
+  private int town_id;
+  private int country_id;
   private messages_permissions messages_permission;
 
-  private enum messages_permissions {ALL, FRIENDS}
+  public enum messages_permissions {ALL, FRIENDS}
 
   public String getFirst_name() {
     return first_name;
@@ -32,20 +30,12 @@ public class PersonEditBodyApi {
     this.last_name = last_name;
   }
 
-  public Date getBirth_date() {
+  public long getBirth_date() {
     return birth_date;
   }
 
-  public void setBirth_date(Date birth_date) {
+  public void setBirth_date(long birth_date) {
     this.birth_date = birth_date;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public String getPhone() {
@@ -72,19 +62,27 @@ public class PersonEditBodyApi {
     this.about = about;
   }
 
-  public String getTown() {
-    return town;
-  }
-
-  public void setTown(String town) {
-    this.town = town;
-  }
-
   public messages_permissions getMessages_permission() {
     return messages_permission;
   }
 
   public void setMessages_permission(messages_permissions messages_permission) {
     this.messages_permission = messages_permission;
+  }
+
+  public int getTown_id() {
+    return town_id;
+  }
+
+  public void setTown_id(int town_id) {
+    this.town_id = town_id;
+  }
+
+  public int getCountry_id() {
+    return country_id;
+  }
+
+  public void setCountry_id(int country_id) {
+    this.country_id = country_id;
   }
 }

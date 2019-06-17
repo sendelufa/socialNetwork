@@ -1,17 +1,15 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class MessageApi {
 
   private int id;
-  private Date time;
+  private long time;
   private int author_id;
   private int recipient_id;
   private String message_text;
   private statuses read_status;
 
-  private enum statuses {SENT, READ}
+  public enum statuses {SENT, READ}
 
   public int getId() {
     return id;
@@ -21,11 +19,11 @@ public class MessageApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 

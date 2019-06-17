@@ -6,7 +6,7 @@ public class NotificationTypeApi {
   private codes code;
   private String name;
 
-  private enum codes {POST, POST_COMMENT, COMMENT_COMMENT, FRIEND_REQUEST, MESSAGE}
+  public enum codes {POST, POST_COMMENT, COMMENT_COMMENT, FRIEND_REQUEST, MESSAGE}
 
   public int getId() {
     return id;

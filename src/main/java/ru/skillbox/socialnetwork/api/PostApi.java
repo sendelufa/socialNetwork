@@ -1,11 +1,9 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class PostApi {
 
   private int id;
-  private Date time;
+  private long time;
   private int author_id;
   private String title;
   private String post_text;
@@ -19,11 +17,11 @@ public class PostApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 

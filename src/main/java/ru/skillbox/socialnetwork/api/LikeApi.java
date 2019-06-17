@@ -1,11 +1,9 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class LikeApi {
 
   private int id;
-  private Date time;
+  private long time;
   private int person_id;
   private int post_id;
 
@@ -17,11 +15,11 @@ public class LikeApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 

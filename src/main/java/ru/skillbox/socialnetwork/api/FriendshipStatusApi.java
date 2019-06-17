@@ -1,15 +1,13 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class FriendshipStatusApi {
 
   private int id;
-  private Date time;
+  private long time;
   private String name;
   private codes code;
 
-  private enum codes {REQUEST, FRIEND, BLOCKED, DECLINED, SUBSCRIBED}
+  public enum codes {REQUEST, FRIEND, BLOCKED, DECLINED, SUBSCRIBED}
 
   public int getId() {
     return id;
@@ -19,11 +17,11 @@ public class FriendshipStatusApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 

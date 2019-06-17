@@ -1,12 +1,10 @@
 package ru.skillbox.socialnetwork.api;
 
-import java.util.Date;
-
 public class CommentApi {
 
   private int id;
-  private Date time;
-  private int post_id;
+  private long time;
+  private String post_id;
   private int parent_id;
   private int author_id;
   private String comment_text;
@@ -20,19 +18,19 @@ public class CommentApi {
     this.id = id;
   }
 
-  public Date getTime() {
+  public long getTime() {
     return time;
   }
 
-  public void setTime(Date time) {
+  public void setTime(long time) {
     this.time = time;
   }
 
-  public int getPost_id() {
+  public String getPost_id() {
     return post_id;
   }
 
-  public void setPost_id(int post_id) {
+  public void setPost_id(String post_id) {
     this.post_id = post_id;
   }
 

@@ -48,13 +48,12 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
+////
+//  public JwtConfig jwtConfig() {
+//    return new JwtConfig();
+//  }
 
-  @Bean
-  public JwtConfig jwtConfig() {
-    return new JwtConfig();
-  }
-
-  @Bean
+//  @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }

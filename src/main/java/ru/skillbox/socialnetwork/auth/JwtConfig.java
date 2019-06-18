@@ -1,7 +1,9 @@
 package ru.skillbox.socialnetwork.auth;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class JwtConfig {    // ++
   @Value("${security.jwt.uri:/auth/**}")
   private String Uri;

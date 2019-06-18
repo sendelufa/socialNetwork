@@ -5,7 +5,7 @@ CREATE TABLE `person` (
   `reg_date` DATE NOT NULL,
   `birth_date` DATE NULL,
   `e_mail` VARCHAR(255) NOT NULL,
-  `phone` INT NOT NULL,
+  `phone` VARCHAR(20) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `photo` VARCHAR(2048) NULL,
   `about` VARCHAR(2048) NULL,

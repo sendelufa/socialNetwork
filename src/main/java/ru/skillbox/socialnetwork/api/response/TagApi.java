@@ -1,6 +1,6 @@
-package ru.skillbox.socialnetwork.api;
+package ru.skillbox.socialnetwork.api.response;
 
-public class TagApi {
+public class TagApi implements AbstractResponse{
 
   private int id;
   private String tag;

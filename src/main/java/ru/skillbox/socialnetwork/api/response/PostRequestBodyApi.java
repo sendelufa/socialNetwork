@@ -1,6 +1,6 @@
-package ru.skillbox.socialnetwork.api;
+package ru.skillbox.socialnetwork.api.response;
 
-public class PostRequestBodyApi {
+public class PostRequestBodyApi implements AbstractResponse{
 
   private String title;
   private String post_text;

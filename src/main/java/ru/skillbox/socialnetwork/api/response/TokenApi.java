@@ -1,6 +1,6 @@
-package ru.skillbox.socialnetwork.api;
+package ru.skillbox.socialnetwork.api.response;
 
-public class TokenApi {
+public class TokenApi implements AbstractResponse{
 
   private String token;
 

@@ -1,6 +1,6 @@
-package ru.skillbox.socialnetwork.api;
+package ru.skillbox.socialnetwork.api.response;
 
-public class CountryApi {
+public class PlatfomLanguageApi implements AbstractResponse {
 
   private int id;
   private String title;

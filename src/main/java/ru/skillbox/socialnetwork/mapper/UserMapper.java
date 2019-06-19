@@ -11,20 +11,8 @@ import javax.annotation.PostConstruct;
 @Component
 public class UserMapper extends Mapper<User, UserApi>
 {
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public UserMapper(ModelMapper modelMapper) {
+    public UserMapper() {
         super(User.class, UserApi.class);
-        this.modelMapper = modelMapper;
-    }
-
-    @PostConstruct
-    public void setupMapper()
-    {
-        modelMapper.createTypeMap(User.class, UserApi.class)
-                .addMappings(m -> m.skip(UserApi::setId)).setPostConverter(toApiConverter());
-        modelMapper.createTypeMap(UserApi.class, User.class)
-                .addMappings(m -> m.skip(User::setId)).setPostConverter(toEntityConverter());
     }
 }

@@ -11,20 +11,9 @@ import javax.annotation.PostConstruct;
 @Component
 public class CommentMapper extends Mapper<PostComment, CommentApi>
 {
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public CommentMapper(ModelMapper modelMapper) {
-        super(PostComment.class, CommentApi.class);
-        this.modelMapper = modelMapper;
-    }
-
-    @PostConstruct
-    public void setupMapper()
+    public CommentMapper()
     {
-        modelMapper.createTypeMap(PostComment.class, CommentApi.class)
-                .addMappings(m -> m.skip(CommentApi::setId)).setPostConverter(toApiConverter());
-        modelMapper.createTypeMap(CommentApi.class, PostComment.class)
-                .addMappings(m -> m.skip(PostComment::setId)).setPostConverter(toEntityConverter());
+        super(PostComment.class, CommentApi.class);
     }
 }

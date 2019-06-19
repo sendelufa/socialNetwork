@@ -11,20 +11,8 @@ import javax.annotation.PostConstruct;
 @Component
 public class Post2TagMapper extends Mapper<Post2tag, Post2TagApi>
 {
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public Post2TagMapper(ModelMapper modelMapper) {
+    public Post2TagMapper() {
         super(Post2tag.class, Post2TagApi.class);
-        this.modelMapper = modelMapper;
-    }
-
-    @PostConstruct
-    public void setupMapper()
-    {
-        modelMapper.createTypeMap(Post2tag.class, Post2TagApi.class)
-                .addMappings(m -> m.skip(Post2TagApi::setId)).setPostConverter(toApiConverter());
-        modelMapper.createTypeMap(Post2TagApi.class, Post2tag.class)
-                .addMappings(m -> m.skip(Post2tag::setId)).setPostConverter(toEntityConverter());
     }
 }

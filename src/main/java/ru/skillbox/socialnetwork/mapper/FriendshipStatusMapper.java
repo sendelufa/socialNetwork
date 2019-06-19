@@ -11,20 +11,8 @@ import javax.annotation.PostConstruct;
 @Component
 public class FriendshipStatusMapper extends Mapper<FriendshipStatus, FriendshipStatusApi>
 {
-    private final ModelMapper modelMapper;
-
     @Autowired
-    public FriendshipStatusMapper(ModelMapper modelMapper) {
+    public FriendshipStatusMapper() {
         super(FriendshipStatus.class, FriendshipStatusApi.class);
-        this.modelMapper = modelMapper;
-    }
-
-    @PostConstruct
-    public void setupMapper()
-    {
-        modelMapper.createTypeMap(FriendshipStatus.class, FriendshipStatusApi.class)
-                .addMappings(m -> m.skip(FriendshipStatusApi::setId)).setPostConverter(toApiConverter());
-        modelMapper.createTypeMap(FriendshipStatusApi.class, FriendshipStatus.class)
-                .addMappings(m -> m.skip(FriendshipStatus::setId)).setPostConverter(toEntityConverter());
     }
 }

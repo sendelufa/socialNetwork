@@ -27,32 +27,6 @@ public abstract class Mapper<E, A>
     }
 
     public A toApi(E entity) {
-        return Objects.isNull(entity)
-                ? null
-                : mapper.map(entity, api);
-    }
-
-    Converter<E, A> toApiConverter() {
-        return context -> {
-            E source = context.getSource();
-            A destination = context.getDestination();
-            mapSpecificFieldsEA(source, destination);
-            return context.getDestination();
-        };
-    }
-
-    Converter<A, E> toEntityConverter() {
-        return context -> {
-            A source = context.getSource();
-            E destination = context.getDestination();
-            mapSpecificFieldsAE(source, destination);
-            return context.getDestination();
-        };
-    }
-
-    private void mapSpecificFieldsEA(E source, A destination) {
-    }
-
-    private void mapSpecificFieldsAE(A source, E destination) {
+        return mapper.map(entity, api);
     }
 }

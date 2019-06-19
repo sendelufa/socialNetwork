@@ -33,7 +33,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
         .and()
         // Add a filter to validate the tokens with every request
-        .addFilterAfter(new JwtTokenAuthenticationFilter(jwtConfig), UsernamePasswordAuthenticationFilter.class)
+        .addFilter(new JwtTokenAuthenticationFilter(jwtConfig))
+        .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig), JwtTokenAuthenticationFilter.class)
         // authorization requests config
         .authorizeRequests()
         // allow all who are accessing "auth" service
@@ -49,6 +50,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
     auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
   }
 
+  @Bean
   public BCryptPasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }

@@ -16,13 +16,16 @@ public class PersonDaoService {
     @Autowired
     private SessionFactory sessionFactory;
 
+
     public Person getPersonByEmail(String email) {
         return getCurrentSession().get(Person.class, email);
     }
 
+
     public List<Person> getAllPersons() {
         return getCurrentSession().createQuery("from Person p").list();
     }
+
 
     public void updatePerson(Person person) {
         getCurrentSession().update(person);

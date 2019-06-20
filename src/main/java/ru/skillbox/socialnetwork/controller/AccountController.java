@@ -9,7 +9,6 @@ import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.service.AccountService;
 
 @RestController
 @RequestMapping("/api/v1/account/")
@@ -30,7 +29,6 @@ public class AccountController {
             return new ResponseEntity(obj, HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
     public ResponseEntity recoveryPassword(@RequestParam String email){

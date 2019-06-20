@@ -13,45 +13,51 @@ import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.dao.PersonDao;
-import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
-
-import java.util.List;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 @Controller
 @RequestMapping("/api/v1/account/")
 public class AccountController {
 
     @Autowired
-    PersonDao personDao;
+    private AccountService accountService;
 
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
-        return null;
+
+         return accountService.registration(registration);
     }
 
-    @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
+
+    @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
     public ResponseEntity recoveryPassword(@RequestParam String email){
-        return null;
+
+
+        if (true){
+            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @RequestMapping(value = "password/set", method = RequestMethod.POST)
+    @RequestMapping(value = "password/set", method = RequestMethod.PUT)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi){
-        return null;
+
+        return accountService.setPassword(passwordApi);
     }
 
-    @RequestMapping(value = "email", method = RequestMethod.POST)
-    public ResponseEntity seteEmail(@RequestParam String email){
-        return null;
+    @RequestMapping(value = "email", method = RequestMethod.PUT)
+    public ResponseEntity setEmail(@RequestParam String email){
+        return accountService.setEmail(email);
     }
 
-    @RequestMapping(value = "notification", method = RequestMethod.POST)
+    @RequestMapping(value = "notification", method = RequestMethod.PUT)
     public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
         return null;
     }
 
-    @RequestMapping(value = "status", method = RequestMethod.POST)
+    @RequestMapping(value = "status", method = RequestMethod.PUT)
     public ResponseEntity status(@RequestParam String status){
         return null;
     }

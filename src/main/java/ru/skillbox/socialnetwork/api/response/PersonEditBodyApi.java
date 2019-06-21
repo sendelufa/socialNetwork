@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class PersonEditBodyApi implements AbstractResponse{
+public class PersonEditBodyApi extends AbstractResponse{
 
   private String first_name;
   private String last_name;

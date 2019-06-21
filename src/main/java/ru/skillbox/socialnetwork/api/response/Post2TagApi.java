@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class Post2TagApi implements AbstractResponse{
+public class Post2TagApi extends AbstractResponse{
 
   private int id;
   private int post_id;

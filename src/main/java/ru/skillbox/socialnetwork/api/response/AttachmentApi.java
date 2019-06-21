@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class AttachmentApi implements AbstractResponse{
+public class AttachmentApi extends AbstractResponse{
 
   private int id;
   private String post_id;

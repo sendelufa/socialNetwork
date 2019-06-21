@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class ErrorApi {
+public class ErrorApi extends AbstractResponse {
 
     private String error;
     private ErrorDescriptionApi error_description;

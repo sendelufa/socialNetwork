@@ -3,20 +3,15 @@ package ru.skillbox.socialnetwork.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.service.AccountService;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/account/")
 public class AccountController {
 
@@ -26,7 +21,14 @@ public class AccountController {
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
 
-         return accountService.registration(registration);
+        Object obj = accountService.registration(registration);
+
+
+        if (obj instanceof ResponseApi){
+            return new ResponseEntity(obj, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(obj, HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -42,14 +44,33 @@ public class AccountController {
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.PUT)
-    public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi){
+    public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi) {
 
-        return accountService.setPassword(passwordApi);
+        Object obj = accountService.setPassword(passwordApi);
+
+        if (obj instanceof ResponseApi) {
+            return new ResponseEntity(obj, HttpStatus.OK);
+        } else {
+            return new ResponseEntity(obj, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "email", method = RequestMethod.PUT)
     public ResponseEntity setEmail(@RequestParam String email){
-        return accountService.setEmail(email);
+
+        Object obj = accountService.setEmail(email);
+
+        if(obj instanceof ResponseApi){
+            return new ResponseEntity(obj, HttpStatus.OK);
+        } else {
+            ErrorApi error = (ErrorApi) obj;
+            String errorDescription = getErrorDescriptionFromErrorApi(error);
+            if(errorDescription.equals("UNAUTHORIZED")){
+                return new ResponseEntity(error,HttpStatus.UNAUTHORIZED);
+            } else {
+                return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
+            }
+        }
     }
 
     @RequestMapping(value = "notification", method = RequestMethod.PUT)

@@ -9,6 +9,7 @@ import java.util.Date;
  * личные сообщения
  */
 @Entity
+@Table(name = "message")
 public class Message {
 
     /**

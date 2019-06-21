@@ -9,6 +9,7 @@ import java.util.Date;
  * статус дружбы
  */
 @Entity
+@Table(name = "friendship_status")
 public class FriendshipStatus {
 
     /**

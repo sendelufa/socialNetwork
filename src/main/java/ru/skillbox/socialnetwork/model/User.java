@@ -7,6 +7,7 @@ import ru.skillbox.socialnetwork.model.enumeration.UserType;
  * модераторы и администраторы
  */
 @Entity
+@Table(name = "user")
 public class User {
 
    /**

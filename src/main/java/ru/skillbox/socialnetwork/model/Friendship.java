@@ -6,6 +6,7 @@ import javax.persistence.*;
  * дружба
  */
 @Entity
+@Table(name = "friendship")
 public class Friendship {
 
     /**

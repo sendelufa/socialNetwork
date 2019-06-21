@@ -7,6 +7,7 @@ import java.util.Date;
  * посты
  */
 @Entity
+@Table(name = "post")
 public class Post {
 
     /**

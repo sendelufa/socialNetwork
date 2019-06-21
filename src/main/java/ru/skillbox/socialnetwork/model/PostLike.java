@@ -7,6 +7,7 @@ import java.util.Date;
  * лайки постов
  */
 @Entity
+@Table(name = "post_like")
 public class PostLike {
 
     /**

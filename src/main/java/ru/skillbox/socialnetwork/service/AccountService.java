@@ -27,7 +27,7 @@ public class AccountService {
     @Autowired
     private SecurityTokenConfig security;
 
-//TODO заменить возвращаемое значение в сигнатурах на AbstructResponse и возвращать в методах либо РеспонсАпи, либо ЭррорАпи
+
     public AbstractResponse registration(RegistrationApi registration) {
 
         String userEmail = registration.getEmail();
@@ -98,7 +98,7 @@ public class AccountService {
     public ResponseEntity notification(String notification_type,boolean enable){
 
 
-        // Куда мне все это дело сохранить - у персона нет поле нотификаций
+
 
 
         if (true){

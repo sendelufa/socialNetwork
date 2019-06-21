@@ -1,16 +1,10 @@
 package ru.skillbox.socialnetwork.api.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class NotificationTypeApi implements AbstractResponse{
+public class NotificationTypeApi extends AbstractResponse{
 
   private int id;
-
-  @JsonProperty("code")
-  private codes name;
-
-  @JsonProperty("name")
-  private String code;
+  private codes code;
+  private String name;
 
   public enum codes {POST, POST_COMMENT, COMMENT_COMMENT, FRIEND_REQUEST, MESSAGE}
 

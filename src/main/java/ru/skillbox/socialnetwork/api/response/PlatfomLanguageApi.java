@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class PlatfomLanguageApi implements AbstractResponse {
+public class PlatfomLanguageApi extends AbstractResponse {
 
   private int id;
   private String title;

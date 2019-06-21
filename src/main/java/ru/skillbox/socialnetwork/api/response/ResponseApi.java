@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class ResponseApi {
+public class ResponseApi extends AbstractResponse {
 
   private String error;
   private long timestamp;
@@ -37,7 +37,7 @@ public class ResponseApi {
   }
 
 
-  public static class Message implements AbstractResponse{
+  public static class Message extends AbstractResponse{
     private String message;
 
     public Message(String message) {

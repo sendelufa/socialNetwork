@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class FriendshipStatusApi implements AbstractResponse{
+public class FriendshipStatusApi extends AbstractResponse{
 
   private int id;
   private long time;

@@ -1,8 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class NotificationApi implements AbstractResponse{
+public class NotificationApi extends AbstractResponse{
 
   private int id;
 

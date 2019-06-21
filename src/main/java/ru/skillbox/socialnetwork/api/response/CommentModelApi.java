@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class CommentModelApi implements AbstractResponse {
+public class CommentModelApi extends AbstractResponse {
 
   private int parent_id;
   private String comment_text;

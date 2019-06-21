@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class LikeApi implements AbstractResponse{
+public class LikeApi extends AbstractResponse{
 
   private int id;
   private long time;

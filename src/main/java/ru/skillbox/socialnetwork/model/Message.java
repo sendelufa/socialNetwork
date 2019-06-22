@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -18,24 +19,28 @@ public class Message {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * дата и время отправки
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * автор сообщения
      */
     @Column(name = "author_id")
+    @NotNull
     private int authorId;
 
     /**
      * Получатель сообщения
      */
     @Column(name = "recipient_id")
+    @NotNull
     private int recipientId;
 
     /**
@@ -48,6 +53,7 @@ public class Message {
      * статус прочтения: SENT (не прочитано) и READ (прочитано)
      */
     @Column(name = "read_status", columnDefinition="ENUM('SENT', 'READ')")
+    @NotNull
     private ReadStatusMessage readStatus;
 
     public int getId() {

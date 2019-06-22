@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * тэги
@@ -15,12 +16,13 @@ public class Tag {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * Тэг
      */
-    @Column(name = "tag")
+    @Column(name = "tag", unique = true)
     private String tag;
 
     public int getId() {

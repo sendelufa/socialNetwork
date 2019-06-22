@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,18 +17,21 @@ public class Post {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * дата и время публикации
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * Автор поста
      */
     @Column(name = "author_id")
+    @NotNull
     private int authorId;
 
     /**
@@ -40,12 +44,14 @@ public class Post {
      * HTML-текст поста
      */
     @Column(name = "post_text")
+    @NotNull
     private String postText;
 
     /**
      * отметка о том, что пост заблокирован
      */
     @Column(name = "is_blocked")
+    @NotNull
     private boolean isBlocked;
 
     public int getId() {

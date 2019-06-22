@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.ActionBlockHistory;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -18,18 +19,21 @@ public class BlockHistory {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * время блокировки
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * пользователь, которого заблокировали
      */
     @Column(name = "person_id")
+    @NotNull
     private int person_id;
 
     /**
@@ -49,6 +53,7 @@ public class BlockHistory {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "action", columnDefinition="ENUM('BLOCK', 'UNBLOCK')")
+    @NotNull
     private ActionBlockHistory action;
 
     public int getId() {

@@ -1,6 +1,8 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import ru.skillbox.socialnetwork.model.enumeration.UserType;
 
 /**
@@ -16,24 +18,28 @@ public class User {
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
    private int id;
 
    /**
     * имя
     */
    @Column(name = "name")
+   @NotNull
    private String name;
 
    /**
     * адрес электронной почты
     */
-   @Column(name = "e_mail")
+   @Column(name = "e_mail", unique = true)
+   @NotNull
    private String email;
 
    /**
     * пароль
     */
    @Column(name = "password")
+   @NotNull
    private String password;
 
    /**

@@ -38,18 +38,11 @@ public class AccountController {
     @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
     public ResponseEntity recoveryPassword(@RequestParam String email){
 
-
-
-        Person person = personDao.getPersonByEmail("ivaniavanov@mail.ru");
-        //List<Person> list = personDao.getAllPersons();
-        System.out.println(person);
-        return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-
-//        if (true){
-//            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-//        }
+        if (true){
+            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.POST)

@@ -17,6 +17,7 @@ import ru.skillbox.socialnetwork.dao.PersonDao;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller

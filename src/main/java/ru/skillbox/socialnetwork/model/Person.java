@@ -9,6 +9,7 @@ import java.util.Date;
  * пользователь соц. сети
  */
 @Entity
+@Table(name = "person")
 public class Person {
 
     /**

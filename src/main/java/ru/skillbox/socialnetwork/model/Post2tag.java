@@ -6,6 +6,7 @@ import javax.persistence.*;
  * связи постов с тэгами
  */
 @Entity
+@Table(name = "post2tag")
 public class Post2tag {
 
     /**

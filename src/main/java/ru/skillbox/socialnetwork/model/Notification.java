@@ -7,6 +7,7 @@ import java.util.Date;
  * оповещения
  */
 @Entity
+@Table(name = "notification")
 public class Notification {
 
     /**

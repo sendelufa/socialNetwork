@@ -6,6 +6,7 @@ import javax.persistence.*;
  * файлы, прикреплённые к постам
  */
 @Entity
+@Table(name = "post_file")
 public class PostFile {
 
     /**

@@ -7,6 +7,7 @@ import java.util.Date;
  * комментарий к посту
  */
 @Entity
+@Table(name = "post_comment")
 public class PostComment {
 
     /**

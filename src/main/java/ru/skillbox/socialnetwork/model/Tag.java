@@ -6,6 +6,7 @@ import javax.persistence.*;
  * тэги
  */
 @Entity
+@Table(name = "tag")
 public class Tag {
 
     /**

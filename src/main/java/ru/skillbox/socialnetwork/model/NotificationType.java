@@ -8,6 +8,7 @@ import javax.persistence.*;
  * тип оповещения
  */
 @Entity
+@Table(name = "notification_type")
 public class NotificationType {
 
     /**

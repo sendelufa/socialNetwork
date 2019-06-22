@@ -103,10 +103,10 @@ public class Person {
     /**
      * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
      */
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
-//    @NotNull
-//    private MessagesPermissionPerson messagesPermission;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
+    @NotNull
+    private MessagesPermissionPerson messagesPermission;
 
     /**
      * время последнего пребывания онлайн
@@ -224,14 +224,14 @@ public class Person {
     public void setApproved(boolean approved) {
         isApproved = approved;
     }
-//
-//    public MessagesPermissionPerson getMessagesPermission() {
-//        return messagesPermission;
-//    }
-//
-//    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
-//        this.messagesPermission = messagesPermission;
-//    }
+
+    public MessagesPermissionPerson getMessagesPermission() {
+        return messagesPermission;
+    }
+
+    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
+        this.messagesPermission = messagesPermission;
+    }
 
     public Date getLastOnlineTime() {
         return lastOnlineTime;

@@ -1,13 +1,16 @@
 package ru.skillbox.socialnetwork.dao;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -17,7 +20,15 @@ public class PersonDao {
     private SessionFactory sessionFactory;
 
     public Person getPersonByEmail(String email) {
-        return getCurrentSession().get(Person.class, email);
+
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(Person.class)
+                .add(Restrictions.eq("email", email));
+                //.add(Restrictions.eq("enabled", true));
+        Person person = Optional.ofNullable((Person) criteria.uniqueResult()).get();
+
+        return person;
+        //return getCurrentSession().get(Person.class, email);
     }
 
     public List<Person> getAllPersons() {

@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,14 +17,16 @@ public class Person {
      * ID
      */
     @Id
-    @Column(name = "id")
+    @Column(name = "id", unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * имя
      */
     @Column(name = "first_name")
+    @NotNull
     private String firstName;
 
     /**
@@ -36,6 +39,7 @@ public class Person {
      * дата и время регистрации
      */
     @Column(name = "reg_date")
+    @NotNull
     private Date regDate;
 
     /**
@@ -48,18 +52,21 @@ public class Person {
      * адрес электронной почты
      */
     @Column(name = "e_mail")
+    @NotNull
     private String email;
 
     /**
      * номер телефона
      */
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
+    @NotNull
     private String phone;
 
     /**
      * пароль
      */
     @Column(name = "password")
+    @NotNull
     private String password;
 
     /**
@@ -90,13 +97,16 @@ public class Person {
      * подтверждена ли регистрация
      */
     @Column(name = "is_approved")
+    @NotNull
     private boolean isApproved;
 
     /**
      * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
      */
-    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
-    private MessagesPermissionPerson messagesPermission;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
+//    @NotNull
+//    private MessagesPermissionPerson messagesPermission;
 
     /**
      * время последнего пребывания онлайн
@@ -108,6 +118,7 @@ public class Person {
      * блокировка пользователя модератором / администратором
      */
     @Column(name = "is_blocked")
+    @NotNull
     private boolean isBlocked;
 
     public int getId() {
@@ -213,14 +224,14 @@ public class Person {
     public void setApproved(boolean approved) {
         isApproved = approved;
     }
-
-    public MessagesPermissionPerson getMessagesPermission() {
-        return messagesPermission;
-    }
-
-    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
-        this.messagesPermission = messagesPermission;
-    }
+//
+//    public MessagesPermissionPerson getMessagesPermission() {
+//        return messagesPermission;
+//    }
+//
+//    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
+//        this.messagesPermission = messagesPermission;
+//    }
 
     public Date getLastOnlineTime() {
         return lastOnlineTime;

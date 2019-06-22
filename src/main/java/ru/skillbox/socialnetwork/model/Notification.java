@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,36 +17,42 @@ public class Notification {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * тип оповещения
      */
     @Column(name = "type_id")
+    @NotNull
     private int typeId;
 
     /**
      * время отправки
      */
     @Column(name = "sent_time")
+    @NotNull
     private Date sentTime;
 
     /**
      * кому отправлено
      */
     @Column(name = "person_id")
+    @NotNull
     private int personId;
 
     /**
      * идентификатор сущности, относительно которой отправлено оповещение (комментарий, друг, пост или сообщение)
      */
     @Column(name = "entity_id")
+    @NotNull
     private int entityId;
 
     /**
      * куда отправлено оповещение (конкретный e-mail или телефон)
      */
     @Column(name = "contact")
+    @NotNull
     private String contact;
 
     public int getId() {

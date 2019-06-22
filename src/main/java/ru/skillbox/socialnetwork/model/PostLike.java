@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,24 +17,28 @@ public class PostLike {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * время и дата лайка
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * пользователь
      */
     @Column(name = "person_id")
+    @NotNull
     private int personId;
 
     /**
      * пост
      */
     @Column(name = "post_id")
+    @NotNull
     private int postId;
 
     public int getId() {

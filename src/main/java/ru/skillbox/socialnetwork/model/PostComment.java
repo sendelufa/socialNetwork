@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -16,18 +17,21 @@ public class PostComment {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * дата и время
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * пост
      */
     @Column(name = "post_id")
+    @NotNull
     private int postId;
 
     /**
@@ -40,6 +44,7 @@ public class PostComment {
      * автор комментария
      */
     @Column(name = "author_id")
+    @NotNull
     private int authorId;
 
     /**

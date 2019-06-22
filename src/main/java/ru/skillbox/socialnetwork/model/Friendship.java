@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * дружба
@@ -15,24 +16,28 @@ public class Friendship {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * статус связи
      */
     @Column(name = "status_id")
+    @NotNull
     private int statusId;
 
     /**
      *  пользователь, запросивший дружбу
      */
     @Column(name = "src_person_id")
+    @NotNull
     private int srcPersonId;
 
     /**
      * пользователь, получивший запрос
      */
     @Column(name = "dst_person_id")
+    @NotNull
     private int dstPersonId;
 
     public int getId() {

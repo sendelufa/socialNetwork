@@ -18,16 +18,18 @@ import java.util.List;
 
 @Service   // It has to be annotated with @Service.
 public class CustomUserDetailsService implements UserDetailsService  {    // ++ temp
-
+  @Autowired
+  private PersonDaoService personDaoService;
   @Autowired
   private BCryptPasswordEncoder encoder;
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    Person person = (new PersonDaoService()).getPersonByEmail(username);  // FIXME: 23.06.2019 каждый раз создавать экземпляр класса ДАО - не айс
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    Person person = personDaoService.getPersonByEmail(email);
         // Remember that Spring needs roles to be in this format: "ROLE_" + userRole (i.e. "ROLE_ADMIN")
         // So, we need to set it to that format, so we can verify and compare roles (i.e. hasRole("ADMIN")).
     if(person != null){
+      person.setPassword(encoder.encode(person.getPassword())); // FIXME: 24.06.2019 не уверен в корректности данной операции
       List<GrantedAuthority> grantedAuthorities = AuthorityUtils
           .commaSeparatedStringToAuthorityList("ROLE_USER");
 //            .commaSeparatedStringToAuthorityList("ROLE_" + user.getType());
@@ -36,6 +38,6 @@ public class CustomUserDetailsService implements UserDetailsService  {    // ++ 
     // The "User" class is provided by Spring and represents a model class for user to be returned by UserDetailsService
     // And used by auth manager to verify and check user authentication.
     // If user not found. Throw this exception.
-    throw new UsernameNotFoundException("Username: " + username + " not found");
+    throw new UsernameNotFoundException("Username: " + email + " not found");
   }
 }

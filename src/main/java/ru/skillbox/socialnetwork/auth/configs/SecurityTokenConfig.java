@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.auth;
+package ru.skillbox.socialnetwork.auth.configs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +8,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.skillbox.socialnetwork.auth.*;
+import ru.skillbox.socialnetwork.auth.filters.JwtTokenAuthenticationFilter;
+import ru.skillbox.socialnetwork.auth.filters.JwtUsernameAndPasswordAuthenticationFilter;
+import ru.skillbox.socialnetwork.auth.handlers.CustomAuthenticationFailureHandler;
+import ru.skillbox.socialnetwork.auth.handlers.CustomAuthenticationSuccessHandler;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +45,12 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         // must be an admin if trying to access admin area (authentication is also required here)
         .antMatchers("/gallery").permitAll()
         // Any other request must be authenticated
-        .anyRequest().authenticated();
+        .anyRequest().authenticated()
+        .and()
+          .formLogin()
+            .successHandler(new CustomAuthenticationSuccessHandler())
+            .failureHandler(new CustomAuthenticationFailureHandler())
+          .loginPage("/login").permitAll();
   }
 
   @Override

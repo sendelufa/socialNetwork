@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.model;
 
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -22,23 +23,24 @@ public class Friendship {
     /**
      * статус связи
      */
-    @Column(name = "status_id")
-    @NotNull
-    private int statusId;
+    @OneToMany(mappedBy = "id")
+    private Set<FriendshipStatus> friendshipStatuses;
 
     /**
      *  пользователь, запросивший дружбу
      */
-    @Column(name = "src_person_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "src_person_id")
     @NotNull
-    private int srcPersonId;
+    private Person srcPerson;
 
     /**
      * пользователь, получивший запрос
      */
-    @Column(name = "dst_person_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dst_person_id")
     @NotNull
-    private int dstPersonId;
+    private Person dstPerson;
 
     public int getId() {
         return id;
@@ -48,27 +50,28 @@ public class Friendship {
         this.id = id;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public Set<FriendshipStatus> getFriendshipStatuses() {
+        return friendshipStatuses;
     }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setFriendshipStatuses(
+        Set<FriendshipStatus> friendshipStatuses) {
+        this.friendshipStatuses = friendshipStatuses;
     }
 
-    public int getSrcPersonId() {
-        return srcPersonId;
+    public Person getSrcPerson() {
+        return srcPerson;
     }
 
-    public void setSrcPersonId(int srcPersonId) {
-        this.srcPersonId = srcPersonId;
+    public void setSrcPerson(Person srcPerson) {
+        this.srcPerson = srcPerson;
     }
 
-    public int getDstPersonId() {
-        return dstPersonId;
+    public Person getDstPerson() {
+        return dstPerson;
     }
 
-    public void setDstPersonId(int dstPersonId) {
-        this.dstPersonId = dstPersonId;
+    public void setDstPerson(Person dstPerson) {
+        this.dstPerson = dstPerson;
     }
 }

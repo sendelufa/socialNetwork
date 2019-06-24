@@ -21,11 +21,12 @@ public class Notification {
     private int id;
 
     /**
-     * тип оповещения
+     * тип нотификации
      */
-    @Column(name = "type_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_id")
     @NotNull
-    private int typeId;
+    private NotificationType notificationType;
 
     /**
      * время отправки
@@ -37,9 +38,10 @@ public class Notification {
     /**
      * кому отправлено
      */
-    @Column(name = "person_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "person_id")
     @NotNull
-    private int personId;
+    private Person person;
 
     /**
      * идентификатор сущности, относительно которой отправлено оповещение (комментарий, друг, пост или сообщение)
@@ -63,12 +65,12 @@ public class Notification {
         this.id = id;
     }
 
-    public int getTypeId() {
-        return typeId;
+    public NotificationType getNotificationType() {
+        return notificationType;
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
     }
 
     public Date getSentTime() {
@@ -79,12 +81,12 @@ public class Notification {
         this.sentTime = sentTime;
     }
 
-    public int getPersonId() {
-        return personId;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public int getEntityId() {

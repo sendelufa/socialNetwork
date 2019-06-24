@@ -22,9 +22,10 @@ public class PostFile {
     /**
      * пост
      */
-    @Column(name = "post_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
     @NotNull
-    private int postId;
+    private Post post;
 
     /**
      * Имя файла
@@ -46,12 +47,12 @@ public class PostFile {
         this.id = id;
     }
 
-    public int getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     public String getName() {

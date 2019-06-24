@@ -32,21 +32,24 @@ public class BlockHistory {
     /**
      * пользователь, которого заблокировали
      */
-    @Column(name = "person_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "person_id")
     @NotNull
-    private int person_id;
+    private Person person;
 
     /**
      * Пост, за который заблокировали
      */
-    @Column(name = "post_id")
-    private int postId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     /**
      * Комментарий
      */
-    @Column(name = "comment_id")
-    private int commentId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "comment_id")
+    private PostComment postComment;
 
     /**
      * тип действия: BLOCK (блокировка) или UNBLOCK (разблокировка)
@@ -72,28 +75,28 @@ public class BlockHistory {
         this.time = time;
     }
 
-    public int getPerson_id() {
-        return person_id;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
-    public int getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public int getCommentId() {
-        return commentId;
+    public PostComment getPostComment() {
+        return postComment;
     }
 
-    public void setCommentId(int commentId) {
-        this.commentId = commentId;
+    public void setPostComment(PostComment postComment) {
+        this.postComment = postComment;
     }
 
     public ActionBlockHistory getAction() {

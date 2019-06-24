@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ public class Person {
     /**
      * ID
      */
+    @JsonProperty("id")
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,36 +24,42 @@ public class Person {
     /**
      * имя
      */
+    @JsonProperty("firstName")
     @Column(name = "first_name")
     private String firstName;
 
     /**
      * фамилия
      */
+    @JsonProperty("lastName")
     @Column(name = "last_name")
     private String lastName;
 
     /**
      * дата и время регистрации
      */
+    @JsonProperty("regDate")
     @Column(name = "reg_date")
     private Date regDate;
 
     /**
      * дата рождения
      */
+    @JsonProperty("birthDate")
     @Column(name = "birth_date")
     private Date birthDate;
 
     /**
      * адрес электронной почты
      */
+    @JsonProperty("email")
     @Column(name = "e_mail")
     private String email;
 
     /**
      * номер телефона
      */
+    @JsonProperty("phone")
     @Column(name = "phone")
     private String phone;
 
@@ -64,18 +72,21 @@ public class Person {
     /**
      * ссылка на изображение с фотографией пользователя
      */
+    @JsonProperty("photo")
     @Column(name = "photo")
     private String photo;
 
     /**
      * текст о себе
      */
+    @JsonProperty("about")
     @Column(name = "about")
     private String about;
 
     /**
      * страна и город проживания
      */
+    @JsonProperty("town")
     @Column(name = "town")
     private String town;
 
@@ -94,18 +105,21 @@ public class Person {
     /**
      * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
      */
+    @JsonProperty("messagesPermission")
     @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
     private MessagesPermissionPerson messagesPermission;
 
     /**
      * время последнего пребывания онлайн
      */
+    @JsonProperty("lastOnlineTime")
     @Column(name = "last_online_time")
     private Date lastOnlineTime;
 
     /**
      * блокировка пользователя модератором / администратором
      */
+    @JsonProperty("isBlocked")
     @Column(name = "is_blocked")
     private boolean isBlocked;
 

@@ -3,19 +3,19 @@ package ru.skillbox.socialnetwork.api.response;
 public class PersonApi implements AbstractResponse {
 
   private int id;
-  private String first_name;
-  private String last_name;
-  private long reg_date;
-  private long birth_date;
+  private String firstName;
+  private String lastName;
+  private long regDate;
+  private long birthDate;
   private String email;
   private String phone;
   private String photo;
   private String about;
-  private int town_id;
+  private int town;
   private int country_id;
-  private messages_permissions messages_permission;
-  private long last_online_time;
-  private boolean is_blocked;
+  private messages_permissions messagesPermission;
+  private long lastOnlineTime;
+  private boolean isBlocked;
 
   public enum messages_permissions {ALL, FRIENDS}
 
@@ -28,47 +28,47 @@ public class PersonApi implements AbstractResponse {
   }
 
   public String getFirst_name() {
-    return first_name;
+    return firstName;
   }
 
   public void setFirst_name(String first_name) {
-    this.first_name = first_name;
+    this.firstName = first_name;
   }
 
   public String getLast_name() {
-    return last_name;
+    return lastName;
   }
 
   public void setLast_name(String last_name) {
-    this.last_name = last_name;
+    this.lastName = last_name;
   }
 
   public long getReg_date() {
-    return reg_date;
+    return regDate;
   }
 
   public void setReg_date(long reg_date) {
-    this.reg_date = reg_date;
+    this.regDate = reg_date;
   }
 
   public long getBirth_date() {
-    return birth_date;
+    return birthDate;
   }
 
   public void setBirth_date(long birth_date) {
-    this.birth_date = birth_date;
+    this.birthDate = birth_date;
   }
 
   public int getTown_id() {
-    return town_id;
+    return town;
   }
 
   public long getLast_online_time() {
-    return last_online_time;
+    return lastOnlineTime;
   }
 
   public void setLast_online_time(long last_online_time) {
-    this.last_online_time = last_online_time;
+    this.lastOnlineTime = last_online_time;
   }
 
   public String getEmail() {
@@ -105,16 +105,16 @@ public class PersonApi implements AbstractResponse {
 
 
   public messages_permissions getMessages_permission() {
-    return messages_permission;
+    return messagesPermission;
   }
 
   public void setMessages_permission(messages_permissions messages_permission) {
-    this.messages_permission = messages_permission;
+    this.messagesPermission = messages_permission;
   }
 
 
   public void setTown_id(int town_id) {
-    this.town_id = town_id;
+    this.town = town_id;
   }
 
   public int getCountry_id() {
@@ -126,10 +126,10 @@ public class PersonApi implements AbstractResponse {
   }
 
   public boolean isIs_blocked() {
-    return is_blocked;
+    return isBlocked;
   }
 
   public void setIs_blocked(boolean is_blocked) {
-    this.is_blocked = is_blocked;
+    this.isBlocked = is_blocked;
   }
 }

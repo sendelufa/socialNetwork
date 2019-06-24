@@ -3,12 +3,14 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * статус дружбы
  */
 @Entity
+@Table(name = "friendship_status")
 public class FriendshipStatus {
 
     /**
@@ -17,6 +19,7 @@ public class FriendshipStatus {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
@@ -42,6 +45,7 @@ public class FriendshipStatus {
      */
     @Enumerated(EnumType.STRING)
     @Column(name = "code", columnDefinition="ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED')")
+    @NotNull
     private CodeFriendshipStatus code;
 
     public int getId() {

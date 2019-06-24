@@ -3,11 +3,13 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * тип оповещения
  */
 @Entity
+@Table(name = "notification_type")
 public class NotificationType {
 
     /**
@@ -16,18 +18,21 @@ public class NotificationType {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * код типа
      */
     @Column(name = "code")
+    @NotNull
     private int code;
 
     /**
      * Имя
      */
     @Column(name = "name", columnDefinition = "ENUM('POST', 'POST_COMMENT', 'COMMENT_COMMENT', 'FRIEND_REQUEST', 'MESSAGE')")
+    @NotNull
     private NameNotificationType name;
 
     public int getId() {

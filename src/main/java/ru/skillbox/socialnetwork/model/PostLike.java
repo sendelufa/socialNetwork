@@ -1,69 +1,77 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * лайки постов
  */
 @Entity
+@Table(name = "post_like")
 public class PostLike {
 
-    /**
-     * ID
-     */
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+   /**
+    * ID
+    */
+   @Id
+   @Column(name = "id")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
+   private int id;
 
-    /**
-     * время и дата лайка
-     */
-    @Column(name = "time")
-    private Date time;
+   /**
+    * время и дата лайка
+    */
+   @Column(name = "time")
+   @NotNull
+   private Date time;
 
-    /**
-     * пользователь
-     */
-    @Column(name = "person_id")
-    private int personId;
+   /**
+    * автор лайка
+    */
+   @ManyToOne
+   @JoinColumn(name = "person_id")
+   @NotNull
+   private Person person;
 
-    /**
-     * пост
-     */
-    @Column(name = "post_id")
-    private int postId;
+   /**
+    * пост
+    */
+   @ManyToOne
+   @JoinColumn(name = "post_id")
+   @NotNull
+   private Post post;
 
-    public int getId() {
-        return id;
-    }
+   public int getId() {
+      return id;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public Date getTime() {
-        return time;
-    }
+   public Date getTime() {
+      return time;
+   }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
+   public void setTime(Date time) {
+      this.time = time;
+   }
 
-    public int getPersonId() {
-        return personId;
-    }
+   public Person getPerson() {
+      return person;
+   }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
-    }
+   public void setPerson(Person person) {
+      this.person = person;
+   }
 
-    public int getPostId() {
-        return postId;
-    }
+   public Post getPost() {
+      return post;
+   }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
-    }
+   public void setPost(Post post) {
+      this.post = post;
+   }
 }

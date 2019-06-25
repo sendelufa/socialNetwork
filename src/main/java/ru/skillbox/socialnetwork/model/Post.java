@@ -91,7 +91,7 @@ public class Post {
      * Список блокировок
      */
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<BlockHistory> blockHistories;
 
     public int getId() {

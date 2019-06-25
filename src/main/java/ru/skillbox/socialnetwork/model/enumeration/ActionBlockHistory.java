@@ -4,8 +4,15 @@ package ru.skillbox.socialnetwork.model.enumeration;
  * тип действия
  */
 public enum  ActionBlockHistory {
-    BLOCK("блокировка"),
-    UNBLOCK("разблокировка");
+    /**
+     * блокировка
+     */
+    BLOCK("BLOCK"),
+
+    /**
+     * разблокировка
+     */
+    UNBLOCK("UNBLOCK");
 
     /**
      * Описание

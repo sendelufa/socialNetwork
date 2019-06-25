@@ -1,20 +1,39 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PersonApi implements AbstractResponse {
 
   private int id;
+
+  @JsonProperty("first_name")
   private String firstName;
+
+  @JsonProperty("last_name")
   private String lastName;
+
+  @JsonProperty("reg_date")
   private long regDate;
+
+  @JsonProperty("birth_date")
   private long birthDate;
+
   private String email;
   private String phone;
   private String photo;
   private String about;
-  private int town;
+
+  private int town_id;
+
   private int country_id;
+
+  @JsonProperty("messages_permission")
   private messages_permissions messagesPermission;
+
+  @JsonProperty("last_online_time")
   private long lastOnlineTime;
+
+  @JsonProperty("is_blocked")
   private boolean isBlocked;
 
   public enum messages_permissions {ALL, FRIENDS}
@@ -60,7 +79,7 @@ public class PersonApi implements AbstractResponse {
   }
 
   public int getTown_id() {
-    return town;
+    return town_id;
   }
 
   public long getLast_online_time() {
@@ -114,7 +133,7 @@ public class PersonApi implements AbstractResponse {
 
 
   public void setTown_id(int town_id) {
-    this.town = town_id;
+    this.town_id = town_id;
   }
 
   public int getCountry_id() {

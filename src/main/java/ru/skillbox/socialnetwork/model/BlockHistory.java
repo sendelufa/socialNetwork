@@ -29,7 +29,7 @@ public class BlockHistory {
      * пользователь, которого заблокировали
      */
     @Column(name = "person_id")
-    private int person_id;
+    private int personId;
 
     /**
      * Пост, за который заблокировали
@@ -67,11 +67,11 @@ public class BlockHistory {
     }
 
     public int getPerson_id() {
-        return person_id;
+        return personId;
     }
 
     public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+        this.personId = person_id;
     }
 
     public int getPostId() {

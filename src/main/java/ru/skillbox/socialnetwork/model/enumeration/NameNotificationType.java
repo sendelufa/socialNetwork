@@ -1,11 +1,30 @@
 package ru.skillbox.socialnetwork.model.enumeration;
 
 public enum NameNotificationType {
-    POST("Новый пост"),
-    POST_COMMENT("Комментарий к посту"),
-    COMMENT_COMMENT("Ответ на комментарий"),
-    FRIEND_REQUEST("Запрос дружбы"),
-    MESSAGE("Личное сообщение");
+    /**
+     * Новый пост
+     */
+    POST("POST"),
+
+    /**
+     * Комментарий к посту
+     */
+    POST_COMMENT("POST_COMMENT"),
+
+    /**
+     * Ответ на комментарий
+     */
+    COMMENT_COMMENT("COMMENT_COMMENT"),
+
+    /**
+     * Запрос дружбы
+     */
+    FRIEND_REQUEST("FRIEND_REQUEST"),
+
+    /**
+     * Личное сообщение
+     */
+    MESSAGE("MESSAGE");
 
     /**
      * Описание

@@ -24,8 +24,8 @@ public class PersonDao {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(Person.class)
                 .add(Restrictions.eq("email", email));
-                //.add(Restrictions.eq("enabled", true));
-        Person person = Optional.ofNullable((Person) criteria.uniqueResult()).get();
+
+        Person person = (Person) criteria.uniqueResult();
 
         return person;
         //return getCurrentSession().get(Person.class, email);

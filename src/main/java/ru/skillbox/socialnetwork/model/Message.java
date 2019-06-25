@@ -54,6 +54,7 @@ public class Message {
    /**
     * статус прочтения: SENT (не прочитано) и READ (прочитано)
     */
+   @Enumerated(EnumType.STRING)
    @Column(name = "read_status", columnDefinition = "ENUM('SENT', 'READ')")
    @NotNull
    private ReadStatusMessage readStatus;
@@ -89,6 +90,7 @@ public class Message {
    public void setRecipient(Person recipient) {
       this.recipient = recipient;
    }
+
 
    public String getMessageText() {
       return MessageText;

@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
@@ -146,10 +147,10 @@ public class Person {
     *
     */
 
-   @OneToMany(mappedBy = "author")
+   @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
    private Set<Message> messagesOutgoing;
 
-   @OneToMany(mappedBy = "recipient")
+   @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipient")
    private Set<Message> messagesIncoming;
 
    /**

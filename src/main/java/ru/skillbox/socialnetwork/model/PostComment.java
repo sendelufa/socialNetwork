@@ -44,7 +44,7 @@ public class PostComment {
      * родительские комментарии (если ответ на комментарий к посту)
      */
 
-    @OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<PostComment> postComments;
 
     /**
@@ -78,7 +78,7 @@ public class PostComment {
      * Список блокировок
      */
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<BlockHistory> blockHistories;
 
     public int getId() {

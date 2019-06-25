@@ -60,21 +60,21 @@ public class Post {
      * Список лайков
      *
      */
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private Set<PostLike> postLikes;
 
     /**
      * Список файлов к посту
      *
      */
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private Set<PostFile> postFiles;
 
     /**
      * Комментарии
      *
      */
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     @OrderBy("time asc")
     private Set<PostComment> postComments;
 
@@ -91,7 +91,7 @@ public class Post {
      * Список блокировок
      */
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<BlockHistory> blockHistories;
 
     public int getId() {

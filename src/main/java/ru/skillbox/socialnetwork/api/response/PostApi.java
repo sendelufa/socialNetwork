@@ -1,13 +1,22 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PostApi implements AbstractResponse {
 
   private int id;
   private long time;
-  private int author_id;
+
+  @JsonProperty("author_id")
+  private int authorId;
+
   private String title;
-  private String post_text;
-  private boolean is_blocked;
+
+  @JsonProperty("post_text")
+  private String postText;
+
+  @JsonProperty("is_blocked")
+  private boolean isBlocked;
 
   public int getId() {
     return id;
@@ -26,11 +35,11 @@ public class PostApi implements AbstractResponse {
   }
 
   public int getAuthor_id() {
-    return author_id;
+    return authorId;
   }
 
   public void setAuthor_id(int author_id) {
-    this.author_id = author_id;
+    this.authorId = author_id;
   }
 
   public String getTitle() {
@@ -42,18 +51,18 @@ public class PostApi implements AbstractResponse {
   }
 
   public String getPost_text() {
-    return post_text;
+    return postText;
   }
 
   public void setPost_text(String post_text) {
-    this.post_text = post_text;
+    this.postText = post_text;
   }
 
   public boolean isIs_blocked() {
-    return is_blocked;
+    return isBlocked;
   }
 
   public void setIs_blocked(boolean is_blocked) {
-    this.is_blocked = is_blocked;
+    this.isBlocked = is_blocked;
   }
 }

@@ -11,8 +11,6 @@ import ru.skillbox.socialnetwork.config.AppConfig;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -34,6 +32,7 @@ public class PersonMapperTest {
         person.setLastName("Edison");
         person.setId(4);
         person.setAbout("Workout");
+        person.setPassword("sddfvdfvd");
         person.setApproved(true);
         person.setEmail("ftoiorp@mail.ru");
         person.setPassword("dfdfgdf");
@@ -42,14 +41,13 @@ public class PersonMapperTest {
         person.setMessagesPermission(MessagesPermissionPerson.ALL);
         person.setPhone("23723472934");
         person.setPhoto("res/jpg.jpg");
+        person.setTown("Moscow");
 
         GregorianCalendar calendar = new GregorianCalendar(1992, Calendar.JANUARY, 24);
         Date birthDate = calendar.getTime();
         person.setBirthDate(birthDate);
         person.setLastOnlineTime(birthDate);
         person.setRegDate(birthDate);
-
-        person.setTown("2");
 
         //мапим и сравниваем
         PersonApi personApi = mapper.map(person, PersonApi.class);
@@ -60,7 +58,6 @@ public class PersonMapperTest {
         assertEquals(person.getLastOnlineTime().getTime(), personApi.getLast_online_time());
         assertEquals(person.getMessagesPermission().getDescription(), personApi.getMessages_permission().toString());
         assertEquals(person.getRegDate().getTime(), personApi.getReg_date());
-        assertEquals(Integer.parseInt(person.getTown()), personApi.getTown_id());
         assertEquals(person.getAbout(), personApi.getAbout());
         assertEquals(person.getEmail(), personApi.getEmail());
         assertEquals(person.getPhone(), personApi.getPhone());
@@ -92,7 +89,6 @@ public class PersonMapperTest {
         assertEquals(personApi.getFirst_name(), person.getFirstName());
         assertEquals(personApi.getLast_name(), person.getLastName());
         assertEquals(personApi.getAbout(), person.getAbout());
-        assertEquals(personApi.getTown_id(), Integer.parseInt(person.getTown()));
         assertEquals(personApi.getLast_online_time(), person.getLastOnlineTime().getTime());
         assertEquals(personApi.getMessages_permission().toString(), person.getMessagesPermission().getDescription());
         assertEquals(personApi.getEmail(), person.getEmail());

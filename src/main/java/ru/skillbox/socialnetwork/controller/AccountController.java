@@ -14,11 +14,7 @@ import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PersonDao;
-import ru.skillbox.socialnetwork.model.Message;
-import ru.skillbox.socialnetwork.model.Person;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/account/")

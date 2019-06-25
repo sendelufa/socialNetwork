@@ -45,6 +45,7 @@ public class User {
    /**
     * тип пользователя: MODERATOR, ADMIN (может управлять другими админами и модераторами)
     */
+   @Enumerated(EnumType.STRING)
    @Column(name = "type", columnDefinition = "ENUM('MODERATOR', 'ADMIN')")
    private UserType type;
 

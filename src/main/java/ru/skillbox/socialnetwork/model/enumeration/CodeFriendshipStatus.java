@@ -4,11 +4,30 @@ package ru.skillbox.socialnetwork.model.enumeration;
  * код статуса
  */
 public enum CodeFriendshipStatus {
-    REQUEST("Запрос на добавление в друзья"),
-    FRIEND("Друзья"),
-    BLOCKED("Пользователь в чёрном списке"),
-    DECLINED("Запрос на добавление в друзья отклонён"),
-    SUBSCRIBED("Подписан");
+    /**
+     * Запрос на добавление в друзья
+     */
+    REQUEST("REQUEST"),
+
+    /**
+     * Друзья
+     */
+    FRIEND("FRIEND"),
+
+    /**
+     * Пользователь в чёрном списке
+     */
+    BLOCKED("BLOCKED"),
+
+    /**
+     * Запрос на добавление в друзья отклонён
+     */
+    DECLINED("DECLINED"),
+
+    /**
+     * Подписан
+     */
+    SUBSCRIBED("SUBSCRIBED");
 
     /**
      * Описание

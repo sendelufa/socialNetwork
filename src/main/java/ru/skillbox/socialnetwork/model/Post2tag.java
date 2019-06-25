@@ -13,7 +13,7 @@ public class Post2tag {
      * ID
      */
     @Id
-     @Column(name = "id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 

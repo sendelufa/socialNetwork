@@ -42,7 +42,7 @@ public class Message {
      * Текст сообщения
      */
     @Column(name = "message_text")
-    private String MessageText;
+    private String messageText;
 
     /**
      * статус прочтения: SENT (не прочитано) и READ (прочитано)
@@ -83,11 +83,11 @@ public class Message {
     }
 
     public String getMessageText() {
-        return MessageText;
+        return messageText;
     }
 
     public void setMessageText(String messageText) {
-        MessageText = messageText;
+        this.messageText = messageText;
     }
 
     public ReadStatusMessage getReadStatus() {

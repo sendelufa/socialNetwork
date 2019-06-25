@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 @RestController
 @RequestMapping("/api/v1/account/")
@@ -99,6 +100,11 @@ public class AccountController {
         } else {
             return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private String getErrorDescriptionFromErrorApi(ErrorApi errorApi){
+        String[] errorDescriptionArray = errorApi.getError_description().getError_description();
+        return errorDescriptionArray[0];
     }
 
     private String getErrorDescriptionFromErrorApi(ErrorApi errorApi){

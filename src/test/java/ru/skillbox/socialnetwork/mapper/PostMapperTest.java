@@ -28,7 +28,6 @@ public class PostMapperTest {
         //заполняем поля
         Post post = new Post();
         post.setId(4);
-        post.setAuthorId(2);
         post.setBlocked(true);
         post.setPostText("Hello, world!");
 
@@ -41,7 +40,6 @@ public class PostMapperTest {
         //мапим и сравниваем
         PostApi postApi = mapper.map(post, PostApi.class);
         assertEquals(post.getId(), postApi.getId());
-        assertEquals(post.getAuthorId(), post.getAuthorId());
         assertEquals(post.getPostText(), postApi.getPost_text());
         assertEquals(post.getTime().getTime(), postApi.getTime());
         assertEquals(post.getTitle(), postApi.getTitle());
@@ -63,7 +61,6 @@ public class PostMapperTest {
         //мапим и сравниваем
         Post post = mapper.map(postApi, Post.class);
         assertEquals(postApi.getId(), post.getId());
-        assertEquals(postApi.getAuthor_id(), post.getAuthorId());
         assertEquals(postApi.getPost_text(), post.getPostText());
         assertEquals(postApi.getTime(), post.getTime().getTime());
         assertEquals(postApi.getTitle(), post.getTitle());

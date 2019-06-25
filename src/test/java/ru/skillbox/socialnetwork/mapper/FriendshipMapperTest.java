@@ -25,16 +25,11 @@ public class FriendshipMapperTest {
         //заполняем поля
         Friendship friendship = new Friendship();
         friendship.setId(4564);
-        friendship.setDstPersonId(5765);
-        friendship.setSrcPersonId(980);
-        friendship.setStatusId(98302);
+
 
         //мапим и сравниваем
         FriendshipApi friendshipApi = mapper.map(friendship, FriendshipApi.class);
         assertEquals(friendship.getId(), friendshipApi.getId());
-        assertEquals(friendship.getDstPersonId(), friendshipApi.getDst_person_id());
-        assertEquals(friendship.getSrcPersonId(), friendshipApi.getSrc_person_id());
-        assertEquals(friendship.getStatusId(), friendshipApi.getStatus_id());
     }
 
     @Test
@@ -51,7 +46,5 @@ public class FriendshipMapperTest {
         Friendship friendship = mapper.map(friendshipApi, Friendship.class);
         assertEquals(friendshipApi.getId(), friendship.getId());
         assertEquals(friendshipApi.getDst_person_id(), friendshipApi.getDst_person_id());
-        assertEquals(friendshipApi.getSrc_person_id(), friendship.getSrcPersonId());
-        assertEquals(friendshipApi.getStatus_id(), friendship.getStatusId());
     }
 }

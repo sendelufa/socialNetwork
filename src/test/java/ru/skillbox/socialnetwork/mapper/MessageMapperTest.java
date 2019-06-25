@@ -29,10 +29,8 @@ public class MessageMapperTest {
         //заполняем поля
         Message message = new Message();
         message.setId(843);
-        message.setAuthorId(4);
         message.setMessageText("pop");
         message.setReadStatus(ReadStatusMessage.SENT);
-        message.setRecipientId(94);
 
         GregorianCalendar calendar = new GregorianCalendar(2017, 9, 23);
         Date date = calendar.getTime();
@@ -42,9 +40,7 @@ public class MessageMapperTest {
         MessageApi messageApi = mapper.map(message, MessageApi.class);
         assertEquals(message.getId(), messageApi.getId());
         assertEquals(message.getMessageText(), messageApi.getMessage_text());
-        assertEquals(message.getAuthorId(), messageApi.getAuthor_id());
         assertEquals(message.getReadStatus().getDescription(), messageApi.getRead_status().toString());
-        assertEquals(message.getRecipientId(), messageApi.getRecipient_id());
         assertEquals(message.getTime().getTime(), messageApi.getTime());
     }
 
@@ -64,9 +60,7 @@ public class MessageMapperTest {
         Message message = mapper.map(messageApi, Message.class);
         assertEquals(messageApi.getId(), message.getId());
         assertEquals(messageApi.getMessage_text(), message.getMessageText());
-        assertEquals(messageApi.getAuthor_id(), message.getAuthorId());
         assertEquals(messageApi.getRead_status().toString(), message.getReadStatus().getDescription());
-        assertEquals(messageApi.getRecipient_id(), message.getRecipientId());
         assertEquals(messageApi.getTime(), message.getTime().getTime());
     }
 }

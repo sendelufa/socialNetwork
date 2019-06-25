@@ -26,14 +26,12 @@ public class PostFileMapperTest {
         postFile.setId(343);
         postFile.setName("text.txt");
         postFile.setPath("res/directory/text.txt");
-        postFile.setPostId(232);
 
         //мапим и сравниваем
         AttachmentApi attachmentApi = mapper.map(postFile, AttachmentApi.class);
         assertEquals(postFile.getId(), attachmentApi.getId());
         assertEquals(postFile.getName(), attachmentApi.getName());
         assertEquals(postFile.getPath(), attachmentApi.getPath());
-        assertEquals(String.valueOf(postFile.getPostId()), attachmentApi.getPost_id());
     }
 
     @Test
@@ -51,6 +49,5 @@ public class PostFileMapperTest {
         assertEquals(attachmentApi.getId(), postFile.getId());
         assertEquals(attachmentApi.getName(), postFile.getName());
         assertEquals(attachmentApi.getPath(), postFile.getPath());
-        assertEquals(Integer.parseInt(attachmentApi.getPost_id()), postFile.getPostId());
     }
 }

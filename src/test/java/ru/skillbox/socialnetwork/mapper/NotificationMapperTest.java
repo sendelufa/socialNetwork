@@ -30,22 +30,18 @@ public class NotificationMapperTest {
         notification.setId(8934);
         notification.setContact("34534532");
         notification.setEntityId(67);
-        notification.setPersonId(73);
 
         GregorianCalendar calendar = new GregorianCalendar(2-16, 8, 9);
         Date date = calendar.getTime();
         notification.setSentTime(date);
 
-        notification.setTypeId(56);
 
         //мапим и сравниваем
         NotificationApi notificationApi = mapper.map(notification, NotificationApi.class);
         assertEquals(notification.getId(), notificationApi.getId());
         assertEquals(notification.getContact(), notificationApi.getContact());
         assertEquals(notification.getEntityId(), notificationApi.getEntity_id());
-        assertEquals(notification.getPersonId(), notificationApi.getPerson_id());
         assertEquals(notification.getSentTime().getTime(), notificationApi.getSent_time());
-        assertEquals(notification.getTypeId(), notificationApi.getType_id());
     }
 
     @Test
@@ -66,8 +62,6 @@ public class NotificationMapperTest {
         assertEquals(notificationApi.getId(), notification.getId());
         assertEquals(notificationApi.getContact(), notification.getContact());
         assertEquals(notificationApi.getEntity_id(), notification.getEntityId());
-        assertEquals(notificationApi.getPerson_id(), notification.getPersonId());
         assertEquals(notificationApi.getSent_time(), notification.getSentTime().getTime());
-        assertEquals(notificationApi.getType_id(), notification.getTypeId());
     }
 }

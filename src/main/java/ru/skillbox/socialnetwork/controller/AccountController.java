@@ -31,6 +31,7 @@ public class AccountController {
         }
     }
 
+
     @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
     public ResponseEntity recoveryPassword(@RequestParam String email){
 
@@ -74,17 +75,24 @@ public class AccountController {
 
     @RequestMapping(value = "notification", method = RequestMethod.PUT)
     public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
+
         return null;
+
+        // Куда мне все это дело сохранить - в таблицу нотификация - нужен дао.
+
+
     }
 
     @RequestMapping(value = "status", method = RequestMethod.PUT)
     public ResponseEntity status(@RequestParam String status){
+
         return null;
     }
 
-    private String getErrorDescriptionFromErrorApi(ErrorApi errorApi){
+    private String getErrorDescriptionFromErrorApi(ErrorApi errorApi) {
         String[] errorDescriptionArray = errorApi.getError_description().getError_description();
         return errorDescriptionArray[0];
+
     }
 
 }

@@ -46,11 +46,13 @@ public class AccountController {
         List<Message> list = personDao.getAllMessages();
         System.out.println(list);
 
-        if (true){
+        return new ResponseEntity<>(null, HttpStatus.OK);
+
+      /*  if (true){
             return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
         } else {
             return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        }*/
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.POST)

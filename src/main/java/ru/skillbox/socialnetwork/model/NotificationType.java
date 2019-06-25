@@ -31,6 +31,7 @@ public class NotificationType {
     /**
      * Имя
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", columnDefinition = "ENUM('POST', 'POST_COMMENT', 'COMMENT_COMMENT', 'FRIEND_REQUEST', 'MESSAGE')")
     @NotNull
     private NameNotificationType name;

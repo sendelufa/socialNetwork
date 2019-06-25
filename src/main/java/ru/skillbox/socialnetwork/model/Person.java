@@ -147,10 +147,10 @@ public class Person {
     *
     */
 
-   @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
    private Set<Message> messagesOutgoing;
 
-   @OneToMany(fetch = FetchType.EAGER, mappedBy = "recipient")
+   @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipient")
    private Set<Message> messagesIncoming;
 
    /**
@@ -177,7 +177,7 @@ public class Person {
     *
     */
 
-   @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
    private Set<BlockHistory> blockHistories;
 
    /**
@@ -185,7 +185,7 @@ public class Person {
     *
     */
 
-   @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+   @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
    private Set<Notification> notifications;
 
    public int getId() {

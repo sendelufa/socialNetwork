@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.dao;
 
+import java.util.ArrayList;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -40,11 +41,13 @@ public class PersonDao {
     }
 
     public List<Message> getAllMessages() {
-        List<Message> list = getCurrentSession().createQuery("From Message").list();
+       List<Message> list = getCurrentSession().createQuery("From Message").list();
+
+
 
         for(Message m : list)
         {
-            System.out.println(m.getId());
+            System.out.println(m.getRecipient().getFirstName());
         }
 
         return list;

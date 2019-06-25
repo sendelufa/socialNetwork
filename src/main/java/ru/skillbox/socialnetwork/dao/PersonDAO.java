@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public class PersonDao {
+public class PersonDAO {
 
     @Autowired
     private SessionFactory sessionFactory;

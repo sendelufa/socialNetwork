@@ -1,7 +1,12 @@
 package ru.skillbox.socialnetwork.model;
 
+import java.util.List;
+import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * комментарий к посту
@@ -16,31 +21,46 @@ public class PostComment {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * дата и время
      */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
     /**
      * пост
      */
-    @Column(name = "post_id")
-    private int postId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    private Post post;
 
     /**
-     * родительский комментарий (если ответ на комментарий к посту)
+     * родительские комментарии (если ответ на комментарий к посту)
      */
-    @Column(name = "parent_id")
-    private int parentId;
+
+    @OneToMany(mappedBy = "parent_id", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<PostComment> postComments;
+
+    /**
+     * родительский комментарий
+     */
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private PostComment parent_id = null;
 
     /**
      * автор комментария
      */
-    @Column(name = "author_id")
-    private int authorId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
+    @NotNull
+    private Person author;
 
     /**
      * Текст комментария
@@ -53,6 +73,13 @@ public class PostComment {
      */
     @Column(name = "is_blocked")
     private boolean isBlocked;
+
+    /**
+     * Список блокировок
+     */
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.EAGER)
+    private Set<BlockHistory> blockHistories;
 
     public int getId() {
         return id;
@@ -70,28 +97,36 @@ public class PostComment {
         this.time = time;
     }
 
-    public int getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public int getParentId() {
-        return parentId;
+    public List<PostComment> getPostComments() {
+        return postComments;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
+    public void setPostComments(List<PostComment> postComments) {
+        this.postComments = postComments;
     }
 
-    public int getAuthorId() {
-        return authorId;
+    public PostComment getParent_id() {
+        return parent_id;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    public void setParent_id(PostComment parent_id) {
+        this.parent_id = parent_id;
+    }
+
+    public Person getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Person author) {
+        this.author = author;
     }
 
     public String getCommentText() {
@@ -108,5 +143,13 @@ public class PostComment {
 
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
+    }
+
+    public Set<BlockHistory> getBlockHistories() {
+        return blockHistories;
+    }
+
+    public void setBlockHistories(Set<BlockHistory> blockHistories) {
+        this.blockHistories = blockHistories;
     }
 }

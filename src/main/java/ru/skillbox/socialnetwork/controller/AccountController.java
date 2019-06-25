@@ -28,64 +28,32 @@ public class AccountController {
 
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        return null;
     }
 
     @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
     public ResponseEntity recoveryPassword(@RequestParam String email){
-         if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        return null;
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.POST)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi){
-//        if (true){
-//            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-//        }
-
-        return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
+        return null;
     }
 
     @RequestMapping(value = "email", method = RequestMethod.POST)
     public ResponseEntity seteEmail(@RequestParam String email){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+        return null;
     }
 
     @RequestMapping(value = "notification", method = RequestMethod.POST)
     public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+        return null;
     }
 
     @RequestMapping(value = "status", method = RequestMethod.POST)
     public ResponseEntity status(@RequestParam String status){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+        return null;
     }
 
 }

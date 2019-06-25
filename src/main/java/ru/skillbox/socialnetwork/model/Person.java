@@ -110,6 +110,19 @@ public class Person {
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
+    /**
+     * онлайн статус
+     */
+    @Column(name = "is_online")
+    private boolean isOnline;
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
     public int getId() {
         return id;
     }

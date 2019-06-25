@@ -15,6 +15,7 @@ CREATE TABLE `person` (
   `messages_permission` ENUM('ALL', 'FRIENDS') NOT NULL DEFAULT 'ALL',
   `last_online_time` TIMESTAMP NULL,
   `is_blocked` BIT NOT NULL DEFAULT 0,
+  `is_online` BIT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `phone_UNIQUE` (`phone` ASC) VISIBLE);

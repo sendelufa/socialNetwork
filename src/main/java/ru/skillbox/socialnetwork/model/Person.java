@@ -1,7 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
-import java.util.HashSet;
 import java.util.Set;
+
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 import javax.persistence.*;

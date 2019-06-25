@@ -1,10 +1,16 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Post2TagApi implements AbstractResponse{
 
   private int id;
-  private int post_id;
-  private int tag_id;
+
+  @JsonProperty("post_id")
+  private int postId;
+
+  @JsonProperty("tag_id")
+  private int tagId;
 
   public int getId() {
     return id;
@@ -15,18 +21,18 @@ public class Post2TagApi implements AbstractResponse{
   }
 
   public int getPost_id() {
-    return post_id;
+    return postId;
   }
 
   public void setPost_id(int post_id) {
-    this.post_id = post_id;
+    this.postId = post_id;
   }
 
   public int getTag_id() {
-    return tag_id;
+    return tagId;
   }
 
   public void setTag_id(int tag_id) {
-    this.tag_id = tag_id;
+    this.tagId = tag_id;
   }
 }

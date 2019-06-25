@@ -15,6 +15,7 @@ import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PersonDao;
 import ru.skillbox.socialnetwork.model.Message;
+import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.List;
 
@@ -35,24 +36,12 @@ public class AccountController {
     }
 
     @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
-    public ResponseEntity recoveryPassword(@RequestBody String email){
-
-//        List<Person> list = personDao.getAllPersons();
-//        System.out.println(list);
-
-//        Person person = personDao.getPersonByEmail(email);
-//        System.out.println(person.getFirstName());
-
-        List<Message> list = personDao.getAllMessages();
-        System.out.println(list);
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
-
-      /*  if (true){
+    public ResponseEntity recoveryPassword(@RequestParam String email){
+         if (true){
             return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
         } else {
             return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }*/
+        }
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.POST)

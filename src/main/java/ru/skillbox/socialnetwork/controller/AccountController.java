@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 @RestController
 @RequestMapping("/api/v1/account/")
@@ -79,6 +80,11 @@ public class AccountController {
     @RequestMapping(value = "status", method = RequestMethod.PUT)
     public ResponseEntity status(@RequestParam String status){
         return null;
+    }
+
+    private String getErrorDescriptionFromErrorApi(ErrorApi errorApi){
+        String[] errorDescriptionArray = errorApi.getError_description().getError_description();
+        return errorDescriptionArray[0];
     }
 
 }

@@ -58,5 +58,5 @@ public class AccountController {
     public ResponseEntity status(@RequestBody String status){
         return null;
     }
-    
+
 }

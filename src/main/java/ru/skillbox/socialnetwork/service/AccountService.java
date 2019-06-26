@@ -16,7 +16,10 @@ import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.auth.SecurityTokenConfig;
 import ru.skillbox.socialnetwork.dao.PersonDao;
 import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
+
+import java.util.Date;
 
 
 @Service
@@ -45,11 +48,13 @@ public class AccountService {
                 person.setFirstName(registration.getFirstName());
                 person.setEmail(userEmail);
 
+                person.setRegDate(new Date());
+                person.setMessagesPermission(MessagesPermissionPerson.ALL);
+
                 if (registration.getPasswd1().equals(registration.getPasswd2())) {
                     String encodedPassword = encoder.encode(registration.getPasswd1());
                     person.setPassword(encodedPassword);
                 } else {
-
                     response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Passwords are not equal"}));
                     response.setSuccess(false);
                     return response;

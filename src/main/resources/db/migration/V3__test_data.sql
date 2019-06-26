@@ -1,16 +1,16 @@
 insert into `person` (`id`,`first_name`, `last_name`, `reg_date`, `birth_date`, `e_mail`, `phone`,
 `password`, `photo`, `about`, `town` , `confirmation_code`, `is_approved`,
-`messages_permission`, `last_online_time` ,`is_blocked`, `is_online`) values
-( '1','Иванов', 'Иван', '2015-01-21', '1963-03-25', 'ivaniavanov@mail.ru', '79234567895', 'asdf1234', null, 'good man', 'Tomsk','', b'0', 'ALL', '2013-10-08 16:07:28', b'0', b'1'),
-( '2','Сидоров', 'Максим', '2010-07-22', '1985-05-14', 'sidorovmaxim@mail.ru', '79856321456', 'maxim1234', null, 'good man', 'Omsk','', b'0', 'ALL', '2019-06-08 10:09:29', b'0', b'1'),
-( '3','Михайлов', 'Сергей', '2012-07-01', '1990-05-19', 'mihailovsergei@mail.ru', '79135546932', 'sergei1990', null, 'funny man', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 15:07:28', b'0', b'1'),
-( '4','Твердохлебов', 'Роман', '2005-05-05', '1991-06-12', 'roman1991@mail.ru', '79423652145', 'roman1991', null, 'strong man', 'Moscow','', b'0', 'FRIENDS', '2019-06-16 16:08:20', b'0', b'1'),
-( '5','Быкова', 'Анастасия', '2013-12-02', '1998-01-17', 'nasty1998@mail.ru', '79456328975', 'nasty456', null, 'nice girl', 'Krum','', b'0', 'FRIENDS', '2019-05-15 05:07:12', b'0', b'1'),
-( '6','Ефремова', 'Алена', '2015-08-08', '1987-06-06', 'efremovaalena@mail.ru', '79238856712', 'alenka1278', null, 'happy woman', 'Tula','', b'0', 'FRIENDS', '2019-06-16 12:09:28', b'0', b'0'),
-( '7','Губкин', 'Иван', '2012-01-09', '1993-03-15', 'ivangubkin@mail.ru', '79452548235', 'ivan8235', null, 'busy man', 'Moscow','', b'0', 'ALL', '2019-06-15 21:01:28', b'0', b'1'),
-( '8','Никифоров', 'Никита', '2019-01-08', '2005-09-09', 'nikita2005@mail.ru', '79234435614', 'nikita5614', null, 'little man', 'Kazan','', b'0', 'ALL', '2019-06-15 22:57:28', b'0', b'1'),
-( '9','Васов', 'Вадим', '2018-07-07', '2003-01-05', 'vadikvasov@mail.ru', '79839541265', 'vadik1265', null, 'cool', 'Ufa','', b'0', 'FRIENDS', '2019-06-15 23:01:56', b'0', b'0'),
-( '10','Дымова', 'Дарья', '2015-09-07', '1995-11-15', 'dumova1995@mail.ru', '79234331552', 'dumova1552', null, 'happy', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 13:52:14', b'0', b'1');
+`messages_permission`, `last_online_time` ,`is_blocked`) values
+( '1','Иванов', 'Иван', '2015-01-21', '1963-03-25', 'ivaniavanov@mail.ru', '79234567895', 'asdf1234', null, 'good man', 'Tomsk','', b'0', 'ALL', '2013-10-08 16:07:28', b'0'),
+( '2','Сидоров', 'Максим', '2010-07-22', '1985-05-14', 'sidorovmaxim@mail.ru', '79856321456', 'maxim1234', null, 'good man', 'Omsk','', b'0', 'ALL', '2019-06-08 10:09:29', b'0'),
+( '3','Михайлов', 'Сергей', '2012-07-01', '1990-05-19', 'mihailovsergei@mail.ru', '79135546932', 'sergei1990', null, 'funny man', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 15:07:28', b'0'),
+( '4','Твердохлебов', 'Роман', '2005-05-05', '1991-06-12', 'roman1991@mail.ru', '79423652145', 'roman1991', null, 'strong man', 'Moscow','', b'0', 'FRIENDS', '2019-06-16 16:08:20', b'0'),
+( '5','Быкова', 'Анастасия', '2013-12-02', '1998-01-17', 'nasty1998@mail.ru', '79456328975', 'nasty456', null, 'nice girl', 'Krum','', b'0', 'FRIENDS', '2019-05-15 05:07:12', b'0'),
+( '6','Ефремова', 'Алена', '2015-08-08', '1987-06-06', 'efremovaalena@mail.ru', '79238856712', 'alenka1278', null, 'happy woman', 'Tula','', b'0', 'FRIENDS', '2019-06-16 12:09:28', b'0'),
+( '7','Губкин', 'Иван', '2012-01-09', '1993-03-15', 'ivangubkin@mail.ru', '79452548235', 'ivan8235', null, 'busy man', 'Moscow','', b'0', 'ALL', '2019-06-15 21:01:28', b'0'),
+( '8','Никифоров', 'Никита', '2019-01-08', '2005-09-09', 'nikita2005@mail.ru', '79234435614', 'nikita5614', null, 'little man', 'Kazan','', b'0', 'ALL', '2019-06-15 22:57:28', b'0'),
+( '9','Васов', 'Вадим', '2018-07-07', '2003-01-05', 'vadikvasov@mail.ru', '79839541265', 'vadik1265', null, 'cool', 'Ufa','', b'0', 'FRIENDS', '2019-06-15 23:01:56', b'0'),
+( '10','Дымова', 'Дарья', '2015-09-07', '1995-11-15', 'dumova1995@mail.ru', '79234331552', 'dumova1552', null, 'happy', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 13:52:14', b'0');
 
 
 

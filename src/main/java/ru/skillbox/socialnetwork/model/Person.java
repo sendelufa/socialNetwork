@@ -61,7 +61,6 @@ public class Person {
     * номер телефона
     */
    @Column(name = "phone", unique = true)
-   @NotNull
    private String phone;
 
    /**

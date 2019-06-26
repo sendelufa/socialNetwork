@@ -26,31 +26,69 @@ public class AccountController {
     @Autowired
     PersonDAO personDao;
 
+    /**
+     * Регистрация пользователя
+     *
+     * @param registration      Сущность, описывающая необходимые данные для регистрации
+     * @return
+     */
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
         return null;
     }
 
+    /**
+     * Восстановить пароль по email.
+     *
+     * Высылает ссылку для восстановления на почтовый ящик.
+     * @param email     Почта
+     * @return
+     */
     @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
     public ResponseEntity recoveryPassword(@RequestParam String email){
         return null;
     }
 
+    /**
+     * Изменить пароль.
+     *
+     * @param passwordApi       Сущность, в которой хранится токен/старый пароль и новый пароль
+     * @return
+     */
     @RequestMapping(value = "password/set", method = RequestMethod.POST)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi){
         return null;
     }
 
+    /**
+     * Смена email'а пользователя.
+     *
+     * @param email     Почта
+     * @return
+     */
     @RequestMapping(value = "email", method = RequestMethod.POST)
     public ResponseEntity seteEmail(@RequestParam String email){
         return null;
     }
 
+    /**
+     * Редактирование настроек оповещения
+     *
+     * @param notification_type     Тип оповещения
+     * @param enable                Включены/выключены
+     * @return
+     */
     @RequestMapping(value = "notification", method = RequestMethod.POST)
     public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
         return null;
     }
 
+    /**
+     * Установить статус пользователя как online/offline
+     *
+     * @param status        Online/offline
+     * @return
+     */
     @RequestMapping(value = "status", method = RequestMethod.POST)
     public ResponseEntity status(@RequestParam String status){
         return null;

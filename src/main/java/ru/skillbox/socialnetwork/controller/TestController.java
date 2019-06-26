@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.skillbox.socialnetwork.dao.PersonDao;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class TestController {
 
     @Autowired
-    private PersonDao personDao;
+    private PersonDAO personDao;
 
     @GetMapping
     public String test(){

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.model.Person;
+
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -55,13 +58,37 @@ public class PersonDAO {
     }
 
     public List<Person> getPersonsByParameters(PersonParameters parameters) {
-        Criteria criteria = getCurrentSession().createCriteria(List.class)
-                .add(Restrictions.like("first_name", parameters.getFirst_name()))
-                .add(Restrictions.like("last_name", parameters.getLast_name()))
-                .add(Restrictions.le("last_name", parameters.getLast_name()))
-                .add(Restrictions.ge("last_name", parameters.getLast_name()));
-//                .add(Restrictions.eq("country_id", parameters.getLast_name()))
-//                .add(Restrictions.eq("city_id", parameters.getLast_name()))
-        return (List<Person>) criteria.uniqueResult();
+        Calendar calendar;
+        Date dateTo;
+        Date dateFrom;
+
+        Criteria criteria = getCurrentSession().createCriteria(Person.class);
+        if (!parameters.getFirst_name().isEmpty()) {
+            criteria.add(Restrictions.like("firstName", parameters.getFirst_name()));
+        }
+
+        if (!parameters.getLast_name().isEmpty()) {
+            criteria.add(Restrictions.like("lastName", parameters.getLast_name()));
+        }
+
+        if (parameters.getAge_from() > 0) {
+            calendar = Calendar.getInstance();
+            calendar.add(Calendar.YEAR, -parameters.getAge_from());
+            dateFrom = calendar.getTime();
+            criteria.add(Restrictions.ge("birthDate", dateFrom));
+        }
+
+        if (parameters.getAge_to() > 0) {
+            calendar = Calendar.getInstance();
+            calendar.add(Calendar.YEAR, -parameters.getAge_to());
+            dateTo = calendar.getTime();
+            criteria.add(Restrictions.le("birthDate", dateTo));
+        }
+
+
+        //TODO: Вернуть когда обновится пекрсона
+//                .add(Restrictions.eq("countryId", parameters.getLast_name()))
+//                .add(Restrictions.eq("cityId", parameters.getLast_name()))
+        return (List<Person>) criteria.list();
     }
 }

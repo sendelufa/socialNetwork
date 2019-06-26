@@ -16,6 +16,7 @@ import ru.skillbox.socialnetwork.controller.AccountController;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -98,14 +99,14 @@ public class AccountControllerTest {
     @Test
     @WithMockUser
     public void testRecoveryPassword() throws Exception {
-        mvc.perform(post("/api/v1/account/password/recovery")
+        mvc.perform(put("/api/v1/account/password/recovery")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("email", "email@test.com"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        mvc.perform(post("/api/v1/account/password/recovery")
+        mvc.perform(put("/api/v1/account/password/recovery")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("email", "test"))
@@ -123,7 +124,7 @@ public class AccountControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(passwordApi);
 
-        mvc.perform(post("/api/v1/account/password/set")
+        mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
@@ -137,7 +138,7 @@ public class AccountControllerTest {
 
         json = objectMapper.writeValueAsString(passwordApi);
 
-        mvc.perform(post("/api/v1/account/password/set")
+        mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
@@ -160,7 +161,7 @@ public class AccountControllerTest {
     @Test
     @WithMockUser
     public void testSetEmail() throws Exception {
-        mvc.perform(post("/api/v1/account/email")
+        mvc.perform(put("/api/v1/account/email")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("email", "email@test.com"))
@@ -178,7 +179,7 @@ public class AccountControllerTest {
     @Test
     @WithMockUser
     public void testNotification() throws Exception {
-        mvc.perform(post("/api/v1/account/notification")
+        mvc.perform(put("/api/v1/account/notification")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("notification_type", "type")
@@ -198,14 +199,14 @@ public class AccountControllerTest {
     @Test
     @WithMockUser
     public void testStatus() throws Exception {
-        mvc.perform(post("/api/v1/account/status")
+        mvc.perform(put("/api/v1/account/status")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("status", "online"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        mvc.perform(post("/api/v1/account/status")
+        mvc.perform(put("/api/v1/account/status")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .param("status", ""))

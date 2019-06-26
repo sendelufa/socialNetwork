@@ -1,13 +1,13 @@
 package ru.skillbox.socialnetwork.service;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.dao.PersonDaoService;
-import ru.skillbox.socialnetwork.mapper.PersonMapper;
-import ru.skillbox.socialnetwork.mapper.PostMapper;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
+import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 
@@ -18,13 +18,13 @@ import java.util.List;
 public class ProfileService {
 
     @Autowired
-    private PersonDaoService personDaoService;
+    private PersonDAO personDAO;
 
     @Autowired
-    private PersonMapper personMapper;
+    private PostDAO postDAO;
 
     @Autowired
-    private PostMapper postMapper;
+    private ModelMapper modelMapper;
 
     /**
      * Получение текущего пользователя
@@ -33,7 +33,7 @@ public class ProfileService {
      */
     public PersonApi getMe() {
         Person person = getCurrentPerson();
-        return personMapper.toApi(person);
+        return modelMapper.map(person, PersonApi.class);
     }
 
     /**
@@ -51,7 +51,7 @@ public class ProfileService {
         person.setAbout(personApi.getAbout());
         person.setTown(Integer.toString(personApi.getTown_id()));
         person.setMessagesPermission(personApi.getMessages_permission());
-        personDaoService.updatePerson(person);
+        personDAO.updatePerson(person);
     }
 
     /**
@@ -59,7 +59,7 @@ public class ProfileService {
      */
     public void deleteMe() {
         Person person = getCurrentPerson();
-        personDaoService.deletePerson(person);
+        personDAO.deletePerson(person);
     }
 
     /**
@@ -69,8 +69,8 @@ public class ProfileService {
      * @return Пользователь
      */
     public PersonApi getPersonById(int id) {
-        Person person = personDaoService.getPersonById(id);
-        return personMapper.toApi(person);
+        Person person = personDAO.getPersonById(id);
+        return modelMapper.map(person, PersonApi.class);
     }
 
     /**
@@ -80,11 +80,10 @@ public class ProfileService {
      * @return Список записей
      */
     public List<PostApi> getWall(int id) {
-        //TODO: Реализовать получение постов, когда появится dao для постов
-        List<Post> posts = new ArrayList<>();
+        List<Post> posts = postDAO.getAllPosts();
         List<PostApi> result = new ArrayList<>();
         for (Post post : posts) {
-            result.add(postMapper.toApi(post));
+            result.add(modelMapper.map(post, PostApi.class));
         }
         return result;
     }
@@ -97,10 +96,10 @@ public class ProfileService {
      */
     public void addPostOnWall(int id, ru.skillbox.socialnetwork.api.request.PostApi newPost) {
         Post post = new Post();
-        post.setAuthorId(id);
+        post.setAuthor(personDAO.getPersonById(id));
         post.setPostText(newPost.getPost_text());
         post.setTitle(newPost.getTitle());
-        //TODO: Реализовать запись поста в бд, когда появится dao для постов
+        postDAO.addPost(post);
     }
 
     /**
@@ -110,10 +109,10 @@ public class ProfileService {
      * @return Пользователь
      */
     public List<PersonApi> searchPerson(PersonParameters parameters) {
-        List<Person> personsFromDB = personDaoService.getPersonsByParameters(parameters);
+        List<Person> personsFromDB = personDAO.getPersonsByParameters(parameters);
         List<PersonApi> persons = new ArrayList<>();
         for (Person person : personsFromDB) {
-            persons.add(personMapper.toApi(person));
+            persons.add(modelMapper.map(person, PersonApi.class));
         }
         return persons;
     }
@@ -124,9 +123,9 @@ public class ProfileService {
      * @param id ID пользователя
      */
     public void blockPersonById(int id) {
-        Person person = personDaoService.getPersonById(id);
+        Person person = personDAO.getPersonById(id);
         person.setBlocked(true);
-        personDaoService.updatePerson(person);
+        personDAO.updatePerson(person);
     }
 
     /**
@@ -135,9 +134,9 @@ public class ProfileService {
      * @param id ID пользователя
      */
     public void unblockPersonById(int id) {
-        Person person = personDaoService.getPersonById(id);
+        Person person = personDAO.getPersonById(id);
         person.setBlocked(false);
-        personDaoService.updatePerson(person);
+        personDAO.updatePerson(person);
     }
 
     private Person getCurrentPerson() {

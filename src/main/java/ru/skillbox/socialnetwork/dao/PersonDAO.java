@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.model.Person;
 import java.util.List;
 
@@ -24,6 +25,12 @@ public class PersonDAO {
         Criteria criteria = session.createCriteria(Person.class)
                 .add(Restrictions.eq("email", email));
 
+        return (Person) criteria.uniqueResult();
+    }
+
+    public Person getPersonById(int id) {
+        Criteria criteria = getCurrentSession().createCriteria(Person.class)
+                .add(Restrictions.idEq(id));
         return (Person) criteria.uniqueResult();
     }
 
@@ -47,4 +54,14 @@ public class PersonDAO {
         return sessionFactory.getCurrentSession();
     }
 
+    public List<Person> getPersonsByParameters(PersonParameters parameters) {
+        Criteria criteria = getCurrentSession().createCriteria(List.class)
+                .add(Restrictions.like("first_name", parameters.getFirst_name()))
+                .add(Restrictions.like("last_name", parameters.getLast_name()))
+                .add(Restrictions.le("last_name", parameters.getLast_name()))
+                .add(Restrictions.ge("last_name", parameters.getLast_name()));
+//                .add(Restrictions.eq("country_id", parameters.getLast_name()))
+//                .add(Restrictions.eq("city_id", parameters.getLast_name()))
+        return (List<Person>) criteria.uniqueResult();
+    }
 }

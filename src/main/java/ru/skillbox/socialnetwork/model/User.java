@@ -1,12 +1,15 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import ru.skillbox.socialnetwork.model.enumeration.UserType;
 
 /**
  * модераторы и администраторы
  */
 @Entity
+@Table(name = "user")
 public class User {
 
    /**
@@ -15,29 +18,34 @@ public class User {
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
    private int id;
 
    /**
     * имя
     */
    @Column(name = "name")
+   @NotNull
    private String name;
 
    /**
     * адрес электронной почты
     */
-   @Column(name = "e_mail")
+   @Column(name = "e_mail", unique = true)
+   @NotNull
    private String email;
 
    /**
     * пароль
     */
    @Column(name = "password")
+   @NotNull
    private String password;
 
    /**
     * тип пользователя: MODERATOR, ADMIN (может управлять другими админами и модераторами)
     */
+   @Enumerated(EnumType.STRING)
    @Column(name = "type", columnDefinition = "ENUM('MODERATOR', 'ADMIN')")
    private UserType type;
 

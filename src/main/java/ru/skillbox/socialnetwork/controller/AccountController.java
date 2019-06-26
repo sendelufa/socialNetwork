@@ -1,118 +1,51 @@
 package ru.skillbox.socialnetwork.controller;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 
 @Controller
 @RequestMapping("/api/v1/account/")
 public class AccountController {
 
-    /**
-     * Регистрация пользователя
-     *
-     * @param registration      Сущность, описывающая необходимые данные для регистрации
-     * @return
-     */
-    @PostMapping(value = "/registration")
+    @Autowired
+    PersonDAO personDao;
+
+    @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        return null;
     }
 
-    /**
-     * Восстановить пароль по email.
-     *
-     * Высылает ссылку для восстановления на почтовый ящик.
-     * @param email     Почта
-     * @return
-     */
-    @PostMapping(value = "password/recovery")
+    @RequestMapping(value = "password/recovery", method = RequestMethod.POST)
     public ResponseEntity recoveryPassword(@RequestParam String email){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        return null;
     }
 
-    /**
-     * Изменить пароль.
-     *
-     * @param passwordApi       Сущность, в которой хранится токен/старый пароль и новый пароль
-     * @return
-     */
-    @PostMapping(value = "password/set")
+    @RequestMapping(value = "password/set", method = RequestMethod.POST)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+        return null;
     }
 
-    /**
-     * Смена email'а пользователя.
-     *
-     * @param email     Почта
-     * @return
-     */
-    @PostMapping(value = "email")
-    public ResponseEntity setEmail(@RequestParam String email){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+    @RequestMapping(value = "email", method = RequestMethod.POST)
+    public ResponseEntity seteEmail(@RequestParam String email){
+        return null;
     }
 
-    /**
-     * Редактирование настроек оповещения
-     *
-     * @param notification_type     Тип оповещения
-     * @param enable                Включены/выключены
-     * @return
-     */
-    @PostMapping(value = "notification")
+    @RequestMapping(value = "notification", method = RequestMethod.POST)
     public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+        return null;
     }
 
-    /**
-     * Установить статус пользователя как online/offline
-     *
-     * @param status        Online/offline
-     * @return
-     */
-    @PostMapping(value = "status")
+    @RequestMapping(value = "status", method = RequestMethod.POST)
     public ResponseEntity status(@RequestParam String status){
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+        return null;
     }
 
 }

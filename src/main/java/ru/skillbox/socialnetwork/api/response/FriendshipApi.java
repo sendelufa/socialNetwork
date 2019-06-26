@@ -1,11 +1,19 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FriendshipApi implements AbstractResponse{
 
   private int id;
-  private int status_id;
-  private int src_person_id;
-  private int dst_person_id;
+
+  @JsonProperty("status_id")
+  private int statusId;
+
+  @JsonProperty("src_person_id")
+  private int srcPersonId;
+
+  @JsonProperty("dst_person_id")
+  private int dstPersonId;
 
   public int getId() {
     return id;
@@ -16,26 +24,26 @@ public class FriendshipApi implements AbstractResponse{
   }
 
   public int getStatus_id() {
-    return status_id;
+    return statusId;
   }
 
   public void setStatus_id(int status_id) {
-    this.status_id = status_id;
+    this.statusId = status_id;
   }
 
   public int getSrc_person_id() {
-    return src_person_id;
+    return srcPersonId;
   }
 
   public void setSrc_person_id(int src_person_id) {
-    this.src_person_id = src_person_id;
+    this.srcPersonId = src_person_id;
   }
 
   public int getDst_person_id() {
-    return dst_person_id;
+    return dstPersonId;
   }
 
   public void setDst_person_id(int dst_person_id) {
-    this.dst_person_id = dst_person_id;
+    this.dstPersonId = dst_person_id;
   }
 }

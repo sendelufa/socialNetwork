@@ -42,6 +42,7 @@ public class HibernateConf {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setHibernateProperties(hibernateProperties());
+        sessionFactory.setPackagesToScan("ru.skillbox.socialnetwork.model");
 
         return sessionFactory;
     }

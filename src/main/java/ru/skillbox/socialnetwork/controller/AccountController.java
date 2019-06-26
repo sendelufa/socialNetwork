@@ -13,7 +13,7 @@ import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.dao.PersonDao;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class AccountController {
 
     @Autowired
-    PersonDao personDao;
+    PersonDAO personDao;
 
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){

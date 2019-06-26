@@ -32,13 +32,7 @@ public class PersonDAO {
     }
 
     public Person getPersonById(int id) {
-<<<<<<< HEAD
         return getCurrentSession().get(Person.class, id);
-=======
-        Criteria criteria = getCurrentSession().createCriteria(Person.class)
-                .add(Restrictions.idEq(id));
-        return (Person) criteria.uniqueResult();
->>>>>>> #35: Подключены недостающие дао
     }
 
     public List<Person> getAllPersons() {
@@ -62,7 +56,6 @@ public class PersonDAO {
         return sessionFactory.getCurrentSession();
     }
 
-<<<<<<< HEAD
     public List getPersonsByParameters(PersonParameters parameters) {
         StringBuilder query = new StringBuilder();
         Calendar calendar = Calendar.getInstance();
@@ -80,16 +73,5 @@ public class PersonDAO {
                 ", birth_date > '" + ageFrom + "' " +
                 ", country_id = " + parameters.getCountry_id() + " " +
                 ", town_id = " + parameters.getCity_id()).list();
-=======
-    public List<Person> getPersonsByParameters(PersonParameters parameters) {
-        Criteria criteria = getCurrentSession().createCriteria(List.class)
-                .add(Restrictions.like("first_name", parameters.getFirst_name()))
-                .add(Restrictions.like("last_name", parameters.getLast_name()))
-                .add(Restrictions.le("last_name", parameters.getLast_name()))
-                .add(Restrictions.ge("last_name", parameters.getLast_name()));
-//                .add(Restrictions.eq("country_id", parameters.getLast_name()))
-//                .add(Restrictions.eq("city_id", parameters.getLast_name()))
-        return (List<Person>) criteria.uniqueResult();
->>>>>>> #35: Подключены недостающие дао
     }
 }

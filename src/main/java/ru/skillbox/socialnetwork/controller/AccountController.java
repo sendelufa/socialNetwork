@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
+import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
@@ -21,78 +22,41 @@ public class AccountController {
     @RequestMapping(value = "registration", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration){
 
-        Object obj = accountService.registration(registration);
+        AbstractResponse response = accountService.registration(registration);
 
-
-        if (obj instanceof ResponseApi){
-            return new ResponseEntity(obj, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(obj, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 
     @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
-    public ResponseEntity recoveryPassword(@RequestParam String email){
-
-
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity recoveryPassword(@RequestBody String email){
+        return null;
     }
 
     @RequestMapping(value = "password/set", method = RequestMethod.PUT)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi) {
 
-        Object obj = accountService.setPassword(passwordApi);
+        AbstractResponse response = accountService.setPassword(passwordApi);
 
-        if (obj instanceof ResponseApi) {
-            return new ResponseEntity(obj, HttpStatus.OK);
-        } else {
-            return new ResponseEntity(obj, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "email", method = RequestMethod.PUT)
-    public ResponseEntity setEmail(@RequestParam String email){
+    public ResponseEntity setEmail(@RequestBody String email){
 
-        Object obj = accountService.setEmail(email);
+        AbstractResponse response = accountService.setEmail(email);
 
-        if(obj instanceof ResponseApi){
-            return new ResponseEntity(obj, HttpStatus.OK);
-        } else {
-            ErrorApi error = (ErrorApi) obj;
-            String errorDescription = getErrorDescriptionFromErrorApi(error);
-            if(errorDescription.equals("UNAUTHORIZED")){
-                return new ResponseEntity(error,HttpStatus.UNAUTHORIZED);
-            } else {
-                return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
-            }
-        }
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "notification", method = RequestMethod.PUT)
-    public ResponseEntity notification(@RequestParam String notification_type, @RequestParam boolean enable){
-
+    public ResponseEntity notification(@RequestBody String notification_type, @RequestBody boolean enable){
         return null;
-
-        // Куда мне все это дело сохранить - в таблицу нотификация - нужен дао.
-
-
     }
 
     @RequestMapping(value = "status", method = RequestMethod.PUT)
-    public ResponseEntity status(@RequestParam String status){
-
+    public ResponseEntity status(@RequestBody String status){
         return null;
     }
-
-    private String getErrorDescriptionFromErrorApi(ErrorApi errorApi) {
-        String[] errorDescriptionArray = errorApi.getError_description().getError_description();
-        return errorDescriptionArray[0];
-
-    }
-
+    
 }

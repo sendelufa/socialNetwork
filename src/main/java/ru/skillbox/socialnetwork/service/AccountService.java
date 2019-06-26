@@ -25,57 +25,71 @@ public class AccountService {
     @Autowired
     private PersonDao personDAO;
     @Autowired
-    private SecurityTokenConfig security;
+    private BCryptPasswordEncoder encoder;
 
 
     public AbstractResponse registration(RegistrationApi registration) {
 
         String userEmail = registration.getEmail();
 
+        AbstractResponse response;
+
 
 
         if(EmailValidator.isValid(userEmail)) {
             Person person = personDAO.getPersonByEmail(userEmail);
 
-            if (person != null) {
+            if (person == null) {
+                person = new Person();
                 person.setLastName(registration.getLastName());
                 person.setFirstName(registration.getFirstName());
                 person.setEmail(userEmail);
 
                 if (registration.getPasswd1().equals(registration.getPasswd2())) {
-                    //BCryptPasswordEncoder encoder = security.passwordEncoder();
-                    String encodedPassword = security.passwordEncoder().encode(registration.getPasswd1());
+                    String encodedPassword = encoder.encode(registration.getPasswd1());
                     person.setPassword(encodedPassword);
                 } else {
 
-                    return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Passwords are not equal"}));
+                    response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Passwords are not equal"}));
+                    response.setSuccess(false);
+                    return response;
                 }
                 personDAO.addPerson(person);
-                return new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+                response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+                response.setSuccess(true);
+                return response;
 
             } else {
-                return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Given email is already used"}));
+                response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Given email is already used"}));
+                response.setSuccess(false);
+                return response;
             }
         } else {
-            return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Invalid email"}));
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Invalid email"}));
+            response.setSuccess(false);
+            return response;
         }
     }
 
     public AbstractResponse setPassword(SetPasswordApi passwordApi){
 
         String password = passwordApi.getPasswdord();
+        AbstractResponse response;
 
         if (!password.equals("")){
-            BCryptPasswordEncoder encoder = security.passwordEncoder();
             String encodedPassword = encoder.encode(password);
 
             Person person  = getCurrentPersonFromSecurityContext();
             person.setPassword(encodedPassword);
 
             personDAO.updatePerson(person);
-            return new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
         } else {
-            return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"empty string as password"}));
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"empty string as password"}));
+            response.setSuccess(false);
+            return response;
         }
     }
 
@@ -83,51 +97,32 @@ public class AccountService {
     public AbstractResponse setEmail(String email) {
 
         Person person = getCurrentPersonFromSecurityContext();
+        AbstractResponse response;
 
-        if(person == null){
-            return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"UNAUTHORIZED"}));
-        } else if (!EmailValidator.isValid(email)){
-            return new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
+        if (!EmailValidator.isValid(email)){
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
+            response.setSuccess(false);
+            return response;
         } else {
             person.setEmail(email);
             personDAO.updatePerson(person);
-            return new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
         }
     }
 
-    public ResponseEntity notification(String notification_type,boolean enable){
-
-
-
-
-
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+    public AbstractResponse notification(String notification_type,boolean enable){
+        return null;
     }
 
 
-    public ResponseEntity status(String status){
-
-
-
-
-        if (true){
-            return new ResponseEntity(new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok")), HttpStatus.OK);
-        } else if (true){
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity(new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"string"})), HttpStatus.UNAUTHORIZED);
-        }
+    public AbstractResponse status(String status){
+        return null;
     }
 
-    public Person getCurrentPersonFromSecurityContext(){
-        Person person  = (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return person;
+    private Person getCurrentPersonFromSecurityContext(){
+        return (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 

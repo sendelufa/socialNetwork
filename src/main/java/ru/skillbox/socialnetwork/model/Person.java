@@ -118,10 +118,9 @@ public class Person {
      */
     @Column(name = "is_online")
     private boolean isOnline;
-    public boolean isOnline() {
+    public boolean getOnline() {
         return isOnline;
     }
-
     public void setOnline(boolean online) {
         isOnline = online;
     }

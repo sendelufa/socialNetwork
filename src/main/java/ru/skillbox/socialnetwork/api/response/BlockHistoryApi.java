@@ -1,12 +1,21 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class BlockHistoryApi implements AbstractResponse{
 
   private int id;
   private long time;
-  private int person_id;
-  private int post_id;
-  private int comment_id;
+
+  @JsonProperty("person_id")
+  private int personId;
+
+  @JsonProperty("post_id")
+  private int postId;
+
+  @JsonProperty("comment_id")
+  private int commentId;
+
   private actions action;
 
   public enum actions {BLOCK, UNBLOCK}
@@ -28,27 +37,27 @@ public class BlockHistoryApi implements AbstractResponse{
   }
 
   public int getPerson_id() {
-    return person_id;
+    return personId;
   }
 
   public void setPerson_id(int person_id) {
-    this.person_id = person_id;
+    this.personId = person_id;
   }
 
   public int getPost_id() {
-    return post_id;
+    return postId;
   }
 
   public void setPost_id(int post_id) {
-    this.post_id = post_id;
+    this.postId = post_id;
   }
 
   public int getComment_id() {
-    return comment_id;
+    return commentId;
   }
 
   public void setComment_id(int comment_id) {
-    this.comment_id = comment_id;
+    this.commentId = comment_id;
   }
 
   public actions getAction() {

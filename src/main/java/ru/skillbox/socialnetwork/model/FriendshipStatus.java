@@ -8,6 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
@@ -30,6 +31,9 @@ public class FriendshipStatus {
 
     @Column(name = "name")
     private String name;
+
+    @OneToOne(mappedBy = "friendshipStatus")
+    private Friendship friendship;
 
     /**
      * код статуса
@@ -75,5 +79,13 @@ public class FriendshipStatus {
 
     public void setCode(CodeFriendshipStatus code) {
         this.code = code;
+    }
+
+    public Friendship getFriendship() {
+        return friendship;
+    }
+
+    public void setFriendship(Friendship friendship) {
+        this.friendship = friendship;
     }
 }

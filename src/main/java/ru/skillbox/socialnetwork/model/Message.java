@@ -1,10 +1,19 @@
 package ru.skillbox.socialnetwork.model;
 
-import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
 /**
  * личные сообщения
@@ -13,47 +22,29 @@ import java.util.Date;
 @Table(name = "message")
 public class Message {
 
-   /**
-    * ID
-    */
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @NotNull
    private int id;
 
-   /**
-    * дата и время отправки
-    */
    @Column(name = "time")
    @NotNull
    private Date time;
 
-   /**
-    * автор сообщения
-    */
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "author_id")
    @NotNull
    private Person author;
 
-   /**
-    * Получатель сообщения
-    */
    @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "recipient_id")
    @NotNull
    private Person recipient;
 
-   /**
-    * Текст сообщения
-    */
    @Column(name = "message_text")
    private String MessageText;
 
-   /**
-    * статус прочтения: SENT (не прочитано) и READ (прочитано)
-    */
    @Enumerated(EnumType.STRING)
    @Column(name = "read_status", columnDefinition = "ENUM('SENT', 'READ')")
    @NotNull
@@ -90,7 +81,6 @@ public class Message {
    public void setRecipient(Person recipient) {
       this.recipient = recipient;
    }
-
 
    public String getMessageText() {
       return MessageText;

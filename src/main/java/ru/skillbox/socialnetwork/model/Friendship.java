@@ -1,7 +1,14 @@
 package ru.skillbox.socialnetwork.model;
 
-import java.util.Set;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -11,32 +18,17 @@ import javax.validation.constraints.NotNull;
 @Table(name = "friendship")
 public class Friendship {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * статус связи
-     */
-    @OneToMany(mappedBy = "id")
-    private Set<FriendshipStatus> friendshipStatuses;
-
-    /**
-     *  пользователь, запросивший дружбу
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "src_person_id")
     @NotNull
     private Person srcPerson;
 
-    /**
-     * пользователь, получивший запрос
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "dst_person_id")
     @NotNull
@@ -48,15 +40,6 @@ public class Friendship {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Set<FriendshipStatus> getFriendshipStatuses() {
-        return friendshipStatuses;
-    }
-
-    public void setFriendshipStatuses(
-        Set<FriendshipStatus> friendshipStatuses) {
-        this.friendshipStatuses = friendshipStatuses;
     }
 
     public Person getSrcPerson() {

@@ -1,6 +1,14 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -10,32 +18,20 @@ import javax.validation.constraints.NotNull;
 @Table(name = "post_file")
 public class PostFile {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * пост
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     @NotNull
     private Post post;
 
-    /**
-     * Имя файла
-     */
     @Column(name = "name")
     private String name;
 
-    /**
-     * путь к файлу в хранилище
-     */
     @Column(name = "path")
     private String path;
 

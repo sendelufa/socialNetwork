@@ -98,6 +98,7 @@ public class Person {
     /**
      * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных), FRIENDS - только от друзей
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
     private MessagesPermissionPerson messagesPermission;
 
@@ -118,12 +119,67 @@ public class Person {
      */
     @Column(name = "is_online")
     private boolean isOnline;
-    public boolean getOnline() {
-        return isOnline;
-    }
-    public void setOnline(boolean online) {
-        isOnline = online;
-    }
+
+
+    @OneToMany(mappedBy = "author")
+    @OrderBy("time asc")
+    private Set<Post> posts;
+
+    /**
+     * Список лайков
+     *
+     */
+
+    @OneToMany(mappedBy = "person")
+    @OrderBy("time asc")
+    private Set<PostLike> likes;
+
+    /**
+     * Список сообщений
+     *
+     */
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+    private Set<Message> messagesOutgoing;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipient")
+    private Set<Message> messagesIncoming;
+
+    /**
+     * Список комментариев
+     *
+     */
+
+    @OneToMany(mappedBy = "author")
+    private Set<PostComment> postComments;
+
+    /**
+     * Список друзей
+     *
+     */
+
+    @OneToMany(mappedBy = "srcPerson")
+    private Set<Friendship> friendshipsSrc;
+
+    @OneToMany(mappedBy = "dstPerson")
+    private Set<Friendship> friendshipsDst;
+
+    /**
+     * Список блокировок
+     *
+     */
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    private Set<BlockHistory> blockHistories;
+
+    /**
+     * Список уведомлений
+     *
+     */
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    private Set<Notification> notifications;
+
 
     public int getId() {
         return id;
@@ -225,31 +281,111 @@ public class Person {
         return isApproved;
     }
 
-   public void setFriendshipsDst(Set<Friendship> friendshipsDst) {
-      this.friendshipsDst = friendshipsDst;
-   }
+    public void setApproved(boolean approved) {
+        isApproved = approved;
+    }
 
-   public Set<PostComment> getPostComments() {
-      return postComments;
-   }
+    public MessagesPermissionPerson getMessagesPermission() {
+        return messagesPermission;
+    }
 
-   public void setPostComments(Set<PostComment> postComments) {
-      this.postComments = postComments;
-   }
+    public void setMessagesPermission(MessagesPermissionPerson messagesPermission) {
+        this.messagesPermission = messagesPermission;
+    }
 
-   public Set<BlockHistory> getBlockHistories() {
-      return blockHistories;
-   }
+    public Date getLastOnlineTime() {
+        return lastOnlineTime;
+    }
 
-   public void setBlockHistories(Set<BlockHistory> blockHistories) {
-      this.blockHistories = blockHistories;
-   }
+    public void setLastOnlineTime(Date lastOnlineTime) {
+        this.lastOnlineTime = lastOnlineTime;
+    }
 
-   public Set<Notification> getNotifications() {
-      return notifications;
-   }
+    public boolean isBlocked() {
+        return isBlocked;
+    }
 
-   public void setNotifications(Set<Notification> notifications) {
-      this.notifications = notifications;
-   }
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
+
+    public Set<PostLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Set<PostLike> likes) {
+        this.likes = likes;
+    }
+
+    public Set<Message> getMessagesOutgoing() {
+        return messagesOutgoing;
+    }
+
+    public void setMessagesOutgoing(Set<Message> messagesOutgoing) {
+        this.messagesOutgoing = messagesOutgoing;
+    }
+
+    public Set<Message> getMessagesIncoming() {
+        return messagesIncoming;
+    }
+
+    public void setMessagesIncoming(Set<Message> messagesIncoming) {
+        this.messagesIncoming = messagesIncoming;
+    }
+
+    public Set<PostComment> getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(Set<PostComment> postComments) {
+        this.postComments = postComments;
+    }
+
+    public Set<Friendship> getFriendshipsSrc() {
+        return friendshipsSrc;
+    }
+
+    public void setFriendshipsSrc(Set<Friendship> friendshipsSrc) {
+        this.friendshipsSrc = friendshipsSrc;
+    }
+
+    public Set<Friendship> getFriendshipsDst() {
+        return friendshipsDst;
+    }
+
+    public void setFriendshipsDst(Set<Friendship> friendshipsDst) {
+        this.friendshipsDst = friendshipsDst;
+    }
+
+    public Set<BlockHistory> getBlockHistories() {
+        return blockHistories;
+    }
+
+    public void setBlockHistories(Set<BlockHistory> blockHistories) {
+        this.blockHistories = blockHistories;
+    }
+
+    public Set<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
+    }
 }

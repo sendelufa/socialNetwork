@@ -28,8 +28,6 @@ public class PostLikeMapperTest {
         //заполняем поля
         PostLike postLike = new PostLike();
         postLike.setId(232);
-        postLike.setPersonId(2342);
-        postLike.setPostId(2421);
 
         GregorianCalendar calendar = new GregorianCalendar(1982, 11, 23);
         Date date = calendar.getTime();
@@ -38,8 +36,6 @@ public class PostLikeMapperTest {
         //мапим и сравниваем
         LikeApi likeApi = mapper.map(postLike, LikeApi.class);
         assertEquals(postLike.getId(), likeApi.getId());
-        assertEquals(postLike.getPersonId(), likeApi.getPerson_id());
-        assertEquals(postLike.getPostId(), likeApi.getPost_id());
         assertEquals(postLike.getTime().getTime(), likeApi.getTime());
     }
 
@@ -56,8 +52,6 @@ public class PostLikeMapperTest {
         //мапим и сравниваем
         PostLike postLike = mapper.map(likeApi, PostLike.class);
         assertEquals(likeApi.getId(), postLike.getId());
-        assertEquals(likeApi.getPerson_id(), postLike.getPersonId());
-        assertEquals(likeApi.getPost_id(), postLike.getPostId());
         assertEquals(likeApi.getTime(), postLike.getTime().getTime());
     }
 }

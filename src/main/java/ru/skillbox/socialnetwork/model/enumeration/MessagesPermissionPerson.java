@@ -5,15 +5,8 @@ package ru.skillbox.socialnetwork.model.enumeration;
  */
 public enum  MessagesPermissionPerson {
 
-    /**
-     * от всех пользователей (кроме заблокированных)
-     */
-    ALL("ALL"),
-
-    /**
-     * только от друзей
-     */
-    FRIENDS("FRIENDS");
+    ALL("от всех пользователей (кроме заблокированных)"),
+    FRIENDS("только от друзей");
 
     /**
      * Описание

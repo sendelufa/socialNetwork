@@ -28,11 +28,9 @@ public class PostCommentMapperTest {
         //заполняем поля
         PostComment postComment = new PostComment();
         postComment.setId(45);
-        postComment.setAuthorId(34);
         postComment.setBlocked(false);
         postComment.setCommentText("good");
-        postComment.setParentId(3456);
-        postComment.setPostId(643);
+
 
         GregorianCalendar calendar = new GregorianCalendar(2019, 9, 27);
         Date date = calendar.getTime();
@@ -41,10 +39,7 @@ public class PostCommentMapperTest {
         //мапим и сравниваем
         CommentApi commentApi = mapper.map(postComment, CommentApi.class);
         assertEquals(postComment.getId(), commentApi.getId());
-        assertEquals(postComment.getAuthorId(), commentApi.getAuthor_id());
         assertEquals(postComment.getCommentText(), commentApi.getComment_text());
-        assertEquals(postComment.getParentId(), commentApi.getParent_id());
-        assertEquals(postComment.getPostId(), Integer.parseInt(commentApi.getPost_id()));
         assertEquals(postComment.getTime().getTime(), commentApi.getTime());
 
     }
@@ -65,10 +60,7 @@ public class PostCommentMapperTest {
         //мапим и сравниваем
         PostComment postComment = mapper.map(commentApi, PostComment.class);
         assertEquals(commentApi.getId(), postComment.getId());
-        assertEquals(commentApi.getAuthor_id(), postComment.getAuthorId());
         assertEquals(commentApi.getComment_text(), postComment.getCommentText());
-        assertEquals(commentApi.getParent_id(), postComment.getParentId());
-        assertEquals(Integer.parseInt(commentApi.getPost_id()), postComment.getPostId());
         assertEquals(commentApi.isIs_blocked(), postComment.isBlocked());
         assertEquals(commentApi.getTime(), postComment.getTime().getTime());
     }

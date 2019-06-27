@@ -28,11 +28,9 @@ public class BlockHistoryMapperTest {
     {
         //заполняем поля
         BlockHistory blockHistory = new BlockHistory();
-        blockHistory.setPerson_id(34);
         blockHistory.setId(23452);
         blockHistory.setAction(ActionBlockHistory.BLOCK);
-        blockHistory.setCommentId(3453);
-        blockHistory.setPostId(34534);
+
 
         GregorianCalendar calendar = new GregorianCalendar(2018, 12, 31);
         Date date = calendar.getTime();
@@ -42,9 +40,6 @@ public class BlockHistoryMapperTest {
         BlockHistoryApi blockHistoryApi = mapper.map(blockHistory, BlockHistoryApi.class);
         assertEquals(blockHistory.getId(), blockHistoryApi.getId());
         assertEquals(blockHistory.getAction().getDescription(), blockHistoryApi.getAction().toString());
-        assertEquals(blockHistory.getCommentId(), blockHistoryApi.getComment_id());
-        assertEquals(blockHistory.getPerson_id(), blockHistoryApi.getPerson_id());
-        assertEquals(blockHistory.getPostId(), blockHistoryApi.getPost_id());
         assertEquals(blockHistory.getTime().getTime(), blockHistoryApi.getTime());
     }
 
@@ -63,10 +58,7 @@ public class BlockHistoryMapperTest {
         //мапим и сравниваем
         BlockHistory blockHistory = mapper.map(blockHistoryApi, BlockHistory.class);
         assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().getDescription());
-        assertEquals(blockHistoryApi.getComment_id(), blockHistory.getCommentId());
         assertEquals(blockHistoryApi.getId(), blockHistory.getId());
-        assertEquals(blockHistoryApi.getPost_id(), blockHistory.getPostId());
-        assertEquals(blockHistoryApi.getPerson_id(), blockHistory.getPerson_id());
         assertEquals(blockHistoryApi.getTime(), blockHistory.getTime().getTime());
     }
 }

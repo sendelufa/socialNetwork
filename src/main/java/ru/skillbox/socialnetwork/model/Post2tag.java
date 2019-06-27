@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * связи постов с тэгами
@@ -15,18 +16,21 @@ public class Post2tag {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
     /**
      * пост
      */
     @Column(name = "post_id")
+    @NotNull
     private int postId;
 
     /**
      * тэг
      */
     @Column(name = "tag_id")
+    @NotNull
     private int tagId;
 
     public int getId() {

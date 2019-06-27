@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.model;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -12,89 +13,98 @@ import java.util.Date;
 @Table(name = "message")
 public class Message {
 
-    /**
-     * ID
-     */
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+   /**
+    * ID
+    */
+   @Id
+   @Column(name = "id")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
+   private int id;
 
-    /**
-     * дата и время отправки
-     */
-    @Column(name = "time")
-    private Date time;
+   /**
+    * дата и время отправки
+    */
+   @Column(name = "time")
+   @NotNull
+   private Date time;
 
-    /**
-     * автор сообщения
-     */
-    @Column(name = "author_id")
-    private int authorId;
+   /**
+    * автор сообщения
+    */
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "author_id")
+   @NotNull
+   private Person author;
 
-    /**
-     * Получатель сообщения
-     */
-    @Column(name = "recipient_id")
-    private int recipientId;
+   /**
+    * Получатель сообщения
+    */
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "recipient_id")
+   @NotNull
+   private Person recipient;
 
-    /**
-     * Текст сообщения
-     */
-    @Column(name = "message_text")
-    private String messageText;
+   /**
+    * Текст сообщения
+    */
+   @Column(name = "message_text")
+   private String MessageText;
 
-    /**
-     * статус прочтения: SENT (не прочитано) и READ (прочитано)
-     */
-    @Column(name = "read_status", columnDefinition="ENUM('SENT', 'READ')")
-    private ReadStatusMessage readStatus;
+   /**
+    * статус прочтения: SENT (не прочитано) и READ (прочитано)
+    */
+   @Enumerated(EnumType.STRING)
+   @Column(name = "read_status", columnDefinition = "ENUM('SENT', 'READ')")
+   @NotNull
+   private ReadStatusMessage readStatus;
 
-    public int getId() {
-        return id;
-    }
+   public int getId() {
+      return id;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public Date getTime() {
-        return time;
-    }
+   public Date getTime() {
+      return time;
+   }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
+   public void setTime(Date time) {
+      this.time = time;
+   }
 
-    public int getAuthorId() {
-        return authorId;
-    }
+   public Person getAuthor() {
+      return author;
+   }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
+   public void setAuthor(Person author) {
+      this.author = author;
+   }
 
-    public int getRecipientId() {
-        return recipientId;
-    }
+   public Person getRecipient() {
+      return recipient;
+   }
 
-    public void setRecipientId(int recipientId) {
-        this.recipientId = recipientId;
-    }
+   public void setRecipient(Person recipient) {
+      this.recipient = recipient;
+   }
 
-    public String getMessageText() {
-        return messageText;
-    }
 
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
-    }
+   public String getMessageText() {
+      return MessageText;
+   }
 
-    public ReadStatusMessage getReadStatus() {
-        return readStatus;
-    }
+   public void setMessageText(String messageText) {
+      MessageText = messageText;
+   }
 
-    public void setReadStatus(ReadStatusMessage readStatus) {
-        this.readStatus = readStatus;
-    }
+   public ReadStatusMessage getReadStatus() {
+      return readStatus;
+   }
+
+   public void setReadStatus(ReadStatusMessage readStatus) {
+      this.readStatus = readStatus;
+   }
 }

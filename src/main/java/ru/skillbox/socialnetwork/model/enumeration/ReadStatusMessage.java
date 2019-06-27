@@ -4,15 +4,8 @@ package ru.skillbox.socialnetwork.model.enumeration;
  * статус прочтения
  */
 public enum  ReadStatusMessage {
-    /**
-     * не прочитано
-     */
-    SENT("SENT"),
-
-    /**
-     * прочитано
-     */
-    READ("READ");
+    SENT("не прочитано"),
+    READ("прочитано");
 
     /**
      * Описание

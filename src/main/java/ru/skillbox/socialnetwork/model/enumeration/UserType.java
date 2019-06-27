@@ -2,17 +2,8 @@ package ru.skillbox.socialnetwork.model.enumeration;
 
 public enum UserType {
     // USER ("Пользователь"), может надо все таки??
-
-   /**
-    * Модератор
-    */
-   MODERATOR("MODERATOR"),
-
-   /**
-    * Админ
-    */
-   ADMIN("ADMIN");
-
+   MODERATOR("Модератор"),
+   ADMIN("Админ");
    private String type;
 
    UserType(String type) {

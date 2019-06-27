@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.model;
 
-import java.util.Set;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +33,7 @@ public class Tag {
     @JoinTable(name = "post2tag",
         joinColumns = @JoinColumn(name = "tag_id"),
         inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> posts;
+    private List<Post> posts;
 
     public int getId() {
         return id;
@@ -51,11 +51,11 @@ public class Tag {
         this.tag = tag;
     }
 
-    public Set<Post> getPosts() {
+    public  List<Post> getPosts() {
         return posts;
     }
 
-    public void setPosts(Set<Post> posts) {
+    public void setPosts( List<Post> posts) {
         this.posts = posts;
     }
 }

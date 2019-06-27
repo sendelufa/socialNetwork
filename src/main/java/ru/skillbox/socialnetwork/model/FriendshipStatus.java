@@ -1,10 +1,17 @@
 package ru.skillbox.socialnetwork.model;
 
-import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
 /**
  * статус дружбы
@@ -13,26 +20,20 @@ import java.util.Date;
 @Table(name = "friendship_status")
 public class FriendshipStatus {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * дата и время установки данного статуса
-     */
     @Column(name = "time")
     private Date time;
 
-    /**
-     * имя
-     */
     @Column(name = "name")
     private String name;
+
+    @OneToOne(mappedBy = "friendshipStatus")
+    private Friendship friendship;
 
     /**
      * код статуса
@@ -78,5 +79,13 @@ public class FriendshipStatus {
 
     public void setCode(CodeFriendshipStatus code) {
         this.code = code;
+    }
+
+    public Friendship getFriendship() {
+        return friendship;
+    }
+
+    public void setFriendship(Friendship friendship) {
+        this.friendship = friendship;
     }
 }

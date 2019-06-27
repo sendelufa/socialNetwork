@@ -1,9 +1,21 @@
 package ru.skillbox.socialnetwork.model;
 
-import java.util.Set;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * посты
@@ -12,173 +24,125 @@ import java.util.Date;
 @Table(name = "post")
 public class Post {
 
-    /**
-     * ID
-     */
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
-    private int id;
+   @Id
+   @Column(name = "id")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
+   private int id;
 
-    /**
-     * дата и время публикации
-     */
-    @Column(name = "time")
-    @NotNull
-    private Date time;
+   @Column(name = "time")
+   @NotNull
+   private Date time;
 
-    /**
-     * Автор поста
-     */
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    @NotNull
-    private Person author;
+   @ManyToOne
+   @JoinColumn(name = "author_id")
+   @NotNull
+   private Person author;
 
-    /**
-     * заголовок
-     */
-    @Column(name = "title")
-    private String title;
+   @Column(name = "title")
+   private String title;
 
-    /**
-     * HTML-текст поста
-     */
-    @Column(name = "post_text")
-    @NotNull
-    private String postText;
+   @Column(name = "post_text")
+   @NotNull
+   private String postText;
 
-    /**
-     * отметка о том, что пост заблокирован
-     */
-    @Column(name = "is_blocked")
-    @NotNull
-    private boolean isBlocked;
+   @Column(name = "is_blocked")
+   @NotNull
+   private boolean isBlocked;
 
-    /**
-     * Список лайков
-     *
-     */
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    private Set<PostLike> postLikes;
+   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+   private List<PostFile> postFiles;
 
-    /**
-     * Список файлов к посту
-     *
-     */
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    private Set<PostFile> postFiles;
+   @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+   @OrderBy("time asc")
+   private List<PostComment> postComments;
 
-    /**
-     * Комментарии
-     *
-     */
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
-    @OrderBy("time asc")
-    private Set<PostComment> postComments;
+   @ManyToMany(fetch = FetchType.LAZY)
+   @JoinTable(name = "post2tag",
+       joinColumns = @JoinColumn(name = "post_id"),
+       inverseJoinColumns = @JoinColumn(name = "tag_id"))
+   private List<Tag> tags;
 
-    /**
-     * Тэги поста
-     */
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "post2tag",
-    joinColumns = @JoinColumn(name = "post_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags;
+   @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+   private List<BlockHistory> blockHistories;
 
-    /**
-     * Список блокировок
-     */
+   public int getId() {
+      return id;
+   }
 
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-    private Set<BlockHistory> blockHistories;
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public int getId() {
-        return id;
-    }
+   public Person getAuthor() {
+      return author;
+   }
 
-    public Person getAuthor() {
-        return author;
-    }
+   public void setAuthor(Person author) {
+      this.author = author;
+   }
 
-    public void setAuthor(Person author) {
-        this.author = author;
-    }
+   public Date getTime() {
+      return time;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public void setTime(Date time) {
+      this.time = time;
+   }
 
-    public Date getTime() {
-        return time;
-    }
+   public String getTitle() {
+      return title;
+   }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
+   public void setTitle(String title) {
+      this.title = title;
+   }
 
-    public String getTitle() {
-        return title;
-    }
+   public String getPostText() {
+      return postText;
+   }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+   public void setPostText(String postText) {
+      this.postText = postText;
+   }
 
-    public String getPostText() {
-        return postText;
-    }
+   public boolean isBlocked() {
+      return isBlocked;
+   }
 
-    public void setPostText(String postText) {
-        this.postText = postText;
-    }
+   public void setBlocked(boolean blocked) {
+      isBlocked = blocked;
+   }
 
-    public boolean isBlocked() {
-        return isBlocked;
-    }
+   public List<PostFile> getPostFiles() {
+      return postFiles;
+   }
 
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
+   public void setPostFiles(List<PostFile> postFiles) {
+      this.postFiles = postFiles;
+   }
 
-    public Set<PostLike> getPostLikes() {
-        return postLikes;
-    }
+   public List<Tag> getTags() {
+      return tags;
+   }
 
-    public void setPostLikes(Set<PostLike> postLikes) {
-        this.postLikes = postLikes;
-    }
+   public void setTags(List<Tag> tags) {
+      this.tags = tags;
+   }
 
-    public Set<PostFile> getPostFiles() {
-        return postFiles;
-    }
+   public List<PostComment> getPostComments() {
+      return postComments;
+   }
 
-    public void setPostFiles(Set<PostFile> postFiles) {
-        this.postFiles = postFiles;
-    }
+   public void setPostComments(List<PostComment> postComments) {
+      this.postComments = postComments;
+   }
 
-    public Set<Tag> getTags() {
-        return tags;
-    }
+   public List<BlockHistory> getBlockHistories() {
+      return blockHistories;
+   }
 
-    public void setTags(Set<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public Set<PostComment> getPostComments() {
-        return postComments;
-    }
-
-    public void setPostComments(Set<PostComment> postComments) {
-        this.postComments = postComments;
-    }
-
-    public Set<BlockHistory> getBlockHistories() {
-        return blockHistories;
-    }
-
-    public void setBlockHistories(Set<BlockHistory> blockHistories) {
-        this.blockHistories = blockHistories;
-    }
+   public void setBlockHistories(List<BlockHistory> blockHistories) {
+      this.blockHistories = blockHistories;
+   }
 }

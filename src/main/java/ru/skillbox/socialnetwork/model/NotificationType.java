@@ -1,9 +1,15 @@
 package ru.skillbox.socialnetwork.model;
 
-import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 
 /**
  * тип оповещения
@@ -12,25 +18,16 @@ import javax.validation.constraints.NotNull;
 @Table(name = "notification_type")
 public class NotificationType {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * код типа
-     */
     @Column(name = "code")
     @NotNull
     private int code;
 
-    /**
-     * Имя
-     */
     @Enumerated(EnumType.STRING)
     @Column(name = "name", columnDefinition = "ENUM('POST', 'POST_COMMENT', 'COMMENT_COMMENT', 'FRIEND_REQUEST', 'MESSAGE')")
     @NotNull

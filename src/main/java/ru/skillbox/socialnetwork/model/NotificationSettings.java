@@ -14,15 +14,13 @@ public class NotificationSettings {
     @NotNull
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "person_id")
     @NotNull
     private int person;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "notification_type_id")
     @NotNull
-    private NotificationType notificationType;
+    private int notificationType;
 
     @Column(name = "enable")
     @NotNull
@@ -44,11 +42,11 @@ public class NotificationSettings {
         this.person = person;
     }
 
-    public NotificationType getNotificationType() {
+    public int getNotificationType() {
         return notificationType;
     }
 
-    public void setNotificationType(NotificationType notificationType) {
+    public void setNotificationType(int notificationType) {
         this.notificationType = notificationType;
     }
 

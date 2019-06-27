@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.mapper.controller;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(AccountController.class)
 public class AccountControllerTest {
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mvc;
@@ -38,8 +39,7 @@ public class AccountControllerTest {
         registrationApi.setPasswd2("1");
         registrationApi.setCoda(1);
 
-        Gson gson = new Gson();
-        String json = gson.toJson(registrationApi);
+        String json = mapper.writeValueAsString(registrationApi);
 
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -57,7 +57,7 @@ public class AccountControllerTest {
         registrationApi.setPasswd2("2");
         registrationApi.setCoda(1);
 
-        json = gson.toJson(registrationApi);
+        json = mapper.writeValueAsString(registrationApi);
 
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -75,7 +75,7 @@ public class AccountControllerTest {
         registrationApi.setPasswd2("1");
         registrationApi.setCoda(1);
 
-        json = gson.toJson(registrationApi);
+        json = mapper.writeValueAsString(registrationApi);
 
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -85,7 +85,7 @@ public class AccountControllerTest {
                 .andDo(MockMvcResultHandlers.print());
 
         registrationApi = new RegistrationApi();
-        json = gson.toJson(registrationApi);
+        json = mapper.writeValueAsString(registrationApi);
 
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -121,8 +121,7 @@ public class AccountControllerTest {
         passwordApi.setOld("1");
         passwordApi.setPasswdord("2");
 
-        Gson gson = new Gson();
-        String json = gson.toJson(passwordApi);
+        String json = mapper.writeValueAsString(passwordApi);
 
         mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -136,7 +135,7 @@ public class AccountControllerTest {
         passwordApi.setToken("1");
         passwordApi.setPasswdord("2");
 
-        json = gson.toJson(passwordApi);
+        json = mapper.writeValueAsString(passwordApi);
 
         mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -148,7 +147,7 @@ public class AccountControllerTest {
 
         passwordApi = new SetPasswordApi();
         passwordApi.setPasswdord("1");
-        json = gson.toJson(passwordApi);
+        json = mapper.writeValueAsString(passwordApi);
 
         mvc.perform(post("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

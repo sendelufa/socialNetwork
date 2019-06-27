@@ -119,3 +119,11 @@ CREATE TABLE `post_like` (
   `code` INT NOT NULL,
   `name` ENUM('POST', 'POST_COMMENT', 'COMMENT_COMMENT', 'FRIEND_REQUEST', 'MESSAGE') NOT NULL,
   PRIMARY KEY (`id`));
+
+  CREATE TABLE `notification_settings` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `person_id` INT NOT NULL,
+  `notification_type_id` INT NOT NULL,
+  `enable` BIT NOT NULL DEFAULT 0
+  PRIMARY KEY (`id`));
+  )

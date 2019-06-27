@@ -1,3 +1,9 @@
-stages:
-  - test
-  - compile
+build:
+  stage: build
+  script:
+    - mvn spring-boot:run
+
+test:
+  stage: test
+  script:
+    - mvn test

@@ -13,47 +13,29 @@ import java.util.Date;
 @Table(name = "block_history")
 public class BlockHistory {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * время блокировки
-     */
     @Column(name = "time")
     @NotNull
     private Date time;
 
-    /**
-     * пользователь, которого заблокировали
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     @NotNull
     private Person person;
 
-    /**
-     * Пост, за который заблокировали
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    /**
-     * Комментарий
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "comment_id")
     private PostComment postComment;
 
-    /**
-     * тип действия: BLOCK (блокировка) или UNBLOCK (разблокировка)
-     */
     @Enumerated(EnumType.STRING)
     @Column(name = "action", columnDefinition="ENUM('BLOCK', 'UNBLOCK')")
     @NotNull

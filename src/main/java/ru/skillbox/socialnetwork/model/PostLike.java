@@ -1,8 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * лайки постов
@@ -11,34 +19,22 @@ import java.util.Date;
 @Table(name = "post_like")
 public class PostLike {
 
-   /**
-    * ID
-    */
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @NotNull
    private int id;
 
-   /**
-    * время и дата лайка
-    */
    @Column(name = "time")
    @NotNull
    private Date time;
 
-   /**
-    * автор лайка
-    */
-   @ManyToOne
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "person_id")
    @NotNull
    private Person person;
 
-   /**
-    * пост
-    */
-   @ManyToOne
+   @ManyToOne(fetch = FetchType.EAGER)
    @JoinColumn(name = "post_id")
    @NotNull
    private Post post;

@@ -1,8 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * оповещения
@@ -11,48 +19,30 @@ import java.util.Date;
 @Table(name = "notification")
 public class Notification {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     private int id;
 
-    /**
-     * тип нотификации
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
     @NotNull
     private NotificationType notificationType;
 
-    /**
-     * время отправки
-     */
     @Column(name = "sent_time")
     @NotNull
     private Date sentTime;
 
-    /**
-     * кому отправлено
-     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "person_id")
     @NotNull
     private Person person;
 
-    /**
-     * идентификатор сущности, относительно которой отправлено оповещение (комментарий, друг, пост или сообщение)
-     */
     @Column(name = "entity_id")
     @NotNull
     private int entityId;
 
-    /**
-     * куда отправлено оповещение (конкретный e-mail или телефон)
-     */
     @Column(name = "contact")
     @NotNull
     private String contact;

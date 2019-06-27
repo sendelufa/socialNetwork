@@ -1,5 +1,7 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PostApi extends AbstractResponse {
 
   private int id;

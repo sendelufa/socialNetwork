@@ -16,19 +16,19 @@ public class NotificationTypeApi extends AbstractResponse{
     this.id = id;
   }
 
-  public codes getName() {
-    return name;
-  }
-
-  public void setName(codes code) {
-    this.name = code;
-  }
-
-  public String getCode() {
+  public codes getCode() {
     return code;
   }
 
-  public void setCode(String name) {
-    this.code = name;
+  public void setCode(codes code) {
+    this.code = code;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }

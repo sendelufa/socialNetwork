@@ -2,8 +2,6 @@ package ru.skillbox.socialnetwork.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,7 @@ import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.auth.SecurityTokenConfig;
-import ru.skillbox.socialnetwork.dao.PersonDao;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
@@ -26,7 +23,7 @@ import java.util.Date;
 public class AccountService {
 
     @Autowired
-    private PersonDao personDAO;
+    private PersonDAO personDAO;
     @Autowired
     private BCryptPasswordEncoder encoder;
 

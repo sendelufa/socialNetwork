@@ -210,3 +210,4 @@ public class Person {
    public void setBlocked(boolean blocked) {
       isBlocked = blocked;
    }
+}

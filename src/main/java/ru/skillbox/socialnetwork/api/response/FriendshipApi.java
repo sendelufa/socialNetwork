@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FriendshipApi implements AbstractResponse{
+public class FriendshipApi extends AbstractResponse{
 
   private int id;
 

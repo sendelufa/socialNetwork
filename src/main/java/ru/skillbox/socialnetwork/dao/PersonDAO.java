@@ -18,6 +18,7 @@ public class PersonDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+
     public Person getPersonByEmail(String email) {
 
         Session session = sessionFactory.getCurrentSession();
@@ -27,9 +28,11 @@ public class PersonDAO {
         return (Person) criteria.uniqueResult();
     }
 
+
     public List<Person> getAllPersons() {
         return getCurrentSession().createQuery("from Person p").list();
     }
+
 
     public void updatePerson(Person person) {
         getCurrentSession().update(person);

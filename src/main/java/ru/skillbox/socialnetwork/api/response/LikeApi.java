@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class LikeApi implements AbstractResponse{
+public class LikeApi extends AbstractResponse{
 
   private int id;
   private long time;

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class CountryApi implements AbstractResponse{
+public class CountryApi extends AbstractResponse{
 
   private int id;
   private String title;

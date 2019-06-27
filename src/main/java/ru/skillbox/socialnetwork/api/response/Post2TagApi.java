@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Post2TagApi implements AbstractResponse{
+public class Post2TagApi extends AbstractResponse{
 
   private int id;
 

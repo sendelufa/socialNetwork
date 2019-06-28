@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -36,10 +37,10 @@ public class PostController {
      * @param id
      * @return
      */
-    @GetMapping("/{id}")
-    public ResponseEntity getPostById(@RequestParam int id) {
+    @GetMapping("/{id:\\d+}")
+    public ResponseEntity getPostById(@PathVariable int id) {
         //TODO: Требуется реализация
-        return null;
+        return new ResponseEntity<>("1", HttpStatus.OK);
     }
 
     /**
@@ -49,9 +50,9 @@ public class PostController {
      * @param publishDate Отложить до даты определенной даты
      * @return
      */
-    @PutMapping("/{id}")
+    @PutMapping("/{id:\\d+}")
     public ResponseEntity editPostById(@RequestBody PostApi request,
-                                       @RequestParam int id,
+                                       @PathVariable int id,
                                        @RequestParam(value = "publish_date", required = false) Number publishDate) {
         //TODO: Требуется реализация
         return null;
@@ -63,8 +64,8 @@ public class PostController {
      * @param id
      * @return
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity deletePostById(@RequestParam int id) {
+    @DeleteMapping("/{id:\\d+}")
+    public ResponseEntity deletePostById(@PathVariable int id) {
         //TODO: Требуется реализация
         return null;
     }
@@ -75,8 +76,8 @@ public class PostController {
      * @param id
      * @return
      */
-    @PutMapping("/{id}/recover")
-    public ResponseEntity recoverPostById(@RequestParam int id) {
+    @PutMapping("/{id:\\d+}/recover")
+    public ResponseEntity recoverPostById(@PathVariable int id) {
         //TODO: Требуется реализация
         return null;
     }
@@ -89,8 +90,8 @@ public class PostController {
      * @param itemPerPage Количество элементов на страницу
      * @return
      */
-    @GetMapping("/{id}/comments")
-    public ResponseEntity getPostingComments(@RequestParam int id,
+    @GetMapping("/{id:\\d+}/comments")
+    public ResponseEntity getPostingComments(@PathVariable int id,
                                              @RequestParam(required = false) int offset,
                                              @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
         //TODO: Требуется реализация
@@ -104,9 +105,9 @@ public class PostController {
      * @param id      ID публикации
      * @return
      */
-    @PostMapping("/{id}/comments")
+    @PostMapping("/{id:\\d+}/comments")
     public ResponseEntity createPostingComment(@RequestBody PostCommentApi request,
-                                               @RequestParam int id) {
+                                               @PathVariable int id) {
         //TODO: Требуется реализация
         return null;
     }
@@ -119,9 +120,9 @@ public class PostController {
      * @param commentId ID комментария публикации
      * @return
      */
-    @PutMapping("/{id}/comments/{comment_id}")
+    @PutMapping("/{id:\\d+}/comments/{comment_id:\\d+}")
     public ResponseEntity editPostingComment(@RequestBody PostCommentApi request,
-                                             @RequestParam int id,
+                                             @PathVariable int id,
                                              @RequestParam(value = "comment_id ") int commentId) {
         //TODO: Требуется реализация
         return null;
@@ -134,9 +135,9 @@ public class PostController {
      * @param commentId ID комментария публикации
      * @return
      */
-    @DeleteMapping("/{id}/comments/{comment_id}")
-    public ResponseEntity deletePostingComment(@RequestParam int id,
-                                               @RequestParam(value = "comment_id ") int commentId) {
+    @DeleteMapping("/{id:\\d+}/comments/{comment_id:\\d+}")
+    public ResponseEntity deletePostingComment(@PathVariable int id,
+                                               @PathVariable(value = "comment_id ") int commentId) {
         //TODO: Требуется реализация
         return null;
     }
@@ -148,9 +149,9 @@ public class PostController {
      * @param commentId ID комментария публикации
      * @return
      */
-    @PutMapping("/{id}/comments/{comment_id}/recover")
-    public ResponseEntity recoverPostingComment(@RequestParam int id,
-                                                @RequestParam(value = "comment_id ") int commentId) {
+    @PutMapping("/{id:\\d+}/comments/{comment_id:\\d+}/recover")
+    public ResponseEntity recoverPostingComment(@PathVariable int id,
+                                                @PathVariable(value = "comment_id ") int commentId) {
         //TODO: Требуется реализация
         return null;
     }
@@ -161,8 +162,8 @@ public class PostController {
      * @param id ID публикации
      * @return
      */
-    @PostMapping("/{id}/report")
-    public ResponseEntity sendReportToPost(@RequestParam int id) {
+    @PostMapping("/{id:\\d+}/report")
+    public ResponseEntity sendReportToPost(@PathVariable int id) {
         //TODO: Требуется реализация
         return null;
     }
@@ -174,9 +175,9 @@ public class PostController {
      * @param commentId ID комментария публикации
      * @return
      */
-    @PostMapping("/{id}/comments/{comment_id}/report")
-    public ResponseEntity sendReportToPostingComment(@RequestParam int id,
-                                                     @RequestParam(value = "comment_id ") int commentId) {
+    @PostMapping("/{id:\\d+}/comments/{comment_id:\\d+}/report")
+    public ResponseEntity sendReportToPostingComment(@PathVariable int id,
+                                                     @PathVariable(value = "comment_id ") int commentId) {
         //TODO: Требуется реализация
         return null;
     }

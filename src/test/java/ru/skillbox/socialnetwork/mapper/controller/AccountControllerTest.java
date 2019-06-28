@@ -119,7 +119,7 @@ public class AccountControllerTest {
     public void testSetPassword() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
         passwordApi.setOld("1");
-        passwordApi.setPasswdord("2");
+        passwordApi.setPassword("2");
 
         String json = mapper.writeValueAsString(passwordApi);
 
@@ -133,7 +133,7 @@ public class AccountControllerTest {
 
         passwordApi = new SetPasswordApi();
         passwordApi.setToken("1");
-        passwordApi.setPasswdord("2");
+        passwordApi.setPassword("2");
 
         json = mapper.writeValueAsString(passwordApi);
 
@@ -146,7 +146,7 @@ public class AccountControllerTest {
 
 
         passwordApi = new SetPasswordApi();
-        passwordApi.setPasswdord("1");
+        passwordApi.setPassword("1");
         json = mapper.writeValueAsString(passwordApi);
 
         mvc.perform(post("/api/v1/account/password/set")

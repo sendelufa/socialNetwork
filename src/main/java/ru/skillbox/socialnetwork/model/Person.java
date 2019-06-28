@@ -83,6 +83,10 @@ public class Person {
    @NotNull
    private boolean isBlocked;
 
+    @Column(name = "is_online")
+   @NotNull
+   private boolean isOnline;
+
    public int getId() {
       return id;
    }
@@ -210,4 +214,12 @@ public class Person {
    public void setBlocked(boolean blocked) {
       isBlocked = blocked;
    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean status) {
+        isOnline = status;
+    }
 }

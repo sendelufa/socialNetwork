@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.service;
 
 
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,8 +17,6 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
 
-import java.util.Date;
-
 
 @Service
 public class AccountService {
@@ -26,6 +25,8 @@ public class AccountService {
     private PersonDAO personDAO;
     @Autowired
     private BCryptPasswordEncoder encoder;
+    @Autowired
+    private MailSender mailSender;
 
 
     public AbstractResponse registration(RegistrationApi registration) {
@@ -111,6 +112,25 @@ public class AccountService {
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
             return response;
+        }
+    }
+
+    public AbstractResponse recoveryPassword(String email) {
+        if (!EmailValidator.isValid(email)) {
+            return new ErrorApi("invalid_request",
+                new ErrorDescriptionApi(new String[]{"Email is not correct"}));
+        }
+        Person person = personDAO.getPersonByEmail(email);
+        if (person != null) {
+            String password = person.getPassword();
+            String name = person.getFirstName();
+            mailSender
+                .send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
+            return new ResponseApi("string", System.currentTimeMillis(),
+                new ResponseApi.Message("ok"));
+        } else {
+            return new ErrorApi("invalid_request",
+                new ErrorDescriptionApi(new String[]{"email not registered"}));
         }
     }
 

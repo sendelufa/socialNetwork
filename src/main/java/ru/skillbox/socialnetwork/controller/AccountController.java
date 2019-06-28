@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.AccountService;
 
 @RestController
@@ -42,7 +39,11 @@ public class AccountController {
      */
     @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
     public ResponseEntity recoveryPassword(@RequestBody String email){
-        return null;
+
+        AbstractResponse response = accountService.recoveryPassword(email);
+
+        return new ResponseEntity(response,
+            response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**

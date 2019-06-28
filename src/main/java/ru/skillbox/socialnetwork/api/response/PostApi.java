@@ -1,68 +1,115 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PostApi extends AbstractResponse {
 
-  private int id;
-  private long time;
+   @Autowired
+   private Data data;
 
-  @JsonProperty("author_id")
-  private int authorId;
+   private String error;
+   private long timestamp;
 
-  private String title;
+   public long getTimestamp() {
+      return timestamp;
+   }
 
-  @JsonProperty("post_text")
-  private String postText;
+   public void setTimestamp(long timestamp) {
+      this.timestamp = timestamp;
+   }
 
-  @JsonProperty("is_blocked")
-  private boolean isBlocked;
+   public Data getData() {
+      return data;
+   }
 
-  public int getId() {
-    return id;
-  }
+   public void setData(Data data) {
+      this.data = data;
+   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+   public String getError() {
+      return error;
+   }
 
-  public long getTime() {
-    return time;
-  }
+   public void setError(String error) {
+      this.error = error;
+   }
 
-  public void setTime(long time) {
-    this.time = time;
-  }
+   @Component
+   public class Data {
 
-  public int getAuthor_id() {
-    return authorId;
-  }
+      private int id;
+      private long time;
 
-  public void setAuthor_id(int author_id) {
-    this.authorId = author_id;
-  }
+      @JsonProperty("author_id")
+      private int authorId;
 
-  public String getTitle() {
-    return title;
-  }
+      private String title;
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+      @JsonProperty("post_text")
+      private String postText;
 
-  public String getPost_text() {
-    return postText;
-  }
+      @JsonProperty("is_blocked")
+      private boolean isBlocked;
 
-  public void setPost_text(String post_text) {
-    this.postText = post_text;
-  }
+      private long likes;
 
-  public boolean isIs_blocked() {
-    return isBlocked;
-  }
+      public int getId() {
+         return id;
+      }
 
-  public void setIs_blocked(boolean is_blocked) {
-    this.isBlocked = is_blocked;
-  }
+      public void setId(int id) {
+         this.id = id;
+      }
+
+      public long getTime() {
+         return time;
+      }
+
+      public void setTime(long time) {
+         this.time = time;
+      }
+
+      public int getAuthorId() {
+         return authorId;
+      }
+
+      public void setAuthorId(int authorId) {
+         this.authorId = authorId;
+      }
+
+      public String getTitle() {
+         return title;
+      }
+
+      public void setTitle(String title) {
+         this.title = title;
+      }
+
+      public String getPostText() {
+         return postText;
+      }
+
+      public void setPostText(String postText) {
+         this.postText = postText;
+      }
+
+      public boolean isBlocked() {
+         return isBlocked;
+      }
+
+      public void setBlocked(boolean blocked) {
+         isBlocked = blocked;
+      }
+
+      public long getLikes() {
+         return likes;
+      }
+
+      public void setLikes(long likes) {
+         this.likes = likes;
+      }
+   }
 }

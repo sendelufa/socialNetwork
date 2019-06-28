@@ -21,7 +21,7 @@ CREATE TABLE `person` (
 
   CREATE TABLE `block_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   `person_id` INT NOT NULL,
   `post_id` INT NULL,
   `comment_id` INT NULL,
@@ -46,14 +46,14 @@ CREATE TABLE `person` (
 
   CREATE TABLE `friendship_status` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NULL,
+  `timestamp` TIMESTAMP NULL,
   `name` VARCHAR(255) NULL,
   `code` ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED') NOT NULL,
   PRIMARY KEY (`id`));
 
   CREATE TABLE `message` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   `author_id` INT NOT NULL,
   `recipient_id` INT NOT NULL,
   `message_text` VARCHAR(2048) NULL,
@@ -62,7 +62,7 @@ CREATE TABLE `person` (
 
   CREATE TABLE `post` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   `author_id` INT NOT NULL,
   `title` VARCHAR(255) NULL,
   `post_text` VARCHAR(4096) NOT NULL,
@@ -83,7 +83,7 @@ CREATE TABLE `post2tag` (
 
 CREATE TABLE `post_like` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   `person_id` INT NOT NULL,
   `post_id` INT NOT NULL,
   PRIMARY KEY (`id`));
@@ -97,7 +97,7 @@ CREATE TABLE `post_like` (
 
   CREATE TABLE `post_comment` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `time` TIMESTAMP NOT NULL,
+  `timestamp` TIMESTAMP NOT NULL,
   `post_id` INT NOT NULL,
   `parent_id` INT NULL,
   `author_id` INT NOT NULL,

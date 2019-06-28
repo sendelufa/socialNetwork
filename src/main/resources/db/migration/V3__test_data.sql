@@ -38,7 +38,7 @@ insert into `friendship` (`id`,`status_id`,`src_person_id`, `dst_person_id`) val
 ('9','5', '9', '8'),
 ('10','5', '10', '3');
 
-insert into `friendship_status` (`id`,`time`, `name`, `code`) values
+insert into `friendship_status` (`id`,`timestamp`, `name`, `code`) values
 ('1','2019-06-12 13:50:30', 'Максим', 'REQUEST'),
 ('2','2018-01-10 12:01:10', 'Анастасия', 'FRIEND'),
 ('3','2018-10-02 09:50:15', 'Роман', 'BLOCKED'),
@@ -50,7 +50,7 @@ insert into `friendship_status` (`id`,`time`, `name`, `code`) values
 ('9','2019-06-06 16:12:39', 'Вадим', 'SUBSCRIBED'),
 ('10','2019-06-12 07:55:30', 'Дарья', 'SUBSCRIBED');
 
-insert into `message` (`id`,`time`,`author_id`, `recipient_id`, `message_text`, `read_status`) values
+insert into `message` (`id`,`timestamp`,`author_id`, `recipient_id`, `message_text`, `read_status`) values
 ('1','2019-04-14 17:50:30', '1', '3', 'привет, пойдем гулять', 'READ'),
 ('2','2018-02-19 13:01:10', '2', '9', 'привет, СДЕЛАЛ ДОМАШКУ', 'READ'),
 ('3','2018-12-06 08:35:15', '3', '5', 'пока', 'READ'),
@@ -62,7 +62,7 @@ insert into `message` (`id`,`time`,`author_id`, `recipient_id`, `message_text`, 
 ('9','2019-04-14 18:22:39',  '3', '1', 'через час дождь', 'SENT'),
 ('10','2019-06-09 16:15:30',  '8', '9', 'конференция через 3 месяца', 'SENT');
 
-insert into `post` (`id`,`time`,`author_id`, `title`, `post_text`, `is_blocked`) values
+insert into `post` (`id`,`timestamp`,`author_id`, `title`, `post_text`, `is_blocked`) values
 ('1','2018-12-06 08:35:15', '2', 'Конференция', 'В МГУ 1 марта будет проходить международная конференция среди молодых ученых, заявки принимаются до 1 февраля', b'1'),
 ('2','2018-12-28 18:14:15', '4', 'Новый год', 'Мандарины - символ Нового года. В магазинах "Пятерочка" всего за 69 р/кг', b'1'),
 ('3','2019-02-05 09:26:15', '6', 'Новый год по всоточному календарю', 'Многие жители нашей многонациональной страны празднуют Новый год по восточному календарю', b'1'),
@@ -98,7 +98,7 @@ insert into `post2tag`(`id`,`post_id`, `tag_id`) values
 ('9','9', '7'),
 ('10','10', '9');
 
-insert into `post_like`(`id`,`time`,`person_id`, `post_id`) values
+insert into `post_like`(`id`,`timestamp`,`person_id`, `post_id`) values
 ('1','2018-12-06 08:35:15', '2','2'),
 ('2','2015-11-14 07:01:56', '1','8'),
 ('3','2013-08-02 11:55:01', '5','4'),
@@ -125,7 +125,7 @@ insert into `post_file`(`id`,`post_id`, `name`, `path`) values
 ('9','7', 'robot.png','d:/Images/');
 
 
-insert into `post_comment`(`id`,`time`, `post_id`, `parent_id`, `author_id`, `comment_text`, `is_blocked`) values
+insert into `post_comment`(`id`,`timestamp`, `post_id`, `parent_id`, `author_id`, `comment_text`, `is_blocked`) values
 ('1','2018-12-06 11:00:15', '1',NULL, '4','Дистанционно можно участвовать?', b'0'),
 ('2','2018-12-06 15:40:15', '1','1', '2','Да, взнос 1000 руб', b'0'),
 ('3','2018-12-28 21:10:15', '2', NULL, '10', 'Еще бы', b'0'),
@@ -158,7 +158,7 @@ insert into `notification` (`id`,`type_id`, `sent_time`, `person_id`, `entity_id
 ('9','3', '2019-03-02 18:54:00', '6','3', 'mihailovsergei@mail.ru'),
 ('10','2', '2018-12-28 21:10:15', '10','3', 'roman1991@mail.ru');
 
-insert into `block_history` (`id`,`time`, `person_id`, `post_id`, `comment_id`, `action`) values
+insert into `block_history` (`id`,`timestamp`, `person_id`, `post_id`, `comment_id`, `action`) values
 ('1','2019-05-15 13:12:14', '4', '1', '1', 'UNBLOCK'),
 ('2','2016-01-10 18:16:33', '2', '1', '2', 'UNBLOCK'),
 ('3','2017-05-12 14:12:51', '10', '2', '3', 'UNBLOCK'),

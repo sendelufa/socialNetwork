@@ -39,11 +39,11 @@ public class PostMapperTest {
 
         //мапим и сравниваем
         PostApi postApi = mapper.map(post, PostApi.class);
-        assertEquals(post.getId(), postApi.getId());
-        assertEquals(post.getPostText(), postApi.getPost_text());
-        assertEquals(post.getTime().getTime(), postApi.getTime());
-        assertEquals(post.getTitle(), postApi.getTitle());
-        assertEquals(post.isBlocked(), postApi.isIs_blocked());
+        assertEquals(post.getId(), postApi.getData().getId());
+        assertEquals(post.getPostText(), postApi.getData().getPostText());
+        assertEquals(post.getTime().getTime(), postApi.getData().getTime());
+        assertEquals(post.getTitle(), postApi.getData().getTitle());
+        assertEquals(post.isBlocked(), postApi.getData().isBlocked());
     }
 
     @Test
@@ -51,19 +51,20 @@ public class PostMapperTest {
     {
         //заполняем поля
         PostApi postApi = new PostApi();
-        postApi.setId(7);
-        postApi.setAuthor_id(6);
-        postApi.setIs_blocked(false);
-        postApi.setPost_text("Grand");
-        postApi.setTime(234238);
-        postApi.setTitle("Head");
+        postApi.getData().setId(7);
+        postApi.getData().setTime(234238);
+        postApi.getData().setAuthorId(6);
+        postApi.getData().setTitle("Head");
+        postApi.getData().setPostText("Grand");
+        postApi.getData().setBlocked(false);
 
         //мапим и сравниваем
         Post post = mapper.map(postApi, Post.class);
-        assertEquals(postApi.getId(), post.getId());
-        assertEquals(postApi.getPost_text(), post.getPostText());
-        assertEquals(postApi.getTime(), post.getTime().getTime());
-        assertEquals(postApi.getTitle(), post.getTitle());
-        assertEquals(postApi.isIs_blocked(), post.isBlocked());
+        assertEquals(postApi.getData().getId(), post.getId());
+        assertEquals(postApi.getData().getTime(), post.getTime().getTime());
+        assertEquals(postApi.getData().getAuthorId(), post.getAuthor().getId());
+        assertEquals(postApi.getData().getTitle(), post.getTitle());
+        assertEquals(postApi.getData().getPostText(), post.getPostText());
+        assertEquals(postApi.getData().isBlocked(), post.isBlocked());
     }
 }

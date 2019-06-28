@@ -13,52 +13,59 @@ import ru.skillbox.socialnetwork.model.PostComment;
 @Transactional
 public class PostDAO {
 
-  @Autowired
-  private SessionFactory sessionFactory;
+   @Autowired
+   private SessionFactory sessionFactory;
 
-  public void addPost(Post post) {
-    getCurrentSession().save(post);
-  }
+   public void addPost(Post post) {
+      getCurrentSession().save(post);
+   }
 
-  public List<Post> getAllPosts() {
-    return getCurrentSession().createQuery("from Post p").list();
-  }
+   public List<Post> getAllPosts() {
+      return getCurrentSession().createQuery("from Post p").list();
+   }
 
-  public Post getPostById(int id) {
-    return getCurrentSession().get(Post.class, id);
-  }
+   public Post getPostById(int id) {
+      return getCurrentSession().get(Post.class, id);
+   }
 
-  public void updatePost(Post post) {
-    getCurrentSession().update(post);
-  }
+   public void updatePost(Post post) {
+      getCurrentSession().update(post);
+   }
 
-  public void deletePost(Post post) {
-    getCurrentSession().delete(post);
-  }
+   public void deletePost(Post post) {
+      getCurrentSession().delete(post);
+   }
 
 
-  public void addComment(PostComment comment) {
-    getCurrentSession().save(comment);
-  }
+   public void addComment(PostComment comment) {
+      getCurrentSession().save(comment);
+   }
 
-  public List<PostComment> getComments() {
-    return getCurrentSession().createQuery("from Post_comment p").list();
-  }
+   public List<PostComment> getComments() {
+      return getCurrentSession().createQuery("from Post_comment p").list();
+   }
 
-  public PostComment getCommentById(int id) {
-    return getCurrentSession().get(PostComment.class, id);
-  }
+   public long getLikesNumber(int id) {
+      String query = String.format("select count(*) from PostLike likes where "
+          + "likes"
+          + ".post=%d", id);
+      return (long) getCurrentSession().createQuery(query).uniqueResult();
+   }
 
-  public void updateComment(PostComment comment) {
-    getCurrentSession().update(comment);
-  }
+   public PostComment getCommentById(int id) {
+      return getCurrentSession().get(PostComment.class, id);
+   }
 
-  public void deleteComment(PostComment comment) {
-    getCurrentSession().delete(comment);
-  }
+   public void updateComment(PostComment comment) {
+      getCurrentSession().update(comment);
+   }
 
-  private Session getCurrentSession() {
-    return sessionFactory.getCurrentSession();
-  }
+   public void deleteComment(PostComment comment) {
+      getCurrentSession().delete(comment);
+   }
+
+   private Session getCurrentSession() {
+      return sessionFactory.getCurrentSession();
+   }
 
 }

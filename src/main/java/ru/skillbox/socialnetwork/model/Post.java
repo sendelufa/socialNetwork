@@ -30,7 +30,7 @@ public class Post {
    @NotNull
    private int id;
 
-   @Column(name = "timestamp")
+   @Column(name = "time")
    @NotNull
    private Date time;
 

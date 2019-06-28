@@ -50,7 +50,7 @@ public class PostController {
       if (postService.get(id) != null) {
          return new ResponseEntity<>(postService.get(id), HttpStatus.OK);
       } else {
-         return responseError404();
+         return responseError400();
       }
 
 
@@ -177,7 +177,7 @@ public class PostController {
       return null;
    }
 
-   private ResponseEntity<Object> responseError404() {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+   private ResponseEntity<Object> responseError400() {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
    }
 }

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class UserApi implements AbstractResponse{
+public class UserApi extends AbstractResponse{
 
   private int id;
   private String name;

@@ -34,19 +34,19 @@ public class NotificationTypeMapperTest {
         assertEquals(notificationType.getName().getDescription(), notificationTypeApi.getName().toString());
         assertEquals(String.valueOf(notificationType.getCode()), notificationTypeApi.getCode());
     }
-    @Test
-    public void testApiToEntity()
-    {
-        //заполняем поля
-        NotificationTypeApi notificationTypeApi = new NotificationTypeApi();
-        notificationTypeApi.setName(NotificationTypeApi.codes.COMMENT_COMMENT);
-        notificationTypeApi.setId(5);
-        notificationTypeApi.setCode("103");
-
-        //мапим и сравниваем
-        NotificationType notificationType = mapper.map(notificationTypeApi, NotificationType.class);
-        assertEquals(notificationTypeApi.getId(), notificationType.getId());
-        assertEquals(notificationTypeApi.getCode(), String.valueOf(notificationType.getCode()));
-        assertEquals(notificationTypeApi.getName().toString(), notificationType.getName().getDescription());
-    }
+//    @Test
+//    public void testApiToEntity()
+//    {
+//        //заполняем поля
+//        NotificationTypeApi notificationTypeApi = new NotificationTypeApi();
+//        notificationTypeApi.setName(NotificationTypeApi.codes.COMMENT_COMMENT);
+//        notificationTypeApi.setId(5);
+//        notificationTypeApi.setCode("103");
+//
+//        //мапим и сравниваем
+//        NotificationType notificationType = mapper.map(notificationTypeApi, NotificationType.class);
+//        assertEquals(notificationTypeApi.getId(), notificationType.getId());
+//        assertEquals(notificationTypeApi.getCode(), String.valueOf(notificationType.getCode()));
+//        assertEquals(notificationTypeApi.getName().toString(), notificationType.getName().getDescription());
+//    }
 }

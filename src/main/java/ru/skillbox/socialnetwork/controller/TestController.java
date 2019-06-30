@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
+import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
 
 /*
     Тестовый контроллер для проверки работоспособности компонентов(костыль)
@@ -16,16 +18,26 @@ import ru.skillbox.socialnetwork.model.Person;
 */
 
 @Controller
-@RequestMapping("/test")
+@RequestMapping("/api/test/")
 public class TestController {
 
    @Autowired
    private PersonDAO personDao;
 
-   @GetMapping
-   public ResponseEntity<Object> test() {
+   @Autowired
+   private PostDAO postDAO;
+
+   @GetMapping("/persons")
+   public ResponseEntity<List> persons() {
       List<Person> allPersons = personDao.getAllPersons();
       allPersons.stream().map(Person::getEmail).forEach(System.out::println);
       return new ResponseEntity<>(allPersons, HttpStatus.OK);
+   }
+
+   @GetMapping("/posts")
+   public ResponseEntity<List> posts() {
+      List<Post> allPosts = postDAO.getAllPosts();
+      allPosts.stream().map(Post::getTitle).forEach(System.out::println);
+      return new ResponseEntity<>(allPosts, HttpStatus.OK);
    }
 }

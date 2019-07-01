@@ -115,19 +115,19 @@ public class AccountService {
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
 
-        if (!EmailValidator.isValid(email)){
-
-            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
-            response.setSuccess(false);
-            return response;
-        } else {
+//        if (!EmailValidator.isValid(email)){
+//
+//            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
+//            response.setSuccess(false);
+//            return response;
+//        } else {
 
             person.setEmail(email);
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
             return response;
-        }
+ //       }
     }
 
     public AbstractResponse notification(String notification_type,boolean enable){

@@ -1,6 +1,10 @@
 package ru.skillbox.socialnetwork.service;
 
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Date;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,6 +37,8 @@ public class AccountService {
     private NotificationDAO notificationDAO;
     @Autowired
     private BCryptPasswordEncoder encoder;
+    @Autowired
+    private MailSender mailSender;
 
 
     public AbstractResponse registration(RegistrationApi registration) {
@@ -130,6 +136,27 @@ public class AccountService {
  //       }
     }
 
+    public AbstractResponse recoveryPassword(String email) {
+        Person person = personDAO.getPersonByEmail(email);
+        AbstractResponse response;
+
+        if (person != null) {
+            String password = randomKey(8);
+            String name = person.getFirstName();
+            String encodedPassword = encoder.encode(password);
+            person.setPassword(encodedPassword);
+            personDAO.updatePerson(person);
+            mailSender.send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
+        } else {
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"email not registered"}));
+            response.setSuccess(false);
+            return response;
+        }
+    }
+
     public AbstractResponse notification(String notification_type,boolean enable){
 
         Person person = getCurrentPersonFromSecurityContext();
@@ -204,6 +231,10 @@ public class AccountService {
 
     }
 
-
+    public String randomKey(int length) {
+        final Random random = new SecureRandom();
+        return String.format("%" + length + "s", new BigInteger(length * 5/*base 32,2^5*/, random)
+            .toString(32)).replace('\u0020', '0');
+    }
 
 }

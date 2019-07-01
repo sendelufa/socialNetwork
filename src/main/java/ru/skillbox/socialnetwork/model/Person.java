@@ -44,7 +44,6 @@ public class Person {
    private String email;
 
    @Column(name = "phone", unique = true)
-   @NotNull
    private String phone;
 
    @Column(name = "password")

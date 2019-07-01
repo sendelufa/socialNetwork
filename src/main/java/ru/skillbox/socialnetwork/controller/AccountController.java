@@ -54,7 +54,8 @@ public class AccountController {
     @RequestMapping(value = "password/set", method = RequestMethod.PUT)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi) {
 
-        AbstractResponse response = accountService.setPassword(passwordApi);
+        String password = passwordApi.getPassword();
+        AbstractResponse response = accountService.setPassword(password);
 
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
@@ -82,7 +83,10 @@ public class AccountController {
      */
     @RequestMapping(value = "notification", method = RequestMethod.PUT)
     public ResponseEntity notification(@RequestBody String notification_type, @RequestBody boolean enable){
-        return null;
+
+        AbstractResponse response = accountService.notification(notification_type,enable);
+
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -93,7 +97,10 @@ public class AccountController {
      */
     @RequestMapping(value = "status", method = RequestMethod.PUT)
     public ResponseEntity status(@RequestBody String status){
-        return null;
+
+        AbstractResponse response = accountService.status(status);
+
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 }

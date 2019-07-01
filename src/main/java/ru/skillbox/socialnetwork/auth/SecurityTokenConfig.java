@@ -40,8 +40,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         // allow all who are accessing "auth" service
         .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
         // must be an admin if trying to access admin area (authentication is also required here)
-        .antMatchers("/test").permitAll()
-        // Any other request must be authenticated
+        .antMatchers("/api/**").permitAll() // временно пропускаем все пока не настром
         .anyRequest().authenticated();
   }
 

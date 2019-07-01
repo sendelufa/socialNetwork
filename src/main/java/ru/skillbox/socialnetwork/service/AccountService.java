@@ -1,7 +1,10 @@
 package ru.skillbox.socialnetwork.service;
 
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Date;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -116,21 +119,23 @@ public class AccountService {
     }
 
     public AbstractResponse recoveryPassword(String email) {
-        if (!EmailValidator.isValid(email)) {
-            return new ErrorApi("invalid_request",
-                new ErrorDescriptionApi(new String[]{"Email is not correct"}));
-        }
         Person person = personDAO.getPersonByEmail(email);
+        AbstractResponse response;
+
         if (person != null) {
-            String password = person.getPassword();
+            String password = randomKey(8);
             String name = person.getFirstName();
-            mailSender
-                .send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
-            return new ResponseApi("string", System.currentTimeMillis(),
-                new ResponseApi.Message("ok"));
+            String encodedPassword = encoder.encode(password);
+            person.setPassword(encodedPassword);
+            personDAO.updatePerson(person);
+            mailSender.send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
         } else {
-            return new ErrorApi("invalid_request",
-                new ErrorDescriptionApi(new String[]{"email not registered"}));
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"email not registered"}));
+            response.setSuccess(false);
+            return response;
         }
     }
 
@@ -147,6 +152,10 @@ public class AccountService {
         return (Person) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-
+    public String randomKey(int length) {
+        final Random random = new SecureRandom();
+        return String.format("%" + length + "s", new BigInteger(length * 5/*base 32,2^5*/, random)
+            .toString(32)).replace('\u0020', '0');
+    }
 
 }

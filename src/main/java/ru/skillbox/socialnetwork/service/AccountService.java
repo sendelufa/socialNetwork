@@ -41,7 +41,7 @@ public class AccountService {
 
         AbstractResponse response;
 
-        if(EmailValidator.isValid(userEmail)) {
+       // if(EmailValidator.isValid(userEmail)) {
 
             Person person = personDAO.getPersonByEmail(userEmail);
 
@@ -78,17 +78,16 @@ public class AccountService {
                 response.setSuccess(false);
                 return response;
             }
-        } else {
-
-            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Invalid email"}));
-            response.setSuccess(false);
-            return response;
-        }
+//        } else {
+//
+//            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Invalid email"}));
+//            response.setSuccess(false);
+//            return response;
+//        }
     }
 
-    public AbstractResponse setPassword(SetPasswordApi passwordApi){
+    public AbstractResponse setPassword(String password){
 
-        String password = passwordApi.getPassword();
         AbstractResponse response;
 
         if (!password.equals("")){
@@ -135,22 +134,36 @@ public class AccountService {
 
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
+        boolean isSettingFound = false;
 
         ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettinsByPersonId(person.getId()));
 
-        for( NotificationSettings setting : ns){
+
+        for (NotificationSettings setting : ns) {
 
             NameNotificationType nameNotificationType = notificationDAO.getNotificationTypeById(setting.getNotificationType()).getName();
 
-            if(nameNotificationType.toString().equals(notification_type)){
+            if (nameNotificationType.toString().equals(notification_type)) {
 
                 setting.setEnable(enable);
                 notificationDAO.updateNotificationSettings(setting);
+                isSettingFound = true;
                 response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
                 response.setSuccess(true);
                 return response;
             }
         }
+
+        if(!isSettingFound){
+            NotificationSettings notificationSettings = new NotificationSettings();
+            notificationSettings.setEnable(enable);
+
+            int notificationTypeId = notificationDAO.getNotificationTypeByName(notification_type).getId();
+            notificationSettings.setNotificationType(notificationTypeId);
+            notificationSettings.setPerson(person.getId());
+            notificationDAO.addNotificationSettings(notificationSettings);
+        }
+
 
         response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
         response.setSuccess(false);

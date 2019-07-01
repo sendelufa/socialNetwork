@@ -54,9 +54,8 @@ public class AccountController {
     @RequestMapping(value = "password/set", method = RequestMethod.PUT)
     public ResponseEntity setPassword(@RequestBody SetPasswordApi passwordApi) {
 
-        AbstractResponse response = accountService.setPassword(passwordApi);
-
-        System.out.println("YUPI");
+        String password = passwordApi.getPassword();
+        AbstractResponse response = accountService.setPassword(password);
 
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

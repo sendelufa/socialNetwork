@@ -29,8 +29,15 @@ public class NotificationDAO {
         }
 
         public NotificationType getNotificationTypeById(int id) {
-        return getCurrentSession().get(NotificationType.class, id);
-    }
+            return getCurrentSession().get(NotificationType.class, id);
+        }
+
+        public NotificationType getNotificationTypeByName(String nameOfType){
+            Criteria criteria = getCurrentSession().createCriteria(NotificationType.class);
+            criteria.add(Restrictions.eq("name", nameOfType));
+
+            return (NotificationType) criteria.uniqueResult();
+        }
 
         public List<Notification> getAllNotification(){
             return getCurrentSession().createQuery("From Notification").list();
@@ -44,17 +51,19 @@ public class NotificationDAO {
             getCurrentSession().update(ns);
         }
 
+        public void addNotificationSettings(NotificationSettings ns){
+        getCurrentSession().save(ns);
+    }
+
         public void deleteNotification(Notification notification) {
             getCurrentSession().delete(notification);
-
-
         }
 
         public void addNotification(Notification notification) {
             getCurrentSession().save(notification);
         }
 
-    private Session getCurrentSession() {
+        private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
 

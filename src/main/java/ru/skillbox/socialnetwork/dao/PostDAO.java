@@ -3,9 +3,11 @@ package ru.skillbox.socialnetwork.dao;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 
@@ -22,6 +24,17 @@ public class PostDAO {
 
    public List<Post> getAllPosts() {
       return getCurrentSession().createQuery("from Post p").list();
+   }
+
+   public List<Post> getPosts(PostParameters postParameters) {
+      String query = String.format("from Post p where locate('%s', p.postText, 1) > 0",
+          postParameters.getText());
+
+      Query q = getCurrentSession().createQuery(query);
+      q.setFirstResult(postParameters.getOffset());
+      q.setMaxResults(postParameters.getItemPerPage());
+
+      return q.list();
    }
 
    public Post getPostById(int id) {

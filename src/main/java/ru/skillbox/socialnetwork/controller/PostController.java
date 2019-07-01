@@ -1,5 +1,7 @@
 package ru.skillbox.socialnetwork.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
 @Controller
@@ -34,12 +38,19 @@ public class PostController {
     */
    @GetMapping("/")
    public ResponseEntity getPost(@RequestParam String text,
-       @RequestParam(value = "date_from", required = false) Number dateFrom,
-       @RequestParam(value = "date_to", required = false) Number dateTo,
-       @RequestParam(required = false) int offset,
-       @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
-      //TODO: Требуется реализация
-      return null;
+       @RequestParam(value = "date_from", required = false) Integer dateFrom,
+       @RequestParam(value = "date_to", required = false) Integer dateTo,
+       @RequestParam(required = false) Integer offset,
+       @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
+      offset = offset == null ? 0: offset;
+      PostParameters postParameters = new PostParameters(
+          text,
+          dateFrom,
+          dateTo,
+          offset,
+          itemPerPage);
+      PostListApi postApiList = postService.search(postParameters);
+       return new ResponseEntity<>(postApiList, HttpStatus.OK);
    }
 
    /**
@@ -50,7 +61,7 @@ public class PostController {
       if (postService.get(id) != null) {
          return new ResponseEntity<>(postService.get(id), HttpStatus.OK);
       } else {
-         return responseError400();
+         return notFoundResponse();
       }
 
 
@@ -177,7 +188,10 @@ public class PostController {
       return null;
    }
 
-   private ResponseEntity<Object> responseError400() {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+   private ResponseEntity<Object> notFoundResponse() {
+      Map<String, String> response = new HashMap<>();
+      response.put("error", "invalid_request");
+      response.put("error_description", "not_found");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
    }
 }

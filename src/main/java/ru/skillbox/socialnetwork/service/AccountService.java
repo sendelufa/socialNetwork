@@ -135,7 +135,7 @@ public class AccountService {
             return response;
  //       }
     }
-    
+
     public AbstractResponse recoveryPassword(String email) {
         Person person = personDAO.getPersonByEmail(email);
         AbstractResponse response;

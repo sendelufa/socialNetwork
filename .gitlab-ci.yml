@@ -1,0 +1,19 @@
+image: alpine
+
+stages:
+  - test
+  - build
+
+test:
+  stage: test
+  script:
+    - mvn test
+  only:
+    - merge_requests
+
+build:
+  stage: build
+  script:
+    - mvn spring boot:run
+  only:
+    - merge_requests

@@ -157,6 +157,27 @@ public class AccountService {
         }
     }
 
+    public AbstractResponse recoveryPassword(String email) {
+        Person person = personDAO.getPersonByEmail(email);
+        AbstractResponse response;
+
+        if (person != null) {
+            String password = randomKey(8);
+            String name = person.getFirstName();
+            String encodedPassword = encoder.encode(password);
+            person.setPassword(encodedPassword);
+            personDAO.updatePerson(person);
+            mailSender.send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
+        } else {
+            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"email not registered"}));
+            response.setSuccess(false);
+            return response;
+        }
+    }
+
     public AbstractResponse notification(String notification_type,boolean enable){
 
         Person person = getCurrentPersonFromSecurityContext();

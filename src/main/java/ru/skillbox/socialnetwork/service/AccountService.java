@@ -135,26 +135,7 @@ public class AccountService {
             return response;
  //       }
     }
-
-    public AbstractResponse recoveryPassword(String email) {
-        if (!EmailValidator.isValid(email)) {
-            return new ErrorApi("invalid_request",
-                new ErrorDescriptionApi(new String[]{"Email is not correct"}));
-        }
-        Person person = personDAO.getPersonByEmail(email);
-        if (person != null) {
-            String password = person.getPassword();
-            String name = person.getFirstName();
-            mailSender
-                .send(email, "Recovery password", "Hi, " + name + ".\nYour password - " + password);
-            return new ResponseApi("string", System.currentTimeMillis(),
-                new ResponseApi.Message("ok"));
-        } else {
-            return new ErrorApi("invalid_request",
-                new ErrorDescriptionApi(new String[]{"email not registered"}));
-        }
-    }
-
+    
     public AbstractResponse recoveryPassword(String email) {
         Person person = personDAO.getPersonByEmail(email);
         AbstractResponse response;

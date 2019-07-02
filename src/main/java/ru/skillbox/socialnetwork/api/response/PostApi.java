@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostApi extends AbstractResponse {
 
-
    private PostDataApi data = new PostDataApi();
-
-
 
    public PostDataApi getData() {
       return data;
@@ -17,5 +14,4 @@ public class PostApi extends AbstractResponse {
    public void setData(PostDataApi data) {
       this.data = data;
    }
-
 }

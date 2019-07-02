@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class PostListApi extends AbstractResponse {
 
-
    private List<PostDataApi> data = new ArrayList<>();
    private int total;
    private int offset;

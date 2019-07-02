@@ -5,19 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class NotificationApi extends AbstractResponse{
 
   private int id;
-
   @JsonProperty("type_id")
   private int typeId;
-
   @JsonProperty("sent_time")
   private long sentTime;
-
   @JsonProperty("person_id")
   private int personId;
-
   @JsonProperty("entity_id")
   private int entityId;
-
   private String contact;
   private String info;
 

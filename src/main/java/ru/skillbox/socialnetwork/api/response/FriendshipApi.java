@@ -5,13 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class FriendshipApi extends AbstractResponse{
 
   private int id;
-
   @JsonProperty("status_id")
   private int statusId;
-
   @JsonProperty("src_person_id")
   private int srcPersonId;
-
   @JsonProperty("dst_person_id")
   private int dstPersonId;
 

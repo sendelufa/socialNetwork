@@ -5,7 +5,6 @@ public class NotificationTypeApi extends AbstractResponse{
   private int id;
   private codes code;
   private String name;
-
   public enum codes {POST, POST_COMMENT, COMMENT_COMMENT, FRIEND_REQUEST, MESSAGE}
 
   public int getId() {

@@ -2,25 +2,18 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class PostDataApi {
 
    private int id;
    private long time;
-
    @JsonProperty("author_id")
    private int authorId;
-
    private String title;
-
    @JsonProperty("post_text")
    private String postText;
-
    @JsonProperty("is_blocked")
    private boolean isBlocked;
-
    private long likes;
-
 
    public int getId() {
       return id;

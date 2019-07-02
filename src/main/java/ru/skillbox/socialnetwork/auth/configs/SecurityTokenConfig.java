@@ -50,7 +50,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
           .formLogin()
             .successHandler(new CustomAuthenticationSuccessHandler())
             .failureHandler(new CustomAuthenticationFailureHandler())
-          .loginPage("/login").permitAll();
+          .loginPage("/api/**").permitAll();
   }
 
   @Override

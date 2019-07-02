@@ -12,8 +12,6 @@ public class PostParameters {
 
 
    private Integer offset;
-
-
    private int itemPerPage;
 
    public PostParameters(String text, Long dateFrom, Long dateTo, int offset, int itemPerPage) {

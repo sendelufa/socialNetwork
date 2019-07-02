@@ -45,7 +45,6 @@ public class PostDAO {
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(postParameters.getOffset());
       q.setMaxResults(postParameters.getItemPerPage());
-
       return q.list();
    }
 
@@ -110,5 +109,4 @@ public class PostDAO {
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }
-
 }

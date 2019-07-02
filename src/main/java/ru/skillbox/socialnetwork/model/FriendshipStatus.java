@@ -13,9 +13,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
-/**
- * статус дружбы
- */
 @Entity
 @Table(name = "friendship_status")
 public class FriendshipStatus {
@@ -35,15 +32,6 @@ public class FriendshipStatus {
     @OneToOne(mappedBy = "friendshipStatus")
     private Friendship friendship;
 
-    /**
-     * код статуса
-     *
-     * REQUEST - Запрос на добавление в друзья
-     * FRIEND - Друзья
-     * BLOCKED - Пользователь в чёрном списке
-     * DECLINED - Запрос на добавление в друзья отклонён
-     * SUBSCRIBED - Подписан
-     */
     @Enumerated(EnumType.STRING)
     @Column(name = "code", columnDefinition="ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED')")
     @NotNull

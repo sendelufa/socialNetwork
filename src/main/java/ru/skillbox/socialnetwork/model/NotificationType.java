@@ -11,9 +11,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 
-/**
- * тип оповещения
- */
 @Entity
 @Table(name = "notification_type")
 public class NotificationType {

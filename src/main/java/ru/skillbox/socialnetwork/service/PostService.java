@@ -1,6 +1,5 @@
 package ru.skillbox.socialnetwork.service;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ public class PostService {
       Post post = postDAO.getPostById(id);
       if (post != null) {
          postApi = fillPostApi(post);
-         postApi.setError("none");
          postApi.setSuccess(true);
       } else {
          return null;
@@ -37,11 +35,9 @@ public class PostService {
       PostListApi postListApi = new PostListApi();
       postListApi.setData(posts.stream().map(this::fillPostApi)
           .collect(Collectors.toList()));
-      postListApi.setTimestamp(new Date().getTime());
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
       postListApi.setPerPage(postParameters.getItemPerPage());
-      postListApi.setError("none");
       postListApi.setSuccess(true);
       return postListApi;
    }
@@ -57,5 +53,4 @@ public class PostService {
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
       return postDataApi;
    }
-
 }

@@ -13,9 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * тэги
- */
 @Entity
 @Table(name = "tag")
 public class Tag {

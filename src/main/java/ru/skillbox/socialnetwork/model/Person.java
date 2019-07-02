@@ -12,9 +12,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
-/**
- * пользователь соц. сети
- */
 @Entity
 @Table(name = "person")
 public class Person {
@@ -66,10 +63,6 @@ public class Person {
    @NotNull
    private boolean isApproved;
 
-   /**
-    * разрешение на получение сообщений: ALL - от всех пользователей (кроме заблокированных),
-    * FRIENDS - только от друзей
-    */
    @Enumerated(EnumType.STRING)
    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
    @NotNull
@@ -82,7 +75,7 @@ public class Person {
    @NotNull
    private boolean isBlocked;
 
-    @Column(name = "is_online")
+   @Column(name = "is_online")
    @NotNull
    private boolean isOnline;
 

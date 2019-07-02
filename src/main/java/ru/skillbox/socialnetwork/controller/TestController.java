@@ -23,7 +23,6 @@ public class TestController {
 
    @Autowired
    private PersonDAO personDao;
-
    @Autowired
    private PostDAO postDAO;
 

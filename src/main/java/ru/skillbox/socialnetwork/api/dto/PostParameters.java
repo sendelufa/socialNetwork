@@ -1,22 +1,11 @@
 package ru.skillbox.socialnetwork.api.dto;
 
-/**
- * Параметры для поиска постов
- */
 public class PostParameters {
 
    private String text;
-
-
    private Integer date_from;
-
-
    private Integer date_to;
-
-
    private Integer offset;
-
-
    private int itemPerPage;
 
    public PostParameters(String text, Integer date_from, Integer date_to, int offset, int itemPerPage) {

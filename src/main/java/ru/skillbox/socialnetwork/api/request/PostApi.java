@@ -3,7 +3,6 @@ package ru.skillbox.socialnetwork.api.request;
 public class PostApi {
 
     private String title;
-
     private String post_text;
 
     public String getTitle() {

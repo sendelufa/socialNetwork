@@ -41,7 +41,6 @@ public class ResponseApi extends AbstractResponse {
     this.timestamp = timestamp;
   }
 
-
   public static class Message extends AbstractResponse{
     private String message;
 

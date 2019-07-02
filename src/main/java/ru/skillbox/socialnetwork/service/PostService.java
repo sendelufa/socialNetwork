@@ -15,7 +15,6 @@ import ru.skillbox.socialnetwork.model.Post;
 @Service
 public class PostService {
 
-
    private PostApi postApi;
    @Autowired
    private PostDAO postDAO;
@@ -65,5 +64,4 @@ public class PostService {
       postApi.setData(fillPostDataApi(post));
       return postApi;
    }
-
 }

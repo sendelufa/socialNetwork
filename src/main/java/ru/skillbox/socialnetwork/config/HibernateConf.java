@@ -21,19 +21,14 @@ public class HibernateConf {
 
     @Autowired
     private Environment environment;
-
     @Value("${spring.datasource.url}")
     private String jdbcURl;
-
     @Value("${spring.datasource.username}")
     private String dbUsername;
-
     @Value("${spring.datasource.password}")
     private String dbPassword;
-
     @Value("${spring.jpa.properties.hibernate.dialect}")
     private String dbDialect;
-
     @Value("${spring.jpa.hibernate.ddl-auto}")
     private String ddlAuto;
 
@@ -43,7 +38,6 @@ public class HibernateConf {
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setHibernateProperties(hibernateProperties());
         sessionFactory.setPackagesToScan("ru.skillbox.socialnetwork.model");
-
         return sessionFactory;
     }
 
@@ -54,11 +48,8 @@ public class HibernateConf {
         dataSource.setUrl(jdbcURl);
         dataSource.setUsername(dbUsername);
         dataSource.setPassword(dbPassword);
-
         return dataSource;
     }
-
-
 
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
@@ -66,7 +57,6 @@ public class HibernateConf {
                 "hibernate.hbm2ddl.auto", environment.getProperty("spring.jpa.hibernate.ddl-auto"));
         hibernateProperties.setProperty(
                 "hibernate.dialect", environment.getProperty("spring.jpa.properties.hibernate.dialect"));
-
         return hibernateProperties;
     }
 }

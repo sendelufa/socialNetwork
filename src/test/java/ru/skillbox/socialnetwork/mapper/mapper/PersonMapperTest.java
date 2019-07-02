@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ public class PersonMapperTest {
 
     @Test
     public void testEntityToApi(){
-        //заполняем поля
         Person person = new Person();
         person.setFirstName("Tomas");
         person.setLastName("Edison");
@@ -42,15 +41,13 @@ public class PersonMapperTest {
         person.setPhone("23723472934");
         person.setPhoto("res/jpg.jpg");
         person.setTown("Moscow");
-
         GregorianCalendar calendar = new GregorianCalendar(1992, Calendar.JANUARY, 24);
         Date birthDate = calendar.getTime();
         person.setBirthDate(birthDate);
         person.setLastOnlineTime(birthDate);
         person.setRegDate(birthDate);
-
-        //мапим и сравниваем
         PersonApi personApi = mapper.map(person, PersonApi.class);
+
         assertEquals(person.getFirstName(), personApi.getFirst_name());
         assertEquals(person.getLastName(), personApi.getLast_name());
         assertEquals(person.getId(), personApi.getId());
@@ -67,7 +64,6 @@ public class PersonMapperTest {
 
     @Test
     public void testApiToEntity(){
-        //заполняем поля
         PersonApi personApi = new PersonApi();
         personApi.setFirst_name("Vasya");
         personApi.setLast_name("Pupkin");
@@ -83,9 +79,8 @@ public class PersonMapperTest {
         personApi.setIs_blocked(false);
         personApi.setPhone("84765439453");
         personApi.setPhoto("res/jpg.jpg");
-
-        //мапим и сравниваем
         Person person = mapper.map(personApi, Person.class);
+
         assertEquals(personApi.getFirst_name(), person.getFirstName());
         assertEquals(personApi.getLast_name(), person.getLastName());
         assertEquals(personApi.getAbout(), person.getAbout());
@@ -99,5 +94,4 @@ public class PersonMapperTest {
         assertEquals(personApi.getPhoto(), person.getPhoto());
         assertEquals(personApi.isIs_blocked(), person.isBlocked());
     }
-
 }

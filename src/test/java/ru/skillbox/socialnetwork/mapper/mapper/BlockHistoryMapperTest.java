@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,18 +26,14 @@ public class BlockHistoryMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         BlockHistory blockHistory = new BlockHistory();
         blockHistory.setId(23452);
         blockHistory.setAction(ActionBlockHistory.BLOCK);
-
-
         GregorianCalendar calendar = new GregorianCalendar(2018, 12, 31);
         Date date = calendar.getTime();
         blockHistory.setTime(date);
-
-        //мапим и сравниваем
         BlockHistoryApi blockHistoryApi = mapper.map(blockHistory, BlockHistoryApi.class);
+
         assertEquals(blockHistory.getId(), blockHistoryApi.getId());
         assertEquals(blockHistory.getAction().getDescription(), blockHistoryApi.getAction().toString());
         assertEquals(blockHistory.getTime().getTime(), blockHistoryApi.getTime());
@@ -46,7 +42,6 @@ public class BlockHistoryMapperTest {
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         BlockHistoryApi blockHistoryApi = new BlockHistoryApi();
         blockHistoryApi.setAction(BlockHistoryApi.actions.UNBLOCK);
         blockHistoryApi.setComment_id(3445);
@@ -54,9 +49,8 @@ public class BlockHistoryMapperTest {
         blockHistoryApi.setPerson_id(5676);
         blockHistoryApi.setPost_id(5467);
         blockHistoryApi.setTime(54564567);
-
-        //мапим и сравниваем
         BlockHistory blockHistory = mapper.map(blockHistoryApi, BlockHistory.class);
+
         assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().getDescription());
         assertEquals(blockHistoryApi.getId(), blockHistory.getId());
         assertEquals(blockHistoryApi.getTime(), blockHistory.getTime().getTime());

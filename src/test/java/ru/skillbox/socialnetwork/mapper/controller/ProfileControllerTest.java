@@ -15,7 +15,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProfileController.class)
 public class ProfileControllerTest {
@@ -38,7 +37,6 @@ public class ProfileControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser
@@ -113,7 +111,6 @@ public class ProfileControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser

@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,14 +22,12 @@ public class Post2tagMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         Post2tag post2tag = new Post2tag();
         post2tag.setId(5);
         post2tag.setPostId(3);
         post2tag.setTagId(9);
-
-        //мапим и сравниваем
         Post2TagApi post2TagApi = mapper.map(post2tag, Post2TagApi.class);
+
         assertEquals(post2tag.getId(), post2TagApi.getId());
         assertEquals(post2tag.getPostId(), post2TagApi.getPost_id());
         assertEquals(post2tag.getTagId(), post2TagApi.getTag_id());
@@ -38,14 +36,12 @@ public class Post2tagMapperTest {
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         Post2TagApi post2TagApi = new Post2TagApi();
         post2TagApi.setId(86);
         post2TagApi.setPost_id(233);
         post2TagApi.setTag_id(34521);
-
-        //мапим и сравниваем
         Post2tag post2tag = mapper.map(post2TagApi, Post2tag.class);
+
         assertEquals(post2TagApi.getId(), post2tag.getId());
         assertEquals(post2TagApi.getPost_id(), post2tag.getPostId());
         assertEquals(post2TagApi.getTag_id(), post2tag.getTagId());

@@ -19,12 +19,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(AccountController.class)
 public class AccountControllerTest {
-    private static final ObjectMapper mapper = new ObjectMapper();
 
+    private static final ObjectMapper mapper = new ObjectMapper();
     @Autowired
     private MockMvc mvc;
 
@@ -38,17 +37,13 @@ public class AccountControllerTest {
         registrationApi.setPasswd1("1");
         registrationApi.setPasswd2("1");
         registrationApi.setCoda(1);
-
         String json = mapper.writeValueAsString(registrationApi);
-
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-
-
         registrationApi = new RegistrationApi();
         registrationApi.setEmail("email@test.com");
         registrationApi.setFirstName("A");
@@ -56,17 +51,13 @@ public class AccountControllerTest {
         registrationApi.setPasswd1("1");
         registrationApi.setPasswd2("2");
         registrationApi.setCoda(1);
-
         json = mapper.writeValueAsString(registrationApi);
-
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
-
-
         registrationApi = new RegistrationApi();
         registrationApi.setEmail("test");
         registrationApi.setFirstName("A");
@@ -74,19 +65,15 @@ public class AccountControllerTest {
         registrationApi.setPasswd1("1");
         registrationApi.setPasswd2("1");
         registrationApi.setCoda(1);
-
         json = mapper.writeValueAsString(registrationApi);
-
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
-
         registrationApi = new RegistrationApi();
         json = mapper.writeValueAsString(registrationApi);
-
         mvc.perform(post("/api/v1/account/registration")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
@@ -94,7 +81,6 @@ public class AccountControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser
@@ -105,7 +91,6 @@ public class AccountControllerTest {
                 .param("email", "email@test.com"))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-
         mvc.perform(put("/api/v1/account/password/recovery")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
@@ -120,35 +105,27 @@ public class AccountControllerTest {
         SetPasswordApi passwordApi = new SetPasswordApi();
         passwordApi.setOld("1");
         passwordApi.setPassword("2");
-
         String json = mapper.writeValueAsString(passwordApi);
-
         mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-
-
         passwordApi = new SetPasswordApi();
         passwordApi.setToken("1");
         passwordApi.setPassword("2");
-
         json = mapper.writeValueAsString(passwordApi);
-
         mvc.perform(put("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
                 .content(json))
                 .andExpect(status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-
 
         passwordApi = new SetPasswordApi();
         passwordApi.setPassword("1");
         json = mapper.writeValueAsString(passwordApi);
-
         mvc.perform(post("/api/v1/account/password/set")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .with(csrf())
@@ -212,5 +189,4 @@ public class AccountControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 }

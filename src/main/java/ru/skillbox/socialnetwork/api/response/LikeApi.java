@@ -6,10 +6,8 @@ public class LikeApi extends AbstractResponse{
 
   private int id;
   private long time;
-
   @JsonProperty("person_id")
   private int personId;
-
   @JsonProperty("post_id")
   private int postId;
 

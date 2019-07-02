@@ -56,5 +56,4 @@ public class RegistrationApi {
     public void setCoda(int coda) {
         this.coda = coda;
     }
-
 }

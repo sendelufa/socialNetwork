@@ -29,11 +29,9 @@ public class PostDAO {
    public List<Post> getPosts(PostParameters postParameters) {
       String query = String.format("from Post p where locate('%s', p.postText, 1) > 0",
           postParameters.getText());
-
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(postParameters.getOffset());
       q.setMaxResults(postParameters.getItemPerPage());
-
       return q.list();
    }
 
@@ -48,7 +46,6 @@ public class PostDAO {
    public void deletePost(Post post) {
       getCurrentSession().delete(post);
    }
-
 
    public void addComment(PostComment comment) {
       getCurrentSession().save(comment);
@@ -80,5 +77,4 @@ public class PostDAO {
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }
-
 }

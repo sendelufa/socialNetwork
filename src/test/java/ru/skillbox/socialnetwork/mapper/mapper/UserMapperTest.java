@@ -13,7 +13,6 @@ import ru.skillbox.socialnetwork.model.enumeration.UserType;
 
 import static org.junit.Assert.assertEquals;
 
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= AppConfig.class)
 public class UserMapperTest {

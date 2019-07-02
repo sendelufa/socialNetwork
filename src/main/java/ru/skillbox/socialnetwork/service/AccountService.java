@@ -14,6 +14,7 @@ import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
+import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;

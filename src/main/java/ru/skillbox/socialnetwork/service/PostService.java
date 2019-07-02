@@ -13,7 +13,6 @@ import ru.skillbox.socialnetwork.model.Post;
 @Service
 public class PostService {
 
-
    private PostApi postApi;
    @Autowired
    private PostDAO postDAO;

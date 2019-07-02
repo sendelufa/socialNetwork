@@ -36,7 +36,6 @@ public class AccountService {
     private MailSender mailSender;
 
     public AbstractResponse registration(RegistrationApi registration) {
-
         String userEmail = registration.getEmail();
         AbstractResponse response;
 

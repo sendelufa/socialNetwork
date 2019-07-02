@@ -19,18 +19,11 @@ public class ProfileService {
 
     @Autowired
     private PersonDAO personDAO;
-
     @Autowired
     private PostDAO postDAO;
-
     @Autowired
     private ModelMapper modelMapper;
 
-    /**
-     * Получение текущего пользователя
-     *
-     * @return Текущий пользоваетль
-     */
     public PersonApi getMe() {
         Person person = getCurrentPerson();
         return modelMapper.map(person, PersonApi.class);

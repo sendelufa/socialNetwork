@@ -7,7 +7,7 @@ public abstract class AbstractResponse {
    @JsonIgnore
    private boolean isSuccess;
 
-
+   @JsonIgnore
    public boolean isSuccess() {
       return isSuccess;
    }

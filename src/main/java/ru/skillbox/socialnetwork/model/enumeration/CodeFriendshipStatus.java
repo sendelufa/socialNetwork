@@ -1,8 +1,5 @@
 package ru.skillbox.socialnetwork.model.enumeration;
 
-/**
- * код статуса
- */
 public enum CodeFriendshipStatus {
     REQUEST("Запрос на добавление в друзья"),
     FRIEND("Друзья"),
@@ -10,9 +7,6 @@ public enum CodeFriendshipStatus {
     DECLINED("Запрос на добавление в друзья отклонён"),
     SUBSCRIBED("Подписан");
 
-    /**
-     * Описание
-     */
     private String description;
 
     CodeFriendshipStatus(String description) {

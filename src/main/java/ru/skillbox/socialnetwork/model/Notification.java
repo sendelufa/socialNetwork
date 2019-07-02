@@ -12,9 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * оповещения
- */
 @Entity
 @Table(name = "notification")
 public class Notification {

@@ -46,7 +46,6 @@ public class ProfileControllerTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-
     @Test
     @WithMockUser
     public void testEditMe() throws Exception {
@@ -120,7 +119,6 @@ public class ProfileControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser

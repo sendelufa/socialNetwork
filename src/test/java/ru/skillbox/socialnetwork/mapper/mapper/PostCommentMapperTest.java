@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,29 +24,23 @@ public class PostCommentMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         PostComment postComment = new PostComment();
         postComment.setId(45);
         postComment.setBlocked(false);
         postComment.setCommentText("good");
-
-
         GregorianCalendar calendar = new GregorianCalendar(2019, 9, 27);
         Date date = calendar.getTime();
         postComment.setTime(date);
-
-        //мапим и сравниваем
         CommentApi commentApi = mapper.map(postComment, CommentApi.class);
+
         assertEquals(postComment.getId(), commentApi.getId());
         assertEquals(postComment.getCommentText(), commentApi.getCommentText());
         assertEquals(postComment.getTime().getTime(), commentApi.getTime());
-
     }
 
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         CommentApi commentApi = new CommentApi();
         commentApi.setId(90);
         commentApi.setAuthorId(234);
@@ -55,9 +49,8 @@ public class PostCommentMapperTest {
         commentApi.setParentId(232);
         commentApi.setPostId("4564");
         commentApi.setTime(23522);
-
-        //мапим и сравниваем
         PostComment postComment = mapper.map(commentApi, PostComment.class);
+
         assertEquals(commentApi.getId(), postComment.getId());
         assertEquals(commentApi.getCommentText(), postComment.getCommentText());
         assertEquals(commentApi.isBlocked(), postComment.isBlocked());

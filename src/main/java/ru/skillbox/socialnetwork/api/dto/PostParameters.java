@@ -1,8 +1,5 @@
 package ru.skillbox.socialnetwork.api.dto;
 
-/**
- * Параметры для поиска постов
- */
 public class PostParameters {
 
    private String text;

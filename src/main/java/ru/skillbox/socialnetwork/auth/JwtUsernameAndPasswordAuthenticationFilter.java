@@ -27,7 +27,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
   // We use auth manager to validate the user credentials
   private AuthenticationManager authManager;
-
   private final JwtConfig jwtConfig;
 
   public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {

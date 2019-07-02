@@ -1,17 +1,25 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.stereotype.Component;
 
-@Component
-public class PostListApi extends AbstractResponse {
-
+public class PostListApi extends ResponseApi {
 
    private List<PostApi> data = new ArrayList<>();
    private int total;
    private int offset;
    private int perPage;
+
+   public PostListApi(String error, long timestamp){
+      super(error, timestamp, null);
+   }
+
+   @JsonIgnore
+   @Override
+   public AbstractResponse getAbstractResponse() {
+      return super.getAbstractResponse();
+   }
 
    public List<PostApi> getData() {
       return data;

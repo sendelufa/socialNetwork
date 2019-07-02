@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
 @Controller
@@ -42,15 +42,15 @@ public class PostController {
        @RequestParam(value = "date_to", required = false) Integer dateTo,
        @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
-      offset = offset == null ? 0: offset;
+      offset = offset == null ? 0 : offset;
       PostParameters postParameters = new PostParameters(
           text,
           dateFrom,
           dateTo,
           offset,
           itemPerPage);
-      PostListApi postApiList = postService.search(postParameters);
-       return new ResponseEntity<>(postApiList, HttpStatus.OK);
+      ResponseApi responseApi = postService.search(postParameters);
+      return new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -58,13 +58,9 @@ public class PostController {
     */
    @GetMapping("/{id:\\d+}")
    public ResponseEntity getPostById(@PathVariable int id) {
-      if (postService.get(id) != null) {
-         return new ResponseEntity<>(postService.get(id), HttpStatus.OK);
-      } else {
-         return notFoundResponse();
-      }
-
-
+      ResponseApi responseApi = postService.get(id);
+      return responseApi == null ? notFoundResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**

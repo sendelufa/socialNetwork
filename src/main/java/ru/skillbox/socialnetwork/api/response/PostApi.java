@@ -63,6 +63,7 @@ public class PostApi extends AbstractResponse {
       this.postText = postText;
    }
 
+   @JsonProperty("is_blocked")
    public boolean isBlocked() {
       return isBlocked;
    }

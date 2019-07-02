@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,19 +8,19 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
 
 @Service
 public class PostService {
 
-
    private PostApi postApi;
+   private PostListApi postListApi;
    @Autowired
    private PostDAO postDAO;
 
-   public PostApi get(int id) {
-      PostApi postApi;
+   public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
       if (post != null) {
          postApi = fillPostApi(post);
@@ -28,18 +29,20 @@ public class PostService {
       } else {
          return null;
       }
-      return postApi;
+      return new ResponseApi("none", new Date().getTime(), postApi);
    }
 
-   public PostListApi search(PostParameters postParameters) {
+   public ResponseApi search(PostParameters postParameters) {
       List<Post> posts = postDAO.getPosts(postParameters);
-      PostListApi postListApi = new PostListApi();
+      PostListApi postListApi = new PostListApi("none", new Date().getTime());
       postListApi.setData(posts.stream().map(this::fillPostApi)
           .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
       postListApi.setPerPage(postParameters.getItemPerPage());
       postListApi.setSuccess(true);
+      postListApi.setTimestamp(new Date().getTime());
+      postListApi.setError("none");
       return postListApi;
    }
 

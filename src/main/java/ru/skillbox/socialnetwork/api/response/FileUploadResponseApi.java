@@ -11,7 +11,6 @@ public class FileUploadResponseApi extends AbstractResponse{
   private int bytes;
   private fileTypes fileType;
   private int createdAt;
-
   public enum fileTypes {IMAGE}
 
   public String getId() {

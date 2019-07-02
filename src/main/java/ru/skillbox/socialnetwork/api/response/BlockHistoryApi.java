@@ -6,18 +6,13 @@ public class BlockHistoryApi extends AbstractResponse{
 
   private int id;
   private long time;
-
   @JsonProperty("person_id")
   private int personId;
-
   @JsonProperty("post_id")
   private int postId;
-
   @JsonProperty("comment_id")
   private int commentId;
-
   private actions action;
-
   public enum actions {BLOCK, UNBLOCK}
 
   public int getId() {

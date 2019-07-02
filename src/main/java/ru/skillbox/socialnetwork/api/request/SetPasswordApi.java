@@ -1,6 +1,5 @@
 package ru.skillbox.socialnetwork.api.request;
 
-
 public class SetPasswordApi {
 
     private String token;
@@ -30,6 +29,4 @@ public class SetPasswordApi {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

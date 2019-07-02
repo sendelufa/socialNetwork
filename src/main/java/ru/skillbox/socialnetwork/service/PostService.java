@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDataApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
@@ -37,7 +36,7 @@ public class PostService {
    public PostListApi search(PostParameters postParameters) {
       List<Post> posts = postDAO.getPosts(postParameters);
       PostListApi postListApi = new PostListApi();
-      postListApi.setData(posts.stream().map(this::fillPostDataApi)
+      postListApi.setData(posts.stream().map(this::fillPostApi)
           .collect(Collectors.toList()));
       postListApi.setTimestamp(new Date().getTime());
       postListApi.setTotal(posts.size());
@@ -48,8 +47,8 @@ public class PostService {
       return postListApi;
    }
 
-   private PostDataApi fillPostDataApi(Post post) {
-      PostDataApi postDataApi = new PostDataApi();
+   private PostApi fillPostApi(Post post) {
+      PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());
       postDataApi.setTime(post.getTime().getTime());
       postDataApi.setAuthorId(post.getAuthor().getId());
@@ -58,14 +57,6 @@ public class PostService {
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
       return postDataApi;
-   }
-
-   private PostApi fillPostApi(Post post) {
-      PostApi postApi = new PostApi();
-      postApi.setTimestamp(new Date().getTime());
-
-      postApi.setData(fillPostDataApi(post));
-      return postApi;
    }
 
 }

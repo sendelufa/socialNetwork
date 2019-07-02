@@ -17,9 +17,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-/**
- * комментарий к посту
- */
 @Entity
 @Table(name = "post_comment")
 public class PostComment {

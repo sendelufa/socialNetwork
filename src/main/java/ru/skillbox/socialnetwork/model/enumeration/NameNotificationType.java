@@ -7,9 +7,6 @@ public enum NameNotificationType {
     FRIEND_REQUEST("Запрос дружбы"),
     MESSAGE("Личное сообщение");
 
-    /**
-     * Описание
-     */
     private String description;
 
     NameNotificationType(String description) {

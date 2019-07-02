@@ -44,7 +44,6 @@ public class Person {
    private String email;
 
    @Column(name = "phone", unique = true)
-   @NotNull
    private String phone;
 
    @Column(name = "password")
@@ -82,6 +81,10 @@ public class Person {
    @Column(name = "is_blocked")
    @NotNull
    private boolean isBlocked;
+
+    @Column(name = "is_online")
+   @NotNull
+   private boolean isOnline;
 
    public int getId() {
       return id;
@@ -210,4 +213,12 @@ public class Person {
    public void setBlocked(boolean blocked) {
       isBlocked = blocked;
    }
+
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean status) {
+        isOnline = status;
+    }
 }

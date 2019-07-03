@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,8 +44,9 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         .anyRequest().authenticated()
         .and()
           .formLogin()
+            .defaultSuccessUrl("/api/auth", true)
             //.successHandler(new CustomAuthenticationSuccessHandler())
-            .failureHandler(new CustomAuthenticationFailureHandler())
+            //.failureHandler(new CustomAuthenticationFailureHandler())
             .usernameParameter("email")
               .permitAll()
         .and()

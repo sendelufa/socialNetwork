@@ -1,5 +1,10 @@
 package ru.skillbox.socialnetwork.mapper;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -9,11 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
 import ru.skillbox.socialnetwork.model.Post;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= AppConfig.class)
@@ -31,7 +31,7 @@ public class PostMapperTest {
         post.setBlocked(true);
         post.setPostText("Hello, world!");
 
-        GregorianCalendar calendar = new GregorianCalendar(2019, 4, 5);
+        GregorianCalendar calendar = new GregorianCalendar(2019, Calendar.MAY, 5);
         Date time = calendar.getTime();
         post.setTime(time);
 
@@ -39,11 +39,11 @@ public class PostMapperTest {
 
         //мапим и сравниваем
         PostApi postApi = mapper.map(post, PostApi.class);
-        assertEquals(post.getId(), postApi.getData().getId());
-        assertEquals(post.getPostText(), postApi.getData().getPostText());
-        assertEquals(post.getTime().getTime(), postApi.getData().getTime());
-        assertEquals(post.getTitle(), postApi.getData().getTitle());
-        assertEquals(post.isBlocked(), postApi.getData().isBlocked());
+        assertEquals(post.getId(), postApi.getId());
+        assertEquals(post.getPostText(), postApi.getPostText());
+        assertEquals(post.getTime().getTime(), postApi.getTime());
+        assertEquals(post.getTitle(), postApi.getTitle());
+        assertEquals(post.isBlocked(), postApi.isBlocked());
     }
 
     @Test
@@ -51,20 +51,20 @@ public class PostMapperTest {
     {
         //заполняем поля
         PostApi postApi = new PostApi();
-        postApi.getData().setId(7);
-        postApi.getData().setTime(234238);
-        postApi.getData().setAuthorId(6);
-        postApi.getData().setTitle("Head");
-        postApi.getData().setPostText("Grand");
-        postApi.getData().setBlocked(false);
+        postApi.setId(7);
+        postApi.setTime(234238);
+        postApi.setAuthorId(6);
+        postApi.setTitle("Head");
+        postApi.setPostText("Grand");
+        postApi.setBlocked(false);
 
         //мапим и сравниваем
         Post post = mapper.map(postApi, Post.class);
-        assertEquals(postApi.getData().getId(), post.getId());
-        assertEquals(postApi.getData().getTime(), post.getTime().getTime());
-        assertEquals(postApi.getData().getAuthorId(), post.getAuthor().getId());
-        assertEquals(postApi.getData().getTitle(), post.getTitle());
-        assertEquals(postApi.getData().getPostText(), post.getPostText());
-        assertEquals(postApi.getData().isBlocked(), post.isBlocked());
+        assertEquals(postApi.getId(), post.getId());
+        assertEquals(postApi.getTime(), post.getTime().getTime());
+        assertEquals(postApi.getAuthorId(), post.getAuthor().getId());
+        assertEquals(postApi.getTitle(), post.getTitle());
+        assertEquals(postApi.getPostText(), post.getPostText());
+        assertEquals(postApi.isBlocked(), post.isBlocked());
     }
 }

@@ -21,7 +21,7 @@ public class ResponseApi extends AbstractResponse {
   }
 
   @JsonProperty("data")
-  public void setAbstractRepsonse(AbstractResponse data) {
+  public void setAbstractResponse(AbstractResponse data) {
     this.data = data;
   }
 

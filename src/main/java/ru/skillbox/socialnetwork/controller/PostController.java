@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
@@ -25,7 +24,7 @@ import ru.skillbox.socialnetwork.service.PostService;
 public class PostController {
 
    @Autowired
-   PostService postService;
+   private PostService postService;
 
    /**
     * Поиск публикации
@@ -59,7 +58,7 @@ public class PostController {
    @GetMapping("/{id:\\d+}")
    public ResponseEntity getPostById(@PathVariable int id) {
       ResponseApi responseApi = postService.get(id);
-      return responseApi == null ? notFoundResponse()
+      return responseApi == null ? badRequestResponse()
           : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
@@ -69,11 +68,16 @@ public class PostController {
     * @param publishDate Отложить до даты определенной даты
     */
    @PutMapping("/{id:\\d+}")
-   public ResponseEntity editPostById(@RequestBody PostApi request,
+   public ResponseEntity editPostById(
+       @RequestBody ru.skillbox.socialnetwork.api.request.PostApi request,
        @PathVariable int id,
-       @RequestParam(value = "publish_date", required = false) Number publishDate) {
-      //TODO: Требуется реализация
-      return null;
+       @RequestParam(value = "publish_date", required = false) Long publishDate) {
+      ResponseApi responseApi = postService.edit(id, request, publishDate);
+
+      System.out
+          .println(id + " " + publishDate + " " + request.getTitle() + " " + request.getPostText());
+      return responseApi == null ? badRequestResponse()
+          :new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -184,7 +188,7 @@ public class PostController {
       return null;
    }
 
-   private ResponseEntity<Object> notFoundResponse() {
+   private ResponseEntity<Object> badRequestResponse() {
       Map<String, String> response = new HashMap<>();
       response.put("error", "invalid_request");
       response.put("error_description", "not_found");

@@ -1,9 +1,12 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ResponseApi extends AbstractResponse {
 
   private String error;
   private long timestamp;
+  //@JsonProperty("data")
   private AbstractResponse data;
 
   public ResponseApi(String error, long timestamp, AbstractResponse data) {
@@ -12,10 +15,12 @@ public class ResponseApi extends AbstractResponse {
     this.data = data;
   }
 
+  @JsonProperty("data")
   public AbstractResponse getAbstractResponse() {
     return data;
   }
 
+  @JsonProperty("data")
   public void setAbstractResponse(AbstractResponse data) {
     this.data = data;
   }
@@ -52,5 +57,6 @@ public class ResponseApi extends AbstractResponse {
       this.message = message;
     }
   }
+
 
 }

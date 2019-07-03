@@ -42,8 +42,7 @@ public class AccountController {
 
         AbstractResponse response = accountService.recoveryPassword(email);
 
-        return new ResponseEntity(response,
-            response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**

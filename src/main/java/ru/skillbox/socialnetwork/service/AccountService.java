@@ -68,7 +68,7 @@ public class AccountService {
                     person.setPassword(encodedPassword);
                 } else {
 
-                    response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Passwords are not equal"}));
+                    response = new ErrorApi("invalid_request", "Passwords are not equal");
                     response.setSuccess(false);
                     return response;
                 }
@@ -80,7 +80,7 @@ public class AccountService {
 
             } else {
 
-                response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Given email is already used"}));
+                response = new ErrorApi("invalid_request", "Given email is already used");
                 response.setSuccess(false);
                 return response;
             }
@@ -109,7 +109,7 @@ public class AccountService {
             return response;
         } else {
 
-            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"empty string as password"}));
+            response = new ErrorApi("invalid_request", "empty string as password");
             response.setSuccess(false);
             return response;
         }
@@ -151,7 +151,7 @@ public class AccountService {
             response.setSuccess(true);
             return response;
         } else {
-            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"email not registered"}));
+            response = new ErrorApi("invalid_request", "email not registered");
             response.setSuccess(false);
             return response;
         }
@@ -192,7 +192,7 @@ public class AccountService {
         }
 
 
-        response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
+        response = new ErrorApi("invalid_request", "BAD REQUEST");
         response.setSuccess(false);
         return response;
 
@@ -218,7 +218,7 @@ public class AccountService {
             response.setSuccess(true);
         }
 
-        response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
+        response = new ErrorApi("invalid_request", "BAD REQUEST");
         response.setSuccess(false);
         return response;
 

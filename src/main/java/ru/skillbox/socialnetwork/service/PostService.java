@@ -27,6 +27,7 @@ public class PostService {
          postApi = fillPostApi(post);
          postApi.setError("none");
          postApi.setSuccess(true);
+
       } else {
          return null;
       }
@@ -62,6 +63,7 @@ public class PostService {
    private PostApi fillPostApi(Post post) {
       PostApi postApi = new PostApi();
       postApi.setTimestamp(new Date().getTime());
+
       postApi.setData(fillPostDataApi(post));
       return postApi;
    }

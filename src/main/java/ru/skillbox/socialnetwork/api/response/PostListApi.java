@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PostListApi extends AbstractResponse {
+public class PostListApi extends PostApi {
 
 
    private List<PostDataApi> data = new ArrayList<>();
@@ -13,7 +13,8 @@ public class PostListApi extends AbstractResponse {
    private int offset;
    private int perPage;
 
-   public List<PostDataApi> getData() {
+
+   public List<PostDataApi> getDataAsList() {
       return data;
    }
 
@@ -44,4 +45,5 @@ public class PostListApi extends AbstractResponse {
    public void setPerPage(int perPage) {
       this.perPage = perPage;
    }
+
 }

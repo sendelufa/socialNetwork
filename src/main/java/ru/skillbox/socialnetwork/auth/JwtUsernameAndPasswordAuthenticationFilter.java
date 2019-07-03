@@ -22,8 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import ru.skillbox.socialnetwork.auth.JwtConfig;
+import ru.skillbox.socialnetwork.model.User;
 
-public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter   {    // ++ temp
+public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter   {
 
   // We use auth manager to validate the user credentials
   private AuthenticationManager authManager;
@@ -46,7 +48,6 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
       // FIXME: 16.06.2019 работает через fasterxml, но нужно ли оставлять?
       // 1. Get credentials from request
       UserCredentials creds = new ObjectMapper().readValue(request.getInputStream(), UserCredentials.class);
-
       // 2. Create auth object (contains credentials) which will be used by auth manager
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
           creds.getUsername(), creds.getPassword(), Collections.emptyList());
@@ -84,6 +85,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
   // A (temporary) class just to represent the user credentials
   private static class UserCredentials {  // FIXME: 16.06.2019 Выносить в отдельный класс или оставить внутренним?
     private String username, password;
+    private User user;
 
     public String getUsername() {
       return username;
@@ -99,6 +101,14 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     public void setPassword(String password) {
       this.password = password;
+    }
+
+    public User getUser() {
+      return user;
+    }
+
+    public void setUser(User user) {
+      this.user = user;
     }
   }
 }

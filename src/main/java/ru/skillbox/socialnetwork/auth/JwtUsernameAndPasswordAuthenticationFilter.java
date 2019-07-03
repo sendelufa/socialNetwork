@@ -51,7 +51,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
       UserCredentials creds = new ObjectMapper().readValue(request.getInputStream(), UserCredentials.class);
       // 2. Create auth object (contains credentials) which will be used by auth manager
       UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-          creds.getUsername(), creds.getPassword(), Collections.emptyList());
+          creds.getEmail(), creds.getPassword(), Collections.emptyList());
 
       // 3. Authentication manager authenticate the user, and use UserDetialsServiceImpl::loadUserByUsername() method to load the user.
       return authManager.authenticate(authToken);
@@ -85,15 +85,15 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
   // A (temporary) class just to represent the user credentials
   private static class UserCredentials {  // FIXME: 16.06.2019 Выносить в отдельный класс или оставить внутренним?
-    private String username, password;
+    private String email, password;
     private User user;
 
-    public String getUsername() {
-      return username;
+    public String getEmail() {
+      return email;
     }
 
-    public void setUsername(String username) {
-      this.username = username;
+    public void setEmail(String email) {
+      this.email = email;
     }
 
     public String getPassword() {

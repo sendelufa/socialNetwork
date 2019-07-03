@@ -237,4 +237,9 @@ public class AccountService {
             .toString(32)).replace('\u0020', '0');
     }
 
+    public Person getCurrentUser() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person personByEmail = personDAO.getPersonByEmail(email);
+        return personByEmail;
+    }
 }

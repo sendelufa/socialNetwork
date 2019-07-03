@@ -30,7 +30,7 @@ public class TestController {
    public ResponseEntity<List> persons() {
       List<Person> allPersons = personDao.getAllPersons();
       allPersons.stream().map(Person::getEmail).forEach(System.out::println);
-      return new ResponseEntity<>(allPersons, HttpStatus.OK); 
+      return new ResponseEntity<>(allPersons, HttpStatus.OK);
    }
 
    @GetMapping("/posts")

@@ -1,5 +1,7 @@
 package ru.skillbox.socialnetwork.auth;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import ru.skillbox.socialnetwork.auth.JwtConfig;
 
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 

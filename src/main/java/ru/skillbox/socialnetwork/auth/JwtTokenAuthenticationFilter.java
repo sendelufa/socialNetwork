@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import ru.skillbox.socialnetwork.auth.JwtConfig;
 
-public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {  // ++
+public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
   private final JwtConfig jwtConfig;
 

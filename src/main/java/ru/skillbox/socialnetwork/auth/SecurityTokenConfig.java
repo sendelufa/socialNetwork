@@ -12,11 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.servlet.http.HttpServletResponse;
 
-@EnableWebSecurity  // Enable security config. This annotation denotes config for spring security.
-public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
-
+@EnableWebSecurity
+public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private JwtConfig jwtConfig;
+
   @Autowired
   private CustomUserDetailsService userDetailsService;
 
@@ -24,10 +24,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
   protected void configure(HttpSecurity http) throws Exception {
     http
         .csrf().disable()
-        // make sure we use stateless session; session won't be used to store user's state.
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
-        // handle an authorized attempts
         .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
         .and()
         // Add a filter to validate the tokens with every request
@@ -35,11 +33,20 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {   // ++
         .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig), JwtTokenAuthenticationFilter.class)
         // authorization requests config
         .authorizeRequests()
-        // allow all who are accessing "auth" service
         .antMatchers(HttpMethod.POST, jwtConfig.getUri()).permitAll()
         // must be an admin if trying to access admin area (authentication is also required here)
-        .antMatchers("/api/**").permitAll()// временно пропускаем все пока не настром
-        .anyRequest().authenticated();
+        .antMatchers("/api/**").permitAll()
+        // Any other request must be authenticated
+        .anyRequest().authenticated()
+        .and()
+          .formLogin()
+            //.successHandler(new CustomAuthenticationSuccessHandler())
+            .failureHandler(new CustomAuthenticationFailureHandler())
+            .usernameParameter("email")
+              .permitAll()
+        .and()
+        .logout()
+            .permitAll();
   }
 
   @Override

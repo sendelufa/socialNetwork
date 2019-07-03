@@ -1,10 +1,12 @@
 package ru.skillbox.socialnetwork.api.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PostApi {
 
     private String title;
 
-    private String post_text;
+    private String postText;
 
     public String getTitle() {
         return title;
@@ -14,11 +16,12 @@ public class PostApi {
         this.title = title;
     }
 
-    public String getPost_text() {
-        return post_text;
+    public String getPostText() {
+        return postText;
     }
 
-    public void setPost_text(String post_text) {
-        this.post_text = post_text;
+    @JsonProperty("post_text")
+    public void setPostText(String postText) {
+        this.postText = postText;
     }
 }

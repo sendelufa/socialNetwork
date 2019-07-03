@@ -46,6 +46,20 @@ public class PostService {
       return postListApi;
    }
 
+   public ResponseApi edit(int id,
+       ru.skillbox.socialnetwork.api.request.PostApi postApiRequest,
+       Long publishDate) {
+      Post post = postDAO.getPostById(id);
+      if (post == null) {
+         return null;
+      }
+      post.setTitle(postApiRequest.getTitle());
+      post.setPostText(postApiRequest.getPostText());
+      post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
+      postDAO.updatePost(post);
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
    private PostApi fillPostApi(Post post) {
       PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());

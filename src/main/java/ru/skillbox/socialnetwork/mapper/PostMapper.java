@@ -26,11 +26,20 @@ public class PostMapper extends Mapper<Post, PostApi> {
     @PostConstruct
     public void setupMapper() {
         modelMapper.createTypeMap(Post.class, PostApi.class)
-                .addMappings(m -> m.skip(PostApi::setData)).setPostConverter(toApiConverter());
+                .addMappings(m -> m.skip(PostApi::setAuthorId))
+                .setPostConverter(toApiConverter());
+        modelMapper.createTypeMap(PostApi.class, Post.class)
+                .addMappings(m -> m.skip(Post::setAuthor))
+                .setPostConverter(toEntityConverter());
     }
 
     @Override
     void mapSpecificFieldsEA(Post source, PostApi destination) {
-        destination.getData().setAuthorId(source.getId());
+        destination.setAuthorId(source.getAuthor().getId());
+    }
+
+    @Override
+    void mapSpecificFieldsAE(PostApi source, Post destination) {
+        destination.setAuthor(personDAO.getPersonById(source.getAuthorId()));
     }
 }

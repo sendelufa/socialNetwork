@@ -10,7 +10,7 @@ public class PostApi extends AbstractResponse {
    private long time;
 
    @JsonProperty("author_id")
-   private int authorId;
+   private Integer authorId;
 
    private String title;
 
@@ -39,11 +39,11 @@ public class PostApi extends AbstractResponse {
       this.time = time;
    }
 
-   public int getAuthorId() {
+   public Integer getAuthorId() {
       return authorId;
    }
 
-   public void setAuthorId(int authorId) {
+   public void setAuthorId(Integer authorId) {
       this.authorId = authorId;
    }
 

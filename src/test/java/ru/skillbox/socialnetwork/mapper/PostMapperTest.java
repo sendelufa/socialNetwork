@@ -62,7 +62,7 @@ public class PostMapperTest {
         Post post = mapper.map(postApi, Post.class);
         assertEquals(postApi.getId(), post.getId());
         assertEquals(postApi.getTime(), post.getTime().getTime());
-        assertEquals(postApi.getAuthorId(), post.getAuthor().getId());
+        assertEquals(postApi.getAuthorId().intValue(), post.getAuthor().getId());
         assertEquals(postApi.getTitle(), post.getTitle());
         assertEquals(postApi.getPostText(), post.getPostText());
         assertEquals(postApi.isBlocked(), post.isBlocked());

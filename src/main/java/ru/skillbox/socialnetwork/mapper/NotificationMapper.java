@@ -35,11 +35,21 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
                 .addMappings(m -> m.skip(NotificationApi::setType_id))
                 .addMappings(m -> m.skip(NotificationApi::setPerson_id))
                 .setPostConverter(toApiConverter());
+        modelMapper.createTypeMap(NotificationApi.class, Notification.class)
+                .addMappings(m -> m.skip(Notification::setNotificationType))
+                .addMappings(m -> m.skip(Notification::setPerson))
+                .setPostConverter(toEntityConverter());
     }
 
     @Override
     void mapSpecificFieldsEA(Notification source, NotificationApi destination) {
         destination.setType_id(source.getNotificationType().getId());
         destination.setPerson_id(source.getPerson().getId());
+    }
+
+    @Override
+    void mapSpecificFieldsAE(NotificationApi source, Notification destination) {
+        destination.setNotificationType(notificationDAO.getNotificationTypeById(source.getType_id()));
+        destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
     }
 }

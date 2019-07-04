@@ -36,6 +36,11 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
                 .addMappings(m -> m.skip(CommentApi::setParent_id))
                 .addMappings(m -> m.skip(CommentApi::setAuthor_id))
                 .setPostConverter(toApiConverter());
+        modelMapper.createTypeMap(CommentApi.class, PostComment.class)
+                .addMappings(m -> m.skip(PostComment::setPost))
+                .addMappings(m -> m.skip(PostComment::setParent_id))
+                .addMappings(m -> m.skip(PostComment::setAuthor))
+                .setPostConverter(toEntityConverter());
     }
 
     @Override
@@ -43,5 +48,12 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         destination.setPost_id(String.valueOf(source.getPost().getId()));
         destination.setParent_id(source.getParent_id().getId());
         destination.setAuthor_id(source.getAuthor().getId());
+    }
+
+    @Override
+    void mapSpecificFieldsAE(CommentApi source, PostComment destination) {
+        destination.setPost(postDAO.getPostById(Integer.parseInt(source.getPost_id())));
+        destination.setParent_id(postDAO.getCommentById(source.getParent_id()));
+        destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));
     }
 }

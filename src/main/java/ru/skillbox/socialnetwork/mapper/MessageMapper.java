@@ -29,11 +29,21 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
                 .addMappings(m -> m.skip(MessageApi::setAuthor_id))
                 .addMappings(m -> m.skip(MessageApi::setRecipient_id))
                 .setPostConverter(toApiConverter());
+        modelMapper.createTypeMap(MessageApi.class, Message.class)
+                .addMappings(m -> m.skip(Message::setAuthor))
+                .addMappings(m -> m.skip(Message::setRecipient))
+                .setPostConverter(toEntityConverter());
     }
 
     @Override
     void mapSpecificFieldsEA(Message source, MessageApi destination) {
         destination.setAuthor_id(source.getAuthor().getId());
         destination.setRecipient_id(source.getRecipient().getId());
+    }
+
+    @Override
+    void mapSpecificFieldsAE(MessageApi source, Message destination) {
+        destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));
+        destination.setRecipient(personDAO.getPersonById(source.getRecipient_id()));
     }
 }

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class FileUploadResponseApi implements AbstractResponse{
+public class FileUploadResponseApi extends AbstractResponse{
 
   private String id;
   private int ownerId;

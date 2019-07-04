@@ -1,6 +1,17 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * дружба
@@ -9,31 +20,25 @@ import javax.persistence.*;
 @Table(name = "friendship")
 public class Friendship {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
-    /**
-     * статус связи
-     */
-    @Column(name = "status_id")
-    private int statusId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "src_person_id")
+    @NotNull
+    private Person srcPerson;
 
-    /**
-     *  пользователь, запросивший дружбу
-     */
-    @Column(name = "src_person_id")
-    private int srcPersonId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "dst_person_id")
+    @NotNull
+    private Person dstPerson;
 
-    /**
-     * пользователь, получивший запрос
-     */
-    @Column(name = "dst_person_id")
-    private int dstPersonId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name ="id", referencedColumnName = "id")
+    private FriendshipStatus friendshipStatus;
 
     public int getId() {
         return id;
@@ -43,27 +48,27 @@ public class Friendship {
         this.id = id;
     }
 
-    public int getStatusId() {
-        return statusId;
+    public Person getSrcPerson() {
+        return srcPerson;
     }
 
-    public void setStatusId(int statusId) {
-        this.statusId = statusId;
+    public void setSrcPerson(Person srcPerson) {
+        this.srcPerson = srcPerson;
     }
 
-    public int getSrcPersonId() {
-        return srcPersonId;
+    public Person getDstPerson() {
+        return dstPerson;
     }
 
-    public void setSrcPersonId(int srcPersonId) {
-        this.srcPersonId = srcPersonId;
+    public void setDstPerson(Person dstPerson) {
+        this.dstPerson = dstPerson;
     }
 
-    public int getDstPersonId() {
-        return dstPersonId;
+    public FriendshipStatus getFriendshipStatus() {
+        return friendshipStatus;
     }
 
-    public void setDstPersonId(int dstPersonId) {
-        this.dstPersonId = dstPersonId;
+    public void setFriendshipStatus(FriendshipStatus friendshipStatus) {
+        this.friendshipStatus = friendshipStatus;
     }
 }

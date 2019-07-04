@@ -1,7 +1,21 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * комментарий к посту
@@ -10,47 +24,37 @@ import java.util.Date;
 @Table(name = "post_comment")
 public class PostComment {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
-    /**
-     * дата и время
-     */
     @Column(name = "time")
+    @NotNull
     private Date time;
 
-    /**
-     * пост
-     */
-    @Column(name = "post_id")
-    private int postId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "post_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    private Post post;
 
-    /**
-     * родительский комментарий (если ответ на комментарий к посту)
-     */
-    @Column(name = "parent_id")
-    private int parentId;
+    @OneToMany(mappedBy = "parent_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<PostComment> postComments;
 
-    /**
-     * автор комментария
-     */
-    @Column(name = "author_id")
-    private int authorId;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private PostComment parent_id = null;
 
-    /**
-     * Текст комментария
-     */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "author_id")
+    @NotNull
+    private Person author;
+
     @Column(name = "comment_text")
     private String commentText;
 
-    /**
-     * комментарий заблокирован
-     */
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
@@ -70,28 +74,36 @@ public class PostComment {
         this.time = time;
     }
 
-    public int getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public int getParentId() {
-        return parentId;
+    public List<PostComment> getPostComments() {
+        return postComments;
     }
 
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
+    public void setPostComments(List<PostComment> postComments) {
+        this.postComments = postComments;
     }
 
-    public int getAuthorId() {
-        return authorId;
+    public PostComment getParent_id() {
+        return parent_id;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    public void setParent_id(PostComment parent_id) {
+        this.parent_id = parent_id;
+    }
+
+    public Person getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Person author) {
+        this.author = author;
     }
 
     public String getCommentText() {
@@ -109,4 +121,5 @@ public class PostComment {
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
     }
+
 }

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class NotificationTypeApi implements AbstractResponse{
+public class NotificationTypeApi extends AbstractResponse{
 
   private int id;
   private codes code;

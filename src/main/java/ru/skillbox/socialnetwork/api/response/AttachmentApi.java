@@ -1,9 +1,14 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class AttachmentApi implements AbstractResponse{
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class AttachmentApi extends AbstractResponse{
 
   private int id;
-  private String post_id;
+
+  @JsonProperty("post_id")
+  private String postId;
+
   private String name;
   private String path;
 
@@ -16,11 +21,11 @@ public class AttachmentApi implements AbstractResponse{
   }
 
   public String getPost_id() {
-    return post_id;
+    return postId;
   }
 
   public void setPost_id(String post_id) {
-    this.post_id = post_id;
+    this.postId = post_id;
   }
 
   public String getName() {

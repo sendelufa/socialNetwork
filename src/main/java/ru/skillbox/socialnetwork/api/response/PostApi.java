@@ -1,59 +1,82 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class PostApi implements AbstractResponse {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
-  private int id;
-  private long time;
-  private int author_id;
-  private String title;
-  private String post_text;
-  private boolean is_blocked;
+@Component
+public class PostApi extends AbstractResponse {
 
-  public int getId() {
-    return id;
-  }
+   private int id;
+   private long time;
 
-  public void setId(int id) {
-    this.id = id;
-  }
+   @JsonProperty("author_id")
+   private int authorId;
 
-  public long getTime() {
-    return time;
-  }
+   private String title;
 
-  public void setTime(long time) {
-    this.time = time;
-  }
+   @JsonProperty("post_text")
+   private String postText;
 
-  public int getAuthor_id() {
-    return author_id;
-  }
+   @JsonProperty("is_blocked")
+   private boolean isBlocked;
 
-  public void setAuthor_id(int author_id) {
-    this.author_id = author_id;
-  }
+   private long likes;
 
-  public String getTitle() {
-    return title;
-  }
 
-  public void setTitle(String title) {
-    this.title = title;
-  }
+   public int getId() {
+      return id;
+   }
 
-  public String getPost_text() {
-    return post_text;
-  }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-  public void setPost_text(String post_text) {
-    this.post_text = post_text;
-  }
+   public long getTime() {
+      return time;
+   }
 
-  public boolean isIs_blocked() {
-    return is_blocked;
-  }
+   public void setTime(long time) {
+      this.time = time;
+   }
 
-  public void setIs_blocked(boolean is_blocked) {
-    this.is_blocked = is_blocked;
-  }
+   public int getAuthorId() {
+      return authorId;
+   }
+
+   public void setAuthorId(int authorId) {
+      this.authorId = authorId;
+   }
+
+   public String getTitle() {
+      return title;
+   }
+
+   public void setTitle(String title) {
+      this.title = title;
+   }
+
+   public String getPostText() {
+      return postText;
+   }
+
+   public void setPostText(String postText) {
+      this.postText = postText;
+   }
+
+   public boolean isBlocked() {
+      return isBlocked;
+   }
+
+   public void setBlocked(boolean blocked) {
+      isBlocked = blocked;
+   }
+
+   public long getLikes() {
+      return likes;
+   }
+
+   public void setLikes(long likes) {
+      this.likes = likes;
+   }
+
 }

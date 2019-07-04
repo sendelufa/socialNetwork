@@ -1,7 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * оповещения
@@ -10,42 +19,32 @@ import java.util.Date;
 @Table(name = "notification")
 public class Notification {
 
-    /**
-     * ID
-     */
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     private int id;
 
-    /**
-     * тип оповещения
-     */
-    @Column(name = "type_id")
-    private int typeId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "type_id")
+    @NotNull
+    private NotificationType notificationType;
 
-    /**
-     * время отправки
-     */
     @Column(name = "sent_time")
+    @NotNull
     private Date sentTime;
 
-    /**
-     * кому отправлено
-     */
-    @Column(name = "person_id")
-    private int personId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "person_id")
+    @NotNull
+    private Person person;
 
-    /**
-     * идентификатор сущности, относительно которой отправлено оповещение (комментарий, друг, пост или сообщение)
-     */
     @Column(name = "entity_id")
+    @NotNull
     private int entityId;
 
-    /**
-     * куда отправлено оповещение (конкретный e-mail или телефон)
-     */
     @Column(name = "contact")
+    @NotNull
     private String contact;
 
     public int getId() {
@@ -56,12 +55,12 @@ public class Notification {
         this.id = id;
     }
 
-    public int getTypeId() {
-        return typeId;
+    public NotificationType getNotificationType() {
+        return notificationType;
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
     }
 
     public Date getSentTime() {
@@ -72,12 +71,12 @@ public class Notification {
         this.sentTime = sentTime;
     }
 
-    public int getPersonId() {
-        return personId;
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     public int getEntityId() {

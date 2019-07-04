@@ -1,7 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * лайки постов
@@ -10,61 +19,55 @@ import java.util.Date;
 @Table(name = "post_like")
 public class PostLike {
 
-    /**
-     * ID
-     */
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+   @Id
+   @Column(name = "id")
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
+   private int id;
 
-    /**
-     * время и дата лайка
-     */
-    @Column(name = "time")
-    private Date time;
+   @Column(name = "time")
+   @NotNull
+   private Date time;
 
-    /**
-     * пользователь
-     */
-    @Column(name = "person_id")
-    private int personId;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "person_id")
+   @NotNull
+   private Person person;
 
-    /**
-     * пост
-     */
-    @Column(name = "post_id")
-    private int postId;
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "post_id")
+   @NotNull
+   private Post post;
 
-    public int getId() {
-        return id;
-    }
+   public int getId() {
+      return id;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public Date getTime() {
-        return time;
-    }
+   public Date getTime() {
+      return time;
+   }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
+   public void setTime(Date time) {
+      this.time = time;
+   }
 
-    public int getPersonId() {
-        return personId;
-    }
+   public Person getPerson() {
+      return person;
+   }
 
-    public void setPersonId(int personId) {
-        this.personId = personId;
-    }
+   public void setPerson(Person person) {
+      this.person = person;
+   }
 
-    public int getPostId() {
-        return postId;
-    }
+   public Post getPost() {
+      return post;
+   }
 
-    public void setPostId(int postId) {
-        this.postId = postId;
-    }
+   public void setPost(Post post) {
+      this.post = post;
+   }
 }

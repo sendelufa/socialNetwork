@@ -1,0 +1,1 @@
+ALTER TABLE person ADD is_online BIT NOT NULL DEFAULT 0;

@@ -1,6 +1,14 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.UserType;
 
 /**
@@ -10,35 +18,25 @@ import ru.skillbox.socialnetwork.model.enumeration.UserType;
 @Table(name = "user")
 public class User {
 
-   /**
-    * ID
-    */
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @NotNull
    private int id;
 
-   /**
-    * имя
-    */
    @Column(name = "name")
+   @NotNull
    private String name;
 
-   /**
-    * адрес электронной почты
-    */
-   @Column(name = "e_mail")
+   @Column(name = "e_mail", unique = true)
+   @NotNull
    private String email;
 
-   /**
-    * пароль
-    */
    @Column(name = "password")
+   @NotNull
    private String password;
 
-   /**
-    * тип пользователя: MODERATOR, ADMIN (может управлять другими админами и модераторами)
-    */
+   @Enumerated(EnumType.STRING)
    @Column(name = "type", columnDefinition = "ENUM('MODERATOR', 'ADMIN')")
    private UserType type;
 

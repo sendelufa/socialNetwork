@@ -1,12 +1,23 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class NotificationApi implements AbstractResponse{
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class NotificationApi extends AbstractResponse{
 
   private int id;
-  private int type_id;
-  private long sent_time;
-  private int person_id;
-  private int entity_id;
+
+  @JsonProperty("type_id")
+  private int typeId;
+
+  @JsonProperty("sent_time")
+  private long sentTime;
+
+  @JsonProperty("person_id")
+  private int personId;
+
+  @JsonProperty("entity_id")
+  private int entityId;
+
   private String contact;
   private String info;
 
@@ -19,19 +30,19 @@ public class NotificationApi implements AbstractResponse{
   }
 
   public int getType_id() {
-    return type_id;
+    return typeId;
   }
 
   public void setType_id(int type_id) {
-    this.type_id = type_id;
+    this.typeId = type_id;
   }
 
   public long getSent_time() {
-    return sent_time;
+    return sentTime;
   }
 
   public void setSent_time(long sent_time) {
-    this.sent_time = sent_time;
+    this.sentTime = sent_time;
   }
 
   public String getInfo() {
@@ -43,19 +54,19 @@ public class NotificationApi implements AbstractResponse{
   }
 
   public int getPerson_id() {
-    return person_id;
+    return personId;
   }
 
   public void setPerson_id(int person_id) {
-    this.person_id = person_id;
+    this.personId = person_id;
   }
 
   public int getEntity_id() {
-    return entity_id;
+    return entityId;
   }
 
   public void setEntity_id(int entity_id) {
-    this.entity_id = entity_id;
+    this.entityId = entity_id;
   }
 
   public String getContact() {

@@ -5,7 +5,7 @@ public class SetPasswordApi {
 
     private String token;
     private String old;
-    private String passwdord;
+    private String password;
 
     public String getToken() {
         return token;
@@ -23,12 +23,12 @@ public class SetPasswordApi {
         this.old = old;
     }
 
-    public String getPasswdord() {
-        return passwdord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswdord(String passwdord) {
-        this.passwdord = passwdord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 

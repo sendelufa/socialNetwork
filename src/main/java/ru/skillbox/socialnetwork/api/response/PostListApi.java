@@ -8,16 +8,16 @@ import org.springframework.stereotype.Component;
 public class PostListApi extends AbstractResponse {
 
 
-   private List<PostDataApi> data = new ArrayList<>();
+   private List<PostApi> data = new ArrayList<>();
    private int total;
    private int offset;
    private int perPage;
 
-   public List<PostDataApi> getData() {
+   public List<PostApi> getData() {
       return data;
    }
 
-   public void setData(List<PostDataApi> data) {
+   public void setData(List<PostApi> data) {
       this.data = data;
    }
 

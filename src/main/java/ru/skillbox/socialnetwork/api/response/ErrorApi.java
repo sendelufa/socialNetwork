@@ -3,9 +3,9 @@ package ru.skillbox.socialnetwork.api.response;
 public class ErrorApi extends AbstractResponse {
 
     private String error;
-    private ErrorDescriptionApi error_description;
+    private String error_description;
 
-    public ErrorApi(String error, ErrorDescriptionApi error_description) {
+    public ErrorApi(String error, String error_description) {
         this.error = error;
         this.error_description = error_description;
     }
@@ -18,11 +18,11 @@ public class ErrorApi extends AbstractResponse {
         this.error = error;
     }
 
-    public ErrorDescriptionApi getError_description() {
+    public String getError_description() {
         return error_description;
     }
 
-    public void setError_description(ErrorDescriptionApi error_description) {
+    public void setError_description(String error_description) {
         this.error_description = error_description;
     }
 }

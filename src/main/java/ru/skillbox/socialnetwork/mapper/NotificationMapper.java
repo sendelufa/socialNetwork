@@ -3,11 +3,9 @@ package ru.skillbox.socialnetwork.mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.skillbox.socialnetwork.api.response.MessageApi;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Notification;
 
 import javax.annotation.PostConstruct;

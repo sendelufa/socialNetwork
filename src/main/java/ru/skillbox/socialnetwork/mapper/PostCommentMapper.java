@@ -4,10 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
-import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.PostComment;
 
 import javax.annotation.PostConstruct;

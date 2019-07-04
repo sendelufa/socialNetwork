@@ -13,10 +13,9 @@ public abstract class Mapper<E, A> {
     private Class<E> entity;
     private Class<A> api;
 
-    Mapper(Class<E> entity, Class<A> api/*, ModelMapper mapper*/) {
+    Mapper(Class<E> entity, Class<A> api) {
         this.entity = entity;
         this.api = api;
-//        this.mapper = mapper;
     }
 
     public E toEntity(A api) {

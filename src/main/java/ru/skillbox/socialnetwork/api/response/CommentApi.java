@@ -11,10 +11,10 @@ public class CommentApi extends AbstractResponse{
   private String postId;
 
   @JsonProperty("parent_id")
-  private int parentId;
+  private Integer parentId;
 
   @JsonProperty("author_id")
-  private int authorId;
+  private Integer authorId;
 
   @JsonProperty("comment_text")
   private String commentText;
@@ -46,19 +46,19 @@ public class CommentApi extends AbstractResponse{
     this.postId = post_id;
   }
 
-  public int getParent_id() {
+  public Integer getParent_id() {
     return parentId;
   }
 
-  public void setParent_id(int parent_id) {
+  public void setParent_id(Integer parent_id) {
     this.parentId = parent_id;
   }
 
-  public int getAuthor_id() {
+  public Integer getAuthor_id() {
     return authorId;
   }
 
-  public void setAuthor_id(int author_id) {
+  public void setAuthor_id(Integer author_id) {
     this.authorId = author_id;
   }
 

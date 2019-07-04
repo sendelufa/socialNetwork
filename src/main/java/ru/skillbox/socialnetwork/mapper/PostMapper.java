@@ -1,31 +1,36 @@
 package ru.skillbox.socialnetwork.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Post;
 
-import java.util.Objects;
+import javax.annotation.PostConstruct;
 
+@Component
 public class PostMapper extends Mapper<Post, PostApi> {
 
-    public PostMapper(ModelMapper mapper) {
-        super(Post.class, PostApi.class, mapper);
-        this.mapper = mapper;
+    private final ModelMapper modelMapper;
+
+    @Autowired
+    private PersonDAO personDAO;
+
+    @Autowired
+    public PostMapper(ModelMapper modelMapper) {
+        super(Post.class, PostApi.class);
+        this.modelMapper = modelMapper;
+    }
+
+    @PostConstruct
+    public void setupMapper() {
+        modelMapper.createTypeMap(Post.class, PostApi.class)
+                .addMappings(m -> m.skip(PostApi::setData)).setPostConverter(toApiConverter());
     }
 
     @Override
-    public PostApi toApi(Post entity) {
-        PostApi result = super.toApi(entity);
-        result.getData().setAuthorId(Objects.isNull(entity) || Objects.isNull(entity.getAuthor())
-                ? null
-                : entity.getAuthor().getId());
-        return result;
-    }
-
-    // TODO: Здесь Надо как-то переопределять, вроде нам нигде не требуется переводить api в entity?
-    @Override
-    public Post toEntity(PostApi api) {
-        return super.toEntity(api);
+    void mapSpecificFieldsEA(Post source, PostApi destination) {
+        destination.getData().setAuthorId(source.getId());
     }
 }

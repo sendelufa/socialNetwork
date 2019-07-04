@@ -8,10 +8,10 @@ public class LikeApi extends AbstractResponse{
   private long time;
 
   @JsonProperty("person_id")
-  private int personId;
+  private Integer personId;
 
   @JsonProperty("post_id")
-  private int postId;
+  private Integer postId;
 
   public int getId() {
     return id;
@@ -29,19 +29,19 @@ public class LikeApi extends AbstractResponse{
     this.time = time;
   }
 
-  public int getPerson_id() {
+  public Integer getPerson_id() {
     return personId;
   }
 
-  public void setPerson_id(int person_id) {
+  public void setPerson_id(Integer person_id) {
     this.personId = person_id;
   }
 
-  public int getPost_id() {
+  public Integer getPost_id() {
     return postId;
   }
 
-  public void setPost_id(int post_id) {
+  public void setPost_id(Integer post_id) {
     this.postId = post_id;
   }
 }

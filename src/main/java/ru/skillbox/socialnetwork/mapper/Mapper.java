@@ -6,19 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
-public abstract class Mapper<E, A>
-{
+public abstract class Mapper<E, A> {
     @Autowired
     ModelMapper mapper;
 
     private Class<E> entity;
     private Class<A> api;
 
-    Mapper(Class<E> entity, Class<A> api, ModelMapper mapper)
-    {
+    Mapper(Class<E> entity, Class<A> api/*, ModelMapper mapper*/) {
         this.entity = entity;
         this.api = api;
-        this.mapper = mapper;
+//        this.mapper = mapper;
     }
 
     public E toEntity(A api) {

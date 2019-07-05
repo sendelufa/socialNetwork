@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Notification;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
 public class NotificationMapper extends Mapper<Notification, NotificationApi> {
@@ -41,12 +42,25 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
 
     @Override
     void mapSpecificFieldsEA(Notification source, NotificationApi destination) {
-        destination.setType_id(source.getNotificationType().getId());
-        destination.setPerson_id(source.getPerson().getId());
+        if (Objects.isNull(source)) {
+            return;
+        }
+
+        if (!Objects.isNull(source.getNotificationType())) {
+            destination.setType_id(source.getNotificationType().getId());
+        }
+
+        if (!Objects.isNull(source.getPerson())) {
+            destination.setPerson_id(source.getPerson().getId());
+        }
     }
 
     @Override
     void mapSpecificFieldsAE(NotificationApi source, Notification destination) {
+        if (Objects.isNull(source)) {
+            return;
+        }
+
         destination.setNotificationType(notificationDAO.getNotificationTypeById(source.getType_id()));
         destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
     }

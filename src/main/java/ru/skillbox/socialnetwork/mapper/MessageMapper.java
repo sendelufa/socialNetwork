@@ -8,6 +8,7 @@ import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Message;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
 public class MessageMapper extends Mapper<Message, MessageApi> {
@@ -37,12 +38,25 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
 
     @Override
     void mapSpecificFieldsEA(Message source, MessageApi destination) {
-        destination.setAuthor_id(source.getAuthor().getId());
-        destination.setRecipient_id(source.getRecipient().getId());
+        if (Objects.isNull(source)) {
+            return;
+        }
+
+        if (!Objects.isNull(source.getAuthor())) {
+            destination.setAuthor_id(source.getAuthor().getId());
+        }
+
+        if (!Objects.isNull(source.getRecipient())) {
+            destination.setRecipient_id(source.getRecipient().getId());
+        }
     }
 
     @Override
     void mapSpecificFieldsAE(MessageApi source, Message destination) {
+        if (Objects.isNull(source)) {
+            return;
+        }
+
         destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));
         destination.setRecipient(personDAO.getPersonById(source.getRecipient_id()));
     }

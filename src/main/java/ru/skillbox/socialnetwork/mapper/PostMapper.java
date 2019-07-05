@@ -8,6 +8,7 @@ import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Post;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
 public class PostMapper extends Mapper<Post, PostApi> {
@@ -35,11 +36,20 @@ public class PostMapper extends Mapper<Post, PostApi> {
 
     @Override
     void mapSpecificFieldsEA(Post source, PostApi destination) {
-        destination.setAuthorId(source.getAuthor().getId());
+        if (Objects.isNull(source)) {
+            return;
+        }
+
+        if (!Objects.isNull(source.getAuthor())) {
+            destination.setAuthorId(source.getAuthor().getId());
+        }
     }
 
     @Override
     void mapSpecificFieldsAE(PostApi source, Post destination) {
+        if (Objects.isNull(source)) {
+            return;
+        }
         destination.setAuthor(personDAO.getPersonById(source.getAuthorId()));
     }
 }

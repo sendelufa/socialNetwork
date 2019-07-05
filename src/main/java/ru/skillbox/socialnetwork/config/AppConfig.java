@@ -4,6 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
@@ -18,5 +20,10 @@ public class AppConfig {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
+    }
+
+    @Bean
+    public PlatformTransactionManager platformTransactionManager() {
+        return new JpaTransactionManager();
     }
 }

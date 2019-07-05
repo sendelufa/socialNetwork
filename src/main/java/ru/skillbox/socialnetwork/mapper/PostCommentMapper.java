@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.PostComment;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
 public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
@@ -43,13 +44,28 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
 
     @Override
     void mapSpecificFieldsEA(PostComment source, CommentApi destination) {
-        destination.setPost_id(String.valueOf(source.getPost().getId()));
-        destination.setParent_id(source.getParent_id().getId());
-        destination.setAuthor_id(source.getAuthor().getId());
+        if (Objects.isNull(source)) {
+            return;
+        }
+
+        if (!Objects.isNull(source.getPost())) {
+            destination.setPost_id(String.valueOf(source.getPost().getId()));
+        }
+
+        if (!Objects.isNull(source.getParent_id())) {
+            destination.setParent_id(source.getParent_id().getId());
+        }
+
+        if (!Objects.isNull(source.getAuthor())) {
+            destination.setAuthor_id(source.getAuthor().getId());
+        }
     }
 
     @Override
     void mapSpecificFieldsAE(CommentApi source, PostComment destination) {
+        if (Objects.isNull(source)) {
+            return;
+        }
         destination.setPost(postDAO.getPostById(Integer.parseInt(source.getPost_id())));
         destination.setParent_id(postDAO.getCommentById(source.getParent_id()));
         destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));

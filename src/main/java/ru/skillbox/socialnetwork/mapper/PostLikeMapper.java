@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.PostLike;
 
 import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
 public class PostLikeMapper extends Mapper<PostLike, LikeApi> {
@@ -41,12 +42,25 @@ public class PostLikeMapper extends Mapper<PostLike, LikeApi> {
 
     @Override
     void mapSpecificFieldsEA(PostLike source, LikeApi destination) {
-        destination.setPerson_id(source.getPerson().getId());
-        destination.setPost_id(source.getPost().getId());
+        if (Objects.isNull(source)) {
+            return;
+        }
+
+        if (!Objects.isNull(source.getPerson())) {
+            destination.setPerson_id(source.getPerson().getId());
+        }
+
+        if (!Objects.isNull(source.getPost())) {
+            destination.setPost_id(source.getPost().getId());
+        }
     }
 
     @Override
     void mapSpecificFieldsAE(LikeApi source, PostLike destination) {
+        if (Objects.isNull(source)) {
+            return;
+        }
+
         destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
         destination.setPost(postDAO.getPostById(source.getPost_id()));
     }

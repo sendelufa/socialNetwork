@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skillbox.socialnetwork.api.request.LikeApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 
 @RestController
@@ -48,7 +49,7 @@ public class LikeController {
      *
      */
     @PutMapping("/likes")
-    public ResponseEntity like(@RequestBody ){
+    public ResponseEntity like(@RequestBody LikeApi likeApi){
 
         AbstractResponse response;
         return null;

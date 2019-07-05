@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.api.request;
 
-public class LikeApi {
+public class RequestLikeApi {
 
 
     private int item_id;

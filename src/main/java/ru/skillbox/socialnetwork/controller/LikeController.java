@@ -18,30 +18,30 @@ public class LikeController {
     /**
      * Был ли поставлен лайк пользователем
      *
-     * @param userId ID пользователя
-     * @param itemId ID объекта у которого необходимо получить "Лайки"
+     * @param user_id ID пользователя
+     * @param item_id ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
     @GetMapping("/liked")
-    public ResponseEntity isLiked(@RequestParam int userId,
-                                  @RequestParam int itemId,
+    public ResponseEntity isLiked(@RequestParam int user_id,
+                                  @RequestParam int item_id,
                                   @RequestParam String type){
 
-        AbstractResponse response = likeService.isLiked(userId,itemId,type);
+        AbstractResponse response = likeService.isLiked(user_id,item_id,type);
         return new ResponseEntity(response,response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Получить список пользователей оставивших лайк
      *
-     * @param itemId ID объекта у которого необходимо получить "Лайки"
+     * @param item_id ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
     @GetMapping("/likes")
-    public ResponseEntity getLikes(@RequestParam int itemId,
+    public ResponseEntity getLikes(@RequestParam int item_id,
                                    @RequestParam String type){
 
-        AbstractResponse response = likeService.getLikes(itemId,type);
+        AbstractResponse response = likeService.getLikes(item_id,type);
 
         return new ResponseEntity(response,response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

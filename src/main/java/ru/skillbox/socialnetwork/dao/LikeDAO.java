@@ -18,28 +18,20 @@ public class LikeDAO {
     @Autowired
     SessionFactory sessionFactory;
 
+
     public List<PostLike> getPostLikesListByPostId(int id){
 
-        Criteria criteria = getCurrentSession().createCriteria(PostLike.class);
-        criteria.add(Restrictions.eq("post", id));
-
-        return (List<PostLike>) criteria.list();
+         String query = String.format("from PostLike likes where likes.post=%d", id);
+         return (List<PostLike>) getCurrentSession().createQuery(query).list();
     }
 
     public PostLike getLikedPost(int userId, int postId){
-        Criteria criteria = getCurrentSession().createCriteria(PostLike.class);
-        criteria.add(Restrictions.eq("post", postId));
-        criteria.add(Restrictions.eq("person", userId));
 
-        return (PostLike) criteria.uniqueResult();
+        String query = String.format("from PostLike likes where likes.post=%d and likes.person=%d", postId,userId);
+
+        return (PostLike) getCurrentSession().createQuery(query).uniqueResult();
     }
 
-//    public PostLike getPostLikeByPostId(int id) {
-//        Criteria criteria = getCurrentSession().createCriteria(PostLike.class);
-//        criteria.add(Restrictions.eq("post", id));
-//
-//        return (PostLike) criteria.uniqueResult();
-//    }
 
     public void addPostLike(PostLike postLike) {
         getCurrentSession().save(postLike);

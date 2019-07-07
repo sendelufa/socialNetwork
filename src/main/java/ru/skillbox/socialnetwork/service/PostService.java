@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
+import ru.skillbox.socialnetwork.api.response.CommentApi;
+import ru.skillbox.socialnetwork.api.response.CommentListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
@@ -13,6 +15,7 @@ import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
 
 @Service
 public class PostService {
@@ -66,15 +69,27 @@ public class PostService {
       return post == null ? null : new ResponseApi("none", new Date().getTime(), postDeleteApi);
    }
 
-   public ResponseApi recover(int id){
+   public ResponseApi recover(int id) {
       Post post = postDAO.recoverPost(id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
-   public ResponseApi reportPost(int id){
+   public ResponseApi reportPost(int id) {
       Post post = postDAO.reportPost(id);
       reportApi.setMessage("Отправлен репорт на пост с id:" + id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
+   }
+
+   public ResponseApi searchComments(int postId, int offset, int itemPerPage) {
+      List<PostComment> comments = postDAO.getComments(postId, offset, itemPerPage);
+      CommentListApi commentListApi = new CommentListApi();
+      commentListApi.setData(comments.stream().map(this::fillCommentApi)
+          .collect(Collectors.toList()));
+      commentListApi.setTotal(comments.size());
+      commentListApi.setOffset(offset);
+      commentListApi.setPerPage(itemPerPage);
+      commentListApi.setSuccess(true);
+      return commentListApi;
    }
 
    private PostApi fillPostApi(Post post) {
@@ -87,5 +102,18 @@ public class PostService {
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
       return postDataApi;
+   }
+
+   private CommentApi fillCommentApi(PostComment comment) {
+      CommentApi commentApi = new CommentApi();
+      commentApi.setId(comment.getId());
+      commentApi.setTime(comment.getTime().getTime());
+      commentApi.setAuthorId(comment.getAuthor().getId());
+      commentApi.setCommentText(comment.getCommentText());
+      //TODO какой ответ должен быть при отсутсвии родителя
+      commentApi.setParentId(comment.getParent() == null ? -1 : comment.getParent().getId());
+      commentApi.setPostId(String.valueOf(comment.getPost().getId()));
+      commentApi.setBlocked(comment.isBlocked());
+      return commentApi;
    }
 }

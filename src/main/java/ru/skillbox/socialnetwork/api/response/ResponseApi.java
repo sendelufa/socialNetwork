@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 
 public class ResponseApi extends AbstractResponse {
 
@@ -12,6 +13,11 @@ public class ResponseApi extends AbstractResponse {
       this.error = error;
       this.timestamp = timestamp;
       this.data = data;
+   }
+
+   public ResponseApi() {
+      this.error = "none";
+      this.timestamp = new Date().getTime();
    }
 
    @JsonProperty("data")

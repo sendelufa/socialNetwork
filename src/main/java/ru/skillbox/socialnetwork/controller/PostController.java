@@ -73,11 +73,8 @@ public class PostController {
        @PathVariable int id,
        @RequestParam(value = "publish_date", required = false) Long publishDate) {
       ResponseApi responseApi = postService.edit(id, request, publishDate);
-
-      System.out
-          .println(id + " " + publishDate + " " + request.getTitle() + " " + request.getPostText());
       return responseApi == null ? badRequestResponse()
-          :new ResponseEntity<>(responseApi, HttpStatus.OK);
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -85,8 +82,9 @@ public class PostController {
     */
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deletePostById(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi responseApi = postService.delete(id);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -94,8 +92,9 @@ public class PostController {
     */
    @PutMapping("/{id:\\d+}/recover")
    public ResponseEntity recoverPostById(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi responseApi = postService.recover(id);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -171,8 +170,9 @@ public class PostController {
     */
    @PostMapping("/{id:\\d+}/report")
    public ResponseEntity sendReportToPost(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi reportApi = postService.reportPost(id);
+      return reportApi == null ? badRequestResponse()
+          : new ResponseEntity<>(reportApi, HttpStatus.OK);
    }
 
    /**

@@ -1,9 +1,11 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope("prototype")
 public class PostApi extends AbstractResponse {
 
    private int id;
@@ -21,7 +23,6 @@ public class PostApi extends AbstractResponse {
    private boolean isBlocked;
 
    private long likes;
-
 
    public int getId() {
       return id;

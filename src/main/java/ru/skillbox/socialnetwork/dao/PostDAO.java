@@ -59,9 +59,19 @@ public class PostDAO {
    }
 
    public void deletePost(Post post) {
-      getCurrentSession().delete(post);
+      //TODO: удаление через отметку в БД?
+      //getCurrentSession().delete(post);
    }
 
+   public Post recoverPost(int id){
+      //TODO: восстановление через отметку в БД?
+      return getPostById(id);
+   }
+
+   public Post reportPost(int id){
+      //TODO: механизм жалобы?
+      return getPostById(id);
+   }
 
    public void addComment(PostComment comment) {
       getCurrentSession().save(comment);

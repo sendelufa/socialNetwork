@@ -27,6 +27,8 @@ public class ProfileControllerTest {
     @Autowired
     private MockMvc mvc;
 
+
+
     @Test
     @WithMockUser
     public void testGetMe() throws Exception {

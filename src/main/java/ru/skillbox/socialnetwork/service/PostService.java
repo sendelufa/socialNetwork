@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
@@ -15,34 +17,31 @@ import ru.skillbox.socialnetwork.model.Post;
 @Service
 public class PostService {
 
+   @Autowired
+   private ReportApi reportApi;
+   @Autowired
    private PostApi postApi;
+   @Autowired
    private PostListApi postListApi;
+   @Autowired
+   private PostDeleteApi postDeleteApi;
    @Autowired
    private PostDAO postDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
-      if (post != null) {
-         postApi = fillPostApi(post);
-         postApi.setSuccess(true);
-
-      } else {
-         return null;
-      }
-      return new ResponseApi("none", new Date().getTime(), postApi);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi search(PostParameters postParameters) {
       List<Post> posts = postDAO.getPosts(postParameters);
-      PostListApi postListApi = new PostListApi("none", new Date().getTime());
+      postListApi = new PostListApi();
       postListApi.setData(posts.stream().map(this::fillPostApi)
           .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
       postListApi.setPerPage(postParameters.getItemPerPage());
       postListApi.setSuccess(true);
-      postListApi.setTimestamp(new Date().getTime());
-      postListApi.setError("none");
       return postListApi;
    }
 
@@ -58,6 +57,24 @@ public class PostService {
       post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
       postDAO.updatePost(post);
       return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
+   public ResponseApi delete(int id) {
+      Post post = postDAO.getPostById(id);
+      postDAO.deletePost(post);
+      postDeleteApi.setId(id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), postDeleteApi);
+   }
+
+   public ResponseApi recover(int id){
+      Post post = postDAO.recoverPost(id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
+   public ResponseApi reportPost(int id){
+      Post post = postDAO.reportPost(id);
+      reportApi.setMessage("Отправлен репорт на пост с id:" + id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
    }
 
    private PostApi fillPostApi(Post post) {

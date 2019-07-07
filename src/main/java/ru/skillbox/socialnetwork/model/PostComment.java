@@ -90,7 +90,7 @@ public class PostComment {
         this.postComments = postComments;
     }
 
-    public PostComment getParent_id() {
+    public PostComment getParent() {
         return parent_id;
     }
 

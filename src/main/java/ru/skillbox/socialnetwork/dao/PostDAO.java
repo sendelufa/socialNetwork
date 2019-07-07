@@ -41,7 +41,6 @@ public class PostDAO {
               + " locate('%s', p.postText, 1) > 0 ORDER BY p.time DESC",
           postParameters.getText());
 
-
       System.out.println(query);
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(postParameters.getOffset());
@@ -63,12 +62,12 @@ public class PostDAO {
       //getCurrentSession().delete(post);
    }
 
-   public Post recoverPost(int id){
+   public Post recoverPost(int id) {
       //TODO: восстановление через отметку в БД?
       return getPostById(id);
    }
 
-   public Post reportPost(int id){
+   public Post reportPost(int id) {
       //TODO: механизм жалобы?
       return getPostById(id);
    }
@@ -77,8 +76,16 @@ public class PostDAO {
       getCurrentSession().save(comment);
    }
 
-   public List<PostComment> getComments() {
-      return getCurrentSession().createQuery("from Post_comment p").list();
+   public List<PostComment> getComments(int postId, int offset, int itemPerPage) {
+      String query = String.format("FROM PostComment comment WHERE "
+          + " comment.post.id=%d ORDER BY comment.time DESC", postId);
+
+      System.out.println(query);
+      Query q = getCurrentSession().createQuery(query);
+      q.setFirstResult(offset);
+      q.setMaxResults(itemPerPage);
+
+      return q.list();
    }
 
    public long getLikesNumber(int id) {

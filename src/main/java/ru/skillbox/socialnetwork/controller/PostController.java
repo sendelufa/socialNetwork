@@ -105,10 +105,11 @@ public class PostController {
     */
    @GetMapping("/{id:\\d+}/comments")
    public ResponseEntity getPostingComments(@PathVariable int id,
-       @RequestParam(required = false) int offset,
+       @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
-      //TODO: Требуется реализация
-      return null;
+      offset = offset == null ? 0 : offset;
+      ResponseApi commentListApi = postService.searchComments(id, offset, itemPerPage);
+      return new ResponseEntity<>(commentListApi, HttpStatus.OK);
    }
 
    /**

@@ -2,22 +2,41 @@ package ru.skillbox.socialnetwork.api.dto;
 
 public class PostParameters {
 
+   /**
+    * ID пользователя
+    */
+   private int id;
+
+   /**
+    * Получить отложенные записи, работает только для текущего пользователя
+    */
+   private boolean queue;
+
    private String text;
 
 
-   private Long dateFrom;
+   private Integer date_from;
 
 
-   private Long dateTo;
+   private Integer date_to;
 
 
+   /**
+    * Отступ от начала списка
+    */
    private Integer offset;
-   private int itemPerPage;
 
-   public PostParameters(String text, Long dateFrom, Long dateTo, int offset, int itemPerPage) {
+   /**
+    * Количество элементов на страницу
+    */
+   private int itemPerPage = 20;
+
+   public PostParameters(){}
+
+   public PostParameters(String text, Integer date_from, Integer date_to, int offset, int itemPerPage) {
       this.text = text;
-      this.dateFrom = dateFrom;
-      this.dateTo = dateTo;
+      this.date_from = date_from;
+      this.date_to = date_to;
       this.offset = offset;
       this.itemPerPage = itemPerPage;
    }
@@ -30,34 +49,52 @@ public class PostParameters {
       this.text = text;
    }
 
-   public Long getDateFrom() { return dateFrom; }
-
-   public void setDateFrom(Long dateFrom) {
-      this.dateFrom = dateFrom;
+   public Integer getDate_from() {
+      return date_from;
    }
 
-   public Long getDateTo() {
-      return dateTo;
+   public void setDate_from(Integer date_from) {
+      this.date_from = date_from;
    }
 
-   public void setDateTo(Long dateTo) {
-      this.dateTo = dateTo;
+   public Integer getDate_to() {
+      return date_to;
+   }
+
+   public void setDate_to(Integer date_to) {
+      this.date_to = date_to;
    }
 
    public int getOffset() {
       return offset;
    }
 
-   public void setOffset(int offset) {
+   public void setOffset(Integer offset) {
       this.offset = offset;
    }
 
-   public int getItemPerPage() {
+   public Integer getItemPerPage() {
       return itemPerPage;
    }
 
    public void setItemPerPage(int itemPerPage) {
       this.itemPerPage = itemPerPage;
+   }
+
+   public int getId() {
+      return id;
+   }
+
+   public void setId(int id) {
+      this.id = id;
+   }
+
+   public boolean isQueue() {
+      return queue;
+   }
+
+   public void setQueue(boolean queue) {
+      this.queue = queue;
    }
 }
 

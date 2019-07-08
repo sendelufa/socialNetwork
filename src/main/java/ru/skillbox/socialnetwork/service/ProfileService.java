@@ -3,7 +3,9 @@ package ru.skillbox.socialnetwork.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
+import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class ProfileService {
 
     @Autowired
@@ -34,13 +37,13 @@ public class ProfileService {
      *
      * @param personApi Редактируемые данные
      */
-    public void editMe(ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
+    public void editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
         Person person = getCurrentPerson();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
         person.setBirthDate(new Date(personApi.getBirth_date()));
         person.setPhone(personApi.getPhone());
-        person.setPhoto(personApi.getPhoto_id());
+        person.setPhoto(personApi.getPhoto());
         person.setAbout(personApi.getAbout());
         person.setTown(Integer.toString(personApi.getTown_id()));
         person.setMessagesPermission(personApi.getMessages_permission());
@@ -82,12 +85,28 @@ public class ProfileService {
     }
 
     /**
+     * Получение записей на стене пользователя с параметрами
+     *
+     * @param postParameters параметры записей
+     * @return
+     */
+    public List<PostApi> getWall(PostParameters postParameters){
+        List<Post> posts = postDAO.getPosts(postParameters);
+        List<PostApi> result = new ArrayList<>();
+        for (Post post : posts) {
+            result.add(modelMapper.map(post, PostApi.class));
+        }
+        return result;
+    }
+
+    /**
      * Добавление публикации на стену пользователя
      *
-     * @param id      ID пользователя
-     * @param newPost Новая публикация
+     * @param id          ID пользователя
+     * @param publishDate Отложить до даты определенной даты
+     * @param newPost     Новая публикация
      */
-    public void addPostOnWall(int id, ru.skillbox.socialnetwork.api.request.PostApi newPost) {
+    public void addPostOnWall(int id, Long publishDate,ru.skillbox.socialnetwork.api.request.PostApi newPost) {
         Post post = new Post();
         post.setAuthor(personDAO.getPersonById(id));
         post.setPostText(newPost.getPostText());

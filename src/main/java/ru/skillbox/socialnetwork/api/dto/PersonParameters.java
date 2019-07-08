@@ -9,7 +9,11 @@ public class PersonParameters {
     private int country_id;
     private int city_id;
     private int offset;
-    private int itemPerPage;
+
+    /**
+     * Количество элементов на страницу
+     */
+    private int itemPerPage = 20;
 
     public PersonParameters() {
     }

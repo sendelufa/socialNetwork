@@ -43,7 +43,7 @@ public class PersonParameters {
     /**
      * Количество элементов на страницу
      */
-    private int itemPerPage;
+    private int itemPerPage = 20;
 
     public PersonParameters() {
     }

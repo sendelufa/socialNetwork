@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 public class PersonApi extends AbstractResponse {
 
@@ -28,15 +29,13 @@ public class PersonApi extends AbstractResponse {
   private int country_id;
 
   @JsonProperty("messages_permission")
-  private messages_permissions messagesPermission;
+  private MessagesPermissionPerson messagesPermission;
 
   @JsonProperty("last_online_time")
   private long lastOnlineTime;
 
   @JsonProperty("is_blocked")
   private boolean isBlocked;
-
-  public enum messages_permissions {ALL, FRIENDS}
 
   public int getId() {
     return id;
@@ -123,11 +122,11 @@ public class PersonApi extends AbstractResponse {
   }
 
 
-  public messages_permissions getMessages_permission() {
+  public MessagesPermissionPerson getMessages_permission() {
     return messagesPermission;
   }
 
-  public void setMessages_permission(messages_permissions messages_permission) {
+  public void setMessages_permission(MessagesPermissionPerson messages_permission) {
     this.messagesPermission = messages_permission;
   }
 

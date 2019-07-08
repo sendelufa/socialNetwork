@@ -47,7 +47,7 @@ public class AccountService {
 
         AbstractResponse response;
 
-       // if(EmailValidator.isValid(userEmail)) {
+        if(EmailValidator.isValid(userEmail)) {
 
             Person person = personDAO.getPersonByEmail(userEmail);
 
@@ -84,12 +84,12 @@ public class AccountService {
                 response.setSuccess(false);
                 return response;
             }
-//        } else {
-//
-//            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"Invalid email"}));
-//            response.setSuccess(false);
-//            return response;
-//        }
+        } else {
+
+            response = new ErrorApi("invalid_request", "Invalid email");
+            response.setSuccess(false);
+            return response;
+        }
     }
 
     public AbstractResponse setPassword(String password){
@@ -121,19 +121,19 @@ public class AccountService {
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
 
-//        if (!EmailValidator.isValid(email)){
-//
-//            response = new ErrorApi("invalid_request", new ErrorDescriptionApi(new String[]{"BAD REQUEST"}));
-//            response.setSuccess(false);
-//            return response;
-//        } else {
+        if (!EmailValidator.isValid(email)){
+
+            response = new ErrorApi("invalid_request", "BAD REQUEST");
+            response.setSuccess(false);
+            return response;
+        } else {
 
             person.setEmail(email);
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
             return response;
- //       }
+        }
     }
 
     public AbstractResponse recoveryPassword(String email) {

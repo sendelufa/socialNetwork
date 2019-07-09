@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.controller;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class AccountController {
      * @param registration Сущность, описывающая необходимые данные для регистрации
      * @return
      */
-    @RequestMapping(value = "registration", method = RequestMethod.POST)
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResponseEntity registration(@RequestBody RegistrationApi registration) {
         AbstractResponse response = accountService.registration(registration);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
@@ -37,10 +38,9 @@ public class AccountController {
      * @return
      */
     @RequestMapping(value = "password/recovery", method = RequestMethod.PUT)
-    public ResponseEntity recoveryPassword(@RequestBody String email) {
-        AbstractResponse response = accountService.recoveryPassword(email);
-        return new ResponseEntity(response,
-                response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    public ResponseEntity recoveryPassword(@RequestBody Map<String, String> params){
+        AbstractResponse response = accountService.recoveryPassword(params.get("email"));
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -63,8 +63,8 @@ public class AccountController {
      * @return
      */
     @RequestMapping(value = "email", method = RequestMethod.PUT)
-    public ResponseEntity setEmail(@RequestBody String email) {
-        AbstractResponse response = accountService.setEmail(email);
+    public ResponseEntity setEmail(@RequestBody Map<String, String> params){
+        AbstractResponse response = accountService.setEmail(params.get("email"));
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
@@ -75,9 +75,9 @@ public class AccountController {
      * @param enable            Включены/выключены
      * @return
      */
-    @RequestMapping(value = "notification", method = RequestMethod.PUT)
-    public ResponseEntity notification(@RequestBody String notification_type, @RequestBody boolean enable) {
-        AbstractResponse response = accountService.notification(notification_type, enable);
+    @RequestMapping(value = "notifications", method = RequestMethod.PUT)
+    public ResponseEntity notification(@RequestBody Map<String, String> params/*@RequestBody String notification_type, @RequestBody boolean enable*/){
+        AbstractResponse response = accountService.notification(params.get("notification_type"),Boolean.parseBoolean(params.get("enable")));
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
@@ -88,8 +88,8 @@ public class AccountController {
      * @return
      */
     @RequestMapping(value = "status", method = RequestMethod.PUT)
-    public ResponseEntity status(@RequestBody String status) {
-        AbstractResponse response = accountService.status(status);
+    public ResponseEntity status(@RequestBody Map<String, String> params){
+        AbstractResponse response = accountService.status(params.get("status"));
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

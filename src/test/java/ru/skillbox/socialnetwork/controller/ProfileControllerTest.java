@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper.controller;
+package ru.skillbox.socialnetwork.controller;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -17,7 +17,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import ru.skillbox.socialnetwork.controller.ProfileController;
 
 
 @RunWith(SpringRunner.class)

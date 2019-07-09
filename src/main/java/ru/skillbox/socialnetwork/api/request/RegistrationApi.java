@@ -7,7 +7,7 @@ public class RegistrationApi {
     private String passwd2;
     private String firstName;
     private String lastName;
-    private int coda;
+    private int code;
 
     public String getEmail() {
         return email;
@@ -49,11 +49,11 @@ public class RegistrationApi {
         this.lastName = lastName;
     }
 
-    public int getCoda() {
-        return coda;
+    public int getCode() {
+        return code;
     }
 
-    public void setCoda(int coda) {
-        this.coda = coda;
+    public void setCode(int code) {
+        this.code = code;
     }
 }

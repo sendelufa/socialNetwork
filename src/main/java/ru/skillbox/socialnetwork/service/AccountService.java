@@ -179,6 +179,7 @@ public class AccountService {
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
+            return response;
         }
 
         response = new ErrorApi("invalid_request", "BAD REQUEST");

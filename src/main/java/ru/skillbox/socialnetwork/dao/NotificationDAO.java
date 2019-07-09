@@ -20,10 +20,9 @@ public class NotificationDAO {
         @Autowired
         SessionFactory sessionFactory;
 
-        public List<NotificationSettings> getNotificationSettinsByPersonId(int id){
-            Criteria criteria = getCurrentSession().createCriteria(NotificationSettings.class);
-            criteria.add(Restrictions.eq("person", id));
-            return (List<NotificationSettings>) criteria.list();
+        public List<NotificationSettings> getNotificationSettingsByPersonId(int id){
+            String query = String.format("from NotificationSettings settings where settings.person=%d", id);
+            return (List<NotificationSettings>) getCurrentSession().createQuery(query).list();
         }
 
         public NotificationType getNotificationTypeById(int id) {

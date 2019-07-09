@@ -80,5 +80,4 @@ public class PostApi extends AbstractResponse {
    public void setLikes(long likes) {
       this.likes = likes;
    }
-
 }

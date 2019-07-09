@@ -12,9 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * лайки постов
- */
 @Entity
 @Table(name = "post_like")
 public class PostLike {

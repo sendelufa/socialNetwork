@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,28 +22,23 @@ public class FriendshipMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         Friendship friendship = new Friendship();
         friendship.setId(4564);
-
-
-        //мапим и сравниваем
         FriendshipApi friendshipApi = mapper.map(friendship, FriendshipApi.class);
+
         assertEquals(friendship.getId(), friendshipApi.getId());
     }
 
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         FriendshipApi friendshipApi = new FriendshipApi();
         friendshipApi.setId(454);
         friendshipApi.setDst_person_id(657);
         friendshipApi.setSrc_person_id(99045);
         friendshipApi.setStatus_id(5456);
-
-        //мапим и сравниваем
         Friendship friendship = mapper.map(friendshipApi, Friendship.class);
+
         assertEquals(friendshipApi.getId(), friendship.getId());
         assertEquals(friendshipApi.getDst_person_id(), friendshipApi.getDst_person_id());
     }

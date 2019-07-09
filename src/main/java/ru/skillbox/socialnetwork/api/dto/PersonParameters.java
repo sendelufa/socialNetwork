@@ -1,48 +1,14 @@
 package ru.skillbox.socialnetwork.api.dto;
 
-/**
- * Параметры пользователя
- */
 public class PersonParameters {
 
-    /**
-     * Имя пользователя
-     */
     private String first_name;
-
-    /**
-     * Фамилия пользователя
-     */
     private String last_name;
-
-    /**
-     * Кол-во лет ОТ
-     */
     private int age_from;
-
-    /**
-     * Кол-во лет ДО
-     */
     private int age_to;
-
-    /**
-     * ID страны
-     */
     private int country_id;
-
-    /**
-     * ID города
-     */
     private int city_id;
-
-    /**
-     * Отступ от начала списка
-     */
     private int offset;
-
-    /**
-     * Количество элементов на страницу
-     */
     private int itemPerPage;
 
     public PersonParameters() {

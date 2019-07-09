@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AttachmentApi extends AbstractResponse{
 
   private int id;
-
   @JsonProperty("post_id")
   private String postId;
-
   private String name;
   private String path;
 

@@ -28,8 +28,6 @@ public class ProfileControllerTest {
     @Autowired
     private MockMvc mvc;
 
-
-
     @Test
     @WithMockUser
     public void testGetMe() throws Exception {
@@ -45,7 +43,6 @@ public class ProfileControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser
@@ -120,7 +117,6 @@ public class ProfileControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(MockMvcResultHandlers.print());
     }
-
 
     @Test
     @WithMockUser

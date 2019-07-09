@@ -1,8 +1,5 @@
 package ru.skillbox.socialnetwork.api.dto;
 
-/**
- * Параметры для поиска постов
- */
 public class PostParameters {
 
    private String text;
@@ -15,8 +12,6 @@ public class PostParameters {
 
 
    private Integer offset;
-
-
    private int itemPerPage;
 
    public PostParameters(String text, Long dateFrom, Long dateTo, int offset, int itemPerPage) {

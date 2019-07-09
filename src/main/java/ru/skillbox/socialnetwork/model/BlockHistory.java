@@ -6,9 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**
- * история блокировок пользователей за пост / комментарий
- */
 @Entity
 @Table(name = "block_history")
 public class BlockHistory {

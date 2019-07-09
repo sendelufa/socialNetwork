@@ -3,8 +3,8 @@ package ru.skillbox.socialnetwork.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class EmailValidator{
+
     private static Pattern pattern;
     private static Matcher matcher;
 
@@ -15,5 +15,4 @@ public class EmailValidator{
         matcher = pattern.matcher(email);
         return matcher.matches();
     }
-
 }

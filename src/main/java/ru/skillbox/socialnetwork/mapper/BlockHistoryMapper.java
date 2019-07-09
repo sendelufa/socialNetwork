@@ -4,11 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.BlockHistoryApi;
-import ru.skillbox.socialnetwork.api.response.MessageApi;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.BlockHistory;
-import ru.skillbox.socialnetwork.model.Message;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -17,12 +16,6 @@ import java.util.Objects;
 public class BlockHistoryMapper extends Mapper<BlockHistory, BlockHistoryApi> {
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    private PersonDAO personDAO;
-
-    @Autowired
-    private PostDAO postDAO;
 
     @Autowired
     public BlockHistoryMapper(ModelMapper modelMapper) {
@@ -67,8 +60,17 @@ public class BlockHistoryMapper extends Mapper<BlockHistory, BlockHistoryApi> {
         if (Objects.isNull(source)) {
             return;
         }
-        destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
-        destination.setPost(postDAO.getPostById(source.getPost_id()));
-        destination.setPostComment(postDAO.getCommentById(source.getComment_id()));
+
+        Person person = new Person();
+        person.setId(source.getPerson_id());
+        destination.setPerson(person);
+
+        Post post = new Post();
+        post.setId(source.getPost_id());
+        destination.setPost(post);
+
+        PostComment postComment = new PostComment();
+        postComment.setId(source.getComment_id());
+        destination.setPostComment(postComment);
     }
 }

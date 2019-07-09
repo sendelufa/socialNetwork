@@ -5,12 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
-import ru.skillbox.socialnetwork.config.HibernateConf;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
@@ -21,8 +17,7 @@ import java.util.GregorianCalendar;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, PostCommentMapper.class, PersonDAO.class, PostDAO.class, HibernateConf.class})
-@Transactional("platformTransactionManager")
+@ContextConfiguration(classes = {AppConfig.class, PostCommentMapper.class})
 public class PostCommentMapperTest {
 
     @Autowired

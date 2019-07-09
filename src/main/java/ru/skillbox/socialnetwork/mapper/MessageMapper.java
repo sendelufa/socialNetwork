@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.MessageApi;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Message;
+import ru.skillbox.socialnetwork.model.Person;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -14,9 +14,6 @@ import java.util.Objects;
 public class MessageMapper extends Mapper<Message, MessageApi> {
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    private PersonDAO personDAO;
 
     @Autowired
     public MessageMapper(ModelMapper modelMapper) {
@@ -57,7 +54,12 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
             return;
         }
 
-        destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));
-        destination.setRecipient(personDAO.getPersonById(source.getRecipient_id()));
+        Person author = new Person();
+        author.setId(source.getAuthor_id());
+        destination.setAuthor(author);
+
+        Person recipient = new Person();
+        recipient.setId(source.getRecipient_id());
+        destination.setRecipient(recipient);
     }
 }

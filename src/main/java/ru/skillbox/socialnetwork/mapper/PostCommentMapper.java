@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 
 import javax.annotation.PostConstruct;
@@ -15,12 +15,6 @@ import java.util.Objects;
 public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    private PostDAO postDAO;
-
-    @Autowired
-    private PersonDAO personDAO;
 
     @Autowired
     public PostCommentMapper(ModelMapper modelMapper) {
@@ -66,8 +60,17 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         if (Objects.isNull(source)) {
             return;
         }
-        destination.setPost(postDAO.getPostById(Integer.parseInt(source.getPost_id())));
-        destination.setParent_id(postDAO.getCommentById(source.getParent_id()));
-        destination.setAuthor(personDAO.getPersonById(source.getAuthor_id()));
+
+        Post post = new Post();
+        post.setId(Integer.parseInt(source.getPost_id()));
+        destination.setPost(post);
+
+        PostComment postParent = new PostComment();
+        postParent.setId(source.getParent_id());
+        destination.setParent_id(postParent);
+
+        Person person = new Person();
+        person.setId(source.getAuthor_id());
+        destination.setAuthor(person);
     }
 }

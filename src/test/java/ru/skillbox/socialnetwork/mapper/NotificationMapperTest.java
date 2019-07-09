@@ -5,12 +5,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
-import ru.skillbox.socialnetwork.config.HibernateConf;
-import ru.skillbox.socialnetwork.dao.NotificationDAO;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationType;
 import ru.skillbox.socialnetwork.model.Person;
@@ -21,8 +17,7 @@ import java.util.GregorianCalendar;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, NotificationMapper.class, PersonDAO.class, NotificationDAO.class, HibernateConf.class})
-@Transactional("platformTransactionManager")
+@ContextConfiguration(classes = {AppConfig.class, NotificationMapper.class})
 public class NotificationMapperTest {
 
     @Autowired

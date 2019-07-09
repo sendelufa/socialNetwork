@@ -4,8 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.LikeApi;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostLike;
 
 import javax.annotation.PostConstruct;
@@ -15,12 +15,6 @@ import java.util.Objects;
 public class PostLikeMapper extends Mapper<PostLike, LikeApi> {
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    private PostDAO postDAO;
-
-    @Autowired
-    private PersonDAO personDAO;
 
     @Autowired
     public PostLikeMapper(ModelMapper modelMapper) {
@@ -60,8 +54,12 @@ public class PostLikeMapper extends Mapper<PostLike, LikeApi> {
         if (Objects.isNull(source)) {
             return;
         }
+        Person person = new Person();
+        person.setId(source.getPerson_id());
+        destination.setPerson(person);
 
-        destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
-        destination.setPost(postDAO.getPostById(source.getPost_id()));
+        Post post = new Post();
+        post.setId(source.getPost_id());
+        destination.setPost(post);
     }
 }

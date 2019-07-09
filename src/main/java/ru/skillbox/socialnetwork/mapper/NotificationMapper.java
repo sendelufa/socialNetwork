@@ -4,9 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
-import ru.skillbox.socialnetwork.dao.NotificationDAO;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Notification;
+import ru.skillbox.socialnetwork.model.NotificationType;
+import ru.skillbox.socialnetwork.model.Person;
 
 import javax.annotation.PostConstruct;
 import java.util.Objects;
@@ -15,12 +15,6 @@ import java.util.Objects;
 public class NotificationMapper extends Mapper<Notification, NotificationApi> {
 
     private final ModelMapper modelMapper;
-
-    @Autowired
-    private PersonDAO personDAO;
-
-    @Autowired
-    private NotificationDAO notificationDAO;
 
     @Autowired
     public NotificationMapper(ModelMapper modelMapper) {
@@ -61,7 +55,12 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
             return;
         }
 
-        destination.setNotificationType(notificationDAO.getNotificationTypeById(source.getType_id()));
-        destination.setPerson(personDAO.getPersonById(source.getPerson_id()));
+        NotificationType notificationType = new NotificationType();
+        notificationType.setId(source.getType_id());
+        destination.setNotificationType(notificationType);
+
+        Person person = new Person();
+        person.setId(source.getPerson_id());
+        destination.setPerson(person);
     }
 }

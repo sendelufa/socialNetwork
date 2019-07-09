@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.ErrorDescriptionApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
@@ -139,7 +138,7 @@ public class AccountService {
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
         boolean isSettingFound = false;
-        ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettinsByPersonId(person.getId()));
+        ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
         for (NotificationSettings setting : ns) {
             NameNotificationType nameNotificationType = notificationDAO.getNotificationTypeById(setting.getNotificationType()).getName();
             if (nameNotificationType.toString().equals(notification_type)) {

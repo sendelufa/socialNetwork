@@ -15,6 +15,7 @@ import ru.skillbox.socialnetwork.model.NotificationSettings;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
+import ru.skillbox.socialnetwork.utils.EmailValidator;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

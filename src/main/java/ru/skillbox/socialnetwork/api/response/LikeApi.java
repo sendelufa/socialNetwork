@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.List;
+import java.util.Set;
 
 public class LikeApi extends AbstractResponse{
 
@@ -67,13 +68,13 @@ public class LikeApi extends AbstractResponse{
    public static class BitLikes extends AbstractResponse{
       private int likes;
 
-      private List<Integer> users;
+      private Set<Integer> users;
 
       public BitLikes(int likes) {
               this.likes = likes;
           }
 
-      public BitLikes(int likes, List<Integer> userList){
+      public BitLikes(int likes, Set<Integer> userList){
           this.likes = likes;
           this.users = userList;
       }
@@ -86,11 +87,11 @@ public class LikeApi extends AbstractResponse{
               this.likes = likes;
           }
 
-      public List<Integer> getUsers() {
+      public Set<Integer> getUsers() {
           return users;
       }
 
-      public void setUsers(List<Integer> users) {
+      public void setUsers(Set<Integer> users) {
           this.users = users;
       }
   }

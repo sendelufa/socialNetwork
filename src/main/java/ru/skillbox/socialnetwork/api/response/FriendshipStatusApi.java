@@ -6,7 +6,6 @@ public class FriendshipStatusApi extends AbstractResponse{
   private long time;
   private String name;
   private codes code;
-
   public enum codes {REQUEST, FRIEND, BLOCKED, DECLINED, SUBSCRIBED}
 
   public int getId() {

@@ -1,8 +1,8 @@
 package ru.skillbox.socialnetwork.api.request;
 
 public class PostCommentApi {
-    private int parent_id;
 
+    private int parent_id;
     private String comment_text;
 
     public int getParent_id() {

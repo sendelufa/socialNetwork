@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,12 +24,13 @@ public class NotificationMapperTest {
     private NotificationMapper notificationMapper;
 
     @Test
-    public void testEntityToApi() {
-        //заполняем поля
+    public void testEntityToApi()
+    {
         Notification notification = new Notification();
         notification.setId(8934);
         notification.setContact("34534532");
         notification.setEntityId(67);
+        GregorianCalendar calendar = new GregorianCalendar(2-16, 8, 9);
         notification.setPerson(new Person());
         notification.getPerson().setId(1);
         notification.setNotificationType(new NotificationType());
@@ -38,10 +39,8 @@ public class NotificationMapperTest {
         GregorianCalendar calendar = new GregorianCalendar(2 - 16, 8, 9);
         Date date = calendar.getTime();
         notification.setSentTime(date);
-
-
-        //мапим и сравниваем
         NotificationApi notificationApi = notificationMapper.toApi(notification);
+
         assertEquals(notification.getId(), notificationApi.getId());
         assertEquals(notification.getContact(), notificationApi.getContact());
         assertEquals(notification.getEntityId(), notificationApi.getEntity_id());
@@ -51,8 +50,8 @@ public class NotificationMapperTest {
     }
 
     @Test
-    public void testApiToEntity() {
-        //заполняем поля
+    public void testApiToEntity()
+    {
         NotificationApi notificationApi = new NotificationApi();
         notificationApi.setId(54);
         notificationApi.setContact("546424545");
@@ -61,9 +60,8 @@ public class NotificationMapperTest {
         notificationApi.setPerson_id(1);
         notificationApi.setType_id(1);
         notificationApi.setSent_time(434736483);
-
-        //мапим и сравниваем
         Notification notification = notificationMapper.toEntity(notificationApi);
+
         assertEquals(notificationApi.getId(), notification.getId());
         assertEquals(notificationApi.getContact(), notification.getContact());
         assertEquals(notificationApi.getEntity_id(), notification.getEntityId());

@@ -20,12 +20,9 @@ public class NotificationDAO {
         @Autowired
         SessionFactory sessionFactory;
 
-        public List<NotificationSettings> getNotificationSettinsByPersonId(int id){
-
-            Criteria criteria = getCurrentSession().createCriteria(NotificationSettings.class);
-            criteria.add(Restrictions.eq("person", id));
-
-            return (List<NotificationSettings>) criteria.list();
+        public List<NotificationSettings> getNotificationSettingsByPersonId(int id){
+            String query = String.format("from NotificationSettings settings where settings.person=%d", id);
+            return (List<NotificationSettings>) getCurrentSession().createQuery(query).list();
         }
 
         public NotificationType getNotificationTypeById(int id) {
@@ -35,7 +32,6 @@ public class NotificationDAO {
         public NotificationType getNotificationTypeByName(String nameOfType){
             Criteria criteria = getCurrentSession().createCriteria(NotificationType.class);
             criteria.add(Restrictions.eq("name", nameOfType));
-
             return (NotificationType) criteria.uniqueResult();
         }
 
@@ -66,6 +62,4 @@ public class NotificationDAO {
         private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
-
-
 }

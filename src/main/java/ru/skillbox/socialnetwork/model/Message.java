@@ -15,9 +15,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
-/**
- * личные сообщения
- */
 @Entity
 @Table(name = "message")
 public class Message {

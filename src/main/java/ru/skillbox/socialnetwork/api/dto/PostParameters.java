@@ -1,28 +1,23 @@
 package ru.skillbox.socialnetwork.api.dto;
 
-/**
- * Параметры для поиска постов
- */
 public class PostParameters {
 
    private String text;
 
 
-   private Integer date_from;
+   private Long dateFrom;
 
 
-   private Integer date_to;
+   private Long dateTo;
 
 
    private Integer offset;
-
-
    private int itemPerPage;
 
-   public PostParameters(String text, Integer date_from, Integer date_to, int offset, int itemPerPage) {
+   public PostParameters(String text, Long dateFrom, Long dateTo, int offset, int itemPerPage) {
       this.text = text;
-      this.date_from = date_from;
-      this.date_to = date_to;
+      this.dateFrom = dateFrom;
+      this.dateTo = dateTo;
       this.offset = offset;
       this.itemPerPage = itemPerPage;
    }
@@ -35,20 +30,18 @@ public class PostParameters {
       this.text = text;
    }
 
-   public Integer getDate_from() {
-      return date_from;
+   public Long getDateFrom() { return dateFrom; }
+
+   public void setDateFrom(Long dateFrom) {
+      this.dateFrom = dateFrom;
    }
 
-   public void setDate_from(Integer date_from) {
-      this.date_from = date_from;
+   public Long getDateTo() {
+      return dateTo;
    }
 
-   public Integer getDate_to() {
-      return date_to;
-   }
-
-   public void setDate_to(Integer date_to) {
-      this.date_to = date_to;
+   public void setDateTo(Long dateTo) {
+      this.dateTo = dateTo;
    }
 
    public int getOffset() {

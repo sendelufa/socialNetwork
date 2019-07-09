@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +24,8 @@ public class MessageMapperTest {
     private MessageMapper messageMapper;
 
     @Test
-    public void testEntityToApi() {
-        //заполняем поля
+    public void testEntityToApi()
+    {
         Message message = new Message();
         message.setId(843);
         message.setMessageText("pop");
@@ -38,9 +38,8 @@ public class MessageMapperTest {
         GregorianCalendar calendar = new GregorianCalendar(2017, 9, 23);
         Date date = calendar.getTime();
         message.setTime(date);
-
-        //мапим и сравниваем
         MessageApi messageApi = messageMapper.toApi(message);
+
         assertEquals(message.getId(), messageApi.getId());
         assertEquals(message.getMessageText(), messageApi.getMessage_text());
         assertEquals(message.getReadStatus().toString(), messageApi.getRead_status().toString());
@@ -50,8 +49,8 @@ public class MessageMapperTest {
     }
 
     @Test
-    public void testApiToEntity() {
-        //заполняем поля
+    public void testApiToEntity()
+    {
         MessageApi messageApi = new MessageApi();
         messageApi.setId(89);
         messageApi.setAuthor_id(1);
@@ -59,9 +58,8 @@ public class MessageMapperTest {
         messageApi.setRead_status(MessageApi.statuses.READ);
         messageApi.setRecipient_id(2);
         messageApi.setTime(8902323);
-
-        //мапим и сравниваем
         Message message = messageMapper.toEntity(messageApi);
+
         assertEquals(messageApi.getId(), message.getId());
         assertEquals(messageApi.getMessage_text(), message.getMessageText());
         assertEquals(messageApi.getRead_status().toString(), message.getReadStatus().toString());

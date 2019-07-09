@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,13 +28,23 @@ public class PostDAO {
    }
 
    public List<Post> getPosts(PostParameters postParameters) {
-      String query = String.format("from Post p where locate('%s', p.postText, 1) > 0",
+      String queryWhere = "";
+
+      queryWhere += postParameters.getDateFrom() != null ?
+          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFrom())) : "";
+
+      queryWhere += postParameters.getDateTo() != null ?
+          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";
+
+      String query = String.format("from Post p where "
+              + queryWhere
+              + " locate('%s', p.postText, 1) > 0 ORDER BY p.time DESC",
           postParameters.getText());
 
+      System.out.println(query);
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(postParameters.getOffset());
       q.setMaxResults(postParameters.getItemPerPage());
-
       return q.list();
    }
 
@@ -46,16 +57,34 @@ public class PostDAO {
    }
 
    public void deletePost(Post post) {
-      getCurrentSession().delete(post);
+      //TODO: удаление через отметку в БД?
+      //getCurrentSession().delete(post);
    }
 
+   public Post recoverPost(int id) {
+      //TODO: восстановление через отметку в БД?
+      return getPostById(id);
+   }
+
+   public Post reportPost(int id) {
+      //TODO: механизм жалобы?
+      return getPostById(id);
+   }
 
    public void addComment(PostComment comment) {
       getCurrentSession().save(comment);
    }
 
-   public List<PostComment> getComments() {
-      return getCurrentSession().createQuery("from Post_comment p").list();
+   public List<PostComment> getComments(int postId, int offset, int itemPerPage) {
+      String query = String.format("FROM PostComment comment WHERE "
+          + " comment.post.id=%d ORDER BY comment.time DESC", postId);
+
+      System.out.println(query);
+      Query q = getCurrentSession().createQuery(query);
+      q.setFirstResult(offset);
+      q.setMaxResults(itemPerPage);
+
+      return q.list();
    }
 
    public long getLikesNumber(int id) {
@@ -80,5 +109,4 @@ public class PostDAO {
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }
-
 }

@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,16 +23,14 @@ public class UserMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         User user = new User();
         user.setId(2342);
         user.setName("Henry");
         user.setPassword("234125");
         user.setType(UserType.ADMIN);
         user.setEmail("nasasd@mail.ru");
-
-        //мапим и сравниваем
         UserApi userApi = mapper.map(user, UserApi.class);
+
         assertEquals(user.getName(), userApi.getName());
         assertEquals(user.getType().getType(), userApi.getType().toString());
         assertEquals(user.getEmail(), userApi.getEmail());
@@ -42,15 +40,13 @@ public class UserMapperTest {
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         UserApi userApi = new UserApi();
         userApi.setEmail("sdfwefvs@mail.ru");
         userApi.setId(2323);
         userApi.setName("Rudik");
         userApi.setType(UserApi.types.MODERATOR);
-
-        //мапим и сравниваем
         User user = mapper.map(userApi, User.class);
+
         assertEquals(userApi.getId(), user.getId());
         assertEquals(userApi.getEmail(), user.getEmail());
         assertEquals(userApi.getName(), user.getName());

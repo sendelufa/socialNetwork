@@ -11,7 +11,6 @@ public class PersonEditBodyApi extends AbstractResponse{
   private int town_id;
   private int country_id;
   private messages_permissions messages_permission;
-
   public enum messages_permissions {ALL, FRIENDS}
 
   public String getFirst_name() {

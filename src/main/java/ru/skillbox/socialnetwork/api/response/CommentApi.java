@@ -6,19 +6,15 @@ public class CommentApi extends AbstractResponse{
 
   private int id;
   private long time;
-
   @JsonProperty("post_id")
   private String postId;
-
   @JsonProperty("parent_id")
   private Integer parentId;
 
   @JsonProperty("author_id")
   private Integer authorId;
-
   @JsonProperty("comment_text")
   private String commentText;
-
   @JsonProperty("is_blocked")
   private boolean isBlocked;
 
@@ -38,43 +34,43 @@ public class CommentApi extends AbstractResponse{
     this.time = time;
   }
 
-  public String getPost_id() {
+  public String getPostId() {
     return postId;
   }
 
-  public void setPost_id(String post_id) {
-    this.postId = post_id;
+  public void setPostId(String postId) {
+    this.postId = postId;
   }
 
-  public Integer getParent_id() {
+  public Integer getParentId() {
     return parentId;
   }
 
-  public void setParent_id(Integer parent_id) {
-    this.parentId = parent_id;
+  public void setParentId(Integer parentId) {
+    this.parentId = parentId;
   }
 
-  public Integer getAuthor_id() {
+  public Integer getAuthorId() {
     return authorId;
   }
 
-  public void setAuthor_id(Integer author_id) {
-    this.authorId = author_id;
+  public void setAuthorId(Integer authorId) {
+    this.authorId = authorId;
   }
 
-  public String getComment_text() {
+  public String getCommentText() {
     return commentText;
   }
 
-  public void setComment_text(String comment_text) {
-    this.commentText = comment_text;
+  public void setCommentText(String commentText) {
+    this.commentText = commentText;
   }
 
-  public boolean isIs_blocked() {
+  public boolean isBlocked() {
     return isBlocked;
   }
 
-  public void setIs_blocked(boolean is_blocked) {
-    this.isBlocked = is_blocked;
+  public void setBlocked(boolean blocked) {
+    isBlocked = blocked;
   }
 }

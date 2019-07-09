@@ -15,7 +15,6 @@ import ru.skillbox.socialnetwork.api.response.PlatfomLanguageApi;
 @RequestMapping("/api/v1/platform/")
 public class PlatformController {
 
-
     /**
      * Получение языков платформы
      *
@@ -30,7 +29,6 @@ public class PlatformController {
                                                         0,
                                                         0), HttpStatus.OK);
     }
-
 
     /**
      * Получение стран платформы
@@ -68,6 +66,4 @@ public class PlatformController {
                 0,
                 0), HttpStatus.OK);
     }
-
-
 }

@@ -8,9 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * связи постов с тэгами
- */
 @Entity
 @Table(name = "post2tag")
 public class Post2tag {

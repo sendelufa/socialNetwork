@@ -1,5 +1,9 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +15,6 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class, PostCommentMapper.class})
 public class PostCommentMapperTest {
@@ -24,8 +23,8 @@ public class PostCommentMapperTest {
     private PostCommentMapper postCommentMapper;
 
     @Test
-    public void testEntityToApi() {
-        //заполняем поля
+    public void testEntityToApi()
+    {
         PostComment postComment = new PostComment();
         postComment.setId(45);
         postComment.setBlocked(false);
@@ -40,11 +39,10 @@ public class PostCommentMapperTest {
         GregorianCalendar calendar = new GregorianCalendar(2019, 9, 27);
         Date date = calendar.getTime();
         postComment.setTime(date);
-
-        //мапим и сравниваем
         CommentApi commentApi = postCommentMapper.toApi(postComment);
+
         assertEquals(postComment.getId(), commentApi.getId());
-        assertEquals(postComment.getCommentText(), commentApi.getComment_text());
+        assertEquals(postComment.getCommentText(), commentApi.getCommentText());
         assertEquals(postComment.getTime().getTime(), commentApi.getTime());
         assertEquals(postComment.getAuthor().getId(), commentApi.getAuthor_id().intValue());
         assertEquals(postComment.getParent_id().getId(), commentApi.getParent_id().intValue());
@@ -52,25 +50,24 @@ public class PostCommentMapperTest {
     }
 
     @Test
-    public void testApiToEntity() {
-        //заполняем поля
+    public void testApiToEntity()
+    {
         CommentApi commentApi = new CommentApi();
         commentApi.setId(90);
-        commentApi.setAuthor_id(1);
-        commentApi.setComment_text("hear");
-        commentApi.setIs_blocked(true);
-        commentApi.setParent_id(1);
-        commentApi.setPost_id("1");
+        commentApi.setAuthorId(234);
+        commentApi.setCommentText("hear");
+        commentApi.setBlocked(true);
+        commentApi.setParentId(232);
+        commentApi.setPostId("4564");
         commentApi.setTime(23522);
-
-        //мапим и сравниваем
         PostComment postComment = postCommentMapper.toEntity(commentApi);
+
         assertEquals(commentApi.getId(), postComment.getId());
-        assertEquals(commentApi.getComment_text(), postComment.getCommentText());
-        assertEquals(commentApi.isIs_blocked(), postComment.isBlocked());
+        assertEquals(commentApi.getCommentText(), postComment.getCommentText());
+        assertEquals(commentApi.isBlocked(), postComment.isBlocked());
         assertEquals(commentApi.getTime(), postComment.getTime().getTime());
-        assertEquals(commentApi.getAuthor_id().intValue(), postComment.getAuthor().getId());
-        assertEquals(commentApi.getParent_id().intValue(), postComment.getParent_id().getId());
-        assertEquals(Integer.parseInt(commentApi.getPost_id()), postComment.getPost().getId());
+        assertEquals(commentApi.getAuthorId().intValue(), postComment.getAuthor().getId());
+        assertEquals(commentApi.getParentId().intValue(), postComment.getParent_id().getId());
+        assertEquals(Integer.parseInt(commentApi.getPostId()), postComment.getPost().getId());
     }
 }

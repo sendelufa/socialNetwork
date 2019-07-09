@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,8 +25,8 @@ public class BlockHistoryMapperTest {
     private BlockHistoryMapper blockHistoryMapper;
 
     @Test
-    public void testEntityToApi() {
-        //заполняем поля
+    public void testEntityToApi()
+    {
         BlockHistory blockHistory = new BlockHistory();
         blockHistory.setId(23452);
         blockHistory.setAction(ActionBlockHistory.BLOCK);
@@ -34,12 +34,9 @@ public class BlockHistoryMapperTest {
         blockHistory.getPerson().setId(1);
         blockHistory.setPost(new Post());
         blockHistory.getPost().setId(1);
-
-
         GregorianCalendar calendar = new GregorianCalendar(2018, 12, 31);
         Date date = calendar.getTime();
         blockHistory.setTime(date);
-
         //мапим и сравниваем
         BlockHistoryApi blockHistoryApi = blockHistoryMapper.toApi(blockHistory);
         assertEquals(blockHistory.getId(), blockHistoryApi.getId());
@@ -50,8 +47,8 @@ public class BlockHistoryMapperTest {
     }
 
     @Test
-    public void testApiToEntity() {
-        //заполняем поля
+    public void testApiToEntity()
+    {
         BlockHistoryApi blockHistoryApi = new BlockHistoryApi();
         blockHistoryApi.setAction(BlockHistoryApi.actions.UNBLOCK);
         blockHistoryApi.setComment_id(1);
@@ -59,10 +56,9 @@ public class BlockHistoryMapperTest {
         blockHistoryApi.setPerson_id(1);
         blockHistoryApi.setPost_id(1);
         blockHistoryApi.setTime(54564567);
-
-        //мапим и сравниваем
         BlockHistory blockHistory = blockHistoryMapper.toEntity(blockHistoryApi);
-        assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().toString());
+
+        assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().getDescription());
         assertEquals(blockHistoryApi.getId(), blockHistory.getId());
         assertEquals(blockHistoryApi.getTime(), blockHistory.getTime().getTime());
         assertEquals(blockHistoryApi.getPerson_id().intValue(), blockHistory.getPerson().getId());

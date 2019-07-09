@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +24,8 @@ public class PostLikeMapperTest {
     private PostLikeMapper postLikeMapper;
 
     @Test
-    public void testEntityToApi() {
-        //заполняем поля
+    public void testEntityToApi()
+    {
         PostLike postLike = new PostLike();
         postLike.setId(232);
         postLike.setPost(new Post());
@@ -36,9 +36,8 @@ public class PostLikeMapperTest {
         GregorianCalendar calendar = new GregorianCalendar(1982, 11, 23);
         Date date = calendar.getTime();
         postLike.setTime(date);
-
-        //мапим и сравниваем
         LikeApi likeApi = postLikeMapper.toApi(postLike);
+
         assertEquals(postLike.getId(), likeApi.getId());
         assertEquals(postLike.getTime().getTime(), likeApi.getTime());
         assertEquals(postLike.getPerson().getId(), likeApi.getPerson_id().intValue());
@@ -46,16 +45,15 @@ public class PostLikeMapperTest {
     }
 
     @Test
-    public void testApiToEntity() {
-        //заполняем поля
+    public void testApiToEntity()
+    {
         LikeApi likeApi = new LikeApi();
         likeApi.setId(232423);
         likeApi.setPerson_id(1);
         likeApi.setPost_id(1);
         likeApi.setTime(23113242);
-
-        //мапим и сравниваем
         PostLike postLike = postLikeMapper.toEntity(likeApi);
+
         assertEquals(likeApi.getId(), postLike.getId());
         assertEquals(likeApi.getTime(), postLike.getTime().getTime());
         assertEquals(likeApi.getPerson_id().intValue(), postLike.getPerson().getId());

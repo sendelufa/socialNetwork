@@ -11,9 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * файлы, прикреплённые к постам
- */
 @Entity
 @Table(name = "post_file")
 public class PostFile {

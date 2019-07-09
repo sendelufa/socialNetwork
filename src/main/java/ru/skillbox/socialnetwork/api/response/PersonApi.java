@@ -5,37 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PersonApi extends AbstractResponse {
 
   private int id;
-
   @JsonProperty("first_name")
   private String firstName;
-
   @JsonProperty("last_name")
   private String lastName;
-
   @JsonProperty("reg_date")
   private long regDate;
-
   @JsonProperty("birth_date")
   private long birthDate;
-
   private String email;
   private String phone;
   private String photo;
   private String about;
-
   private int town_id;
-
   private int country_id;
-
   @JsonProperty("messages_permission")
   private messages_permissions messagesPermission;
-
   @JsonProperty("last_online_time")
   private long lastOnlineTime;
-
   @JsonProperty("is_blocked")
   private boolean isBlocked;
-
   public enum messages_permissions {ALL, FRIENDS}
 
   public int getId() {
@@ -122,7 +111,6 @@ public class PersonApi extends AbstractResponse {
     this.about = about;
   }
 
-
   public messages_permissions getMessages_permission() {
     return messagesPermission;
   }
@@ -130,7 +118,6 @@ public class PersonApi extends AbstractResponse {
   public void setMessages_permission(messages_permissions messages_permission) {
     this.messagesPermission = messages_permission;
   }
-
 
   public void setTown_id(int town_id) {
     this.town_id = town_id;

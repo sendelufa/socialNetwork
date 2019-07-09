@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.FileUploadResponseApi;
 import ru.skillbox.socialnetwork.service.StorageService;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class FileUploadController {
     @Value("${upload.path}")
     private String uploadPath;
 
-    private long time;
+    private long timeResult;
 
     /**
      * Загрузка файла в хранилище
@@ -39,23 +40,33 @@ public class FileUploadController {
     @PostMapping(value = "/storage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam String type,
                                      @RequestParam("file")MultipartFile file) throws IOException {
-        if(file != null)
+        File uploadDir = new File(uploadPath);
+        if(!uploadDir.exists())
         {
-            File uploadDir = new File(uploadPath);
-            if(!uploadDir.exists())
-            {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
-            long period = System.currentTimeMillis();
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
-            time = System.currentTimeMillis() - period;
-            storageService.getDataFile(file).setRelativeFilePath(uploadPath + "/" + resultFileName);
-            storageService.getDataFile(file).setCreatedAt((int) time);
+            uploadDir.mkdir();
         }
-        AbstractResponse response = storageService.uploadFile(type, file);
+
+        String uuidFile = UUID.randomUUID().toString();
+        String resultFileName = uuidFile + "." + file.getOriginalFilename();
+        long period = System.currentTimeMillis();
+
+        if(type.equals("IMAGE")) {
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+        }
+        timeResult = System.currentTimeMillis() - period;
+
+        FileUploadResponseApi fura = new FileUploadResponseApi();
+        fura.setId(uuidFile);
+        fura.setOwnerId(12);
+        fura.setFileName(file.getName());
+        fura.setRawFileURL(file.getOriginalFilename());
+        fura.setRelativeFilePath("/" + resultFileName);
+        fura.setCreatedAt((int) timeResult);
+        fura.setFileType(FileUploadResponseApi.fileTypes.IMAGE);
+        fura.setFileFormat(file.getContentType());
+        fura.setBytes(file.getBytes().length);
+
+        AbstractResponse response = storageService.uploadFile(type, file, fura);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 }

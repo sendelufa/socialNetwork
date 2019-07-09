@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class PostListApi extends ResponseApi {
+public class CommentListApi extends ResponseApi {
 
-   private List<PostApi> data = new ArrayList<>();
+   private List<CommentApi> data = new ArrayList<>();
    private int total;
    private int offset;
    private int perPage;
 
    @JsonProperty("data")
-   public List<PostApi> getData() {
+   public List<CommentApi> getData() {
       return data;
    }
 
-   public void setData(List<PostApi> data) {
+   public void setData(List<CommentApi> data) {
       this.data = data;
    }
 

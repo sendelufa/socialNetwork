@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
+import ru.skillbox.socialnetwork.api.request.RequestNotificationSettingsApi;
 import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.service.AccountService;
@@ -71,13 +72,12 @@ public class AccountController {
     /**
      * Редактирование настроек оповещения
      *
-     * @param notification_type Тип оповещения
-     * @param enable            Включены/выключены
+     * @param notificationSettingsApi Тип оповещения и флаг активности
      * @return
      */
-    @RequestMapping(value = "notification", method = RequestMethod.PUT)
-    public ResponseEntity notification(@RequestBody String notification_type, @RequestBody boolean enable) {
-        AbstractResponse response = accountService.notification(notification_type, enable);
+    @RequestMapping(value = "notifications", method = RequestMethod.PUT)
+    public ResponseEntity notification(@RequestBody RequestNotificationSettingsApi notificationSettingsApi) {
+        AbstractResponse response = accountService.notification(notificationSettingsApi.getNotification_type(), notificationSettingsApi.isEnable());
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 

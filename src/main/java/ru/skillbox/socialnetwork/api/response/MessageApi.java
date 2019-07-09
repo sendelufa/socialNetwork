@@ -6,19 +6,14 @@ public class MessageApi extends AbstractResponse{
 
   private int id;
   private long time;
-
   @JsonProperty("author_id")
   private int authorId;
-
   @JsonProperty("recipient_id")
   private int recipientId;
-
   @JsonProperty("message_text")
   private String messageText;
-
   @JsonProperty("read_status")
   private statuses readStatus;
-
   public enum statuses {SENT, READ}
 
   public int getId() {

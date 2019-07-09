@@ -19,18 +19,11 @@ public class ProfileService {
 
     @Autowired
     private PersonDAO personDAO;
-
     @Autowired
     private PostDAO postDAO;
-
     @Autowired
     private ModelMapper modelMapper;
 
-    /**
-     * Получение текущего пользователя
-     *
-     * @return Текущий пользоваетль
-     */
     public PersonApi getMe() {
         Person person = getCurrentPerson();
         return modelMapper.map(person, PersonApi.class);
@@ -97,7 +90,7 @@ public class ProfileService {
     public void addPostOnWall(int id, ru.skillbox.socialnetwork.api.request.PostApi newPost) {
         Post post = new Post();
         post.setAuthor(personDAO.getPersonById(id));
-        post.setPostText(newPost.getPost_text());
+        post.setPostText(newPost.getPostText());
         post.setTitle(newPost.getTitle());
         postDAO.addPost(post);
     }

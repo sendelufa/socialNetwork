@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Post2TagApi extends AbstractResponse{
 
   private int id;
-
   @JsonProperty("post_id")
   private int postId;
-
   @JsonProperty("tag_id")
   private int tagId;
 

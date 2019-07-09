@@ -17,9 +17,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-/**
- * посты
- */
 @Entity
 @Table(name = "post")
 public class Post {

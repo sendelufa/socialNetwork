@@ -5,21 +5,13 @@ import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 public class PersonApi {
 
     private String first_name;
-
     private String last_name;
-
     private long birth_date;
-
     private String phone;
-
     private String photo_id;
-
     private String about;
-
     private int town_id;
-
     private int country_id;
-
     private MessagesPermissionPerson messages_permission;
 
     public String getFirst_name() {

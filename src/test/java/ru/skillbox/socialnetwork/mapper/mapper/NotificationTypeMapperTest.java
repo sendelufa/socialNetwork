@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,14 +22,12 @@ public class NotificationTypeMapperTest {
 
     @Test
     public void testEntityToApi() {
-        //заполняем поля
         NotificationType notificationType = new NotificationType();
         notificationType.setId(7);
         notificationType.setCode(101);
         notificationType.setName(NameNotificationType.POST);
-
-        //мапим и сравниваем
         NotificationTypeApi notificationTypeApi = mapper.map(notificationType, NotificationTypeApi.class);
+
         assertEquals(notificationType.getId(), notificationTypeApi.getId());
         assertEquals(notificationType.getName().getDescription(), notificationTypeApi.getName().toString());
         assertEquals(String.valueOf(notificationType.getCode()), notificationTypeApi.getCode());
@@ -37,14 +35,12 @@ public class NotificationTypeMapperTest {
 //    @Test
 //    public void testApiToEntity()
 //    {
-//        //заполняем поля
 //        NotificationTypeApi notificationTypeApi = new NotificationTypeApi();
 //        notificationTypeApi.setName(NotificationTypeApi.codes.COMMENT_COMMENT);
 //        notificationTypeApi.setId(5);
 //        notificationTypeApi.setCode("103");
-//
-//        //мапим и сравниваем
 //        NotificationType notificationType = mapper.map(notificationTypeApi, NotificationType.class);
+
 //        assertEquals(notificationTypeApi.getId(), notificationType.getId());
 //        assertEquals(notificationTypeApi.getCode(), String.valueOf(notificationType.getCode()));
 //        assertEquals(notificationTypeApi.getName().toString(), notificationType.getName().getDescription());

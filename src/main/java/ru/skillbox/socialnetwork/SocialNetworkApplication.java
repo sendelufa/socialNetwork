@@ -7,7 +7,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableEurekaClient
 
 public class SocialNetworkApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SocialNetworkApplication.class, args);
 	}

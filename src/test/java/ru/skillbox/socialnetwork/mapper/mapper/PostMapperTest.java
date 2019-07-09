@@ -1,4 +1,4 @@
-package ru.skillbox.socialnetwork.mapper;
+package ru.skillbox.socialnetwork.mapper.mapper;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,7 +25,6 @@ public class PostMapperTest {
     @Test
     public void testEntityToApi()
     {
-        //заполняем поля
         Post post = new Post();
         post.setId(4);
         post.setBlocked(true);
@@ -34,10 +33,7 @@ public class PostMapperTest {
         GregorianCalendar calendar = new GregorianCalendar(2019, Calendar.MAY, 5);
         Date time = calendar.getTime();
         post.setTime(time);
-
         post.setTitle("Java");
-
-        //мапим и сравниваем
         PostApi postApi = mapper.map(post, PostApi.class);
         assertEquals(post.getId(), postApi.getId());
         assertEquals(post.getPostText(), postApi.getPostText());
@@ -49,7 +45,6 @@ public class PostMapperTest {
     @Test
     public void testApiToEntity()
     {
-        //заполняем поля
         PostApi postApi = new PostApi();
         postApi.setId(7);
         postApi.setTime(234238);

@@ -6,7 +6,6 @@ public class UserApi extends AbstractResponse{
   private String name;
   private String email;
   private types type;
-
   public enum types {MODERATOR, ADMIN}
 
   public int getId() {

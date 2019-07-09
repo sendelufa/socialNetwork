@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
 @Controller
@@ -25,7 +24,7 @@ import ru.skillbox.socialnetwork.service.PostService;
 public class PostController {
 
    @Autowired
-   PostService postService;
+   private PostService postService;
 
    /**
     * Поиск публикации
@@ -38,19 +37,19 @@ public class PostController {
     */
    @GetMapping("/")
    public ResponseEntity getPost(@RequestParam String text,
-       @RequestParam(value = "date_from", required = false) Integer dateFrom,
-       @RequestParam(value = "date_to", required = false) Integer dateTo,
+       @RequestParam(value = "date_from", required = false) Long dateFrom,
+       @RequestParam(value = "date_to", required = false) Long dateTo,
        @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
-      offset = offset == null ? 0: offset;
+      offset = offset == null ? 0 : offset;
       PostParameters postParameters = new PostParameters(
           text,
           dateFrom,
           dateTo,
           offset,
           itemPerPage);
-      PostListApi postApiList = postService.search(postParameters);
-       return new ResponseEntity<>(postApiList, HttpStatus.OK);
+      ResponseApi responseApi = postService.search(postParameters);
+      return new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -58,13 +57,9 @@ public class PostController {
     */
    @GetMapping("/{id:\\d+}")
    public ResponseEntity getPostById(@PathVariable int id) {
-      if (postService.get(id) != null) {
-         return new ResponseEntity<>(postService.get(id), HttpStatus.OK);
-      } else {
-         return notFoundResponse();
-      }
-
-
+      ResponseApi responseApi = postService.get(id);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -73,11 +68,13 @@ public class PostController {
     * @param publishDate Отложить до даты определенной даты
     */
    @PutMapping("/{id:\\d+}")
-   public ResponseEntity editPostById(@RequestBody PostApi request,
+   public ResponseEntity editPostById(
+       @RequestBody ru.skillbox.socialnetwork.api.request.PostApi request,
        @PathVariable int id,
-       @RequestParam(value = "publish_date", required = false) Number publishDate) {
-      //TODO: Требуется реализация
-      return null;
+       @RequestParam(value = "publish_date", required = false) Long publishDate) {
+      ResponseApi responseApi = postService.edit(id, request, publishDate);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -85,8 +82,9 @@ public class PostController {
     */
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deletePostById(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi responseApi = postService.delete(id);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -94,8 +92,9 @@ public class PostController {
     */
    @PutMapping("/{id:\\d+}/recover")
    public ResponseEntity recoverPostById(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi responseApi = postService.recover(id);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -106,10 +105,11 @@ public class PostController {
     */
    @GetMapping("/{id:\\d+}/comments")
    public ResponseEntity getPostingComments(@PathVariable int id,
-       @RequestParam(required = false) int offset,
+       @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
-      //TODO: Требуется реализация
-      return null;
+      offset = offset == null ? 0 : offset;
+      ResponseApi commentListApi = postService.searchComments(id, offset, itemPerPage);
+      return new ResponseEntity<>(commentListApi, HttpStatus.OK);
    }
 
    /**
@@ -171,8 +171,9 @@ public class PostController {
     */
    @PostMapping("/{id:\\d+}/report")
    public ResponseEntity sendReportToPost(@PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+      ResponseApi reportApi = postService.reportPost(id);
+      return reportApi == null ? badRequestResponse()
+          : new ResponseEntity<>(reportApi, HttpStatus.OK);
    }
 
    /**
@@ -188,7 +189,7 @@ public class PostController {
       return null;
    }
 
-   private ResponseEntity<Object> notFoundResponse() {
+   private ResponseEntity<Object> badRequestResponse() {
       Map<String, String> response = new HashMap<>();
       response.put("error", "invalid_request");
       response.put("error_description", "not_found");

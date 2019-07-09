@@ -7,7 +7,6 @@ import javax.validation.constraints.NotNull;
 @Table(name = "notification_settings")
 public class NotificationSettings {
 
-
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

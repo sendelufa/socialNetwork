@@ -136,6 +136,7 @@ public class AccountService {
 
     public AbstractResponse notification(String notification_type,boolean enable){
         Person person = getCurrentPersonFromSecurityContext();
+
         AbstractResponse response;
         boolean isSettingFound = false;
         ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
@@ -157,6 +158,10 @@ public class AccountService {
             notificationSettings.setNotificationType(notificationTypeId);
             notificationSettings.setPerson(person.getId());
             notificationDAO.addNotificationSettings(notificationSettings);
+
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+            response.setSuccess(true);
+            return response;
         }
 
 

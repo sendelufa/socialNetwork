@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationSettings;
 import ru.skillbox.socialnetwork.model.NotificationType;
+import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 
 import java.util.List;
 
@@ -31,7 +32,9 @@ public class NotificationDAO {
 
         public NotificationType getNotificationTypeByName(String nameOfType){
             Criteria criteria = getCurrentSession().createCriteria(NotificationType.class);
-            criteria.add(Restrictions.eq("name", nameOfType));
+            NameNotificationType name =  NameNotificationType.valueOf(nameOfType);
+            criteria.add(Restrictions.eq("name", name));
+
             return (NotificationType) criteria.uniqueResult();
         }
 

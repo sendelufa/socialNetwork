@@ -3,6 +3,8 @@ package ru.skillbox.socialnetwork.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,8 +19,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Date;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter   {
@@ -27,13 +32,15 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
   private AuthenticationManager authManager;
   private final JwtConfig jwtConfig;
 
+  private ObjectMapper objectMapper = new ObjectMapper();
+
   public JwtUsernameAndPasswordAuthenticationFilter(AuthenticationManager authManager, JwtConfig jwtConfig) {
     this.authManager = authManager;
     this.jwtConfig = jwtConfig;
 
     // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
     // In our case, we use "/auth". So, we need to override the defaults.
-    this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(jwtConfig.getUri(), "POST"));
+    this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login", "POST"));
   }
 
   @Override
@@ -106,5 +113,19 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     public void setUser(User user) {
       this.user = user;
     }
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    Map<String, Object> data = new HashMap<>();
+    data.put("error", "invalid_request");
+    data.put("error_description", "string");
+
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+    response.getOutputStream()
+            .println(objectMapper.writeValueAsString(data));
   }
 }

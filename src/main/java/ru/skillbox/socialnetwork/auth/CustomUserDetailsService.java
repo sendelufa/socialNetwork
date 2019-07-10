@@ -37,5 +37,4 @@ public class CustomUserDetailsService implements UserDetailsService  {
     // The "User" class is provided by Spring and represents a model class for user to be returned by UserDetailsService
     throw new UsernameNotFoundException("Username: " + email + " not found");
   }
-
 }

@@ -11,6 +11,7 @@ import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 /*
     Тестовый контроллер для проверки работоспособности компонентов(костыль)
@@ -26,10 +27,14 @@ public class TestController {
    @Autowired
    private PostDAO postDAO;
 
+   @Autowired
+   private AccountService accountService;
+
    @GetMapping("/persons")
    public ResponseEntity<List> persons() {
       List<Person> allPersons = personDao.getAllPersons();
       allPersons.stream().map(Person::getEmail).forEach(System.out::println);
+      System.out.println(accountService.getCurrentUser().getEmail());
       return new ResponseEntity<>(allPersons, HttpStatus.OK);
    }
 

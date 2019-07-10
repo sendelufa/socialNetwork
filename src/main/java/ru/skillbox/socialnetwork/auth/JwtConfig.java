@@ -4,14 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtConfig {
-  @Value("${security.jwt.uri:/auth/**}")
-  private String Uri;
+public class JwtConfig {    // ++
 
   @Value("${security.jwt.header:Authorization}")
   private String header;
-
-  @Value("${security.jwt.prefix:Bearer}")
+  @Value("${security.jwt.prefix:Bearer}")   // ??
   private String prefix;
 
   @Value("${security.jwt.expiration:#{24*60*60}}")
@@ -19,10 +16,6 @@ public class JwtConfig {
 
   @Value("${security.jwt.secret:JwtSecretKey13}")
   private String secret;
-
-  public String getUri() {
-    return Uri;
-  }
 
   public String getHeader() {
     return header;

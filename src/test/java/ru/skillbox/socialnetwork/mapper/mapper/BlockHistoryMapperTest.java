@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.BlockHistoryApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.mapper.BlockHistoryMapper;
 import ru.skillbox.socialnetwork.model.BlockHistory;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
@@ -58,7 +59,7 @@ public class BlockHistoryMapperTest {
         blockHistoryApi.setTime(54564567);
         BlockHistory blockHistory = blockHistoryMapper.toEntity(blockHistoryApi);
 
-        assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().getDescription());
+        assertEquals(blockHistoryApi.getAction().toString(), blockHistory.getAction().toString());
         assertEquals(blockHistoryApi.getId(), blockHistory.getId());
         assertEquals(blockHistoryApi.getTime(), blockHistory.getTime().getTime());
         assertEquals(blockHistoryApi.getPerson_id().intValue(), blockHistory.getPerson().getId());

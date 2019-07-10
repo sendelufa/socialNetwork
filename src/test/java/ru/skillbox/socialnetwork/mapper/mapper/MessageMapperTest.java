@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.MessageApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.mapper.MessageMapper;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;

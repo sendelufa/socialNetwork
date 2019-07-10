@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.mapper.NotificationMapper;
 import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationType;
 import ru.skillbox.socialnetwork.model.Person;
@@ -30,7 +31,6 @@ public class NotificationMapperTest {
         notification.setId(8934);
         notification.setContact("34534532");
         notification.setEntityId(67);
-        GregorianCalendar calendar = new GregorianCalendar(2-16, 8, 9);
         notification.setPerson(new Person());
         notification.getPerson().setId(1);
         notification.setNotificationType(new NotificationType());

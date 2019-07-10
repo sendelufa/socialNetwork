@@ -25,9 +25,9 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
     @PostConstruct
     public void setupMapper() {
         modelMapper.createTypeMap(PostComment.class, CommentApi.class)
-                .addMappings(m -> m.skip(CommentApi::setPost_id))
-                .addMappings(m -> m.skip(CommentApi::setParent_id))
-                .addMappings(m -> m.skip(CommentApi::setAuthor_id))
+                .addMappings(m -> m.skip(CommentApi::setPostId))
+                .addMappings(m -> m.skip(CommentApi::setParentId))
+                .addMappings(m -> m.skip(CommentApi::setAuthorId))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(CommentApi.class, PostComment.class)
                 .addMappings(m -> m.skip(PostComment::setPost))
@@ -43,15 +43,15 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         }
 
         if (!Objects.isNull(source.getPost())) {
-            destination.setPost_id(String.valueOf(source.getPost().getId()));
+            destination.setPostId(String.valueOf(source.getPost().getId()));
         }
 
-        if (!Objects.isNull(source.getParent_id())) {
-            destination.setParent_id(source.getParent_id().getId());
+        if (!Objects.isNull(source.getParent())) {
+            destination.setParentId(source.getParent().getId());
         }
 
         if (!Objects.isNull(source.getAuthor())) {
-            destination.setAuthor_id(source.getAuthor().getId());
+            destination.setAuthorId(source.getAuthor().getId());
         }
     }
 
@@ -62,15 +62,15 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         }
 
         Post post = new Post();
-        post.setId(Integer.parseInt(source.getPost_id()));
+        post.setId(Integer.parseInt(source.getPostId()));
         destination.setPost(post);
 
         PostComment postParent = new PostComment();
-        postParent.setId(source.getParent_id());
+        postParent.setId(source.getParentId());
         destination.setParent_id(postParent);
 
         Person person = new Person();
-        person.setId(source.getAuthor_id());
+        person.setId(source.getAuthorId());
         destination.setAuthor(person);
     }
 }

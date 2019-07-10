@@ -1,9 +1,5 @@
 package ru.skillbox.socialnetwork.mapper.mapper;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +7,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class, PostCommentMapper.class})
@@ -32,7 +34,7 @@ public class PostCommentMapperTest {
         postComment.setAuthor(new Person());
         postComment.getAuthor().setId(1);
         postComment.setParent_id(new PostComment());
-        postComment.getParent_id().setId(1);
+        postComment.getParent().setId(1);
         postComment.setPost(new Post());
         postComment.getPost().setId(1);
 
@@ -44,9 +46,9 @@ public class PostCommentMapperTest {
         assertEquals(postComment.getId(), commentApi.getId());
         assertEquals(postComment.getCommentText(), commentApi.getCommentText());
         assertEquals(postComment.getTime().getTime(), commentApi.getTime());
-        assertEquals(postComment.getAuthor().getId(), commentApi.getAuthor_id().intValue());
-        assertEquals(postComment.getParent_id().getId(), commentApi.getParent_id().intValue());
-        assertEquals(postComment.getPost().getId(), Integer.parseInt(commentApi.getPost_id()));
+        assertEquals(postComment.getAuthor().getId(), commentApi.getAuthorId().intValue());
+        assertEquals(postComment.getParent().getId(), commentApi.getParentId().intValue());
+        assertEquals(postComment.getPost().getId(), Integer.parseInt(commentApi.getPostId()));
     }
 
     @Test
@@ -67,7 +69,7 @@ public class PostCommentMapperTest {
         assertEquals(commentApi.isBlocked(), postComment.isBlocked());
         assertEquals(commentApi.getTime(), postComment.getTime().getTime());
         assertEquals(commentApi.getAuthorId().intValue(), postComment.getAuthor().getId());
-        assertEquals(commentApi.getParentId().intValue(), postComment.getParent_id().getId());
+        assertEquals(commentApi.getParentId().intValue(), postComment.getParent().getId());
         assertEquals(Integer.parseInt(commentApi.getPostId()), postComment.getPost().getId());
     }
 }

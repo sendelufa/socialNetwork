@@ -13,47 +13,47 @@ import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
-  @Autowired
-  private JwtConfig jwtConfig;
+    @Autowired
+    private JwtConfig jwtConfig;
 
-  @Autowired
-  private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-        .csrf().disable()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-        .and()
-        // Add a filter to validate the tokens with every request
-        .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
-        .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig), JwtTokenAuthenticationFilter.class)
-        // authorization requests config
-        .authorizeRequests()
-        // must be an admin if trying to access admin area (authentication is also required here)
- //       .antMatchers("/api/**").permitAll()
-        // Any other request must be authenticated
-        .anyRequest().authenticated()
-        .and()
-          .formLogin()
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+                .and()
+                // Add a filter to validate the tokens with every request
+                .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig), JwtTokenAuthenticationFilter.class)
+                // authorization requests config
+                .authorizeRequests()
+                // must be an admin if trying to access admin area (authentication is also required here)
+                .antMatchers("/api/**").permitAll()
+                // Any other request must be authenticated
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
 //            .defaultSuccessUrl("/api/auth", true)
-            //.successHandler(new CustomAuthenticationSuccessHandler())
-            .usernameParameter("email")
-            .permitAll()
-        .and()
-        .logout()
-            .permitAll();
-  }
+                //.successHandler(new CustomAuthenticationSuccessHandler())
+                .usernameParameter("email")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll();
+    }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-  }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
 
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

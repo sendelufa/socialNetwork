@@ -177,7 +177,7 @@ public class AccountService {
             }
         }
 
-        if(!isSettingFound){
+        if(!isSettingFound && !notification_type.equals("")){
             NotificationSettings notificationSettings = new NotificationSettings();
             notificationSettings.setEnable(enable);
 

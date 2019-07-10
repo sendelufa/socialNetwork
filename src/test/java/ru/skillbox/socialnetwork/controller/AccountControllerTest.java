@@ -236,7 +236,7 @@ public class AccountControllerTest {
         mvc.perform(put("/api/v1/account/notifications")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
-            .content("{\"notification_type\": \"POST\","
+            .content("{\"notification_type\": \"\","
                 + "\"enable\": \"\"}"))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("error")))

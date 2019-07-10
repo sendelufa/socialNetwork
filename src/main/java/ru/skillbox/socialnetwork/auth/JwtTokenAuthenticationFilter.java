@@ -17,51 +17,50 @@ import java.util.stream.Collectors;
 
 public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtConfig jwtConfig;
+    private final JwtConfig jwtConfig;
 
-  public JwtTokenAuthenticationFilter(JwtConfig jwtConfig) {
-    this.jwtConfig = jwtConfig;
-  }
-
-  @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-      throws ServletException, IOException {
-
-    String header = request.getHeader(jwtConfig.getHeader());
-
-    if(header == null || !header.startsWith(jwtConfig.getPrefix())) {
-      chain.doFilter(request, response);  		// If not valid, go to the next filter.
-      return;
+    public JwtTokenAuthenticationFilter(JwtConfig jwtConfig) {
+        this.jwtConfig = jwtConfig;
     }
 
-    String token = header.replace(jwtConfig.getPrefix(), "");
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
 
-    try {	// exceptions might be thrown in creating the claims if for example the token is expired
+        String header = request.getHeader(jwtConfig.getHeader());
 
-      // 4. Validate the token
-      Claims claims = Jwts.parser()
-          .setSigningKey(jwtConfig.getSecret().getBytes())
-          .parseClaimsJws(token)
-          .getBody();
+        if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
+            chain.doFilter(request, response);        // If not valid, go to the next filter.
+            return;
+        }
 
-      String username = claims.getSubject();
-      if(username != null) {
-        @SuppressWarnings("unchecked")
-        List<String> authorities = (List<String>) claims.get("authorities");
+        String token = header.replace(jwtConfig.getPrefix(), "");
 
-        // 5. Create auth object
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-            username, null, authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        try {    // exceptions might be thrown in creating the claims if for example the token is expired
+            // 4. Validate the token
+            Claims claims = Jwts.parser()
+                    .setSigningKey(jwtConfig.getSecret().getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
 
-        // 6. Authenticate the user
-        SecurityContextHolder.getContext().setAuthentication(auth);
-      }
+            String username = claims.getSubject();
+            if (username != null) {
+                @SuppressWarnings("unchecked")
+                List<String> authorities = (List<String>) claims.get("authorities");
 
-    } catch (Exception e) {
-      SecurityContextHolder.clearContext();
+                // 5. Create auth object
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                        username, null, authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+
+                // 6. Authenticate the user
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+        }
+
+        chain.doFilter(request, response);
     }
-
-    chain.doFilter(request, response);
-  }
 
 }

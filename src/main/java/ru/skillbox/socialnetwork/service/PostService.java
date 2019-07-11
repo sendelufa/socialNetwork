@@ -26,8 +26,7 @@ public class PostService {
    private PostApi postApi;
    @Autowired
    private PostListApi postListApi;
-   @Autowired
-   private PostDeleteApi postDeleteApi;
+
    @Autowired
    private PostDAO postDAO;
 
@@ -63,10 +62,11 @@ public class PostService {
    }
 
    public ResponseApi delete(int id) {
+      PostDeleteApi postDeleteApi = new PostDeleteApi();
       Post post = postDAO.getPostById(id);
       postDAO.deletePost(post);
       postDeleteApi.setId(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), postDeleteApi);
+      return new ResponseApi("none", new Date().getTime(), postDeleteApi);
    }
 
    public ResponseApi recover(int id) {

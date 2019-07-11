@@ -1,8 +1,11 @@
 package ru.skillbox.socialnetwork.auth;
 
+import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +15,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
+import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.User;
 
 import javax.servlet.FilterChain;
@@ -80,9 +86,26 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         .setExpiration(new Date(now + jwtConfig.getExpiration() * 1000))  // in milliseconds
         .signWith(SignatureAlgorithm.HS512, jwtConfig.getSecret().getBytes())
         .compact();
-
     // Add token to header
     response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
+    response.addHeader("email", auth.getName());
+//    response.sendRedirect("/auth/success");   //не срабатывает
+
+
+  }
+
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    Map<String, Object> data = new HashMap<>();
+    data.put("error", "invalid_request");
+    data.put("error_description", "string");
+
+    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+    response.getOutputStream()
+            .println(objectMapper.writeValueAsString(data));
   }
 
   // A (temporary) class just to represent the user credentials
@@ -113,19 +136,5 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
     public void setUser(User user) {
       this.user = user;
     }
-  }
-
-  @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
-    Map<String, Object> data = new HashMap<>();
-    data.put("error", "invalid_request");
-    data.put("error_description", "string");
-
-    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
-    response.getOutputStream()
-            .println(objectMapper.writeValueAsString(data));
   }
 }

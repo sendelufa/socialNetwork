@@ -21,7 +21,6 @@ import ru.skillbox.socialnetwork.model.PostComment;
 @Service
 public class PostService {
 
-   private ReportApi reportApi;
    private PostApi postApi;
    private PostListApi postListApi;
 
@@ -74,6 +73,7 @@ public class PostService {
 
    public ResponseApi reportPost(int id) {
       Post post = postDAO.reportPost(id);
+      ReportApi reportApi = new ReportApi();
       reportApi.setMessage("Отправлен репорт на пост с id:" + id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
    }
@@ -100,11 +100,41 @@ public class PostService {
       return null;
    }
 
-   public ResponseApi editComment(int postId, int commentId, PostCommentApi request){
+   public ResponseApi editComment(int postId, int commentId, PostCommentApi request) {
       PostComment postComment = postDAO.getCommentById(commentId);
+      if (postComment.getPost().getId() != postId) {
+         return null;
+      }
       postComment.setCommentText(request.getComment_text());
       postDAO.addComment(postComment);
       return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
+   }
+
+   public ResponseApi deleteComment(int postId, int commentId) {
+      PostDeleteApi postDeleteApi = new PostDeleteApi();
+      PostComment postComment = postDAO.getCommentById(commentId);
+      if (postComment.getPost().getId() != postId) {
+         return null;
+      }
+      postDAO.deleteComment(postComment);
+      postDeleteApi.setId(commentId);
+      return new ResponseApi("none", new Date().getTime(), postDeleteApi);
+   }
+
+   public ResponseApi recoverComment(int id) {
+      //TODO не соответствует API, в апи требуют список вернуть.
+      PostComment postComment = postDAO.recoverComment(id);
+      CommentApi postCommentResponse = fillCommentApi(postComment);
+      return new ResponseApi("none", new Date().getTime(),
+          postCommentResponse);
+   }
+
+   public ResponseApi reportComment(int id) {
+      //TODO нет логики и таблицы в бд для жалоб
+      Post post = postDAO.reportPost(id);
+      ReportApi reportApi = new ReportApi();
+      reportApi.setMessage("Отправлен репорт на коммент с id:" + id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
    }
 
    private PostApi fillPostApi(Post post) {

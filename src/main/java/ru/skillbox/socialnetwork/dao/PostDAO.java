@@ -89,6 +89,13 @@ public class PostDAO {
       return q.list();
    }
 
+   public PostComment recoverComment(int id) {
+      PostComment postComment = getCommentById(id);
+      postComment.setDeleted(false);
+      getCurrentSession().update(postComment);
+      return postComment;
+   }
+
    public long getLikesNumber(int id) {
       String query = String.format("select count(*) from PostLike likes where "
           + "likes"
@@ -105,7 +112,8 @@ public class PostDAO {
    }
 
    public void deleteComment(PostComment comment) {
-      getCurrentSession().delete(comment);
+      comment.setDeleted(true);
+      getCurrentSession().update(comment);
    }
 
    private Session getCurrentSession() {

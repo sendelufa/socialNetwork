@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Repository
 @Transactional
@@ -76,7 +77,6 @@ public class PostDAO {
    public void deleteComment(PostComment comment) {
       getCurrentSession().delete(comment);
    }
-
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

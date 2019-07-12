@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
+import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
 import ru.skillbox.socialnetwork.api.response.CommentListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
@@ -20,11 +21,8 @@ import ru.skillbox.socialnetwork.model.PostComment;
 @Service
 public class PostService {
 
-   @Autowired
    private ReportApi reportApi;
-   @Autowired
    private PostApi postApi;
-   @Autowired
    private PostListApi postListApi;
 
    @Autowired
@@ -92,6 +90,23 @@ public class PostService {
       return commentListApi;
    }
 
+   public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
+      PostComment postComment = new PostComment();
+      postComment.setCommentText(postCommentApi.getComment_text());
+      postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
+      postComment.setPost(postDAO.getPostById(postId));
+      //TODO - Получить текущего пользователя
+      //postComment.setAuthor(SecurityContextHolder.getContext().getAuthentication().getPrincipal().);
+      return null;
+   }
+
+   public ResponseApi editComment(int postId, int commentId, PostCommentApi request){
+      PostComment postComment = postDAO.getCommentById(commentId);
+      postComment.setCommentText(request.getComment_text());
+      postDAO.addComment(postComment);
+      return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
+   }
+
    private PostApi fillPostApi(Post post) {
       PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());
@@ -111,7 +126,7 @@ public class PostService {
       commentApi.setAuthorId(comment.getAuthor().getId());
       commentApi.setCommentText(comment.getCommentText());
       //TODO какой ответ должен быть при отсутсвии родителя
-      commentApi.setParentId(comment.getParent() == null ? -1 : comment.getParent().getId());
+      commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
       return commentApi;

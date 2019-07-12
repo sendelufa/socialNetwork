@@ -119,23 +119,24 @@ public class PostController {
     */
    @PostMapping("/{id:\\d+}/comments")
    public ResponseEntity createPostingComment(@RequestBody PostCommentApi request,
-       @PathVariable int id) {
-      //TODO: Требуется реализация
+       @PathVariable Integer id) {
+      //TODO не готов сервис
+      ResponseApi commentApi = postService.createComment(id, request);
       return null;
    }
 
    /**
     * Редактирование комментария к публикации
     *
-    * @param id ID публикации
+    * @param postId ID публикации
     * @param commentId ID комментария публикации
     */
-   @PutMapping("/{id:\\d+}/comments/{comment_id:\\d+}")
+   @PutMapping("/{postId:\\d+}/comments/{commentId:\\d+}")
    public ResponseEntity editPostingComment(@RequestBody PostCommentApi request,
-       @PathVariable int id,
-       @RequestParam(value = "comment_id ") int commentId) {
-      //TODO: Требуется реализация
-      return null;
+       @PathVariable int postId,
+       @PathVariable int commentId) {
+      ResponseApi commentApi = postService.editComment(commentId, postId, request);
+      return new ResponseEntity<>(commentApi, HttpStatus.OK);
    }
 
    /**

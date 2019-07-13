@@ -1,0 +1,1 @@
+﻿ALTER TABLE `person` MODIFY COLUMN `phone` VARCHAR(20) NULL;

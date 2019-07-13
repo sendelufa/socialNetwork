@@ -12,7 +12,7 @@ import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.service.AccountService;
 
 @RestController
-@RequestMapping("/api/v1/account/")
+@RequestMapping("account/")
 public class AccountController {
 
     @Autowired

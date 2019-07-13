@@ -28,6 +28,8 @@ public class PersonApi extends AbstractResponse {
   @JsonProperty("is_blocked")
   private boolean isBlocked;
 
+  private String token;
+
   public int getId() {
     return id;
   }
@@ -139,5 +141,13 @@ public class PersonApi extends AbstractResponse {
 
   public void setIs_blocked(boolean is_blocked) {
     this.isBlocked = is_blocked;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
   }
 }

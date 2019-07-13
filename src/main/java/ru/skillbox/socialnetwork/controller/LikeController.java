@@ -9,7 +9,6 @@ import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.service.LikeService;
 
 @RestController
-@RequestMapping("/api/v1")
 public class LikeController {
 
     @Autowired

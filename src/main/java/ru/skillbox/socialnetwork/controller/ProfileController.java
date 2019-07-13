@@ -18,7 +18,7 @@ import java.util.List;
  * Работа с публичной информацией пользователя
  */
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("users")
 public class ProfileController {
 
 

@@ -20,7 +20,7 @@ import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
 @Controller
-@RequestMapping("/api/v1/post")
+@RequestMapping("post")
 public class PostController {
 
    @Autowired

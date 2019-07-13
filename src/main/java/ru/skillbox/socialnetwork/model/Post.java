@@ -47,6 +47,10 @@ public class Post {
    @NotNull
    private boolean isBlocked;
 
+   @Column(name = "is_deleted")
+   @NotNull
+   private boolean isDeleted;
+
    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
    private List<PostFile> postFiles;
 
@@ -109,6 +113,14 @@ public class Post {
 
    public void setBlocked(boolean blocked) {
       isBlocked = blocked;
+   }
+
+   public boolean isDeleted() {
+      return isDeleted;
+   }
+
+   public void setDeleted(boolean deleted) {
+      isDeleted = deleted;
    }
 
    public List<PostFile> getPostFiles() {

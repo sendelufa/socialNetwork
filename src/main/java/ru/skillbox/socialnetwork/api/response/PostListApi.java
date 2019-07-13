@@ -3,11 +3,8 @@ package ru.skillbox.socialnetwork.api.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
+
 public class PostListApi extends ResponseApi {
 
    private List<PostApi> data = new ArrayList<>();

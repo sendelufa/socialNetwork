@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
+import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
 import ru.skillbox.socialnetwork.api.response.CommentListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
@@ -13,6 +14,7 @@ import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
@@ -20,16 +22,13 @@ import ru.skillbox.socialnetwork.model.PostComment;
 @Service
 public class PostService {
 
-   @Autowired
-   private ReportApi reportApi;
-   @Autowired
    private PostApi postApi;
-   @Autowired
    private PostListApi postListApi;
-   @Autowired
-   private PostDeleteApi postDeleteApi;
+
    @Autowired
    private PostDAO postDAO;
+   @Autowired
+   private PersonDAO personDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
@@ -63,10 +62,11 @@ public class PostService {
    }
 
    public ResponseApi delete(int id) {
+      PostDeleteApi postDeleteApi = new PostDeleteApi();
       Post post = postDAO.getPostById(id);
       postDAO.deletePost(post);
       postDeleteApi.setId(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), postDeleteApi);
+      return new ResponseApi("none", new Date().getTime(), postDeleteApi);
    }
 
    public ResponseApi recover(int id) {
@@ -76,6 +76,7 @@ public class PostService {
 
    public ResponseApi reportPost(int id) {
       Post post = postDAO.reportPost(id);
+      ReportApi reportApi = new ReportApi();
       reportApi.setMessage("Отправлен репорт на пост с id:" + id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
    }
@@ -90,6 +91,55 @@ public class PostService {
       commentListApi.setPerPage(itemPerPage);
       commentListApi.setSuccess(true);
       return commentListApi;
+   }
+
+   public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
+      PostComment postComment = new PostComment();
+      postComment.setCommentText(postCommentApi.getComment_text());
+      postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
+      postComment.setPost(postDAO.getPostById(postId));
+      postComment.setTime(new Date());
+      //TODO - Получить текущего пользователя (сейчас заглушка на юзера №1)
+      postComment.setAuthor(personDAO.getPersonById(1));
+      postDAO.addComment(postComment);
+      return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
+   }
+
+   public ResponseApi editComment(int postId, int commentId, PostCommentApi request) {
+      PostComment postComment = postDAO.getCommentById(commentId);
+      if (postComment.getPost().getId() != postId) {
+         return null;
+      }
+      postComment.setCommentText(request.getComment_text());
+      postDAO.updateComment(postComment);
+      return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
+   }
+
+   public ResponseApi deleteComment(int postId, int commentId) {
+      PostDeleteApi postDeleteApi = new PostDeleteApi();
+      PostComment postComment = postDAO.getCommentById(commentId);
+      if (postComment.getPost().getId() != postId) {
+         return null;
+      }
+      postDAO.deleteComment(postComment);
+      postDeleteApi.setId(commentId);
+      return new ResponseApi("none", new Date().getTime(), postDeleteApi);
+   }
+
+   public ResponseApi recoverComment(int id) {
+      //TODO не соответствует API, в апи требуют список вернуть.
+      PostComment postComment = postDAO.recoverComment(id);
+      CommentApi postCommentResponse = fillCommentApi(postComment);
+      return new ResponseApi("none", new Date().getTime(),
+          postCommentResponse);
+   }
+
+   public ResponseApi reportComment(int id) {
+      //TODO нет логики и таблицы в бд для жалоб
+      Post post = postDAO.reportPost(id);
+      ReportApi reportApi = new ReportApi();
+      reportApi.setMessage("Отправлен репорт на коммент с id:" + id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), reportApi);
    }
 
    private PostApi fillPostApi(Post post) {
@@ -111,7 +161,7 @@ public class PostService {
       commentApi.setAuthorId(comment.getAuthor().getId());
       commentApi.setCommentText(comment.getCommentText());
       //TODO какой ответ должен быть при отсутсвии родителя
-      commentApi.setParentId(comment.getParent() == null ? -1 : comment.getParent().getId());
+      commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
       return commentApi;

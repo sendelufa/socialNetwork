@@ -38,7 +38,7 @@ public class PostDAO {
 
       String query = String.format("from Post p where "
               + queryWhere
-              + " locate('%s', p.postText, 1) > 0 ORDER BY p.time DESC",
+              + " locate('%s', p.postText, 1) > 0 AND p.isDeleted = false ORDER BY p.time DESC",
           postParameters.getText());
 
       System.out.println(query);
@@ -57,13 +57,15 @@ public class PostDAO {
    }
 
    public void deletePost(Post post) {
-      //TODO: удаление через отметку в БД?
-      //getCurrentSession().delete(post);
+      post.setDeleted(true);
+      getCurrentSession().update(post);
    }
 
    public Post recoverPost(int id) {
-      //TODO: восстановление через отметку в БД?
-      return getPostById(id);
+      Post post = getPostById(id);
+      post.setDeleted(false);
+      getCurrentSession().update(post);
+      return post;
    }
 
    public Post reportPost(int id) {
@@ -87,6 +89,13 @@ public class PostDAO {
       return q.list();
    }
 
+   public PostComment recoverComment(int id) {
+      PostComment postComment = getCommentById(id);
+      postComment.setDeleted(false);
+      getCurrentSession().update(postComment);
+      return postComment;
+   }
+
    public long getLikesNumber(int id) {
       String query = String.format("select count(*) from PostLike likes where "
           + "likes"
@@ -103,7 +112,8 @@ public class PostDAO {
    }
 
    public void deleteComment(PostComment comment) {
-      getCurrentSession().delete(comment);
+      comment.setDeleted(true);
+      getCurrentSession().update(comment);
    }
 
    private Session getCurrentSession() {

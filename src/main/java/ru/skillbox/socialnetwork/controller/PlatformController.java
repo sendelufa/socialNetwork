@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +14,7 @@ import ru.skillbox.socialnetwork.api.response.PlatfomLanguageApi;
 import ru.skillbox.socialnetwork.service.PlatformService;
 
 @Service
+@Controller
 @RequestMapping("/api/v1/platform/")
 public class PlatformController {
 
@@ -22,9 +24,6 @@ public class PlatformController {
     /**
      * Получение языков платформы
      *
-     * @param language          Строка для поиска по языкам
-     * @param offset            Отступ от начала списка
-     * @param itemPerPage       Количество элементов на страницу
      * @return
      */
     @RequestMapping(value = "languages", method = RequestMethod.GET)

@@ -6,11 +6,11 @@ public class NotificationApi extends AbstractResponse{
 
   private int id;
   @JsonProperty("type_id")
-  private int typeId;
+  private Integer typeId;
   @JsonProperty("sent_time")
   private long sentTime;
   @JsonProperty("person_id")
-  private int personId;
+  private Integer personId;
   @JsonProperty("entity_id")
   private int entityId;
   private String contact;
@@ -24,11 +24,11 @@ public class NotificationApi extends AbstractResponse{
     this.id = id;
   }
 
-  public int getType_id() {
+  public Integer getType_id() {
     return typeId;
   }
 
-  public void setType_id(int type_id) {
+  public void setType_id(Integer type_id) {
     this.typeId = type_id;
   }
 
@@ -48,11 +48,11 @@ public class NotificationApi extends AbstractResponse{
     this.info = info;
   }
 
-  public int getPerson_id() {
+  public Integer getPerson_id() {
     return personId;
   }
 
-  public void setPerson_id(int person_id) {
+  public void setPerson_id(Integer person_id) {
     this.personId = person_id;
   }
 

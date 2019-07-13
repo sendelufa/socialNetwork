@@ -7,9 +7,9 @@ public class MessageApi extends AbstractResponse{
   private int id;
   private long time;
   @JsonProperty("author_id")
-  private int authorId;
+  private Integer authorId;
   @JsonProperty("recipient_id")
-  private int recipientId;
+  private Integer recipientId;
   @JsonProperty("message_text")
   private String messageText;
   @JsonProperty("read_status")
@@ -32,19 +32,19 @@ public class MessageApi extends AbstractResponse{
     this.time = time;
   }
 
-  public int getAuthor_id() {
+  public Integer getAuthor_id() {
     return authorId;
   }
 
-  public void setAuthor_id(int author_id) {
+  public void setAuthor_id(Integer author_id) {
     this.authorId = author_id;
   }
 
-  public int getRecipient_id() {
+  public Integer getRecipient_id() {
     return recipientId;
   }
 
-  public void setRecipient_id(int recipient_id) {
+  public void setRecipient_id(Integer recipient_id) {
     this.recipientId = recipient_id;
   }
 

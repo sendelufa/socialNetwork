@@ -14,6 +14,7 @@ import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
@@ -26,6 +27,8 @@ public class PostService {
 
    @Autowired
    private PostDAO postDAO;
+   @Autowired
+   private PersonDAO personDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
@@ -95,9 +98,11 @@ public class PostService {
       postComment.setCommentText(postCommentApi.getComment_text());
       postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
       postComment.setPost(postDAO.getPostById(postId));
-      //TODO - Получить текущего пользователя
-      //postComment.setAuthor(SecurityContextHolder.getContext().getAuthentication().getPrincipal().);
-      return null;
+      postComment.setTime(new Date());
+      //TODO - Получить текущего пользователя (сейчас заглушка на юзера №1)
+      postComment.setAuthor(personDAO.getPersonById(1));
+      postDAO.addComment(postComment);
+      return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
    }
 
    public ResponseApi editComment(int postId, int commentId, PostCommentApi request) {
@@ -106,7 +111,7 @@ public class PostService {
          return null;
       }
       postComment.setCommentText(request.getComment_text());
-      postDAO.addComment(postComment);
+      postDAO.updateComment(postComment);
       return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
    }
 

@@ -120,9 +120,10 @@ public class PostController {
    @PostMapping("/{id:\\d+}/comments")
    public ResponseEntity createPostingComment(@RequestBody PostCommentApi request,
        @PathVariable Integer id) {
-      //TODO не готов сервис
+      //TODO не готов сервис, комментарии пишутся от хард код юзера
       ResponseApi commentApi = postService.createComment(id, request);
-      return null;
+      return commentApi == null ? badRequestResponse()
+          : new ResponseEntity<>(commentApi, HttpStatus.OK);
    }
 
    /**

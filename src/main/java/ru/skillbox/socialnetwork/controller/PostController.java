@@ -37,8 +37,8 @@ public class PostController {
     */
    @GetMapping("/")
    public ResponseEntity getPost(@RequestParam String text,
-       @RequestParam(value = "date_from", required = false) Long dateFrom,
-       @RequestParam(value = "date_to", required = false) Long dateTo,
+       @RequestParam(value = "date_from", required = false) Integer dateFrom,
+       @RequestParam(value = "date_to", required = false) Integer dateTo,
        @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
       offset = offset == null ? 0 : offset;

@@ -71,7 +71,7 @@ public class PersonMapperTest {
         personApi.setTown_id(5);
         personApi.setCountry_id(3);
         personApi.setLast_online_time(12345);
-        personApi.setMessages_permission(PersonApi.messages_permissions.ALL);
+        personApi.setMessages_permission(MessagesPermissionPerson.ALL);
         personApi.setBirth_date(2345546);
         personApi.setReg_date(4563463);
         personApi.setEmail("mwerwer@mail.ru");

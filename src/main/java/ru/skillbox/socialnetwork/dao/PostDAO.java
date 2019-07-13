@@ -33,11 +33,11 @@ public class PostDAO {
    public List<Post> getPosts(PostParameters postParameters) {
       String queryWhere = "";
 
-      queryWhere += postParameters.getDateFrom() != null ?
-          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFrom())) : "";
+      queryWhere += postParameters.getDate_from() != null ?
+          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDate_from())) : "";
 
-      queryWhere += postParameters.getDateTo() != null ?
-          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";
+      queryWhere += postParameters.getDate_to() != null ?
+          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDate_to())) : "";
 
       String query = String.format("from Post p where "
               + queryWhere

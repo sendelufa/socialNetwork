@@ -1,11 +1,17 @@
 package ru.skillbox.socialnetwork.service;
 
+
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Date;
+import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
+import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
@@ -17,11 +23,9 @@ import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
+
 
 @Service
 public class AccountService {
@@ -35,22 +39,30 @@ public class AccountService {
     @Autowired
     private MailSender mailSender;
 
+
     public AbstractResponse registration(RegistrationApi registration) {
+
         String userEmail = registration.getEmail();
+
         AbstractResponse response;
 
         if(EmailValidator.isValid(userEmail)) {
 
             Person person = personDAO.getPersonByEmail(userEmail);
+
             if (person == null) {
+
                 person = new Person();
                 person.setLastName(registration.getLastName());
                 person.setFirstName(registration.getFirstName());
                 person.setEmail(userEmail);
+
                 person.setRegDate(new Date());
                 person.setMessagesPermission(MessagesPermissionPerson.ALL);
                 person.setOnline(true);
+
                 if (registration.getPasswd1().equals(registration.getPasswd2())) {
+
                     String encodedPassword = encoder.encode(registration.getPasswd1());
                     person.setPassword(encodedPassword);
                 } else {
@@ -59,10 +71,12 @@ public class AccountService {
                     response.setSuccess(false);
                     return response;
                 }
+
                 personDAO.addPerson(person);
                 response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
                 response.setSuccess(true);
                 return response;
+
             } else {
 
                 response = new ErrorApi("invalid_request", "Given email is already used");
@@ -78,11 +92,16 @@ public class AccountService {
     }
 
     public AbstractResponse setPassword(String password){
+
         AbstractResponse response;
+
         if (!password.equals("")){
+
             String encodedPassword = encoder.encode(password);
+
             Person person  = getCurrentPersonFromSecurityContext();
             person.setPassword(encodedPassword);
+
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
@@ -95,7 +114,9 @@ public class AccountService {
         }
     }
 
+
     public AbstractResponse setEmail(String email) {
+
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
 
@@ -117,6 +138,7 @@ public class AccountService {
     public AbstractResponse recoveryPassword(String email) {
         Person person = personDAO.getPersonByEmail(email);
         AbstractResponse response;
+
         if (person != null) {
             String password = randomKey(8);
             String name = person.getFirstName();
@@ -135,14 +157,18 @@ public class AccountService {
     }
 
     public AbstractResponse notification(String notification_type,boolean enable){
+
         Person person = getCurrentPersonFromSecurityContext();
 
         AbstractResponse response;
         boolean isSettingFound = false;
         ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
         for (NotificationSettings setting : ns) {
+
             NameNotificationType nameNotificationType = notificationDAO.getNotificationTypeById(setting.getNotificationType()).getName();
+
             if (nameNotificationType.toString().equals(notification_type)) {
+
                 setting.setEnable(enable);
                 notificationDAO.updateNotificationSettings(setting);
                 isSettingFound = true;
@@ -151,9 +177,11 @@ public class AccountService {
                 return response;
             }
         }
-        if(!isSettingFound){
+
+        if(!isSettingFound && !notification_type.equals("")){
             NotificationSettings notificationSettings = new NotificationSettings();
             notificationSettings.setEnable(enable);
+
             int notificationTypeId = notificationDAO.getNotificationTypeByName(notification_type).getId();
             notificationSettings.setNotificationType(notificationTypeId);
             notificationSettings.setPerson(person.getId());
@@ -168,32 +196,41 @@ public class AccountService {
         response = new ErrorApi("invalid_request", "BAD REQUEST");
         response.setSuccess(false);
         return response;
+
     }
+
 
     public AbstractResponse status(String status){
         Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
+
         if(status.equals("online")) {
+
             person.setOnline(true);
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
             return response;
         } else if(status.equals("offline")){
+
             person.setOnline(false);
             personDAO.updatePerson(person);
             response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
             response.setSuccess(true);
+            return response;
         }
 
         response = new ErrorApi("invalid_request", "BAD REQUEST");
         response.setSuccess(false);
         return response;
+
     }
 
     private Person getCurrentPersonFromSecurityContext(){
+
          UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
          return personDAO.getPersonByEmail(user.getUsername());
+
     }
 
     public String randomKey(int length) {
@@ -201,4 +238,5 @@ public class AccountService {
         return String.format("%" + length + "s", new BigInteger(length * 5/*base 32,2^5*/, random)
             .toString(32)).replace('\u0020', '0');
     }
+
 }

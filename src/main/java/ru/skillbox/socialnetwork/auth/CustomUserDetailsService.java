@@ -26,11 +26,11 @@ public class CustomUserDetailsService implements UserDetailsService  {    // ++ 
     // (temporary) hard coding the users. All passwords must be encoded.
     User us1 = new User();
     us1.setId(1);
-    us1.setName("omar");
+    us1.setName("sidorovmaxim@mail.ru");
     us1.setPassword(encoder.encode("12345"));
     User us2 = new User();
     us2.setId(2);
-    us2.setName("admin");
+    us2.setName("mihailovsergei@mail.ru");
     us2.setPassword(encoder.encode("12345"));
     us2.setType(UserType.ADMIN);
 

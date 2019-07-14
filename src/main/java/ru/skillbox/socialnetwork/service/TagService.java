@@ -36,9 +36,13 @@ public class TagService {
       return tagApi;
    }
 
-   public  List<Post>  findByTag(String tag) {
+   public  List<Post>  allPostsByTag(String tag) {
       List<Post> posts = tagDAO.getPostsbyTag(tag);
       return posts;
+   }
+
+   public List<Tag> findAllTags(){
+      return tagDAO.getAllTag();
    }
 
    private TagApi fillTagApi(Tag tag) {

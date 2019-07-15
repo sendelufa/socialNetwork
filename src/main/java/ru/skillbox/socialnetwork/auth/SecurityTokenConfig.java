@@ -35,7 +35,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                     .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
                     .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, personDAO), JwtTokenAuthenticationFilter.class)
                 .authorizeRequests()
-                    .antMatchers("/api/**").permitAll()
+                    .antMatchers("/api/**", "/api/v1/account/register", "/api/v1/account/password/recovery").permitAll()
                     .anyRequest().authenticated()
                     .and()
                         .formLogin()

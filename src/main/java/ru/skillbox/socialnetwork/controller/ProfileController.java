@@ -29,10 +29,8 @@ public class ProfileController {
     */
    @GetMapping("/me")
    public ResponseEntity getMe() {
-      PersonApi person = profileService.getMe();
-      if(person != null)
-         return new ResponseEntity<>(person, HttpStatus.OK);
-      return new ResponseEntity<>(new ErrorApi("invalid_request", "You are not authorized"), HttpStatus.UNAUTHORIZED);
+     AbstractResponse response = profileService.getMe();
+     return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -40,8 +38,8 @@ public class ProfileController {
     */
    @PutMapping("/me")
    public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
-      profileService.editMe(personApi);
-      return new ResponseEntity<>(new ResponseApi("ok",System.currentTimeMillis(), new SuccessfulResponseApi("Person has been edit")), HttpStatus.OK);
+      AbstractResponse response = profileService.editMe(personApi);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -49,8 +47,8 @@ public class ProfileController {
     */
    @DeleteMapping("/me")
    public ResponseEntity deleteMe() {
-      profileService.deleteMe();
-      return new ResponseEntity<>(new ResponseApi("ok",System.currentTimeMillis(), new SuccessfulResponseApi("Person has been deleted")), HttpStatus.OK);
+     AbstractResponse response = profileService.deleteMe();
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**

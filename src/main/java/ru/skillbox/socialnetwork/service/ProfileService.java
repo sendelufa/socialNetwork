@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
@@ -29,9 +32,19 @@ public class ProfileService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public PersonApi getMe() {
+    public AbstractResponse getMe() {
+        AbstractResponse response;
         Person person = getCurrentPerson();
-        return modelMapper.map(person, PersonApi.class);
+      if(person != null){
+        PersonApi personApi = modelMapper.map(person, PersonApi.class);
+        response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+        response.setSuccess(true);
+      }
+      else {
+        response = new ErrorApi("invalid_request", "You are not authorized");
+        response.setSuccess(false);
+      }
+      return response;
     }
 
     /**
@@ -39,7 +52,8 @@ public class ProfileService {
      *
      * @param personApi Редактируемые данные
      */
-    public void editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+    public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+        AbstractResponse response;
         Person person = getCurrentPerson();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
@@ -50,14 +64,22 @@ public class ProfileService {
         person.setTown(Integer.toString(personApi.getTown_id()));
         person.setMessagesPermission(personApi.getMessages_permission());
         personDAO.updatePerson(person);
+        PersonApi personApiReturn = modelMapper.map(person, PersonApi.class);
+        response = new ResponseApi("string", System.currentTimeMillis(), personApiReturn);
+        response.setSuccess(true);
+        return response;
     }
 
     /**
      * Удаление текущего пользователя
      */
-    public void deleteMe() {
+    public AbstractResponse deleteMe() {
+        AbstractResponse response;
         Person person = getCurrentPerson();
         personDAO.deletePerson(person);
+        response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
+        response.setSuccess(true);
+        return response;
     }
 
     /**
@@ -172,7 +194,7 @@ public class ProfileService {
     }
 
     private Person getCurrentPerson() {
-        //TODO: Пока заглушка, реализовать, когда появится функция для получения персоны
-        return (Person) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+      UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      return personDAO.getPersonByEmail(user.getUsername());
     }
 }

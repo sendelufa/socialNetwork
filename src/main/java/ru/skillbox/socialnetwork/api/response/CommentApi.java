@@ -12,7 +12,7 @@ public class CommentApi extends AbstractResponse{
   private Integer parentId;
 
   @JsonProperty("author_id")
-  private int authorId;
+  private Integer authorId;
   @JsonProperty("comment_text")
   private String commentText;
   @JsonProperty("is_blocked")
@@ -50,11 +50,11 @@ public class CommentApi extends AbstractResponse{
     this.parentId = parentId;
   }
 
-  public int getAuthorId() {
+  public Integer getAuthorId() {
     return authorId;
   }
 
-  public void setAuthorId(int authorId) {
+  public void setAuthorId(Integer authorId) {
     this.authorId = authorId;
   }
 

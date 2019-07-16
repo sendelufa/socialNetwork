@@ -1,18 +1,14 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
 public class PostApi extends AbstractResponse {
 
    private int id;
    private long time;
 
    @JsonProperty("author_id")
-   private int authorId;
+   private Integer authorId;
 
    private String title;
 
@@ -40,11 +36,11 @@ public class PostApi extends AbstractResponse {
       this.time = time;
    }
 
-   public int getAuthorId() {
+   public Integer getAuthorId() {
       return authorId;
    }
 
-   public void setAuthorId(int authorId) {
+   public void setAuthorId(Integer authorId) {
       this.authorId = authorId;
    }
 

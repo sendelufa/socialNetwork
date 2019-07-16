@@ -20,7 +20,7 @@ import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
 
 @Controller
-@RequestMapping("/api/v1/post")
+@RequestMapping("post")
 public class PostController {
 
    @Autowired
@@ -37,8 +37,8 @@ public class PostController {
     */
    @GetMapping("/")
    public ResponseEntity getPost(@RequestParam String text,
-       @RequestParam(value = "date_from", required = false) Long dateFrom,
-       @RequestParam(value = "date_to", required = false) Long dateTo,
+       @RequestParam(value = "date_from", required = false) Integer dateFrom,
+       @RequestParam(value = "date_to", required = false) Integer dateTo,
        @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
@@ -119,36 +119,41 @@ public class PostController {
     */
    @PostMapping("/{id:\\d+}/comments")
    public ResponseEntity createPostingComment(@RequestBody PostCommentApi request,
-       @PathVariable int id) {
-      //TODO: Требуется реализация
-      return null;
+       @PathVariable Integer id) {
+      //TODO не готов сервис, комментарии пишутся от хард код юзера
+      ResponseApi commentApi = postService.createComment(id, request);
+      return commentApi == null ? badRequestResponse()
+          : new ResponseEntity<>(commentApi, HttpStatus.OK);
    }
 
    /**
     * Редактирование комментария к публикации
     *
-    * @param id ID публикации
+    * @param postId ID публикации
     * @param commentId ID комментария публикации
     */
-   @PutMapping("/{id:\\d+}/comments/{comment_id:\\d+}")
+   @PutMapping("/{postId:\\d+}/comments/{commentId:\\d+}")
    public ResponseEntity editPostingComment(@RequestBody PostCommentApi request,
-       @PathVariable int id,
-       @RequestParam(value = "comment_id ") int commentId) {
-      //TODO: Требуется реализация
-      return null;
+       @PathVariable int postId,
+       @PathVariable int commentId) {
+      ResponseApi commentApi = postService.editComment(commentId, postId, request);
+      return commentApi == null ? badRequestResponse() :
+          new ResponseEntity<>(commentApi, HttpStatus.OK);
    }
 
    /**
     * Удаление комментария к публикации
     *
-    * @param id ID публикации
+    * @param postId ID публикации
     * @param commentId ID комментария публикации
     */
    @DeleteMapping("/{id:\\d+}/comments/{comment_id:\\d+}")
-   public ResponseEntity deletePostingComment(@PathVariable int id,
-       @PathVariable(value = "comment_id ") int commentId) {
-      //TODO: Требуется реализация
-      return null;
+   public ResponseEntity deletePostingComment(
+       @PathVariable(value = "id") int postId,
+       @PathVariable(value = "comment_id") int commentId) {
+      ResponseApi responseApi = postService.deleteComment(postId, commentId);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -159,9 +164,10 @@ public class PostController {
     */
    @PutMapping("/{id:\\d+}/comments/{comment_id:\\d+}/recover")
    public ResponseEntity recoverPostingComment(@PathVariable int id,
-       @PathVariable(value = "comment_id ") int commentId) {
-      //TODO: Требуется реализация
-      return null;
+       @PathVariable(value = "comment_id") int commentId) {
+      ResponseApi responseApi = postService.recoverComment(commentId);
+      return responseApi == null ? badRequestResponse()
+          : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**
@@ -184,9 +190,10 @@ public class PostController {
     */
    @PostMapping("/{id:\\d+}/comments/{comment_id:\\d+}/report")
    public ResponseEntity sendReportToPostingComment(@PathVariable int id,
-       @PathVariable(value = "comment_id ") int commentId) {
-      //TODO: Требуется реализация
-      return null;
+       @PathVariable(value = "comment_id") int commentId) {
+      ResponseApi reportApi = postService.reportComment(commentId);
+      return reportApi == null ? badRequestResponse()
+          : new ResponseEntity<>(reportApi, HttpStatus.OK);
    }
 
    private ResponseEntity<Object> badRequestResponse() {

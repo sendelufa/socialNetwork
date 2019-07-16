@@ -2,8 +2,11 @@ package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -11,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Repository
 @Transactional
@@ -30,15 +34,15 @@ public class PostDAO {
    public List<Post> getPosts(PostParameters postParameters) {
       String queryWhere = "";
 
-      queryWhere += postParameters.getDateFrom() != null ?
-          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFrom())) : "";
+      queryWhere += postParameters.getDate_from() != null ?
+          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDate_from())) : "";
 
-      queryWhere += postParameters.getDateTo() != null ?
-          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";
+      queryWhere += postParameters.getDate_to() != null ?
+          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDate_to())) : "";
 
       String query = String.format("from Post p where "
               + queryWhere
-              + " locate('%s', p.postText, 1) > 0 ORDER BY p.time DESC",
+              + " locate('%s', p.postText, 1) > 0 AND p.isDeleted = false ORDER BY p.time DESC",
           postParameters.getText());
 
       System.out.println(query);
@@ -57,13 +61,15 @@ public class PostDAO {
    }
 
    public void deletePost(Post post) {
-      //TODO: удаление через отметку в БД?
-      //getCurrentSession().delete(post);
+      post.setDeleted(true);
+      getCurrentSession().update(post);
    }
 
    public Post recoverPost(int id) {
-      //TODO: восстановление через отметку в БД?
-      return getPostById(id);
+      Post post = getPostById(id);
+      post.setDeleted(false);
+      getCurrentSession().update(post);
+      return post;
    }
 
    public Post reportPost(int id) {
@@ -87,6 +93,13 @@ public class PostDAO {
       return q.list();
    }
 
+   public PostComment recoverComment(int id) {
+      PostComment postComment = getCommentById(id);
+      postComment.setDeleted(false);
+      getCurrentSession().update(postComment);
+      return postComment;
+   }
+
    public long getLikesNumber(int id) {
       String query = String.format("select count(*) from PostLike likes where "
           + "likes"
@@ -103,9 +116,9 @@ public class PostDAO {
    }
 
    public void deleteComment(PostComment comment) {
-      getCurrentSession().delete(comment);
+      comment.setDeleted(true);
+      getCurrentSession().update(comment);
    }
-
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

@@ -55,6 +55,10 @@ public class PostComment {
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
+    @Column(name = "is_deleted")
+    @NotNull
+    private boolean isDeleted;
+
     public int getId() {
         return id;
     }
@@ -119,4 +123,15 @@ public class PostComment {
         isBlocked = blocked;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public PostComment getParent_id() {
+        return parent_id;
+    }
 }

@@ -32,10 +32,11 @@ import ru.skillbox.socialnetwork.service.MailSender;
 public class AccountControllerTest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private static final String email1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах (кроме смены эмаил)
-    private static final String email2 = "mihailovsergei@mail.ru";//для теста смены эмаил
-    private static final String newEmail = "mihailovsergei2@mail.ru";//новый эмаил для смены эмаил
-    private static final String emailRegistr = "newUser@mail.ru";//эмаил для теста регистрации
+    private final String PATH_ACC = "/account";
+    private static final String EMAIL_1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах (кроме смены эмаил)
+    private static final String EMAIL_2 = "mihailovsergei@mail.ru";//для теста смены эмаил
+    private static final String NEW_EMAIL = "mihailovsergei2@mail.ru";//новый эмаил для смены эмаил
+    private static final String EMAIL_REGISTR = "newUser@mail.ru";//эмаил для теста регистрации
 
     @Autowired
     private AccountController controller;
@@ -46,10 +47,11 @@ public class AccountControllerTest {
     @MockBean
     private MailSender mailSender;
 
-    @Test
+  @WithUserDetails(EMAIL_1)//Удалить когда регистрация будет доступна для неавторизованых
+  @Test
     public void correctRegistrationTest() throws Exception {
         RegistrationApi registrationApi = new RegistrationApi();
-        registrationApi.setEmail(emailRegistr);
+        registrationApi.setEmail(EMAIL_REGISTR);
         registrationApi.setFirstName("A");
         registrationApi.setLastName("B");
         registrationApi.setPasswd1("1");
@@ -58,7 +60,7 @@ public class AccountControllerTest {
 
         String json = mapper.writeValueAsString(registrationApi);
 
-        mvc.perform(post("/api/v1/account/register")
+        mvc.perform(post(PATH_ACC + "/register")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content(json))
@@ -70,10 +72,11 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @Test
+  @WithUserDetails(EMAIL_1)//Удалить когда регистрация будет доступна для неавторизованых
+  @Test
     public void failRegistrationTest() throws Exception {
         RegistrationApi registrationApi = new RegistrationApi();
-        registrationApi.setEmail(emailRegistr);
+        registrationApi.setEmail(EMAIL_REGISTR);
         registrationApi.setFirstName("A");
         registrationApi.setLastName("B");
         registrationApi.setPasswd1("1");
@@ -82,7 +85,7 @@ public class AccountControllerTest {
 
         String json = mapper.writeValueAsString(registrationApi);
 
-        mvc.perform(post("/api/v1/account/register")
+        mvc.perform(post(PATH_ACC + "/register")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content(json))
@@ -101,7 +104,7 @@ public class AccountControllerTest {
 
         json = mapper.writeValueAsString(registrationApi);
 
-        mvc.perform(post("/api/v1/account/register")
+        mvc.perform(post(PATH_ACC + "/register")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content(json))
@@ -112,13 +115,13 @@ public class AccountControllerTest {
 
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)//Удалить когда восстановление пароля будет доступно для неавторизованых
     @Test
     public void correctRecoveryPasswordTest() throws Exception {
-        mvc.perform(put("/api/v1/account/password/recovery")
+        mvc.perform(put(PATH_ACC + "/password/recovery")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
-            .content("{\"email\": \"" + email1 + "\"}"))
+            .content("{\"email\": \"" + EMAIL_1 + "\"}"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("error")))
             .andExpect(content().string(containsString("timestamp")))
@@ -129,16 +132,16 @@ public class AccountControllerTest {
         //Email не отправляем а проверяем была ли попытка отправить
         Mockito.verify(mailSender, Mockito.times(1))
             .send(
-                ArgumentMatchers.eq(email1),
+                ArgumentMatchers.eq(EMAIL_1),
                 ArgumentMatchers.anyString(),
                 ArgumentMatchers.anyString()
             );
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)//Удалить когда восстановление пароля будет доступно для неавторизованых
     @Test
     public void failRecoveryPasswordTest() throws Exception {
-        mvc.perform(put("/api/v1/account/password/recovery")
+        mvc.perform(put(PATH_ACC + "/password/recovery")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content("{\"email\": \"private\"}"))
@@ -148,7 +151,7 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void correctSetPasswordTest() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
@@ -157,7 +160,7 @@ public class AccountControllerTest {
 
         String json = mapper.writeValueAsString(passwordApi);
 
-        mvc.perform(put("/api/v1/account/password/set")
+        mvc.perform(put(PATH_ACC + "/password/set")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content(json))
@@ -169,14 +172,14 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void failSetPasswordTest() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
         passwordApi.setPassword("");
         String json = mapper.writeValueAsString(passwordApi);
 
-        mvc.perform(put("/api/v1/account/password/set")
+        mvc.perform(put(PATH_ACC + "/password/set")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content(json))
@@ -186,13 +189,13 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email2)
+    @WithUserDetails(EMAIL_2)
     @Test
     public void correctSetEmailTest() throws Exception {
-        mvc.perform(put("/api/v1/account/email")
+        mvc.perform(put(PATH_ACC + "/email")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
-            .content("{\"email\": \"" + newEmail + "\"}"))
+            .content("{\"email\": \"" + NEW_EMAIL + "\"}"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("error")))
             .andExpect(content().string(containsString("timestamp")))
@@ -201,23 +204,23 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void failSetEmailTest() throws Exception {
-        mvc.perform(put("/api/v1/account/email")
+        mvc.perform(put(PATH_ACC + "/email")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
-            .content("{\"email\": \"newEmail\"}"))
+            .content("{\"email\": \"NEW_EMAIL\"}"))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("error")))
             .andExpect(content().string(containsString("error_description")))
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void correctNotificationTest() throws Exception {
-        mvc.perform(put("/api/v1/account/notifications")
+        mvc.perform(put(PATH_ACC + "/notifications")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content("{\"notification_type\": \"POST\","
@@ -230,10 +233,10 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void failNotificationTest() throws Exception {
-        mvc.perform(put("/api/v1/account/notifications")
+        mvc.perform(put(PATH_ACC + "/notifications")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content("{\"notification_type\": \"\","
@@ -244,10 +247,10 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void correctStatusTest() throws Exception {
-        mvc.perform(put("/api/v1/account/status")
+        mvc.perform(put(PATH_ACC + "/status")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content("{\"status\": \"online\"}"))
@@ -259,10 +262,10 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-    @WithUserDetails(email1)
+    @WithUserDetails(EMAIL_1)
     @Test
     public void failStatusTest() throws Exception {
-        mvc.perform(put("/api/v1/account/status")
+        mvc.perform(put(PATH_ACC + "/status")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
             .content("{\"status\": \"\"}"))

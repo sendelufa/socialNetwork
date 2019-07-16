@@ -10,7 +10,6 @@ import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.api.request.PostApi;
 import ru.skillbox.socialnetwork.service.ProfileService;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -30,10 +29,8 @@ public class ProfileController {
     */
    @GetMapping("/me")
    public ResponseEntity getMe() {
-      PersonApi person = profileService.getMe();
-      if(person != null)
-         return new ResponseEntity<>(person, HttpStatus.OK);
-      return new ResponseEntity<>(new ErrorApi("invalid_request", "You are not authorized"), HttpStatus.UNAUTHORIZED);
+     AbstractResponse response = profileService.getMe();
+     return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -41,8 +38,8 @@ public class ProfileController {
     */
    @PutMapping("/me")
    public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
-      profileService.editMe(personApi);
-      return new ResponseEntity<>(new ResponseApi("ok",System.currentTimeMillis(), new SuccessfulResponseApi("Person has been edit")), HttpStatus.OK);
+      AbstractResponse response = profileService.editMe(personApi);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -50,8 +47,8 @@ public class ProfileController {
     */
    @DeleteMapping("/me")
    public ResponseEntity deleteMe() {
-      profileService.deleteMe();
-      return new ResponseEntity<>(new ResponseApi("ok",System.currentTimeMillis(), new SuccessfulResponseApi("Person has been deleted")), HttpStatus.OK);
+     AbstractResponse response = profileService.deleteMe();
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -61,10 +58,8 @@ public class ProfileController {
     */
    @GetMapping("/{id}")
    public ResponseEntity get(@RequestParam int id) {
-      PersonApi personApi = profileService.getPersonById(id);
-      if(personApi != null)
-         return new ResponseEntity<>(personApi, HttpStatus.OK);
-      return new ResponseEntity<>(new ErrorApi("invalid_request", "id doesn't exist"), HttpStatus.UNAUTHORIZED);
+      AbstractResponse response = profileService.getPersonById(id);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
 
    /**
@@ -117,8 +112,8 @@ public class ProfileController {
     */
    @PutMapping("/block/{id}")
    public ResponseEntity block(@RequestParam(value = "id") Integer id) {
-      profileService.blockPersonById(id);
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      AbstractResponse response = profileService.blockPersonById(id);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -128,8 +123,8 @@ public class ProfileController {
     */
    @DeleteMapping("/block/{id}")
    public ResponseEntity unblock(@RequestParam int id) {
-      profileService.blockPersonById(id);
-      return new ResponseEntity<>(null, HttpStatus.OK);
+      AbstractResponse response = profileService.unblockPersonById(id);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
 

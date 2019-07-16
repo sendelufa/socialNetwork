@@ -32,7 +32,7 @@ import ru.skillbox.socialnetwork.service.MailSender;
 public class AccountControllerTest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private final String PATH_ACC = "/api/v1/account";
+    private final String PATH_ACC = "/account";
     private static final String EMAIL_1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах (кроме смены эмаил)
     private static final String EMAIL_2 = "mihailovsergei@mail.ru";//для теста смены эмаил
     private static final String NEW_EMAIL = "mihailovsergei2@mail.ru";//новый эмаил для смены эмаил

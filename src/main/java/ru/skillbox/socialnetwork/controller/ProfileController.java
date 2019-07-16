@@ -3,14 +3,21 @@ package ru.skillbox.socialnetwork.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
-import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.api.request.PostApi;
+import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.service.ProfileService;
-
-import java.util.List;
 
 /**
  * Работа с профилем
@@ -64,15 +71,24 @@ public class ProfileController {
 
    /**
     * Получение записей на стене пользователя
-    *
-    * @param parameters параметры для получения постов
+    * @param id ID пользователя
+    * @param queue Получить отложенные записи, работает только для текущего пользователя
+    * @param offset Отступ от начала списка
+    * @param itemPerPage Количество элементов на страницу
     */
    @GetMapping("/{id}/wall")
-   public ResponseEntity getWall(@RequestBody PostParameters parameters) {
-      List<ru.skillbox.socialnetwork.api.response.PostApi> posts = profileService.getWall(parameters);
-      if(posts != null && !posts.isEmpty())
-         return new ResponseEntity<>(posts, HttpStatus.OK);
-      return new ResponseEntity<>(new ErrorApi("invalid_request", "No posts were found."), HttpStatus.BAD_REQUEST);
+   public ResponseEntity getWall(
+       @RequestParam int id,
+       @RequestParam(required = false) boolean queue,
+       @RequestParam(required = false) int offset,
+       @RequestParam(required = false) int itemPerPage) {
+      PostParameters postParameters = new PostParameters();
+      postParameters.setId(id);
+      postParameters.setQueue(queue);
+      postParameters.setOffset(offset);
+      postParameters.setItemPerPage(itemPerPage);
+      AbstractResponse response = profileService.getWall(postParameters);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -87,22 +103,34 @@ public class ProfileController {
            @RequestParam int id,
            @RequestParam(required = false) Long publishDate,
            @RequestBody PostApi newPost) {
-      profileService.addPostOnWall(id, publishDate, newPost);
-      return new ResponseEntity<>(new ResponseApi("ok",System.currentTimeMillis(), new SuccessfulResponseApi("Post has been added")), HttpStatus.OK);
+      AbstractResponse response = profileService.addPostOnWall(id, publishDate, newPost);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
     * Поиск пользователя
-    *
-    * @param personParameters Параметры пользователя
+    * @param first_name Имя пользователя
+    * @param last_name Фамилия пользователя
+    * @param age_from Кол-во лет ОТ
+    * @param age_to Кол-во лет ДО
+    * @param country_id ID страны
+    * @param city_id ID города
+    * @param offset Отступ от начала списка
+    * @param itemPerPage Количество элементов на страницу
     */
    @GetMapping("/search/")
-   public ResponseEntity search(
-           @RequestBody(required = false)PersonParameters personParameters) {
-      List<PersonApi> persons = profileService.searchPerson(personParameters);
-      if(persons != null && !persons.isEmpty())
-         return new ResponseEntity<>(persons, HttpStatus.OK);
-      return new ResponseEntity<>(new ErrorApi("invalid_request", "Persons with this parameters doesn't exist"), HttpStatus.BAD_REQUEST);
+   public ResponseEntity search(@RequestParam(required = false) String first_name,
+       @RequestParam(required = false) String last_name,
+       @RequestParam(required = false) int age_from,
+       @RequestParam(required = false) int age_to,
+       @RequestParam(required = false) int country_id,
+       @RequestParam(required = false) int city_id,
+       @RequestParam(required = false) int offset,
+       @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
+      PersonParameters personParameters = new PersonParameters(first_name, last_name, age_from,
+          age_to, country_id, city_id, offset, itemPerPage);
+      AbstractResponse response = profileService.searchPerson(personParameters);
+      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**

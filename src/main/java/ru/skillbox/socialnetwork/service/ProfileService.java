@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,9 @@ import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
+import ru.skillbox.socialnetwork.api.response.PersonListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
@@ -122,15 +122,27 @@ public class ProfileService {
      * Получение записей на стене пользователя с параметрами
      *
      * @param postParameters параметры записей
-     * @return
      */
-    public List<PostApi> getWall(PostParameters postParameters){
-        List<Post> posts = postDAO.getPosts(postParameters);
-        List<PostApi> result = new ArrayList<>();
-        for (Post post : posts) {
-            result.add(modelMapper.map(post, PostApi.class));
+    public AbstractResponse getWall(PostParameters postParameters) {
+        AbstractResponse response;
+        PostListApi postListApi = new PostListApi();
+        List<Post> postsFromDB = postDAO.getPosts(postParameters);
+        List<PostApi> posts = new ArrayList<>();
+        for (Post post : postsFromDB) {
+            posts.add(modelMapper.map(post, PostApi.class));
         }
-        return result;
+        if (posts != null && !posts.isEmpty()) {
+            postListApi.setData(posts);
+            postListApi.setTotal(posts.size());
+            postListApi.setOffset(postParameters.getOffset());
+            postListApi.setPerPage(postParameters.getItemPerPage());
+            response = postListApi;
+            response.setSuccess(true);
+        } else {
+            response = new ErrorApi("invalid_request", "No posts were found");
+            response.setSuccess(false);
+        }
+        return response;
     }
 
     /**
@@ -140,12 +152,23 @@ public class ProfileService {
      * @param publishDate Отложить до даты определенной даты
      * @param newPost     Новая публикация
      */
-    public void addPostOnWall(int id, Long publishDate,ru.skillbox.socialnetwork.api.request.PostApi newPost) {
+    public AbstractResponse addPostOnWall(int id, Long publishDate,
+        ru.skillbox.socialnetwork.api.request.PostApi newPost) {
+        AbstractResponse response;
         Post post = new Post();
+        Date date = new Date();
+        if (publishDate != null && publishDate > 0) {
+            date = new Date(publishDate);
+        }
         post.setAuthor(personDAO.getPersonById(id));
         post.setPostText(newPost.getPostText());
         post.setTitle(newPost.getTitle());
+        post.setTime(date);
         postDAO.addPost(post);
+        PostApi postApi = modelMapper.map(post, PostApi.class);
+        response = new ResponseApi("string", System.currentTimeMillis(), postApi);
+        response.setSuccess(true);
+        return response;
     }
 
     /**
@@ -154,13 +177,27 @@ public class ProfileService {
      * @param parameters Параметры для поиска
      * @return Пользователь
      */
-    public List<PersonApi> searchPerson(PersonParameters parameters) {
+    public AbstractResponse searchPerson(PersonParameters parameters) {
+        AbstractResponse response;
+        PersonListApi personListApi = new PersonListApi();
         List<Person> personsFromDB = personDAO.getPersonsByParameters(parameters);
         List<PersonApi> persons = new ArrayList<>();
         for (Person person : personsFromDB) {
             persons.add(modelMapper.map(person, PersonApi.class));
         }
-        return persons;
+        if (persons != null && !persons.isEmpty()) {
+            personListApi.setData(persons);
+            personListApi.setTotal(persons.size());
+            personListApi.setOffset(parameters.getOffset());
+            personListApi.setPerPage(parameters.getItemPerPage());
+            response = personListApi;
+            response.setSuccess(true);
+        } else {
+            response = new ErrorApi("invalid_request",
+                "Persons with this parameters doesn't exist");
+            response.setSuccess(false);
+        }
+        return response;
     }
 
     /**

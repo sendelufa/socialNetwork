@@ -32,9 +32,12 @@ public class ProfileService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private AccountService accountService;
+
     public AbstractResponse getMe() {
         AbstractResponse response;
-        Person person = getCurrentPerson();
+        Person person = accountService.getCurrentUser();
       if(person != null){
         PersonApi personApi = modelMapper.map(person, PersonApi.class);
         response = new ResponseApi("string", System.currentTimeMillis(), personApi);

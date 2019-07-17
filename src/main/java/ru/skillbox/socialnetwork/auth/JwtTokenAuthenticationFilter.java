@@ -29,18 +29,18 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
         String header = request.getHeader(jwtConfig.getHeader());
 
-        if (header == null || !header.startsWith(jwtConfig.getPrefix())) {
+        if (header == null /* || !header.startsWith(jwtConfig.getPrefix()) */) {
             chain.doFilter(request, response);        // If not valid, go to the next filter.
             return;
         }
 
-        String token = header.replace(jwtConfig.getPrefix(), "");
+       // String token = header.replace(jwtConfig.getPrefix(), "");
 
         try {    // exceptions might be thrown in creating the claims if for example the token is expired
             // 4. Validate the token
             Claims claims = Jwts.parser()
                     .setSigningKey(jwtConfig.getSecret().getBytes())
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(header)
                     .getBody();
 
             String username = claims.getSubject();

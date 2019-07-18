@@ -21,7 +21,7 @@ public class LikeController {
      * @param item_id ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
-    @GetMapping("/liked")
+    @GetMapping("liked")
     public ResponseEntity isLiked(@RequestParam int user_id,
                                   @RequestParam int item_id,
                                   @RequestParam String type){
@@ -36,7 +36,7 @@ public class LikeController {
      * @param item_id ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
-    @GetMapping("/likes")
+    @GetMapping("likes")
     public ResponseEntity getLikes(@RequestParam int item_id,
                                    @RequestParam String type){
 
@@ -51,7 +51,7 @@ public class LikeController {
      * @body itemId запрашивает id сущности и ее тип
      *
      */
-    @PutMapping("/likes")
+    @PutMapping("likes")
     public ResponseEntity like(@RequestBody RequestLikeApi likeApi){
 
         AbstractResponse response = likeService.like(likeApi);
@@ -65,7 +65,7 @@ public class LikeController {
      * @param itemId ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
-    @DeleteMapping("/likes")
+    @DeleteMapping("likes")
     public ResponseEntity removeLike (@RequestParam int itemId,
                                       @RequestParam String type) {
 

@@ -8,14 +8,14 @@ import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.service.TagService;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("tags")
 public class TagController {
 
     @Autowired
     private TagService tagService;
 
 
-    @GetMapping("/tags/list")
+    @GetMapping("/list")
     public ResponseEntity getTagsList() {
         AbstractResponse response = (AbstractResponse) tagService.findAllTags();
         return new ResponseEntity(response,response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
@@ -25,7 +25,7 @@ public class TagController {
      *
      * @param tag тэг для поиска
      */
-    @GetMapping("/tags")
+    @GetMapping("/")
     public ResponseEntity getByTag(@RequestParam String tag) {
         AbstractResponse response = (AbstractResponse) tagService.allPostsByTag(tag);
         return new ResponseEntity(response,response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

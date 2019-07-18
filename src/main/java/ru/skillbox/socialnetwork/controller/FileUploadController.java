@@ -27,7 +27,7 @@ public class FileUploadController {
      * @param type Тип файла
      * @param file Файл
      */
-    @PostMapping(value = "/storage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "storage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam String type,
                                      @RequestParam("file")MultipartFile file) throws IOException {
 

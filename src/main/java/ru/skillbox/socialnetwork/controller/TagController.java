@@ -10,7 +10,7 @@ import ru.skillbox.socialnetwork.model.Tag;
 import ru.skillbox.socialnetwork.service.TagService;
 
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("tags")
 public class TagController {
 
     @Autowired

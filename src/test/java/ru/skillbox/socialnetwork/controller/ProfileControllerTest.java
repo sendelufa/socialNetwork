@@ -156,78 +156,103 @@ public class ProfileControllerTest {
 
   @WithUserDetails(EMAIL_1)
   @Test
-    public void testGetWall() throws Exception {
-      mvc.perform(get(PATH_USER + "/1/wall")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .param("queue", "false")
-                .param("id", "1")
-                .param("offset", "1")
-                .param("itemPerPage", "20")
-                .with(csrf()))
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-
-      mvc.perform(get(PATH_USER + "/1/wall")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .param("queue", "")
-                .param("id", "f")
-                .param("offset", "")
-                .param("itemPerPage", "")
-                .with(csrf()))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print());
+  public void correctGetWallTest() throws Exception {
+    mvc.perform(get(PATH_USER + "/2/wall")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .param("queue", "false")
+        .param("id", "2")
+        .param("offset", "1")
+        .param("itemPerPage", "20")
+        .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("timestamp")))
+        .andExpect(content().string(containsString("data")))
+        .andExpect(content().string(containsString("id")))
+        .andExpect(content().string(containsString("total")))
+        .andExpect(content().string(containsString("author_id")))
+        .andExpect(content().string(containsString("likes")))
+        .andDo(MockMvcResultHandlers.print());
     }
 
   @WithUserDetails(EMAIL_1)
   @Test
-    public void testPostWall() throws Exception {
-      mvc.perform(post(PATH_USER + "/1/wall")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .param("id", "1")
-                .param("publishDate",""))
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
+  public void failGetWallTest() throws Exception {
+    mvc.perform(get(PATH_USER + "/2/wall")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .param("queue", "false")
+        .param("id", "f")
+        .param("offset", "1")
+        .param("itemPerPage", "20")
+        .with(csrf()))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("error_description")))
+        .andDo(MockMvcResultHandlers.print());
+  }
 
-      mvc.perform(post(PATH_USER + "/1/wall")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .param("id", "f")
-                .param("publishDate",""))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print());
+  @WithUserDetails(EMAIL_1)
+  @Test
+  public void correctPostWallTest() throws Exception {
+    mvc.perform(post(PATH_USER + "/2/wall")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .with(csrf())
+        .param("id", "2")
+        .param("publishDate", "")
+        .content("{\n"
+            + "  \"title\": \"string\",\n"
+            + "  \"post_text\": \"string\"\n"
+            + "}"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("timestamp")))
+        .andExpect(content().string(containsString("data")))
+        .andExpect(content().string(containsString("id")))
+        .andExpect(content().string(containsString("title")))
+        .andDo(MockMvcResultHandlers.print());
     }
+
+  @WithUserDetails(EMAIL_1)
+  @Test
+  public void failPostWallTest() throws Exception {
+    mvc.perform(post(PATH_USER + "/2/wall")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .with(csrf())
+        .param("id", "")
+        .param("publishDate", "")
+        .content("{\n"
+            + "  \"title\": \"string\",\n"
+            + "  \"post_text\": \"string\"\n"
+            + "}"))
+        .andExpect(status().isBadRequest())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("error_description")))
+        .andDo(MockMvcResultHandlers.print());
+  }
 
   @WithUserDetails(EMAIL_1)
   @Test
     public void testSearch() throws Exception {
-      mvc.perform(get(PATH_USER + "/search")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .param("first_name","a")
-                .param("last_name","b")
-                .param("age_from","1")
-                .param("age_to","2")
-                .param("country_id","1")
-                .param("city_id","2")
-                .param("offset", "2")
-                .param("itemPerPage", "2"))
-                .andExpect(status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-
-      mvc.perform(get(PATH_USER + "/search")
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .with(csrf())
-                .param("first_name","")
-                .param("last_name","")
-                .param("age_from","")
-                .param("age_to","")
-                .param("country_id","")
-                .param("city_id","")
-                .param("offset", "")
-                .param("itemPerPage", ""))
-                .andExpect(status().isBadRequest())
-                .andDo(MockMvcResultHandlers.print());
+    mvc.perform(get(PATH_USER + "/search/")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .with(csrf())
+        .param("first_name", "")
+        .param("last_name", "")
+        .param("age_from", "0")
+        .param("age_to", "0")
+        .param("country_id", "0")
+        .param("city_id", "0")
+        .param("offset", "0")
+        .param("itemPerPage", "10"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("timestamp")))
+        .andExpect(content().string(containsString("data")))
+        .andExpect(content().string(containsString("id")))
+        .andExpect(content().string(containsString("email")))
+        .andExpect(content().string(containsString("total")))
+        .andExpect(content().string(containsString("offset")))
+        .andDo(MockMvcResultHandlers.print());
     }
 
   @WithUserDetails(EMAIL_1)

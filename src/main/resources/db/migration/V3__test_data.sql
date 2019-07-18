@@ -1,30 +1,30 @@
 insert into `person` (`id`,`first_name`, `last_name`, `reg_date`, `birth_date`, `e_mail`, `phone`,
 `password`, `photo`, `about`, `town` , `confirmation_code`, `is_approved`,
 `messages_permission`, `last_online_time` ,`is_blocked`) values
-( '1','Иванов', 'Иван', '2015-01-21', '1963-03-25', 'ivaniavanov@mail.ru', '79234567895', 'asdf1234', null, 'good man', 'Tomsk','', b'0', 'ALL', '2013-10-08 16:07:28', b'0'),
-( '2','Сидоров', 'Максим', '2010-07-22', '1985-05-14', 'sidorovmaxim@mail.ru', '79856321456', 'maxim1234', null, 'good man', 'Omsk','', b'0', 'ALL', '2019-06-08 10:09:29', b'0'),
-( '3','Михайлов', 'Сергей', '2012-07-01', '1990-05-19', 'mihailovsergei@mail.ru', '79135546932', 'sergei1990', null, 'funny man', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 15:07:28', b'0'),
-( '4','Твердохлебов', 'Роман', '2005-05-05', '1991-06-12', 'roman1991@mail.ru', '79423652145', 'roman1991', null, 'strong man', 'Moscow','', b'0', 'FRIENDS', '2019-06-16 16:08:20', b'0'),
-( '5','Быкова', 'Анастасия', '2013-12-02', '1998-01-17', 'nasty1998@mail.ru', '79456328975', 'nasty456', null, 'nice girl', 'Krum','', b'0', 'FRIENDS', '2019-05-15 05:07:12', b'0'),
-( '6','Ефремова', 'Алена', '2015-08-08', '1987-06-06', 'efremovaalena@mail.ru', '79238856712', 'alenka1278', null, 'happy woman', 'Tula','', b'0', 'FRIENDS', '2019-06-16 12:09:28', b'0'),
-( '7','Губкин', 'Иван', '2012-01-09', '1993-03-15', 'ivangubkin@mail.ru', '79452548235', 'ivan8235', null, 'busy man', 'Moscow','', b'0', 'ALL', '2019-06-15 21:01:28', b'0'),
-( '8','Никифоров', 'Никита', '2019-01-08', '2005-09-09', 'nikita2005@mail.ru', '79234435614', 'nikita5614', null, 'little man', 'Kazan','', b'0', 'ALL', '2019-06-15 22:57:28', b'0'),
-( '9','Васов', 'Вадим', '2018-07-07', '2003-01-05', 'vadikvasov@mail.ru', '79839541265', 'vadik1265', null, 'cool', 'Ufa','', b'0', 'FRIENDS', '2019-06-15 23:01:56', b'0'),
-( '10','Дымова', 'Дарья', '2015-09-07', '1995-11-15', 'dumova1995@mail.ru', '79234331552', 'dumova1552', null, 'happy', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 13:52:14', b'0');
+( '1','Ivanov', 'Ivan', '2015-01-21', '1963-03-25', 'ivaniavanov@mail.ru', '79234567895', '$2a$10$BF8z1SVci201H8NgBPccAOAZyn1xb4rDLaO4uw6gQdoA/2B6PkOPi', null, 'good man', 'Tomsk','', b'0', 'ALL', '2013-10-08 16:07:28', b'0'),
+( '2','Сидоров', 'Максим', '2010-07-22', '1985-05-14', 'sidorovmaxim@mail.ru', '79856321456', '$2a$10$rYdERqNj9jEyYMpuPPxTb.0Y7S3bUNFBSgr4tyPAeBFICWTje4m6O', null, 'good man', 'Omsk','', b'0', 'ALL', '2019-06-08 10:09:29', b'0'),
+( '3','Михайлов', 'Сергей', '2012-07-01', '1990-05-19', 'mihailovsergei@mail.ru', '79135546932', '$2a$10$CkOdN9ky5yvWSpU6BluVQOGWYLyaODHLA3hmE8.mIedVTXea3pv0q', null, 'funny man', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 15:07:28', b'0'),
+( '4','Твердохлебов', 'Роман', '2005-05-05', '1991-06-12', 'roman1991@mail.ru', '79423652145', '$2a$10$0RRyhLUpk7BQD0STA/gj1OeBIpuzjhq7EAqbNhudNsGtUbkz0VpXO', null, 'strong man', 'Moscow','', b'0', 'FRIENDS', '2019-06-16 16:08:20', b'0'),
+( '5','Быкова', 'Анастасия', '2013-12-02', '1998-01-17', 'nasty1998@mail.ru', '79456328975', '$2a$10$dbpSQRrS3jrvnR6MIgljbeatY/w3bg7w8iKNl5Vj9kijQv.Xl2oVG', null, 'nice girl', 'Krum','', b'0', 'FRIENDS', '2019-05-15 05:07:12', b'0'),
+( '6','Ефремова', 'Алена', '2015-08-08', '1987-06-06', 'efremovaalena@mail.ru', '79238856712', '$2a$10$g5BfEUH3x6XZzrkchuPXj.IRBpr8xYJUfqg1fLfAfaGJORsiNhIJG', null, 'happy woman', 'Tula','', b'0', 'FRIENDS', '2019-06-16 12:09:28', b'0'),
+( '7','Губкин', 'Иван', '2012-01-09', '1993-03-15', 'ivangubkin@mail.ru', '79452548235', '$2a$10$tXxSg6XUY580zsIVxv9oI.wT30kEa2.6xeydPS3I4xOGRtXTbuIIe', null, 'busy man', 'Moscow','', b'0', 'ALL', '2019-06-15 21:01:28', b'0'),
+( '8','Никифоров', 'Никита', '2019-01-08', '2005-09-09', 'nikita2005@mail.ru', '79234435614', '$2a$10$EPaLUZhQmBXSKXUJHIFq4ub5gjni5d.HcS0i.0FvOyNDpvHS4VP4i', null, 'little man', 'Kazan','', b'0', 'ALL', '2019-06-15 22:57:28', b'0'),
+( '9','Васов', 'Вадим', '2018-07-07', '2003-01-05', 'vadikvasov@mail.ru', '79839541265', '$2a$10$eqF2r1j2LsCJiXpwffN.juUCSPTdX6m1guBb3RShm./mQWYjRSYri', null, 'cool', 'Ufa','', b'0', 'FRIENDS', '2019-06-15 23:01:56', b'0'),
+( '10','Дымова', 'Дарья', '2015-09-07', '1995-11-15', 'dumova1995@mail.ru', '79234331552', '$2a$10$5dg449b2hmHxKqrcb9F6Fu8ftMl7Mznfx14KUVEvLsgvjCOUeF5H.', null, 'happy', 'Moscow','', b'0', 'FRIENDS', '2019-06-15 13:52:14', b'0');
 
 
 
 insert into `user` (`id`,`name`,`e_mail`, `password`, `type`) values
-('1','Алексей', 'alex_inbox@gmail.com', 'alex1224', 'ADMIN'),
-('2','Вася', 'vasya_inbox@gmail.com', 'vasya456321', 'ADMIN'),
-('3','Света', 'sveta2000@gmail.com', 'sveta789', 'MODERATOR'),
-('4','Игорь', 'igor1995@gmail.com', 'igor1995', 'MODERATOR'),
-('5','Артем', 'tema_box@gmail.com', 'artem1996', 'MODERATOR'),
-('6','Кирилл', 'kirill_box@gmail.com', 'kirill2005', 'MODERATOR'),
-('7','Даня', 'danil2001@gmail.com', 'passdanil1525', 'ADMIN'),
-('8','Виталий', 'vitali_inbox@gmail.com', 'vitali1224', 'MODERATOR'),
-('9','Максим', 'max_box@gmail.com', 'maxpass1995', 'ADMIN'),
-('10','Айгуль', 'igul8888@gmail.com', 'aigulpass8888', 'ADMIN');
+('1','Алексей', 'alex_inbox@gmail.com', '$2a$10$RRepeZvEBd0uZ6P9sP/8zuoZxl66Vk/bPUoRkgLZsFgvM4nuCAq8q', 'ADMIN'),
+('2','Вася', 'vasya_inbox@gmail.com', '$2a$10$2IvAFuMJA/ZxCz395E9unOe.S0N9x.WCu90oKc3dQbLMKhXCFiOJa', 'ADMIN'),
+('3','Света', 'sveta2000@gmail.com', '$2a$10$SXrGyZjfPgBugbMBDYj7DOXPZMAArbh1IqlrYkN/Vut3oW6HpNNhe', 'MODERATOR'),
+('4','Игорь', 'igor1995@gmail.com', '$2a$10$ILwURGlFZ3BcQ7THRWL5wehc64B1R0Z9d9lNrLFBDo7fm8NRsr9e.', 'MODERATOR'),
+('5','Артем', 'tema_box@gmail.com', '$2a$10$hxsSQokBp473kaLa8KvZ9.GQ1WisuLDyZyIBVkEafTwCvNWAXG.r.', 'MODERATOR'),
+('6','Кирилл', 'kirill_box@gmail.com', '$2a$10$L3eCECaCrh6aJMbujxbvVuSJ8LjFDC1RUEubHyTCTYHT1gXth52HG', 'MODERATOR'),
+('7','Даня', 'danil2001@gmail.com', '$2a$10$lqqzSgbVugfIFQ02eLGSSeU1YYIjJKDg1jWQLBkdNXtlF3jRFUOLe', 'ADMIN'),
+('8','Виталий', 'vitali_inbox@gmail.com', '$2a$10$pfs5UEQRAiFIdgYZX.h65ekga9urxVtd2S58F/8ovYrb1nEt3cvGS', 'MODERATOR'),
+('9','Максим', 'max_box@gmail.com', '$2a$10$CQTI3Ub4UXxog/NLQ6hzC.fx4kIUtSpP3IN.Wni303uab11ZWvlD2', 'ADMIN'),
+('10','Айгуль', 'igul8888@gmail.com', '$2a$10$BrU5tKYvw0tSXyvOqxKlguBDScp1.I.yzBfQRd577h75Ujcv9aHUi', 'ADMIN');
 
 insert into `friendship` (`id`,`status_id`,`src_person_id`, `dst_person_id`) values
 ('1','1', '2', '3'),

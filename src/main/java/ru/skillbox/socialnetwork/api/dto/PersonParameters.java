@@ -18,6 +18,18 @@ public class PersonParameters {
     public PersonParameters() {
     }
 
+    public PersonParameters(String first_name, String last_name, int age_from, int age_to,
+        int country_id, int city_id, int offset, int itemPerPage) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.age_from = age_from;
+        this.age_to = age_to;
+        this.country_id = country_id;
+        this.city_id = city_id;
+        this.offset = offset;
+        this.itemPerPage = itemPerPage;
+    }
+
     public String getFirst_name() {
         return first_name;
     }

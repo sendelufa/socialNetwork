@@ -2,7 +2,9 @@ package ru.skillbox.socialnetwork.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -67,6 +69,23 @@ public class PostControllerTest {
 
    @WithUserDetails(EMAIL)
    @Test
+   public void search_post_success_response() throws Exception {
+      mvc.perform(get(PATH_POST + "/")
+          .param("text", "qwe")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("total")))
+          .andExpect(content().string(containsString("offset")))
+          .andExpect(content().string(containsString("perPage")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
    public void edit_by_id_success_response() throws Exception {
       mvc.perform(put(PATH_POST + "/{id}", "1")
           .param("publish_date", "1559751301818")
@@ -83,4 +102,133 @@ public class PostControllerTest {
           .andDo(MockMvcResultHandlers.print());
    }
 
+   @WithUserDetails(EMAIL)
+   @Test
+   public void recover_by_id_success_response() throws Exception {
+      mvc.perform(put(PATH_POST + "/{id}/recover", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void report_by_id_success_response() throws Exception {
+      mvc.perform(post(PATH_POST + "/{id}/report", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void delete_by_id_success_response() throws Exception {
+      mvc.perform(delete(PATH_POST + "/{id}", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void get_comments_success_response() throws Exception {
+      mvc.perform(get(PATH_POST + "/{id}/comments", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .param("offset", "0")
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("total")))
+          .andExpect(content().string(containsString("offset")))
+          .andExpect(content().string(containsString("perPage")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void post_comment_success_response() throws Exception {
+      mvc.perform(post(PATH_POST + "/{id}/comments", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .param("offset", "0")
+          .with(csrf())
+          .content("{\n"
+              + "  \"parent_id\": \"1\",\n"
+              + "  \"comment_text\": \"string\"\n"
+              + "}"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void edit_comment_by_id_success_response() throws Exception {
+      mvc.perform(put(PATH_POST + "/{id}/comments/{comments_id}", "1", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf())
+          .content("{\n"
+              + "  \"parent_id\": \"1\",\n"
+              + "  \"comment_text\": \"string\"\n"
+              + "}"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void delete_comment_by_id_success_response() throws Exception {
+      mvc.perform(delete(PATH_POST + "/{id}/comments/{comments_id}", "1", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void recover_comment_by_id_success_response() throws Exception {
+      mvc.perform(put(PATH_POST + "/{id}/comments/{comments_id}/recover", "1", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
+
+   @WithUserDetails(EMAIL)
+   @Test
+   public void report_comment_by_id_success_response() throws Exception {
+      mvc.perform(post(PATH_POST + "/{id}/comments/{comments_id}/report", "1", "1")
+          .contentType(MediaType.APPLICATION_JSON_UTF8)
+          .with(csrf()))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("error")))
+          .andExpect(content().string(containsString("timestamp")))
+          .andExpect(content().string(containsString("data")))
+          .andDo(MockMvcResultHandlers.print());
+   }
 }

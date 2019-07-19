@@ -11,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
-import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
@@ -24,7 +23,6 @@ import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 @Service
@@ -226,7 +224,7 @@ public class AccountService {
 
     }
 
-    private Person getCurrentPersonFromSecurityContext(){
+    public Person getCurrentPersonFromSecurityContext(){
 
          UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
          return personDAO.getPersonByEmail(user.getUsername());
@@ -239,6 +237,7 @@ public class AccountService {
             .toString(32)).replace('\u0020', '0');
     }
 
+    //Не получает текущего пользователя !
     public Person getCurrentUser() {
         String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Person personByEmail = personDAO.getPersonByEmail(email);

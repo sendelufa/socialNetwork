@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
@@ -37,7 +35,7 @@ public class ProfileService {
 
     public AbstractResponse getMe() {
         AbstractResponse response;
-        Person person = accountService.getCurrentUser();
+      Person person = accountService.getCurrentPersonFromSecurityContext();
       if(person != null){
         PersonApi personApi = modelMapper.map(person, PersonApi.class);
         response = new ResponseApi("string", System.currentTimeMillis(), personApi);
@@ -57,7 +55,7 @@ public class ProfileService {
      */
     public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
         AbstractResponse response;
-        Person person = getCurrentPerson();
+      Person person = accountService.getCurrentPersonFromSecurityContext();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
         person.setBirthDate(new Date(personApi.getBirth_date()));
@@ -78,7 +76,7 @@ public class ProfileService {
      */
     public AbstractResponse deleteMe() {
         AbstractResponse response;
-        Person person = getCurrentPerson();
+      Person person = accountService.getCurrentPersonFromSecurityContext();
         personDAO.deletePerson(person);
         response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
         response.setSuccess(true);
@@ -231,10 +229,5 @@ public class ProfileService {
         response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
         response.setSuccess(true);
         return response;
-    }
-
-    private Person getCurrentPerson() {
-      UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      return personDAO.getPersonByEmail(user.getUsername());
     }
 }

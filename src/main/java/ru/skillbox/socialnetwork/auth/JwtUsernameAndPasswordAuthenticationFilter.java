@@ -156,7 +156,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 response.getOutputStream()
                         .println(objectMapper.writeValueAsString(responseApi));
             } else {
-                ErrorApi errorApi = new ErrorApi("invalid_request", "string");
+                ErrorApi errorApi = new ErrorApi("invalid_request", "unauthorized!");
                 response.getOutputStream()
                         .println(objectMapper.writeValueAsString(errorApi));
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());

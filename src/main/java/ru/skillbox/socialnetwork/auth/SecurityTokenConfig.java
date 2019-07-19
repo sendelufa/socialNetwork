@@ -43,7 +43,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(
                             "/account/register", "/account/password/recovery",
-                            "/platform/**" ,"/api/test/**"
+                            "/platform/**" ,"/api/test/**"      //, "/*/**"     //раскомментирование отключает security
                     ).permitAll()
                     .anyRequest().authenticated()
                     .and()

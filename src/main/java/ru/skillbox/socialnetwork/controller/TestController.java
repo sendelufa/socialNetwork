@@ -34,7 +34,7 @@ public class TestController {
    public ResponseEntity<List> persons() {
       List<Person> allPersons = personDao.getAllPersons();
       allPersons.stream().map(Person::getEmail).forEach(System.out::println);
-      System.out.println(accountService.getCurrentUser().getEmail());
+      //System.out.println(accountService.getCurrentUser().getEmail());
       return new ResponseEntity<>(allPersons, HttpStatus.OK);
    }
 

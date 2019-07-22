@@ -1,0 +1,21 @@
+UPDATE `social_network`.`person` SET `password` = '$2a$10$BF8z1SVci201H8NgBPccAOAZyn1xb4rDLaO4uw6gQdoA/2B6PkOPi' WHERE (`e_mail` = 'ivaniavanov@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$rYdERqNj9jEyYMpuPPxTb.0Y7S3bUNFBSgr4tyPAeBFICWTje4m6O' WHERE (`e_mail` = 'sidorovmaxim@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$CkOdN9ky5yvWSpU6BluVQOGWYLyaODHLA3hmE8.mIedVTXea3pv0q' WHERE (`e_mail` = 'mihailovsergei@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$0RRyhLUpk7BQD0STA/gj1OeBIpuzjhq7EAqbNhudNsGtUbkz0VpXO' WHERE (`e_mail` = 'roman1991@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$dbpSQRrS3jrvnR6MIgljbeatY/w3bg7w8iKNl5Vj9kijQv.Xl2oVG' WHERE (`e_mail` = 'nasty1998@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$g5BfEUH3x6XZzrkchuPXj.IRBpr8xYJUfqg1fLfAfaGJORsiNhIJG' WHERE (`e_mail` = 'efremovaalena@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$tXxSg6XUY580zsIVxv9oI.wT30kEa2.6xeydPS3I4xOGRtXTbuIIe' WHERE (`e_mail` = 'ivangubkin@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$EPaLUZhQmBXSKXUJHIFq4ub5gjni5d.HcS0i.0FvOyNDpvHS4VP4i' WHERE (`e_mail` = 'nikita2005@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$eqF2r1j2LsCJiXpwffN.juUCSPTdX6m1guBb3RShm./mQWYjRSYri' WHERE (`e_mail` = 'vadikvasov@mail.ru');
+UPDATE `social_network`.`person` SET `password` = '$2a$10$5dg449b2hmHxKqrcb9F6Fu8ftMl7Mznfx14KUVEvLsgvjCOUeF5H.' WHERE (`e_mail` = 'dumova1995@mail.ru');
+
+UPDATE `social_network`.`user` SET `password` = '$2a$10$RRepeZvEBd0uZ6P9sP/8zuoZxl66Vk/bPUoRkgLZsFgvM4nuCAq8q' WHERE (`e_mail` = 'alex_inbox@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$2IvAFuMJA/ZxCz395E9unOe.S0N9x.WCu90oKc3dQbLMKhXCFiOJa' WHERE (`e_mail` = 'vasya_inbox@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$SXrGyZjfPgBugbMBDYj7DOXPZMAArbh1IqlrYkN/Vut3oW6HpNNhe' WHERE (`e_mail` = 'sveta2000@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$ILwURGlFZ3BcQ7THRWL5wehc64B1R0Z9d9lNrLFBDo7fm8NRsr9e.' WHERE (`e_mail` = 'igor1995@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$hxsSQokBp473kaLa8KvZ9.GQ1WisuLDyZyIBVkEafTwCvNWAXG.r.' WHERE (`e_mail` = 'tema_box@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$L3eCECaCrh6aJMbujxbvVuSJ8LjFDC1RUEubHyTCTYHT1gXth52HG' WHERE (`e_mail` = 'kirill_box@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$lqqzSgbVugfIFQ02eLGSSeU1YYIjJKDg1jWQLBkdNXtlF3jRFUOLe' WHERE (`e_mail` = 'danil2001@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$pfs5UEQRAiFIdgYZX.h65ekga9urxVtd2S58F/8ovYrb1nEt3cvGS' WHERE (`e_mail` = 'vitali_inbox@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$CQTI3Ub4UXxog/NLQ6hzC.fx4kIUtSpP3IN.Wni303uab11ZWvlD2' WHERE (`e_mail` = 'max_box@gmail.com');
+UPDATE `social_network`.`user` SET `password` = '$2a$10$BrU5tKYvw0tSXyvOqxKlguBDScp1.I.yzBfQRd577h75Ujcv9aHUi' WHERE (`e_mail` = 'igul8888@gmail.com');

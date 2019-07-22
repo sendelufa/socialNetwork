@@ -57,7 +57,7 @@ public class ProfileService {
      */
     public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
         AbstractResponse response;
-        Person person = getCurrentPerson();
+        Person person = accountService.getCurrentUser();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
         person.setBirthDate(new Date(personApi.getBirth_date()));
@@ -78,7 +78,7 @@ public class ProfileService {
      */
     public AbstractResponse deleteMe() {
         AbstractResponse response;
-        Person person = getCurrentPerson();
+        Person person = accountService.getCurrentUser();
         personDAO.deletePerson(person);
         response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
         response.setSuccess(true);
@@ -233,8 +233,4 @@ public class ProfileService {
         return response;
     }
 
-    private Person getCurrentPerson() {
-      UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-      return personDAO.getPersonByEmail(user.getUsername());
-    }
 }

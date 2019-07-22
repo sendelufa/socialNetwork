@@ -36,16 +36,16 @@ public class ProfileService {
     public AbstractResponse getMe() {
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
-      if(person != null){
-        PersonApi personApi = modelMapper.map(person, PersonApi.class);
-        response = new ResponseApi("string", System.currentTimeMillis(), personApi);
-        response.setSuccess(true);
-      }
-      else {
-        response = new ErrorApi("invalid_request", "You are not authorized");
-        response.setSuccess(false);
-      }
-      return response;
+        if(person != null){
+            PersonApi personApi = modelMapper.map(person, PersonApi.class);
+            response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+            response.setSuccess(true);
+        }
+        else {
+            response = new ErrorApi("invalid_request", "You are not authorized");
+            response.setSuccess(false);
+        }
+        return response;
     }
 
     /**

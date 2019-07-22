@@ -35,6 +35,11 @@ public class TagDAO {
       return getCurrentSession().get(Tag.class, id);
    }
 
+   public void deleteTag(Tag tag) {
+      getCurrentSession().delete(tag);
+   }
+
+
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

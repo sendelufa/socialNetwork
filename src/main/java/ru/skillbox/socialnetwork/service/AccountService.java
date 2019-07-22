@@ -7,11 +7,9 @@ import java.util.Date;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
-import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
@@ -24,7 +22,6 @@ import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 @Service
@@ -99,7 +96,7 @@ public class AccountService {
 
             String encodedPassword = encoder.encode(password);
 
-            Person person  = getCurrentPersonFromSecurityContext();
+            Person person  = getCurrentUser();
             person.setPassword(encodedPassword);
 
             personDAO.updatePerson(person);
@@ -117,7 +114,7 @@ public class AccountService {
 
     public AbstractResponse setEmail(String email) {
 
-        Person person = getCurrentPersonFromSecurityContext();
+        Person person = getCurrentUser();
         AbstractResponse response;
 
         if (!EmailValidator.isValid(email)){
@@ -158,7 +155,7 @@ public class AccountService {
 
     public AbstractResponse notification(String notification_type,boolean enable){
 
-        Person person = getCurrentPersonFromSecurityContext();
+        Person person = getCurrentUser();
 
         AbstractResponse response;
         boolean isSettingFound = false;
@@ -201,7 +198,7 @@ public class AccountService {
 
 
     public AbstractResponse status(String status){
-        Person person = getCurrentPersonFromSecurityContext();
+        Person person = getCurrentUser();
         AbstractResponse response;
 
         if(status.equals("online")) {
@@ -226,10 +223,10 @@ public class AccountService {
 
     }
 
-    private Person getCurrentPersonFromSecurityContext(){
-
-         UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-         return personDAO.getPersonByEmail(user.getUsername());
+    public Person getCurrentUser(){
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person personByEmail = personDAO.getPersonByEmail(email);
+        return personByEmail;
 
     }
 
@@ -239,9 +236,5 @@ public class AccountService {
             .toString(32)).replace('\u0020', '0');
     }
 
-    public Person getCurrentUser() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Person personByEmail = personDAO.getPersonByEmail(email);
-        return personByEmail;
-    }
+
 }

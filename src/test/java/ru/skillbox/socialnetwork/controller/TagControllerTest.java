@@ -22,7 +22,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 
 @RunWith(SpringRunner.class)
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TagControllerTest {

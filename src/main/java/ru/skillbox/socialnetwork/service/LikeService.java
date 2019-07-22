@@ -25,6 +25,8 @@ public class LikeService {
     private LikeDAO likeDAO;
     @Autowired
     private PostDAO postDAO;
+    @Autowired
+    private AccountService accountService;
 
 
     public AbstractResponse isLiked(int userId, int itemId, String type){
@@ -92,7 +94,8 @@ public class LikeService {
             PostLike postLike = new PostLike();
             postLike.setTime(new Date());
 
-            Person person = getCurrentPersonFromSecurityContext();
+
+            Person person = accountService.getCurrentUser();
             postLike.setPerson(person);
 
             Post post = postDAO.getPostById(likeApi.getItem_id());
@@ -113,7 +116,7 @@ public class LikeService {
             CommentLike commentLike = new CommentLike();
             commentLike.setTime(new Date());
 
-            Person person = getCurrentPersonFromSecurityContext();
+            Person person = accountService.getCurrentUser();
             commentLike.setPerson(person);
 
             PostComment postComment = postDAO.getCommentById(likeApi.getItem_id());
@@ -141,7 +144,7 @@ public class LikeService {
 
         AbstractResponse response;
 
-        Person person = getCurrentPersonFromSecurityContext();
+        Person person = accountService.getCurrentUser();
 
         if(type.equals("Post")){
             PostLike postLike = likeDAO.getLikedPost(person.getId(), itemId);
@@ -161,13 +164,6 @@ public class LikeService {
         response = new ErrorApi("invalid_request", "Wrong type of entity");
         response.setSuccess(false);
         return response;
-    }
-
-    private Person getCurrentPersonFromSecurityContext(){
-
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return personDAO.getPersonByEmail(user.getUsername());
-
     }
 
     private AbstractResponse getOutputResponse(Set<Integer> userList){

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
@@ -35,17 +37,17 @@ public class ProfileService {
 
     public AbstractResponse getMe() {
         AbstractResponse response;
-      Person person = accountService.getCurrentPersonFromSecurityContext();
-      if(person != null){
-        PersonApi personApi = modelMapper.map(person, PersonApi.class);
-        response = new ResponseApi("string", System.currentTimeMillis(), personApi);
-        response.setSuccess(true);
-      }
-      else {
-        response = new ErrorApi("invalid_request", "You are not authorized");
-        response.setSuccess(false);
-      }
-      return response;
+        Person person = accountService.getCurrentUser();
+        if(person != null){
+            PersonApi personApi = modelMapper.map(person, PersonApi.class);
+            response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+            response.setSuccess(true);
+        }
+        else {
+            response = new ErrorApi("invalid_request", "You are not authorized");
+            response.setSuccess(false);
+        }
+        return response;
     }
 
     /**
@@ -55,7 +57,7 @@ public class ProfileService {
      */
     public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
         AbstractResponse response;
-      Person person = accountService.getCurrentPersonFromSecurityContext();
+        Person person = accountService.getCurrentUser();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
         person.setBirthDate(new Date(personApi.getBirth_date()));
@@ -76,7 +78,7 @@ public class ProfileService {
      */
     public AbstractResponse deleteMe() {
         AbstractResponse response;
-      Person person = accountService.getCurrentPersonFromSecurityContext();
+        Person person = accountService.getCurrentUser();
         personDAO.deletePerson(person);
         response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
         response.setSuccess(true);
@@ -230,4 +232,5 @@ public class ProfileService {
         response.setSuccess(true);
         return response;
     }
+
 }

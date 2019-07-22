@@ -22,6 +22,8 @@ public class StorageService {
 
     @Autowired
     private PersonDAO personDAO;
+    @Autowired
+    private AccountService accountService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -65,7 +67,7 @@ public class StorageService {
 
         FileUploadResponseApi fura = new FileUploadResponseApi();
         fura.setId(uuidFile);
-        fura.setOwnerId(getCurrentPersonFromSecurityContext().getId());
+        fura.setOwnerId(accountService.getCurrentUser().getId());
         fura.setFileName(file.getName());
         fura.setRawFileURL(file.getOriginalFilename());
         fura.setRelativeFilePath("/" + resultFileName);
@@ -77,10 +79,5 @@ public class StorageService {
         return fura;
     }
 
-    private Person getCurrentPersonFromSecurityContext(){
 
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return personDAO.getPersonByEmail(user.getUsername());
-
-    }
 }

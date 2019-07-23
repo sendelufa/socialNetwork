@@ -1,0 +1,1 @@
+ALTER TABLE notification ADD is_readed BIT NOT NULL DEFAULT 0;

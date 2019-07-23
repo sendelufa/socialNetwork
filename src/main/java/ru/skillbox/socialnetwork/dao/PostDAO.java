@@ -52,6 +52,14 @@ public class PostDAO {
       return q.list();
    }
 
+   public List<Post> getFeed(int id){
+       int maxItemsToShow = 10;
+       String query = String.format("from Post p where p.author=%d", id);
+       Query q = getCurrentSession().createQuery(query);
+       q.setMaxResults(maxItemsToShow);
+       return q.list();
+   }
+
    public Post getPostById(int id) {
       return getCurrentSession().get(Post.class, id);
    }

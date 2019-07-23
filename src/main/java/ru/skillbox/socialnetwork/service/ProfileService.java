@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
@@ -38,16 +36,16 @@ public class ProfileService {
     public AbstractResponse getMe() {
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
-      if(person != null){
-        PersonApi personApi = modelMapper.map(person, PersonApi.class);
-        response = new ResponseApi("string", System.currentTimeMillis(), personApi);
-        response.setSuccess(true);
-      }
-      else {
-        response = new ErrorApi("invalid_request", "You are not authorized");
-        response.setSuccess(false);
-      }
-      return response;
+        if(person != null){
+            PersonApi personApi = modelMapper.map(person, PersonApi.class);
+            response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+            response.setSuccess(true);
+        }
+        else {
+            response = new ErrorApi("invalid_request", "You are not authorized");
+            response.setSuccess(false);
+        }
+        return response;
     }
 
     /**
@@ -232,5 +230,4 @@ public class ProfileService {
         response.setSuccess(true);
         return response;
     }
-
 }

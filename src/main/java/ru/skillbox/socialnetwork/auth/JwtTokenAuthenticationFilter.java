@@ -29,6 +29,9 @@ public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
 
         String header = request.getHeader(jwtConfig.getHeader());
 
+        if (header != null)
+               header = header.replace(jwtConfig.getPrefix(), "");
+
         if (header == null /* || !header.startsWith(jwtConfig.getPrefix()) */) {
             chain.doFilter(request, response);        // If not valid, go to the next filter.
             return;

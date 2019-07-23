@@ -52,6 +52,8 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                             .permitAll()
                     .and()
                         .logout()
+                            .logoutUrl("/auth/logout")
+                            .logoutSuccessUrl("/auth/login")
                             .permitAll();
     }
 

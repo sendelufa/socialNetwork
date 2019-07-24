@@ -35,10 +35,11 @@ public class PostController {
     * @param offset Отступ от начала списка
     * @param itemPerPage Количество элементов на страницу
     */
-   @GetMapping("/")
+   
+   @GetMapping("")
    public ResponseEntity getPost(@RequestParam String text,
-       @RequestParam(value = "date_from", required = false) Integer dateFrom,
-       @RequestParam(value = "date_to", required = false) Integer dateTo,
+       @RequestParam(value = "date_from", required = false) Long dateFrom,
+       @RequestParam(value = "date_to", required = false) Long dateTo,
        @RequestParam(required = false) Integer offset,
        @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
       offset = offset == null ? 0 : offset;

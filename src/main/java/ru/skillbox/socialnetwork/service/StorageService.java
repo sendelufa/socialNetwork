@@ -32,7 +32,7 @@ public class StorageService {
     private String uuidFile = UUID.randomUUID().toString();
     private String resultFileName;
 
-    public AbstractResponse uploadFileResponse(String type, MultipartFile file, FileUploadResponseApi fura) throws IOException {
+    public AbstractResponse uploadFileResponse(String type, MultipartFile file) throws IOException {
         AbstractResponse response;
 
         if (type.equals("IMAGE") && file != null) {

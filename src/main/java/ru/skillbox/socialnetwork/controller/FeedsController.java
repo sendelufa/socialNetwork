@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("feeds")
+//@RequestMapping("feeds")
 public class FeedsController {
 
   @Autowired
@@ -28,8 +28,8 @@ public class FeedsController {
       Default value : 20
    */
 
-  @GetMapping("")
-  public ResponseEntity getPost(@RequestParam String name,
+  @GetMapping("feeds")
+  public ResponseEntity getPost(@RequestParam(required = false) String name,
                                 @RequestParam(required = false) Integer offset,
                                 @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
     offset = offset == null ? 0 : offset;
@@ -39,6 +39,10 @@ public class FeedsController {
         null,
         offset,
         itemPerPage);
+    if(name == null){
+      ResponseApi responseApi = postService.getFeed();
+      return new ResponseEntity<>(responseApi, responseApi.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
     ResponseApi responseApi = postService.search(postParameters);
     return responseApi == null ? badRequestResponse() :
         new ResponseEntity<>(responseApi, HttpStatus.OK);

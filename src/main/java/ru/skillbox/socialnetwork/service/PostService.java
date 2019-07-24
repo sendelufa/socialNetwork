@@ -29,10 +29,24 @@ public class PostService {
    private PostDAO postDAO;
    @Autowired
    private PersonDAO personDAO;
+   @Autowired
+   private AccountService accountService;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
+   public ResponseApi getFeed(){
+
+      int currentPersinId = accountService.getCurrentUser().getId();
+      List<Post> posts = postDAO.getFeed(currentPersinId);
+      postListApi = new PostListApi();
+      postListApi.setData(posts.stream().map(this::fillPostApi)
+              .collect(Collectors.toList()));
+      postListApi.setTotal(posts.size());
+      postListApi.setSuccess(true);
+      return  postListApi;
    }
 
    public ResponseApi search(PostParameters postParameters) {

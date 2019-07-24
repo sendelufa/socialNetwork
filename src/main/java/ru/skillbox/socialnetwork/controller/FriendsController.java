@@ -8,6 +8,7 @@ import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.service.FriendsService;
 
 @RestController
 public class FriendsController {

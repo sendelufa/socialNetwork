@@ -1,16 +1,8 @@
 package ru.skillbox.socialnetwork.model;
 
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Table(name = "notification")
@@ -43,6 +35,10 @@ public class Notification {
     @Column(name = "contact")
     @NotNull
     private String contact;
+
+    @Column(name = "is_readed")
+    @NotNull
+    private boolean isReaded;
 
     public int getId() {
         return id;
@@ -90,5 +86,13 @@ public class Notification {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public boolean isReaded() {
+        return isReaded;
+    }
+
+    public void setReaded(boolean readed) {
+        isReaded = readed;
     }
 }

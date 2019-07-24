@@ -15,10 +15,10 @@ public class PostParameters {
    private String text;
 
 
-   private Integer date_from;
+   private Long date_from;
 
 
-   private Integer date_to;
+   private Long date_to;
 
 
    /**
@@ -33,7 +33,7 @@ public class PostParameters {
 
    public PostParameters(){}
 
-   public PostParameters(String text, Integer date_from, Integer date_to, int offset, int itemPerPage) {
+   public PostParameters(String text, Long date_from, Long date_to, int offset, int itemPerPage) {
       this.text = text;
       this.date_from = date_from;
       this.date_to = date_to;
@@ -49,19 +49,19 @@ public class PostParameters {
       this.text = text;
    }
 
-   public Integer getDate_from() {
+   public Long getDate_from() {
       return date_from;
    }
 
-   public void setDate_from(Integer date_from) {
+   public void setDate_from(Long date_from) {
       this.date_from = date_from;
    }
 
-   public Integer getDate_to() {
+   public Long getDate_to() {
       return date_to;
    }
 
-   public void setDate_to(Integer date_to) {
+   public void setDate_to(Long date_to) {
       this.date_to = date_to;
    }
 

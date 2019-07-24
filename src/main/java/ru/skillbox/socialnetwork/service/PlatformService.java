@@ -16,11 +16,11 @@ public class PlatformService {
     public AbstractResponse languages(String language, int offset,  int itemPerPage){
 
         AbstractResponse response = new ListResponseApi("string",
-                System.currentTimeMillis(),
-                new PlatfomLanguageApi(1, "Русский"),
-                0,
-                0,
-                0);
+                    System.currentTimeMillis(),
+                    new PlatfomLanguageApi(1, "Русский"),
+                    0,
+                    0,
+                    0);
 
         return response;
     }
@@ -28,11 +28,11 @@ public class PlatformService {
     public AbstractResponse countries(String country, int offset, int itemPerPage){
 
         AbstractResponse response = new ListResponseApi("string",
-                System.currentTimeMillis(),
-                new PlatfomLanguageApi(1, "Россия"),
-                0,
-                0,
-                0);
+                    System.currentTimeMillis(),
+                    new PlatfomLanguageApi(1, "Россия"),
+                    0,
+                    0,
+                    0);
 
         return response;
     }

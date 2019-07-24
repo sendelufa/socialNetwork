@@ -24,7 +24,7 @@ public class PlatformController {
      * @return
      */
     @RequestMapping(value = "languages", method = RequestMethod.GET)
-    public ResponseEntity languages(@RequestParam String language, @RequestParam int offset, @RequestParam int itemPerPage){
+    public ResponseEntity languages(@RequestParam(required = false) String language, @RequestParam int offset, @RequestParam int itemPerPage){
 
         AbstractResponse response = platformService.languages(language,offset,itemPerPage);
 

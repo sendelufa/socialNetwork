@@ -27,8 +27,8 @@ public class NotificationController {
     }
 
     @PutMapping
-    public ResponseEntity readNotification(@RequestParam(required = false) int id,
-                                           @RequestParam(required = false) boolean all) {
+    public ResponseEntity readNotification(@RequestParam(required = false, defaultValue = "0") int id,
+                                           @RequestParam(required = false, defaultValue = "false") boolean all) {
         ResponseApi responseApi = notificationService.readNotification(id, all);
         return responseApi == null
                 ? badRequestResponse()

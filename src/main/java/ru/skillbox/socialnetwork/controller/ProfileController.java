@@ -45,7 +45,7 @@ public class ProfileController {
     * Редактирование текущего пользователя
     */
    @PutMapping("/me")
-   public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+   public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
       AbstractResponse response = profileService.editMe(personApi);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }

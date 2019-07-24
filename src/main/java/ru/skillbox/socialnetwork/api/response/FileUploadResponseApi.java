@@ -8,7 +8,7 @@ public class FileUploadResponseApi extends AbstractResponse{
   private String relativeFilePath;
   private String rawFileURL;
   private String fileFormat;
-  private int bytes;
+  private byte[] bytes;
   private fileTypes fileType;
   private int createdAt;
   public enum fileTypes {IMAGE}
@@ -61,11 +61,11 @@ public class FileUploadResponseApi extends AbstractResponse{
     this.fileFormat = fileFormat;
   }
 
-  public int getBytes() {
+  public byte[] getBytes() {
     return bytes;
   }
 
-  public void setBytes(int bytes) {
+  public void setBytes(byte[] bytes) {
     this.bytes = bytes;
   }
 

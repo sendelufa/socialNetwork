@@ -53,14 +53,14 @@ public class ProfileService {
      *
      * @param personApi Редактируемые данные
      */
-    public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+    public AbstractResponse editMe(ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
-        person.setBirthDate(new Date(personApi.getBirth_date()));
+        person.setBirthDate(personApi.getBirth_date());
         person.setPhone(personApi.getPhone());
-        person.setPhoto(personApi.getPhoto());
+        person.setPhoto(personApi.getPhoto_id());
         person.setAbout(personApi.getAbout());
         person.setTown(Integer.toString(personApi.getTown_id()));
         person.setMessagesPermission(personApi.getMessages_permission());

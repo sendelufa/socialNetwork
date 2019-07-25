@@ -40,12 +40,15 @@ public class Message {
    private Person recipient;
 
    @Column(name = "message_text")
-   private String MessageText;
+   private String messageText;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "read_status", columnDefinition = "ENUM('SENT', 'READ')")
    @NotNull
    private ReadStatusMessage readStatus;
+
+   @Column(name = "dialog_id")
+   private Integer dialogId;
 
    public int getId() {
       return id;
@@ -80,11 +83,11 @@ public class Message {
    }
 
    public String getMessageText() {
-      return MessageText;
+      return messageText;
    }
 
    public void setMessageText(String messageText) {
-      MessageText = messageText;
+      this.messageText = messageText;
    }
 
    public ReadStatusMessage getReadStatus() {
@@ -94,4 +97,8 @@ public class Message {
    public void setReadStatus(ReadStatusMessage readStatus) {
       this.readStatus = readStatus;
    }
+
+   public Integer getDialogId() { return dialogId; }
+
+   public void setDialogId(Integer dialogId) { this.dialogId = dialogId; }
 }

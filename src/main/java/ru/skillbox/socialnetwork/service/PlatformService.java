@@ -13,7 +13,7 @@ public class PlatformService {
     @Autowired
     PlatformDAO platformDAO;
 
-    public AbstractResponse languages(String language, int offset,  int itemPerPage){
+    public AbstractResponse languages(String language, Long offset,  Long itemPerPage){
 
         AbstractResponse response = new ListResponseApi("string",
                     System.currentTimeMillis(),

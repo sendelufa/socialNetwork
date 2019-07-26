@@ -47,6 +47,14 @@ public class Message {
    @NotNull
    private ReadStatusMessage readStatus;
 
+   @Column(name = "is_deleted")
+   private boolean isDeleted;
+
+   @ManyToOne(fetch = FetchType.EAGER)
+   @JoinColumn(name = "dialog_id")
+   @NotNull
+   private Dialog dialog;
+
    public int getId() {
       return id;
    }
@@ -93,5 +101,21 @@ public class Message {
 
    public void setReadStatus(ReadStatusMessage readStatus) {
       this.readStatus = readStatus;
+   }
+
+   public boolean isDeleted() {
+      return isDeleted;
+   }
+
+   public void setDeleted(boolean deleted) {
+      isDeleted = deleted;
+   }
+
+   public Dialog getDialog() {
+      return dialog;
+   }
+
+   public void setDialog(Dialog dialog) {
+      this.dialog = dialog;
    }
 }

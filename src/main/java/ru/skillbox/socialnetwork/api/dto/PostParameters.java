@@ -15,10 +15,10 @@ public class PostParameters {
    private String text;
 
 
-   private Integer date_from;
+   private Integer dateFom;
 
 
-   private Integer date_to;
+   private Integer dateTo;
 
 
    /**
@@ -35,8 +35,8 @@ public class PostParameters {
 
    public PostParameters(String text, Integer date_from, Integer date_to, int offset, int itemPerPage) {
       this.text = text;
-      this.date_from = date_from;
-      this.date_to = date_to;
+      this.dateFom = date_from;
+      this.dateTo = date_to;
       this.offset = offset;
       this.itemPerPage = itemPerPage;
    }
@@ -49,20 +49,20 @@ public class PostParameters {
       this.text = text;
    }
 
-   public Integer getDate_from() {
-      return date_from;
+   public Integer getDateFom() {
+      return dateFom;
    }
 
-   public void setDate_from(Integer date_from) {
-      this.date_from = date_from;
+   public void setDateFom(Integer dateFom) {
+      this.dateFom = dateFom;
    }
 
-   public Integer getDate_to() {
-      return date_to;
+   public Integer getDateTo() {
+      return dateTo;
    }
 
-   public void setDate_to(Integer date_to) {
-      this.date_to = date_to;
+   public void setDateTo(Integer dateTo) {
+      this.dateTo = dateTo;
    }
 
    public int getOffset() {

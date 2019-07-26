@@ -29,3 +29,13 @@ ADD CONSTRAINT `dialog_fk`
   REFERENCES `dialog` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+  ALTER TABLE `message`
+ADD INDEX `dialog_message_fk_idx` (`dialog_id` ASC) VISIBLE;
+;
+ALTER TABLE `message`
+ADD CONSTRAINT `dialog_message_fk`
+  FOREIGN KEY (`dialog_id`)
+  REFERENCES `message` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;

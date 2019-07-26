@@ -1,11 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -25,6 +30,15 @@ public class Dialog {
    @JoinColumn(name = "invite_code")
    @NotNull
    private String inviteCode;
+
+   @OneToMany(mappedBy = "dialogId", fetch = FetchType.LAZY)
+   private List<Message> messages;
+
+   @ManyToMany(fetch = FetchType.LAZY)
+   @JoinTable(name = "person2dialog",
+       joinColumns = @JoinColumn(name = "dialog_id"),
+       inverseJoinColumns = @JoinColumn(name = "person_id"))
+   private List<Person> personList;
 
    public int getId() {
       return id;
@@ -50,5 +64,19 @@ public class Dialog {
       this.inviteCode = inviteCode;
    }
 
+   public List<Message> getMessages() {
+      return messages;
+   }
 
+   public void setMessages(List<Message> messages) {
+      this.messages = messages;
+   }
+
+   public List<Person> getPersonList() {
+      return personList;
+   }
+
+   public void setPersonList(List<Person> personList) {
+      this.personList = personList;
+   }
 }

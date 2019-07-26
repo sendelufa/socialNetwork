@@ -38,7 +38,13 @@ public class StorageService {
     public AbstractResponse uploadFileResponse(String type, MultipartFile file) throws IOException {
         AbstractResponse response;
 
-        if (type.equals("IMAGE") && file != null) {
+        if(file == null){
+            response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("nothing to upload"));
+            response.setSuccess(true);
+            return response;
+        }
+       // if (type.equals("IMAGE") && file != null) {
+        if (type.equals("IMAGE")) {
             //uploadFile(type, file);
             byte[] bytes = file.getBytes();
             response = new ResponseApi("string", System.currentTimeMillis(), getFileUploadResponseApi(file, uploadFile(type, file), bytes));

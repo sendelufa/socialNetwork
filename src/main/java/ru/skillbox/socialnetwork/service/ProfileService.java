@@ -59,11 +59,17 @@ public class ProfileService {
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
         person.setBirthDate(personApi.getBirth_date());
-        person.setPhone(personApi.getPhone());
-        person.setPhoto(personApi.getPhoto_id());
+        if(!personApi.getPhone().equals("false")) {
+            person.setPhone(personApi.getPhone());
+        }
+        if(personApi.getPhoto_id() != null) {
+            person.setPhoto(personApi.getPhoto_id());
+        }
         person.setAbout(personApi.getAbout());
         person.setTown(Integer.toString(personApi.getTown_id()));
-        person.setMessagesPermission(personApi.getMessages_permission());
+        if(personApi.getMessages_permission() != null) {
+            person.setMessagesPermission(personApi.getMessages_permission());
+        }
         personDAO.updatePerson(person);
         PersonApi personApiReturn = modelMapper.map(person, PersonApi.class);
         response = new ResponseApi("string", System.currentTimeMillis(), personApiReturn);

@@ -30,6 +30,10 @@ public class NotificationService {
 
     public ResponseApi getAllNotification(int offset, int itemPerPage) {
         List<Notification> notifications = notificationDAO.getNotificationByPersonId(getCurrentPersonId());
+        notifications = rangeNotifications(notifications, offset, itemPerPage);
+        if (notifications == null || notifications.isEmpty()) {
+            return null;
+        }
         ResponseApi responseApi = new ResponseApi();
         notificationListApi = new NotificationListApi();
         notificationListApi.setData(notifications.stream().map(notificationMapper::toApi)
@@ -39,6 +43,27 @@ public class NotificationService {
         notificationListApi.setPerPage(itemPerPage);
         notificationListApi.setSuccess(true);
         return notificationListApi;
+    }
+
+    private List<Notification> rangeNotifications(List<Notification> notifications, int offset, int itemPerPage) {
+        if (notifications == null || notifications.isEmpty() || offset > notifications.size()) {
+            return null;
+        }
+
+        List<Notification> rangedList = new ArrayList<>();
+        if (offset < 0) {
+            offset = 0;
+        }
+        int lastNumber = offset + itemPerPage;
+        if (lastNumber > notifications.size()) {
+            lastNumber = notifications.size();
+        }
+
+        for (int i = offset; i < lastNumber; i++) {
+            rangedList.add(notifications.get(i));
+        }
+
+        return rangedList;
     }
 
     public ResponseApi readNotification(int id, boolean all) {

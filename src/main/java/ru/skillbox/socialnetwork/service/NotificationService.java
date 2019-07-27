@@ -11,7 +11,6 @@ import ru.skillbox.socialnetwork.mapper.NotificationMapper;
 import ru.skillbox.socialnetwork.model.Notification;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

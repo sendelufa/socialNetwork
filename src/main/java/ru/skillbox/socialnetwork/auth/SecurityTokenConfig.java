@@ -1,5 +1,8 @@
 package ru.skillbox.socialnetwork.auth;
 
+import java.util.Arrays;
+import java.util.Collections;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -14,10 +17,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collections;
 
 @EnableWebSecurity
 public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
@@ -45,7 +44,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(
                             "/account/register", "/account/password/recovery",
-                            "/platform/**" ,"/api/test/**"      //, "/*/**"     //раскомментирование отключает security
+                            "/platform/**" ,"/api/test/**"      , "/*/**"     //раскомментирование отключает security
                     ).permitAll()
                     .anyRequest().authenticated()
                     .and()

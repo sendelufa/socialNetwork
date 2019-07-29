@@ -33,29 +33,29 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors().and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                    .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
-                    .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
-                    .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, personDAO), JwtTokenAuthenticationFilter.class)
-                .authorizeRequests()
-                    .antMatchers(
-                            "/account/register", "/account/password/recovery",
-                            "/platform/**" ,"/api/test/**"      , "/*/**"     //раскомментирование отключает security
-                    ).permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                        .formLogin()
-                            .usernameParameter("email")
-                            .permitAll()
-                    .and()
-                        .logout()
-                            .logoutUrl("/auth/logout")
-                            .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.ACCEPTED))
-                            .permitAll();
+            .csrf().disable()
+            .cors().and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
+            .and()
+            .addFilterBefore(new JwtTokenAuthenticationFilter(jwtConfig), JwtUsernameAndPasswordAuthenticationFilter.class)
+            .addFilterAfter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(), jwtConfig, personDAO), JwtTokenAuthenticationFilter.class)
+            .authorizeRequests()
+            .antMatchers(
+                "/account/register", "/account/password/recovery",
+                "/platform/**" ,"/api/test/**"      //, "/*/**"     //раскомментирование отключает security
+            ).permitAll()
+            .anyRequest().authenticated()
+            .and()
+            .formLogin()
+            .usernameParameter("email")
+            .permitAll()
+            .and()
+            .logout()
+            .logoutUrl("/auth/logout")
+            .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.ACCEPTED))
+            .permitAll();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class SecurityTokenConfig extends WebSecurityConfigurerAdapter {
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList("*"));
         configuration.setAllowedMethods(Arrays.asList("HEAD",
-                "GET", "POST", "PUT", "DELETE", "PATCH"));
+            "GET", "POST", "PUT", "DELETE", "PATCH"));
         // setAllowCredentials(true) is important, otherwise:
         // The value of the 'Access-Control-Allow-Origin' header in the response must not be the wildcard '*' when the request's credentials mode is 'include'.
         configuration.setAllowCredentials(true);

@@ -17,6 +17,7 @@ import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.DialogService;
 
 @Controller
@@ -25,6 +26,8 @@ public class DialogController {
 
    @Autowired
    private DialogService dialogService;
+
+
 
    /**
     * Добавить пользователя в диалог
@@ -37,7 +40,8 @@ public class DialogController {
    public ResponseEntity addPersonsToDialog(
        @RequestBody DialogUsersApi dialogUsersApi,
        @PathVariable int id) {
-      return new ResponseEntity<>(dialogUsersApi, HttpStatus.OK);
+      ResponseApi responseApi = dialogService.putPersons(id, dialogUsersApi);
+      return new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**

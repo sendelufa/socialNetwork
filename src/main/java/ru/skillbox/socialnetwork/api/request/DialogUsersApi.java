@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DialogUsersApi {
 
    @JsonProperty("user_ids")
-   private Long[] userIds;
+   private long[] userIds;
 
-   public Long[] getUserIds() {
+   public long[] getUserIds() {
       return userIds;
    }
 
-   public void setUserIds(Long[] userIds) {
+   public void setUserIds(long[] userIds) {
       this.userIds = userIds;
    }
 }

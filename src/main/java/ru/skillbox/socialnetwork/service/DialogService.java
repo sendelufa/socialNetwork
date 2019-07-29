@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
+import ru.skillbox.socialnetwork.api.response.PersonListId;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.DialogDao;
 import ru.skillbox.socialnetwork.dao.MessageDao;
@@ -150,5 +152,11 @@ public class DialogService {
       dialog.setPersonList(personList);
       dialogDao.addDialog(dialog);
       return new ResponseApi("ok", System.currentTimeMillis(), dialogMapper.toApi(dialog));
+   }
+
+   public ResponseApi putPersons(int dialogId, DialogUsersApi dialogUsersApi) {
+      PersonListId personsIdApi = new PersonListId();
+      personsIdApi.setData(dialogUsersApi.getUserIds());
+      return new ResponseApi("ok", System.currentTimeMillis(), personsIdApi);
    }
 }

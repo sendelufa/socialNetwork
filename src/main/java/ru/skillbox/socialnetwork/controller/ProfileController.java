@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,7 +45,7 @@ public class ProfileController {
     * Редактирование текущего пользователя
     */
    @PutMapping("/me")
-   public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+   public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
       AbstractResponse response = profileService.editMe(personApi);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
@@ -64,7 +65,7 @@ public class ProfileController {
     * @param id ID пользователя
     */
    @GetMapping("/{id}")
-   public ResponseEntity get(@RequestParam int id) {
+   public ResponseEntity get(@PathVariable int id) {
       AbstractResponse response = profileService.getPersonById(id);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
@@ -78,10 +79,10 @@ public class ProfileController {
     */
    @GetMapping("/{id}/wall")
    public ResponseEntity getWall(
-       @RequestParam int id,
-       @RequestParam(required = false) boolean queue,
-       @RequestParam(required = false) int offset,
-       @RequestParam(required = false) int itemPerPage) {
+       @RequestParam(required = false, defaultValue = "false") boolean queue,
+       @RequestParam(required = false, defaultValue = "0") int offset,
+       @RequestParam(required = false, defaultValue = "20") int itemPerPage,
+       @PathVariable("id") int id) {
       PostParameters postParameters = new PostParameters();
       postParameters.setId(id);
       postParameters.setQueue(queue);
@@ -100,8 +101,8 @@ public class ProfileController {
     */
    @PostMapping("/{id}/wall")
    public ResponseEntity postToWall(
-           @RequestParam int id,
-           @RequestParam(required = false) Long publishDate,
+           @PathVariable int id,
+           @RequestParam(required = false, defaultValue = "0") Long publishDate,
            @RequestBody PostApi newPost) {
       AbstractResponse response = profileService.addPostOnWall(id, publishDate, newPost);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
@@ -119,16 +120,15 @@ public class ProfileController {
     * @param itemPerPage Количество элементов на страницу
     */
    @GetMapping("/search/")
-   public ResponseEntity search(@RequestParam(required = false) String first_name,
-       @RequestParam(required = false) String last_name,
-       @RequestParam(required = false) int age_from,
-       @RequestParam(required = false) int age_to,
-       @RequestParam(required = false) int country_id,
-       @RequestParam(required = false) int city_id,
-       @RequestParam(required = false) int offset,
+   public ResponseEntity search(@RequestParam(required = false, defaultValue = "") String first_name,
+       @RequestParam(required = false, defaultValue = "") String last_name,
+       @RequestParam(required = false, defaultValue = "0") int age_from,
+       @RequestParam(required = false, defaultValue = "0") int age_to,
+       @RequestParam(required = false, defaultValue = "0") int country_id,
+       @RequestParam(required = false, defaultValue = "0") int city_id,
+       @RequestParam(required = false, defaultValue = "0") int offset,
        @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
-      PersonParameters personParameters = new PersonParameters(first_name, last_name, age_from,
-          age_to, country_id, city_id, offset, itemPerPage);
+      PersonParameters personParameters = new PersonParameters(first_name, last_name, age_from, age_to, country_id, city_id, offset, itemPerPage);
       AbstractResponse response = profileService.searchPerson(personParameters);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
@@ -139,7 +139,7 @@ public class ProfileController {
     * @param id ID пользователя
     */
    @PutMapping("/block/{id}")
-   public ResponseEntity block(@RequestParam(value = "id") Integer id) {
+   public ResponseEntity block(@PathVariable Integer id) {
       AbstractResponse response = profileService.blockPersonById(id);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
@@ -150,7 +150,7 @@ public class ProfileController {
     * @param id ID пользователя
     */
    @DeleteMapping("/block/{id}")
-   public ResponseEntity unblock(@RequestParam int id) {
+   public ResponseEntity unblock(@PathVariable int id) {
       AbstractResponse response = profileService.unblockPersonById(id);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }

@@ -127,6 +127,8 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     private void enrichAuthenticationResponse(HttpServletResponse response, boolean success,
                                               String email, String token) {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
         try {
             if (success) {
                 Person person = personDAO.getPersonByEmail(email);
@@ -153,8 +155,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 ResponseApi responseApi = new ResponseApi("string", System.currentTimeMillis(), personApi);
 
                 response.setStatus(HttpServletResponse.SC_OK);
-                response.getOutputStream()
-                        .println(objectMapper.writeValueAsString(responseApi));
+                objectMapper.writeValue(response.getOutputStream(), responseApi);
             } else {
                 ErrorApi errorApi = new ErrorApi("invalid_request", "unauthorized!");
                 response.getOutputStream()
@@ -162,8 +163,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
             }
 
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.setCharacterEncoding(StandardCharsets.UTF_8.toString());
+
         } catch (Exception e){
             e.printStackTrace();
         }

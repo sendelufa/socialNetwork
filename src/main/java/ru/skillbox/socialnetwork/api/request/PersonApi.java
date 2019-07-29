@@ -2,11 +2,13 @@ package ru.skillbox.socialnetwork.api.request;
 
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
+import java.util.Date;
+
 public class PersonApi {
 
     private String first_name;
     private String last_name;
-    private long birth_date;
+    private Date birth_date;
     private String phone;
     private String photo_id;
     private String about;
@@ -30,11 +32,11 @@ public class PersonApi {
         this.last_name = last_name;
     }
 
-    public long getBirth_date() {
+    public Date getBirth_date() {
         return birth_date;
     }
 
-    public void setBirth_date(long birth_date) {
+    public void setBirth_date(Date birth_date) {
         this.birth_date = birth_date;
     }
 

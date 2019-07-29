@@ -59,7 +59,6 @@ public class Person {
 
    @Enumerated(EnumType.STRING)
    @Column(name = "messages_permission", columnDefinition = "ENUM('ALL', 'FRIENDS')")
-   @NotNull
    private MessagesPermissionPerson messagesPermission;
 
    @Column(name = "last_online_time")

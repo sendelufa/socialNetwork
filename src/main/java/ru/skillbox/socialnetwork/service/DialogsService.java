@@ -1,18 +1,15 @@
 package ru.skillbox.socialnetwork.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.DialogDao;
 import ru.skillbox.socialnetwork.dao.MessageDao;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
-import ru.skillbox.socialnetwork.dao.UserDao;
 import ru.skillbox.socialnetwork.mapper.DialogMapper;
 import ru.skillbox.socialnetwork.model.Dialog;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
-import ru.skillbox.socialnetwork.model.User;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class DialogsService {
     private DialogMapper dialogMapper;
 
     @Autowired
-    private UserDao userDao;
+    private PersonDAO personDAO;
 
     public AbstractResponse deleteDialogMessages(int dialogId, int messageId) {
         Dialog dialog = dialogDao.getDialogById(dialogId);
@@ -142,11 +139,11 @@ public class DialogsService {
 
     public AbstractResponse putDialogs(DialogUserShortListApi dialogUsers) {
         Dialog dialog = new Dialog();
-        List<User> users = new ArrayList<>();
+        List<Person> personList = new ArrayList<>();
         for(Integer i : dialogUsers.getUserIds()){
-            users.add(userDao.getUserById(i));
+            personList.add(personDAO.getPersonById(i));
         }
-        dialog.setUsers(users);
+        dialog.setPersonList(personList);
         dialogDao.addDialog(dialog);
         return new ResponseApi("ok", System.currentTimeMillis(), dialogMapper.toApi(dialog));
     }

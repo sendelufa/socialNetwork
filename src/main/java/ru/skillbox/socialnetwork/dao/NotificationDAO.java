@@ -18,51 +18,61 @@ import java.util.List;
 @Transactional
 public class NotificationDAO {
 
-        @Autowired
-        SessionFactory sessionFactory;
+    @Autowired
+    SessionFactory sessionFactory;
 
-        public List<NotificationSettings> getNotificationSettingsByPersonId(int id){
-            String query = String.format("from NotificationSettings settings where settings.person=%d", id);
-            return (List<NotificationSettings>) getCurrentSession().createQuery(query).list();
-        }
+    public List<NotificationSettings> getNotificationSettingsByPersonId(int id) {
+        String query = String.format("from NotificationSettings settings where settings.person=%d", id);
+        return (List<NotificationSettings>) getCurrentSession().createQuery(query).list();
+    }
 
-        public NotificationType getNotificationTypeById(int id) {
-            return getCurrentSession().get(NotificationType.class, id);
-        }
+    public NotificationType getNotificationTypeById(int id) {
+        return getCurrentSession().get(NotificationType.class, id);
+    }
 
-        public NotificationType getNotificationTypeByName(String nameOfType){
-            Criteria criteria = getCurrentSession().createCriteria(NotificationType.class);
-            NameNotificationType name =  NameNotificationType.valueOf(nameOfType);
-            criteria.add(Restrictions.eq("name", name));
+    public NotificationType getNotificationTypeByName(String nameOfType) {
+        Criteria criteria = getCurrentSession().createCriteria(NotificationType.class);
+        NameNotificationType name = NameNotificationType.valueOf(nameOfType);
+        criteria.add(Restrictions.eq("name", name));
 
-            return (NotificationType) criteria.uniqueResult();
-        }
+        return (NotificationType) criteria.uniqueResult();
+    }
 
-        public List<Notification> getAllNotification(){
-            return getCurrentSession().createQuery("From Notification").list();
-        }
+    public List<Notification> getAllNotification() {
+        return getCurrentSession().createQuery("From Notification").list();
+    }
 
-        public void updateNotification(Notification notification) {
-            getCurrentSession().update(notification);
-        }
+    public Notification getNotificationById(int id) {
+        String query = String.format("From Notification where id=%d", id);
+        return (Notification) getCurrentSession().createQuery(query).uniqueResult();
+    }
 
-        public void updateNotificationSettings(NotificationSettings ns){
-            getCurrentSession().update(ns);
-        }
+    public List<Notification> getNotificationByPersonId(int id) {
+        String query = String.format("from Notification where person_id=%d", id);
+        return (List<Notification>) getCurrentSession().createQuery(query).list();
+    }
 
-        public void addNotificationSettings(NotificationSettings ns){
+    public void updateNotification(Notification notification) {
+        getCurrentSession().update(notification);
+    }
+
+    public void updateNotificationSettings(NotificationSettings ns) {
+        getCurrentSession().update(ns);
+    }
+
+    public void addNotificationSettings(NotificationSettings ns) {
         getCurrentSession().save(ns);
     }
 
-        public void deleteNotification(Notification notification) {
-            getCurrentSession().delete(notification);
-        }
+    public void deleteNotification(Notification notification) {
+        getCurrentSession().delete(notification);
+    }
 
-        public void addNotification(Notification notification) {
-            getCurrentSession().save(notification);
-        }
+    public void addNotification(Notification notification) {
+        getCurrentSession().save(notification);
+    }
 
-        private Session getCurrentSession() {
+    private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
 }

@@ -40,20 +40,18 @@ public class Message {
    private Person recipient;
 
    @Column(name = "message_text")
-   private String MessageText;
+   private String messageText;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "read_status", columnDefinition = "ENUM('SENT', 'READ')")
    @NotNull
    private ReadStatusMessage readStatus;
 
+   @Column(name = "dialog_id")
+   private Integer dialogId;
+
    @Column(name = "is_deleted")
    private boolean isDeleted;
-
-   @ManyToOne(fetch = FetchType.EAGER)
-   @JoinColumn(name = "dialog_id")
-   @NotNull
-   private Dialog dialog;
 
    public int getId() {
       return id;
@@ -88,11 +86,11 @@ public class Message {
    }
 
    public String getMessageText() {
-      return MessageText;
+      return messageText;
    }
 
    public void setMessageText(String messageText) {
-      MessageText = messageText;
+      this.messageText = messageText;
    }
 
    public ReadStatusMessage getReadStatus() {
@@ -103,19 +101,15 @@ public class Message {
       this.readStatus = readStatus;
    }
 
-   public boolean isDeleted() {
-      return isDeleted;
-   }
+   public Integer getDialogId() { return dialogId; }
+
+   public void setDialogId(Integer dialogId) { this.dialogId = dialogId; }
 
    public void setDeleted(boolean deleted) {
       isDeleted = deleted;
    }
 
-   public Dialog getDialog() {
-      return dialog;
-   }
-
-   public void setDialog(Dialog dialog) {
-      this.dialog = dialog;
+   public boolean isDeleted(){
+      return isDeleted;
    }
 }

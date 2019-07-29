@@ -53,17 +53,23 @@ public class ProfileService {
      *
      * @param personApi Редактируемые данные
      */
-    public AbstractResponse editMe(ru.skillbox.socialnetwork.api.response.PersonApi personApi) {
+    public AbstractResponse editMe(ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
         person.setFirstName(personApi.getFirst_name());
         person.setLastName(personApi.getLast_name());
-        person.setBirthDate(new Date(personApi.getBirth_date()));
-        person.setPhone(personApi.getPhone());
-        person.setPhoto(personApi.getPhoto());
+        person.setBirthDate(personApi.getBirth_date());
+        if(!personApi.getPhone().equals("false")) {
+            person.setPhone(personApi.getPhone());
+        }
+        if(personApi.getPhoto_id() != null) {
+            person.setPhoto(personApi.getPhoto_id());
+        }
         person.setAbout(personApi.getAbout());
         person.setTown(Integer.toString(personApi.getTown_id()));
-        person.setMessagesPermission(personApi.getMessages_permission());
+        if(personApi.getMessages_permission() != null) {
+            person.setMessagesPermission(personApi.getMessages_permission());
+        }
         personDAO.updatePerson(person);
         PersonApi personApiReturn = modelMapper.map(person, PersonApi.class);
         response = new ResponseApi("string", System.currentTimeMillis(), personApiReturn);
@@ -127,7 +133,7 @@ public class ProfileService {
     public AbstractResponse getWall(PostParameters postParameters) {
         AbstractResponse response;
         PostListApi postListApi = new PostListApi();
-        List<Post> postsFromDB = postDAO.getPosts(postParameters);
+        List<Post> postsFromDB = postDAO.getFeed(postParameters.getId());
         List<PostApi> posts = new ArrayList<>();
         for (Post post : postsFromDB) {
             posts.add(modelMapper.map(post, PostApi.class));

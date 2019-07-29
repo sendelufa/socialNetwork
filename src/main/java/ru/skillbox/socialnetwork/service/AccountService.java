@@ -154,7 +154,7 @@ public class AccountService {
     }
 
     public AbstractResponse notification(String notification_type,boolean enable){
-
+        
         Person person = getCurrentUser();
 
         AbstractResponse response;

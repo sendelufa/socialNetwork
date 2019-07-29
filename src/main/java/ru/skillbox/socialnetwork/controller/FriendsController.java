@@ -1,9 +1,11 @@
 package ru.skillbox.socialnetwork.controller;
 
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostApi;
@@ -22,59 +24,64 @@ public class FriendsController {
      *@param itemPerPage Количество элементов на страницу
     */
 
-    @GetMapping("/")
+    @GetMapping("friends")
     public ResponseEntity getFriends(@RequestParam String name,
                               @RequestParam(required = false) Integer offset,
                               @RequestParam(required = false, defaultValue = "20") Integer itemPerPage){
 
         offset = offset == null ? 0 : offset;
-        PersonParameters personParameters = new PersonParameters(
+        FriendsParameters friendsParameters = new FriendsParameters(
                 name,
                 offset,
                 itemPerPage);
-        AbstractResponse response = friendsService.searchFriend(personParameters);
+        AbstractResponse response = friendsService.searchFriend(friendsParameters);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("friends/{id}")
     public ResponseEntity deleteFriend(@RequestParam int id) {
         AbstractResponse response = friendsService.deleteFriendById(id);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("friends/{id}")
     public ResponseEntity addAsFriend(@RequestParam int id) {
         AbstractResponse response = friendsService.addPersonAsFriendById(id);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
 
-    @GetMapping("/request")
+    @GetMapping("friends/request")
     public ResponseEntity getListOfRequests(@RequestParam String name,
                                      @RequestParam(required = false) Integer offset,
                                      @RequestParam(required = false, defaultValue = "20") Integer itemPerPage){
 
         offset = offset == null ? 0 : offset;
-        PersonParameters personParameters = new PersonParameters(
+        FriendsParameters friendsParameters = new FriendsParameters(
                 name,
                 offset,
                 itemPerPage);
-        AbstractResponse response = friendsService.getRequestsByName(personParameters);
+        AbstractResponse response = friendsService.getRequestsByName(friendsParameters);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 
     }
 
-    @GetMapping("/recommendations")
+    @GetMapping("friends/recommendations")
     public ResponseEntity getListOfRecommendations(@RequestParam(required = false) Integer offset,
                                                    @RequestParam(required = false, defaultValue = "20") Integer itemPerPage){
         offset = offset == null ? 0 : offset;
-        AbstractResponse response = friendsService.getRecommendations();
+        FriendsParameters friendsParameters = new FriendsParameters(
+            "",
+            offset,
+            itemPerPage);
+        AbstractResponse response = friendsService.getRecommendations(friendsParameters);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 
     }
-    @PostMapping("/api/v1/is/friends")
-    public ResponseEntity isFriend() {
+    @PostMapping("/is/friends")
+    public ResponseEntity isFriend(@RequestBody HashMap user_ids) {
+        System.out.println(user_ids.get("user_ids"));
         AbstractResponse response = friendsService.isAFriendOfUsers();
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

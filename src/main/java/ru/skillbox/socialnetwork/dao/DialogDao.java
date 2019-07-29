@@ -27,16 +27,15 @@ public class DialogDao {
       return q.list();
    }
 
-   private Session getCurrentSession() {
-      return sessionFactory.getCurrentSession();
-   }
-
-
    public void updateDialog(Dialog dialog) {
       getCurrentSession().update(dialog);
    }
 
    public void addDialog(Dialog dialog) {
       getCurrentSession().save(dialog);
+   }
+
+   private Session getCurrentSession() {
+      return sessionFactory.getCurrentSession();
    }
 }

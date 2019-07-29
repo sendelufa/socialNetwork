@@ -54,7 +54,7 @@ public class FriendsService {
     return mapFriendshipToFriendsApi(requests, parameters);
   }
 
-  public AbstractResponse getRecommendations() {
+  public AbstractResponse getRecommendations(FriendsParameters friendsParameters) {
     // FIXME: 27.07.2019 По какому принципу??
     return null;
   }

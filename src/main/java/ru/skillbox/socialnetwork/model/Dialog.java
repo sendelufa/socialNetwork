@@ -27,6 +27,9 @@ public class Dialog {
    @Column(name = "owner_id")
    private Integer ownerId;
 
+   @Column(name = "unread_count")
+   private Integer unreadCount;
+
    @JoinColumn(name = "invite_code")
    @NotNull
    private String inviteCode;
@@ -79,4 +82,12 @@ public class Dialog {
    public void setPersonList(List<Person> personList) {
       this.personList = personList;
    }
+
+    public Integer getUnreadCount() {
+        return unreadCount;
+    }
+
+    public void setUnreadCount(Integer unreadCount) {
+        this.unreadCount = unreadCount;
+    }
 }

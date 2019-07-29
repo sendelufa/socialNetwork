@@ -3,10 +3,8 @@ package ru.skillbox.socialnetwork.dao;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
-import ru.skillbox.socialnetwork.model.Tag;
 
 @Repository
 @Transactional
@@ -34,11 +31,11 @@ public class PostDAO {
    public List<Post> getPosts(PostParameters postParameters) {
       String queryWhere = "";
 
-      queryWhere += postParameters.getDate_from() != null ?
-          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDate_from())) : "";
+      queryWhere += postParameters.getDateFom() != null ?
+          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFom())) : "";
 
-      queryWhere += postParameters.getDate_to() != null ?
-          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDate_to())) : "";
+      queryWhere += postParameters.getDateTo() != null ?
+          String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";
 
       String query = String.format("from Post p where "
               + queryWhere

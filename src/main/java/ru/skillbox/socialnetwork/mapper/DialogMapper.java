@@ -28,7 +28,7 @@ public class DialogMapper extends Mapper<Dialog, DialogApi> {
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(DialogApi.class, Dialog.class)
                 .addMappings(m -> m.skip(Dialog::setMessages))
-                .addMappings(m -> m.skip(Dialog::setUsers))
+               // .addMappings(m -> m.skip(Dialog::setUsers))
                 .addMappings(m -> m.skip(Dialog::setUnreadCount))
                 .setPostConverter(toEntityConverter());
     }
@@ -42,9 +42,9 @@ public class DialogMapper extends Mapper<Dialog, DialogApi> {
             destination.setMessages(source.getMessages());
         }
 
-        if (!Objects.isNull(source.getUsers())) {
-            destination.setUsers(source.getUsers());
-        }
+//        if (!Objects.isNull(source.getUsers())) {
+//            destination.setUsers(source.getUsers());
+//        }
 
         if (!Objects.isNull(source.getUnreadCount())) {
             destination.setUnreadСount(source.getUnreadCount());
@@ -60,9 +60,9 @@ public class DialogMapper extends Mapper<Dialog, DialogApi> {
             destination.setMessages(source.getMessages());
         }
 
-        if (!Objects.isNull(source.getUsers())) {
-            destination.setUsers(source.getUsers());
-        }
+//        if (!Objects.isNull(source.getUsers())) {
+//            destination.setUsers(source.getUsers());
+//        }
 
         if (!Objects.isNull(source.getUnreadСount())) {
             destination.setUnreadCount(source.getUnreadСount());

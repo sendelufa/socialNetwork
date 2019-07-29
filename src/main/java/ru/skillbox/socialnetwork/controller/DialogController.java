@@ -17,14 +17,14 @@ import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
-import ru.skillbox.socialnetwork.service.DialogsService;
+import ru.skillbox.socialnetwork.service.DialogService;
 
 @Controller
 @RequestMapping("dialogs")
-public class DialogsController {
+public class DialogController {
 
    @Autowired
-   private DialogsService dialogsService;
+   private DialogService dialogService;
 
    /**
     * Добавить пользователя в диалог
@@ -163,7 +163,7 @@ public class DialogsController {
    public ResponseEntity deleteMessage(
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
-      AbstractResponse response = dialogsService.deleteDialogMessages(dialogId, messageId);
+      AbstractResponse response = dialogService.deleteDialogMessages(dialogId, messageId);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
@@ -180,7 +180,7 @@ public class DialogsController {
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId,
        @RequestBody MessageSendRequestBodyApi message){
-      AbstractResponse response = dialogsService.editDialogMessage(dialogId, messageId, message);
+      AbstractResponse response = dialogService.editDialogMessage(dialogId, messageId, message);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
@@ -196,7 +196,7 @@ public class DialogsController {
    public ResponseEntity recoverMessage(
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
-      AbstractResponse response = dialogsService.recoverDialogMessage(dialogId, messageId);
+      AbstractResponse response = dialogService.recoverDialogMessage(dialogId, messageId);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
@@ -212,7 +212,7 @@ public class DialogsController {
    public ResponseEntity readMessage(
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
-      AbstractResponse response = dialogsService.readDialogMessage(dialogId, messageId);
+      AbstractResponse response = dialogService.readDialogMessage(dialogId, messageId);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
@@ -221,13 +221,13 @@ public class DialogsController {
        @RequestParam String query,
        @RequestParam int offset,
        @RequestParam int itemPerPage){
-      AbstractResponse response = dialogsService.getDialogs(query,offset,itemPerPage);
+      AbstractResponse response = dialogService.getDialogs(query,offset,itemPerPage);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    @PostMapping
    public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers){
-      AbstractResponse response = dialogsService.putDialogs(dialogUsers);
+      AbstractResponse response = dialogService.putDialogs(dialogUsers);
       return new ResponseEntity(response, HttpStatus.OK);
    }
 

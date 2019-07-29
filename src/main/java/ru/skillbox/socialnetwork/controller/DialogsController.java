@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.controller;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,10 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
-import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.request.LongpollHistoryPequestBodyApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.service.DialogsService;
 
 @Controller
@@ -225,5 +224,16 @@ public class DialogsController {
       AbstractResponse response = dialogsService.putDialogs(dialogUsers);
       return new ResponseEntity(response, HttpStatus.OK);
    }
+
+   @GetMapping("longpoll")
+   public ResponseEntity getLongpoll(){
+      return new ResponseEntity(new LongpollServerResponseBodyApi(), HttpStatus.OK);
+   }
+
+   @PostMapping("longpoll/history")
+   public ResponseEntity postLongollHistory(@RequestBody LongpollHistoryPequestBodyApi longpollPequest){
+      return new ResponseEntity(new LongpollHistoryResponseApi(), HttpStatus.OK);
+   }
+
 
 }

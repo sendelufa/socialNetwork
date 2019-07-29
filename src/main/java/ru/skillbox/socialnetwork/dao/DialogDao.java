@@ -4,10 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.model.Dialog;
 
 import java.util.List;
 
+@Component
 public class DialogDao {
 
     @Autowired

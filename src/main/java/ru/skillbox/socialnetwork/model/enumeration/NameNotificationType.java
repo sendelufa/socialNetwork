@@ -1,7 +1,7 @@
 package ru.skillbox.socialnetwork.model.enumeration;
 
 public enum NameNotificationType {
-    POST("Новый пост"),
+    FRIEND_BIRTHDAY("День рождения друга"),
     POST_COMMENT("Комментарий к посту"),
     COMMENT_COMMENT("Ответ на комментарий"),
     FRIEND_REQUEST("Запрос дружбы"),

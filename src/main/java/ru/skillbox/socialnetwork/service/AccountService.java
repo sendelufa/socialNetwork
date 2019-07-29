@@ -4,15 +4,14 @@ package ru.skillbox.socialnetwork.service;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.NotificationSettings;
@@ -157,6 +156,9 @@ public class AccountService {
         
         Person person = getCurrentUser();
 
+        System.out.println("Putting new notification setting or updating current one! \n" +
+                "incoming notificaion type: " + notification_type + "\n" +
+                "is should be enabled: " + enable + "\n");
         AbstractResponse response;
         boolean isSettingFound = false;
         ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
@@ -194,6 +196,29 @@ public class AccountService {
         response.setSuccess(false);
         return response;
 
+    }
+
+    public AbstractResponse getNotifications(){
+
+        Person person = getCurrentUser();
+
+        AbstractResponse response;
+        ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
+        List<ResponseNotificationSettingsApi> data = new ArrayList<>();
+
+
+        for(NotificationSettings setting : ns){
+            ResponseNotificationSettingsApi temp = new ResponseNotificationSettingsApi();
+
+            NameNotificationType nameNotificationType = notificationDAO.getNotificationTypeById(setting.getNotificationType()).getName();
+            temp.setNotification_type(nameNotificationType.toString());
+            temp.setEnable(setting.isEnable());
+            data.add(temp);
+        }
+
+        response = new NotificationSettingsListApi("string", System.currentTimeMillis(), data);
+        response.setSuccess(true);
+        return response;
     }
 
 

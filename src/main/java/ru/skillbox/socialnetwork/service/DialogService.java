@@ -21,7 +21,7 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
 
 @Service
-public class DialogsService {
+public class DialogService {
 
    @Autowired
    private MessageDao messageDao;

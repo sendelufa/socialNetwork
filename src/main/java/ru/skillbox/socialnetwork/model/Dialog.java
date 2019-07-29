@@ -83,11 +83,11 @@ public class Dialog {
       this.personList = personList;
    }
 
-    public Integer getUnreadCount() {
-        return unreadCount;
-    }
+   public Integer getUnreadCount() {
+      return unreadCount;
+   }
 
-    public void setUnreadCount(Integer unreadCount) {
-        this.unreadCount = unreadCount;
-    }
+   public void setUnreadCount(Integer unreadCount) {
+      this.unreadCount = unreadCount;
+   }
 }

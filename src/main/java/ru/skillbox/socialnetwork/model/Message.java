@@ -53,6 +53,7 @@ public class Message {
    @Column(name = "is_deleted")
    private boolean isDeleted;
 
+
    public int getId() {
       return id;
    }
@@ -105,11 +106,11 @@ public class Message {
 
    public void setDialogId(Integer dialogId) { this.dialogId = dialogId; }
 
-   public void setDeleted(boolean deleted) {
-      isDeleted = deleted;
+   public boolean isDeleted() {
+      return isDeleted;
    }
 
-   public boolean isDeleted(){
-      return isDeleted;
+   public void setDeleted(boolean deleted) {
+      isDeleted = deleted;
    }
 }

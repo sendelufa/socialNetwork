@@ -37,6 +37,11 @@ public class PostService {
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
+   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi postApi) {
+
+      return null;
+   }
+
    public ResponseApi getFeed(){
 
       int currentPersinId = accountService.getCurrentUser().getId();

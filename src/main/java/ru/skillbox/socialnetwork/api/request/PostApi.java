@@ -2,11 +2,23 @@ package ru.skillbox.socialnetwork.api.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class PostApi {
 
     private String title;
 
     private String postText;
+
+    private List<String> tags;
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
 
     public String getTitle() {
         return title;

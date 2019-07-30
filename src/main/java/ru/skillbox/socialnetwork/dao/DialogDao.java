@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.Dialog;
+import ru.skillbox.socialnetwork.model.Person;
 
 @Repository
 @Transactional
@@ -33,6 +34,15 @@ public class DialogDao {
 
    public void addDialog(Dialog dialog) {
       getCurrentSession().save(dialog);
+   }
+
+   public void addPersonToDialog(Dialog dialog, Person person) {
+      try {dialog.getPersonList().add(person);
+
+         getCurrentSession().save(dialog);
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
    }
 
    private Session getCurrentSession() {

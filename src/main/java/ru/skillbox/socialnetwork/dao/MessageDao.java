@@ -11,24 +11,24 @@ import ru.skillbox.socialnetwork.model.Message;
 @Transactional
 public class MessageDao {
 
-    @Autowired
-    SessionFactory sessionFactory;
+   @Autowired
+   private SessionFactory sessionFactory;
 
-    public Message getMessageById(int id){
-        return getCurrentSession().get(Message.class, id);
-    }
+   public Message getMessageById(int id){
+      return getCurrentSession().get(Message.class, id);
+   }
 
-    public void deleteMessage(Message message){
-        getCurrentSession().delete(message);
-    }
+   public void deleteMessage(Message message){
+      getCurrentSession().delete(message);
+   }
 
-    public void updateMessage(Message message){
-        getCurrentSession().update(message);
-    }
+   public void updateMessage(Message message){
+      getCurrentSession().update(message);
+   }
 
-    private Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+   private Session getCurrentSession() {
+      return sessionFactory.getCurrentSession();
+   }
 
 
 }

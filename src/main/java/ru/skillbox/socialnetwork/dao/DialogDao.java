@@ -37,12 +37,8 @@ public class DialogDao {
    }
 
    public void addPersonToDialog(Dialog dialog, Person person) {
-      try {dialog.getPersonList().add(person);
-
-         getCurrentSession().save(dialog);
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+      dialog.getPersonList().add(person);
+      getCurrentSession().save(dialog);
    }
 
    private Session getCurrentSession() {

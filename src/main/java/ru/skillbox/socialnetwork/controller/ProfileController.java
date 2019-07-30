@@ -79,15 +79,25 @@ public class ProfileController {
     */
    @GetMapping("/{id}/wall")
    public ResponseEntity getWall(
-       @RequestParam(required = false, defaultValue = "false") boolean queue,
-       @RequestParam(required = false, defaultValue = "0") int offset,
-       @RequestParam(required = false, defaultValue = "20") int itemPerPage,
+       @RequestParam(required = false) boolean queue, //, defaultValue = "false"
+       @RequestParam(required = false) String offset, //, defaultValue = "0"
+       @RequestParam(required = false) String itemPerPage, //, defaultValue = "20"
        @PathVariable("id") int id) {
       PostParameters postParameters = new PostParameters();
       postParameters.setId(id);
       postParameters.setQueue(queue);
-      postParameters.setOffset(offset);
-      postParameters.setItemPerPage(itemPerPage);
+
+      if(offset.equals("undefined")){
+         postParameters.setOffset(0);
+      } else {
+         postParameters.setOffset(Integer.parseInt(offset));
+      }
+      if(itemPerPage.equals("undefined")){
+         postParameters.setItemPerPage(20);
+      } else {
+         postParameters.setItemPerPage(Integer.parseInt(itemPerPage));
+      }
+
       AbstractResponse response = profileService.getWall(postParameters);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }

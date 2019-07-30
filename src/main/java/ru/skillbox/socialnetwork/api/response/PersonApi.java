@@ -18,6 +18,8 @@ public class PersonApi extends AbstractResponse {
   private String phone;
   private String photo;
   private String about;
+  private CityApi city;
+  private CountryApi country;
   private int town_id;
   private int country_id;
   @JsonProperty("messages_permission")
@@ -114,6 +116,21 @@ public class PersonApi extends AbstractResponse {
     this.about = about;
   }
 
+  public CityApi getCity() {
+      return city;
+  }
+
+  public void setCity(CityApi city) {
+      this.city = city;
+  }
+
+  public CountryApi getCountry() {
+      return country;
+  }
+
+  public void setCountry(CountryApi country) {
+      this.country = country;
+  }
 
   public MessagesPermissionPerson getMessages_permission() {
     return messagesPermission;

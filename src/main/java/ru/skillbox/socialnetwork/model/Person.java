@@ -50,6 +50,9 @@ public class Person {
    @Column(name = "town")
    private String town;
 
+   @Column(name = "country")
+   private String country;
+
    @Column(name = "confirmation_code")
    private String confirmationCode;
 
@@ -158,6 +161,14 @@ public class Person {
 
    public void setTown(String town) {
       this.town = town;
+   }
+
+   public String getCountry() {
+      return country;
+   }
+
+   public void setCountry(String country) {
+      this.country = country;
    }
 
    public String getConfirmationCode() {

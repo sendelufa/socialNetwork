@@ -155,7 +155,6 @@ public class AccountControllerTest {
     @Test
     public void correctSetPasswordTest() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
-        passwordApi.setOld("94f18938");
         passwordApi.setPassword("123");
 
         String json = mapper.writeValueAsString(passwordApi);

@@ -24,23 +24,22 @@ public class FriendsService {
 
 
   public AbstractResponse searchFriend(FriendsParameters parameters) {
-  //FIXME    пока забираем всех друзей пользователя
-    List<Friendship> allFriends = friendsDAO.searchAllFriendForPerson(accountService.getCurrentUser());
+    List<Friendship> allFriends = friendsDAO.searchFriend(parameters);
     if(allFriends.size() < 1)
       return sendError("НетЪ друзей");
     return mapFriendshipToFriendsApi(allFriends, parameters);
   }
 
-  public AbstractResponse deleteFriendById(int id) {
-    if(friendsDAO.deleteFriendById(id)){
+  public AbstractResponse deleteFriendById(FriendsParameters parameters) {
+    if(friendsDAO.deleteFriendById(parameters)){
       return sendOk();
     } else {
       return sendError("Не удалось удалить друга");
     }
   }
 
-  public AbstractResponse addPersonAsFriendById(int id) {
-    if(friendsDAO.addPersonAsFriendById(id)){
+  public AbstractResponse addPersonAsFriendById(FriendsParameters parameters) {
+    if(friendsDAO.addPersonAsFriendById(parameters)){
       return sendOk();
     } else {
       return sendError("Не удалось добавить друга");
@@ -54,9 +53,10 @@ public class FriendsService {
     return mapFriendshipToFriendsApi(requests, parameters);
   }
 
-  public AbstractResponse getRecommendations(FriendsParameters friendsParameters) {
+  public AbstractResponse getRecommendations(FriendsParameters parameters) {
     // FIXME: 27.07.2019 По какому принципу??
-    return null;
+    List<Friendship> rec = friendsDAO.getRecommendation(parameters);
+    return mapFriendshipToFriendsApi(rec, parameters);
   }
 
   public AbstractResponse isAFriendOfUsers() {

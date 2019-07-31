@@ -87,15 +87,20 @@ public class ProfileController {
       postParameters.setId(id);
       postParameters.setQueue(queue);
 
-      if(offset.equals("undefined")){
-         postParameters.setOffset(0);
+      System.out.println("не понял");
+      int defaultOffset = 0;
+      int defaultItemPerPAge = 20;
+
+      System.out.println("offset:" + offset + " itemPP: " + itemPerPage);
+      if(offset == null || offset.equals("undefined")){
+          postParameters.setOffset(defaultOffset);
       } else {
-         postParameters.setOffset(Integer.parseInt(offset));
+          postParameters.setOffset(Integer.parseInt(offset));
       }
-      if(itemPerPage.equals("undefined")){
-         postParameters.setItemPerPage(20);
+      if(itemPerPage == null || itemPerPage.equals("undefined")){
+          postParameters.setItemPerPage(defaultItemPerPAge);
       } else {
-         postParameters.setItemPerPage(Integer.parseInt(itemPerPage));
+          postParameters.setItemPerPage(Integer.parseInt(itemPerPage));
       }
 
       AbstractResponse response = profileService.getWall(postParameters);

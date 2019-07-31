@@ -130,10 +130,12 @@ public class ProfileService {
         AbstractResponse response;
         PostListApi postListApi = new PostListApi();
         List<Post> postsFromDB = postDAO.getFeed(postParameters.getId());
+
         List<PostApi> posts = new ArrayList<>();
         for (Post post : postsFromDB) {
             posts.add(modelMapper.map(post, PostApi.class));
         }
+        System.out.println(posts.size());
         if (posts != null && !posts.isEmpty()) {
             postListApi.setData(posts);
             postListApi.setTotal(posts.size());
@@ -141,10 +143,14 @@ public class ProfileService {
             postListApi.setPerPage(postParameters.getItemPerPage());
             response = postListApi;
             response.setSuccess(true);
-        } else {
-            response = new ErrorApi("invalid_request", "No posts were found");
-            response.setSuccess(false);
+            return  response;
+        } else if(posts.isEmpty()) {
+            response = postListApi;
+            response.setSuccess(true);
+            return  response;
         }
+        response = new ErrorApi("invalid_request", "incorrect parameters");
+        response.setSuccess(false);
         return response;
     }
 

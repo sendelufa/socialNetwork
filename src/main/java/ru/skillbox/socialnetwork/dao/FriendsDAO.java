@@ -1,6 +1,8 @@
 package ru.skillbox.socialnetwork.dao;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,8 +15,6 @@ import ru.skillbox.socialnetwork.model.Friendship;
 import ru.skillbox.socialnetwork.model.FriendshipStatus;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
-
-import java.util.List;
 
 @Repository
 @Transactional
@@ -104,11 +104,34 @@ public class FriendsDAO {
   }
 
   public List<Friendship> getRecommendation(FriendsParameters parameters) {
-    return null;
+    String query =
+        "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = 1";
+    List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
+
+    List<Friendship> list = new ArrayList<>();
+    for (Friendship myFriend : listMyFriend) {
+      List<Friendship> listFriendsOfFriend = searchAllFriendForPerson(myFriend.getDstPerson());
+      for (Friendship friendOfFriend : listFriendsOfFriend) {
+        if (!listMyFriend.contains(friendOfFriend) && !friendOfFriend.getDstPerson()
+            .equals(parameters.getPerson())) {
+          list.add(friendOfFriend);
+        }
+      }
+    }
+    return list;
   }
 
-  public List<Friendship> isAFriendOfUsers(int id) {
-    return null;
+  public List<Friendship> isAFriendOfUsers(int[] idsFriend, int currentId) {
+    List<Friendship> idStatus = new ArrayList<>();
+    for (int id : idsFriend) {
+      String query =
+          "from Friendship f where src_person_id = " + currentId + " AND dst_person_id = " + id;
+      List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
+      if (listMyFriend.size() > 0) {
+        idStatus.add(listMyFriend.get(0));
+      }
+    }
+    return idStatus;
   }
 
   private Session getCurrentSession() {

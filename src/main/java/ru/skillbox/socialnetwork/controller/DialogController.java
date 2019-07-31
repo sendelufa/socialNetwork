@@ -160,7 +160,7 @@ public class DialogController {
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
       AbstractResponse response = dialogService.deleteDialogMessages(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -177,7 +177,7 @@ public class DialogController {
        @PathVariable(value = "message_id") int messageId,
        @RequestBody MessageSendRequestBodyApi message){
       AbstractResponse response = dialogService.editDialogMessage(dialogId, messageId, message);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -193,7 +193,7 @@ public class DialogController {
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
       AbstractResponse response = dialogService.recoverDialogMessage(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -209,7 +209,7 @@ public class DialogController {
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId){
       AbstractResponse response = dialogService.readDialogMessage(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    @GetMapping
@@ -218,23 +218,23 @@ public class DialogController {
        @RequestParam int offset,
        @RequestParam int itemPerPage){
       AbstractResponse response = dialogService.getDialogs(query,offset,itemPerPage);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    @PostMapping
    public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers){
       AbstractResponse response = dialogService.putDialogs(dialogUsers);
-      return new ResponseEntity(response, HttpStatus.OK);
+      return new ResponseEntity<>(response, HttpStatus.OK);
    }
 
    @GetMapping("longpoll")
    public ResponseEntity getLongpoll(){
-      return new ResponseEntity(new LongpollServerResponseBodyApi(), HttpStatus.OK);
+      return new ResponseEntity<>(new LongpollServerResponseBodyApi(), HttpStatus.OK);
    }
 
    @PostMapping("longpoll/history")
    public ResponseEntity postLongollHistory(@RequestBody LongpollHistoryPequestBodyApi longpollPequest){
-      return new ResponseEntity(new LongpollHistoryResponseApi(), HttpStatus.OK);
+      return new ResponseEntity<>(new LongpollHistoryResponseApi(), HttpStatus.OK);
    }
 
 

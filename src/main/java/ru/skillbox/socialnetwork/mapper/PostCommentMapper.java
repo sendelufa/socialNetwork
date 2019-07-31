@@ -27,7 +27,7 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         modelMapper.createTypeMap(PostComment.class, CommentApi.class)
                 .addMappings(m -> m.skip(CommentApi::setPostId))
                 .addMappings(m -> m.skip(CommentApi::setParentId))
-                .addMappings(m -> m.skip(CommentApi::setAuthorId))
+                .addMappings(m -> m.skip(CommentApi::setAuthor))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(CommentApi.class, PostComment.class)
                 .addMappings(m -> m.skip(PostComment::setPost))
@@ -50,9 +50,6 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
             destination.setParentId(source.getParent().getId());
         }
 
-        if (!Objects.isNull(source.getAuthor())) {
-            destination.setAuthorId(source.getAuthor().getId());
-        }
     }
 
     @Override
@@ -70,7 +67,7 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         destination.setParent_id(postParent);
 
         Person person = new Person();
-        person.setId(source.getAuthorId());
+        person.setId(source.getAuthor().getId());
         destination.setAuthor(person);
     }
 }

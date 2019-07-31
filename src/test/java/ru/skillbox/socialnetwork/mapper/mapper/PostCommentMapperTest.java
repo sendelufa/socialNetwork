@@ -46,7 +46,7 @@ public class PostCommentMapperTest {
         assertEquals(postComment.getId(), commentApi.getId());
         assertEquals(postComment.getCommentText(), commentApi.getCommentText());
         assertEquals(postComment.getTime().getTime(), commentApi.getTime());
-        assertEquals(postComment.getAuthor().getId(), commentApi.getAuthorId().intValue());
+        assertEquals(postComment.getAuthor().getId(), commentApi.getAuthor().getId());
         assertEquals(postComment.getParent().getId(), commentApi.getParentId().intValue());
         assertEquals(postComment.getPost().getId(), Integer.parseInt(commentApi.getPostId()));
     }
@@ -56,7 +56,6 @@ public class PostCommentMapperTest {
     {
         CommentApi commentApi = new CommentApi();
         commentApi.setId(90);
-        commentApi.setAuthorId(234);
         commentApi.setCommentText("hear");
         commentApi.setBlocked(true);
         commentApi.setParentId(232);
@@ -68,7 +67,7 @@ public class PostCommentMapperTest {
         assertEquals(commentApi.getCommentText(), postComment.getCommentText());
         assertEquals(commentApi.isBlocked(), postComment.isBlocked());
         assertEquals(commentApi.getTime(), postComment.getTime().getTime());
-        assertEquals(commentApi.getAuthorId().intValue(), postComment.getAuthor().getId());
+        assertEquals(commentApi.getAuthor().getId(), postComment.getAuthor().getId());
         assertEquals(commentApi.getParentId().intValue(), postComment.getParent().getId());
         assertEquals(Integer.parseInt(commentApi.getPostId()), postComment.getPost().getId());
     }

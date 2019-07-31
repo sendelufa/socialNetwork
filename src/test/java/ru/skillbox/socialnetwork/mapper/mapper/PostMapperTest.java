@@ -44,7 +44,7 @@ public class PostMapperTest {
         assertEquals(post.getTime().getTime(), postApi.getTime());
         assertEquals(post.getTitle(), postApi.getTitle());
         assertEquals(post.isBlocked(), postApi.isBlocked());
-        assertEquals(post.getAuthor().getId(), postApi.getAuthorId().intValue());
+        assertEquals(post.getAuthor().getId(), postApi.getAuthor().getId());
     }
 
     @Test
@@ -53,7 +53,6 @@ public class PostMapperTest {
         PostApi postApi = new PostApi();
         postApi.setId(7);
         postApi.setTime(234238);
-        postApi.setAuthorId(6);
         postApi.setTitle("Head");
         postApi.setPostText("Grand");
         postApi.setBlocked(false);
@@ -62,7 +61,7 @@ public class PostMapperTest {
         Post post = postMapper.toEntity(postApi);
         assertEquals(postApi.getId(), post.getId());
         assertEquals(postApi.getTime(), post.getTime().getTime());
-        assertEquals(postApi.getAuthorId().intValue(), post.getAuthor().getId());
+        assertEquals(postApi.getAuthor().getId(), post.getAuthor().getId());
         assertEquals(postApi.getTitle(), post.getTitle());
         assertEquals(postApi.getPostText(), post.getPostText());
         assertEquals(postApi.isBlocked(), post.isBlocked());

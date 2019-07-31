@@ -191,16 +191,6 @@ public class PostService {
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
       postDataApi.setMyLike(true);
-
-      List<PostComment> postComments = post.getPostComments();
-      List<CommentListApiForPostApi> commentListApiForPostApis = new ArrayList<>();
-      for(PostComment pc : postComments) {
-         for(CommentListApiForPostApi clafpa : commentListApiForPostApis) {
-            clafpa = mapper.map(pc, CommentListApiForPostApi.class);
-         }
-      }
-
-      postDataApi.setComments(commentListApiForPostApis);
       return postDataApi;
    }
 
@@ -219,16 +209,6 @@ public class PostService {
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
       commentApi.setMyLike(true);
-
-      List<PostComment> postCommentsSub = comment.getPostComments();
-      List<SubCommentApi> subCommentApis = new ArrayList<>();
-      for(PostComment pc : postCommentsSub) {
-         for(SubCommentApi sca : subCommentApis) {
-            sca = mapper.map(pc, SubCommentApi.class);
-         }
-      }
-
-      commentApi.setSubComments(subCommentApis);
       return commentApi;
    }
 }

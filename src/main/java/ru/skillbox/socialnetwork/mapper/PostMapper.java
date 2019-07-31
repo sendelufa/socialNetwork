@@ -24,7 +24,7 @@ public class PostMapper extends Mapper<Post, PostApi> {
     @PostConstruct
     public void setupMapper() {
         modelMapper.createTypeMap(Post.class, PostApi.class)
-                .addMappings(m -> m.skip(PostApi::setAuthorId))
+                .addMappings(m -> m.skip(PostApi::setAuthor))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(PostApi.class, Post.class)
                 .addMappings(m -> m.skip(Post::setAuthor))
@@ -38,7 +38,7 @@ public class PostMapper extends Mapper<Post, PostApi> {
         }
 
         if (!Objects.isNull(source.getAuthor())) {
-            destination.setAuthorId(source.getAuthor().getId());
+            return;
         }
     }
 
@@ -48,7 +48,7 @@ public class PostMapper extends Mapper<Post, PostApi> {
             return;
         }
         Person person = new Person();
-        person.setId(source.getAuthorId());
+        person.setId(source.getAuthor().getId());
         destination.setAuthor(person);
     }
 }

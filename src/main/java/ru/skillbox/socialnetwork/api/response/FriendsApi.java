@@ -1,10 +1,12 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
 import java.util.List;
 
 public class FriendsApi extends ResponseApi {
- private int offset;
+  private int total;
+  private int offset;
  private int perPage;
 private List<PersonApi> data;
 
@@ -35,6 +37,7 @@ private List<PersonApi> data;
     this.perPage = perPage;
   }
 
+  @JsonProperty("data")
   public List<PersonApi> getData() {
     return data;
   }
@@ -43,4 +46,11 @@ private List<PersonApi> data;
     this.data = data;
   }
 
+  public int getTotal() {
+    return total;
+  }
+
+  public void setTotal(int total) {
+    this.total = total;
+  }
 }

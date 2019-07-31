@@ -6,9 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
-import ru.skillbox.socialnetwork.api.dto.PersonParameters;
-import ru.skillbox.socialnetwork.api.dto.PostParameters;
-import ru.skillbox.socialnetwork.api.request.PostApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.service.FriendsService;
 
@@ -40,14 +37,18 @@ public class FriendsController {
     }
 
     @DeleteMapping("friends/{id}")
-    public ResponseEntity deleteFriend(@RequestParam int id) {
-        AbstractResponse response = friendsService.deleteFriendById(id);
+    public ResponseEntity deleteFriend(@PathVariable int id) {
+        FriendsParameters friendsParameters = new FriendsParameters();
+        friendsParameters.setTargetID(id);
+        AbstractResponse response = friendsService.deleteFriendById(friendsParameters);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("friends/{id}")
-    public ResponseEntity addAsFriend(@RequestParam int id) {
-        AbstractResponse response = friendsService.addPersonAsFriendById(id);
+    public ResponseEntity addAsFriend(@PathVariable int id) {
+        FriendsParameters friendsParameters = new FriendsParameters();
+        friendsParameters.setTargetID(id);
+        AbstractResponse response = friendsService.addPersonAsFriendById(friendsParameters);
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
@@ -80,9 +81,8 @@ public class FriendsController {
 
     }
     @PostMapping("/is/friends")
-    public ResponseEntity isFriend(@RequestBody HashMap user_ids) {
-        System.out.println(user_ids.get("user_ids"));
-        AbstractResponse response = friendsService.isAFriendOfUsers();
+    public ResponseEntity isFriend(@RequestBody HashMap<String, int[]> user_ids) {
+        AbstractResponse response = friendsService.isAFriendOfUsers(user_ids.get("user_ids"));
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 

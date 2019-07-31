@@ -8,13 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.PersonApi;
-import ru.skillbox.socialnetwork.api.response.PersonListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
@@ -37,7 +31,7 @@ public class ProfileService {
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
         if(person != null){
-            PersonApi personApi = modelMapper.map(person, PersonApi.class);
+            PersonApi personApi = map(person);
             response = new ResponseApi("string", System.currentTimeMillis(), personApi);
             response.setSuccess(true);
         }
@@ -54,6 +48,7 @@ public class ProfileService {
      * @param personApi Редактируемые данные
      */
     public AbstractResponse editMe(ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
+
         AbstractResponse response;
         Person person = accountService.getCurrentUser();
         person.setFirstName(personApi.getFirst_name());
@@ -66,12 +61,12 @@ public class ProfileService {
             person.setPhoto(personApi.getPhoto_id());
         }
         person.setAbout(personApi.getAbout());
-        person.setTown(Integer.toString(personApi.getTown_id()));
+        //person.setTown(Integer.toString(personApi.getTown_id()));
         if(personApi.getMessages_permission() != null) {
             person.setMessagesPermission(personApi.getMessages_permission());
         }
         personDAO.updatePerson(person);
-        PersonApi personApiReturn = modelMapper.map(person, PersonApi.class);
+        PersonApi personApiReturn = map(person);
         response = new ResponseApi("string", System.currentTimeMillis(), personApiReturn);
         response.setSuccess(true);
         return response;
@@ -99,7 +94,8 @@ public class ProfileService {
         AbstractResponse response;
         Person person = personDAO.getPersonById(id);
         if(person != null){
-            PersonApi personApi = modelMapper.map(person, PersonApi.class);
+            PersonApi personApi = map(person);
+
             response = new ResponseApi("string", System.currentTimeMillis(), personApi);
             response.setSuccess(true);
         }
@@ -235,5 +231,21 @@ public class ProfileService {
         response = new ResponseApi("string", System.currentTimeMillis(), new ResponseApi.Message("ok"));
         response.setSuccess(true);
         return response;
+    }
+
+    public PersonApi map(Person person){
+        PersonApi personApi = modelMapper.map(person, PersonApi.class);
+
+        CityApi city = new CityApi();
+        city.setId(1);
+        city.setTitle(person.getTown());
+        personApi.setCity(city);
+
+        CountryApi country = new CountryApi();
+        country.setId(1);
+        country.setTitle(person.getCountry());
+        personApi.setCountry(country);
+
+        return personApi;
     }
 }

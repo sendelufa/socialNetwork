@@ -81,6 +81,12 @@ public class AccountController {
         return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }
 
+    @RequestMapping(value = "notifications", method = RequestMethod.GET)
+    public ResponseEntity getNotification() {
+        AbstractResponse response = accountService.getNotifications();
+        return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
     /**
      * Установить статус пользователя как online/offline
      *

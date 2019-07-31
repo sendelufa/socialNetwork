@@ -25,7 +25,7 @@ public class NotificationTypeMapperTest {
         NotificationType notificationType = new NotificationType();
         notificationType.setId(7);
         notificationType.setCode(101);
-        notificationType.setName(NameNotificationType.POST);
+        notificationType.setName(NameNotificationType.POST_COMMENT);
         NotificationTypeApi notificationTypeApi = mapper.map(notificationType, NotificationTypeApi.class);
 
         assertEquals(notificationType.getId(), notificationTypeApi.getId());

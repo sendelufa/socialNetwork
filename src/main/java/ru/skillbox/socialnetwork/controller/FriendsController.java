@@ -22,7 +22,7 @@ public class FriendsController {
     */
 
     @GetMapping("friends")
-    public ResponseEntity getFriends(@RequestParam String name,
+    public ResponseEntity getFriends(@RequestParam(required = false, defaultValue = "") String name,
                               @RequestParam(required = false) Integer offset,
                               @RequestParam(required = false, defaultValue = "20") Integer itemPerPage){
 

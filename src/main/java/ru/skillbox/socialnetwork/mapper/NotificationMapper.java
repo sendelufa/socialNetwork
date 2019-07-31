@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationType;
@@ -26,7 +27,7 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
     public void setupMapper() {
         modelMapper.createTypeMap(Notification.class, NotificationApi.class)
                 .addMappings(m -> m.skip(NotificationApi::setType_id))
-                .addMappings(m -> m.skip(NotificationApi::setPerson_id))
+                .addMappings(m -> m.skip(NotificationApi::setEntityAuthor))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(NotificationApi.class, Notification.class)
                 .addMappings(m -> m.skip(Notification::setNotificationType))
@@ -45,7 +46,8 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
         }
 
         if (!Objects.isNull(source.getPerson())) {
-            destination.setPerson_id(source.getPerson().getId());
+            Person person = source.getPerson();
+            destination.setEntityAuthor(mapper.map(person, AuthorApi.class));
         }
     }
 
@@ -60,7 +62,7 @@ public class NotificationMapper extends Mapper<Notification, NotificationApi> {
         destination.setNotificationType(notificationType);
 
         Person person = new Person();
-        person.setId(source.getPerson_id());
+        person.setId(source.getEntityAuthor().getId());
         destination.setPerson(person);
     }
 }

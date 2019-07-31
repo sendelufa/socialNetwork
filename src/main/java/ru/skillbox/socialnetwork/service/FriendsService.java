@@ -23,8 +23,6 @@ public class FriendsService {
   @Autowired
   private FriendsDAO friendsDAO;
   @Autowired
-  private PersonDAO personDAO;
-  @Autowired
   AccountService accountService;
 
 
@@ -62,10 +60,7 @@ public class FriendsService {
   public AbstractResponse getRecommendations(FriendsParameters parameters) {
     parameters.setPerson(accountService.getCurrentUser());
     List<Friendship> rec = friendsDAO.getRecommendation(parameters);
-    FriendsApi friendsApi = mapFriendshipToFriendsApi(rec, parameters);
-    friendsApi.setOffset(parameters.getOffset());
-    friendsApi.setPerPage(parameters.getItemPerPage());
-    return friendsApi;
+    return mapFriendshipToFriendsApi(rec, parameters);
   }
 
   public AbstractResponse isAFriendOfUsers(int[] ids) {
@@ -106,16 +101,14 @@ public class FriendsService {
 
   //маппер для FriendsApi
   private FriendsApi mapFriendshipToFriendsApi(@NotNull List<Friendship> list, FriendsParameters parameters){
-    return mapFriendshipToFriendsApi(list, parameters.getName());
-  }
-
-  private FriendsApi mapFriendshipToFriendsApi(@NotNull List<Friendship> list, String name){
     List<PersonApi> apis = list.stream()
         //FIXME пофиксить - поиск учитывает регистр
-        .filter(e -> e.getDstPerson().getFirstName().indexOf(name) >= 0
-            || e.getDstPerson().getLastName().indexOf(name) >= 0)
+        .filter(e -> e.getDstPerson().getFirstName().contains(parameters.getName())
+            || e.getDstPerson().getLastName().contains(parameters.getName()))
         .map(this::fillPersonApi).collect(Collectors.toList());
     FriendsApi api = new FriendsApi();
+    api.setPerPage(parameters.getItemPerPage());
+    api.setOffset(parameters.getOffset());
     api.setData(apis);
     api.setSuccess(true);
     api.setTotal(apis.size());

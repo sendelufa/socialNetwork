@@ -1,12 +1,23 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
+
 public class FriendshipStatusApi extends AbstractResponse{
 
   private int id;
+  @JsonIgnore
   private long time;
+  @JsonIgnore
   private String name;
-  private codes code;
-  public enum codes {REQUEST, FRIEND, BLOCKED, DECLINED, SUBSCRIBED}
+  private CodeFriendshipStatus code;
+
+  public FriendshipStatusApi(int id, CodeFriendshipStatus code) {
+    this.id = id;
+    this.code = code;
+  }
+
+  public FriendshipStatusApi(){}
 
   public int getId() {
     return id;
@@ -32,11 +43,11 @@ public class FriendshipStatusApi extends AbstractResponse{
     this.name = name;
   }
 
-  public codes getCode() {
+  public CodeFriendshipStatus getCode() {
     return code;
   }
 
-  public void setCode(codes code) {
+  public void setCode(CodeFriendshipStatus code) {
     this.code = code;
   }
 }

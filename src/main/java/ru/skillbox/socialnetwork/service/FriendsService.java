@@ -1,17 +1,22 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
-import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.ErrorApi;
+import ru.skillbox.socialnetwork.api.response.FriendsApi;
+import ru.skillbox.socialnetwork.api.response.FriendshipStatusApi;
+import ru.skillbox.socialnetwork.api.response.IsFriendsApi;
+import ru.skillbox.socialnetwork.api.response.PersonApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Friendship;
-import ru.skillbox.socialnetwork.model.Person;
-
-import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class FriendsService {
@@ -54,23 +59,28 @@ public class FriendsService {
   }
 
   public AbstractResponse getRecommendations(FriendsParameters parameters) {
-    // FIXME: 27.07.2019 По какому принципу??
+    parameters.setPerson(accountService.getCurrentUser());
     List<Friendship> rec = friendsDAO.getRecommendation(parameters);
-    return mapFriendshipToFriendsApi(rec, parameters);
+    FriendsApi friendsApi = mapFriendshipToFriendsApi(rec, parameters);
+    friendsApi.setOffset(parameters.getOffset());
+    friendsApi.setPerPage(parameters.getItemPerPage());
+    return friendsApi;
   }
 
-  public AbstractResponse isAFriendOfUsers() {
-    List<Friendship> friends = friendsDAO.isAFriendOfUsers(accountService.getCurrentUser().getId());
+  public AbstractResponse isAFriendOfUsers(int[] ids) {
+    List<Friendship> friends = friendsDAO.isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
     if(friends.size() < 1)
       return sendError("Это не Ваши друзья");
-    /* FIXME: 27.07.2019 Неверный ответ, надо в таком формате:
-            {
-               "user_ids": [
-                   3
-                ]
-            }
-     */
-    return mapFriendshipToFriendsApi(friends, "");
+
+    IsFriendsApi responseApi = new IsFriendsApi();
+    List<FriendshipStatusApi> listStatusApi = new ArrayList<>();
+    for (Friendship friend : friends) {
+      FriendshipStatusApi statusApi = new FriendshipStatusApi(friend.getDstPerson().getId(), friend.getFriendshipStatus().getCode());
+      listStatusApi.add(statusApi);
+    }
+    responseApi.setData(listStatusApi);
+    responseApi.setSuccess(true);
+    return responseApi;
   }
 
   //маппер для PersonApi
@@ -106,6 +116,8 @@ public class FriendsService {
         .map(this::fillPersonApi).collect(Collectors.toList());
     FriendsApi api = new FriendsApi();
     api.setData(apis);
+    api.setSuccess(true);
+    api.setTotal(apis.size());
     return api;
   }
 

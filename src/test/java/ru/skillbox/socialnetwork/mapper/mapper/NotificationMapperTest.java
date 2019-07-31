@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
 import ru.skillbox.socialnetwork.mapper.NotificationMapper;
@@ -45,7 +46,7 @@ public class NotificationMapperTest {
         assertEquals(notification.getContact(), notificationApi.getContact());
         assertEquals(notification.getEntityId(), notificationApi.getEntity_id());
         assertEquals(notification.getSentTime().getTime(), notificationApi.getSent_time());
-        assertEquals(notification.getPerson().getId(), notificationApi.getPerson_id().intValue());
+        assertEquals(notification.getPerson().getId(), notificationApi.getEntityAuthor().getId().intValue());
         assertEquals(notification.getNotificationType().getId(), notificationApi.getType_id().intValue());
     }
 
@@ -57,7 +58,9 @@ public class NotificationMapperTest {
         notificationApi.setContact("546424545");
         notificationApi.setEntity_id(944);
         notificationApi.setInfo("tool");
-        notificationApi.setPerson_id(1);
+        AuthorApi author = new AuthorApi();
+        author.setId(1);
+        notificationApi.setEntityAuthor(author);
         notificationApi.setType_id(1);
         notificationApi.setSent_time(434736483);
         Notification notification = notificationMapper.toEntity(notificationApi);
@@ -66,7 +69,7 @@ public class NotificationMapperTest {
         assertEquals(notificationApi.getContact(), notification.getContact());
         assertEquals(notificationApi.getEntity_id(), notification.getEntityId());
         assertEquals(notificationApi.getSent_time(), notification.getSentTime().getTime());
-        assertEquals(notificationApi.getPerson_id().intValue(), notification.getPerson().getId());
+        assertEquals(notificationApi.getEntityAuthor().getId().intValue(), notification.getPerson().getId());
         assertEquals(notificationApi.getType_id().intValue(), notification.getNotificationType().getId());
     }
 }

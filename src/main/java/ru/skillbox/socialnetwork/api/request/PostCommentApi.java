@@ -4,6 +4,42 @@ public class PostCommentApi {
 
     private int parent_id;
     private String comment_text;
+    private int id;
+    private long time;
+    private PersonApiForPostCommentApi author;
+    private boolean is_blocked;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public PersonApiForPostCommentApi getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(PersonApiForPostCommentApi author) {
+        this.author = author;
+    }
+
+    public boolean isIs_blocked() {
+        return is_blocked;
+    }
+
+    public void setIs_blocked(boolean is_blocked) {
+        this.is_blocked = is_blocked;
+    }
 
     public int getParent_id() {
         return parent_id;

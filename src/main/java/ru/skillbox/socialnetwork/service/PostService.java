@@ -1,23 +1,22 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Service
 public class PostService {
@@ -31,15 +30,32 @@ public class PostService {
    private PersonDAO personDAO;
    @Autowired
    private AccountService accountService;
+   @Autowired
+   private ModelMapper mapper;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
-   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi postApi) {
+   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi postApiRequest) {
+      Post post = new Post();
+      Date date = new Date();
+      date.setTime(publishDate);
+      post.setTime(date);
+      post.setAuthor(accountService.getCurrentUser());
+      post.setTitle(postApiRequest.getTitle());
+      post.setPostText(postApiRequest.getPostText());
+      List<Tag> tags = new ArrayList<>();
+      for (Tag tag : tags) {
+         for (String t : postApiRequest.getTags()) {
+            tag.setTag(t);
+         }
 
-      return null;
+      }
+      post.setTags(tags);
+      postDAO.addPost(post);
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi getFeed(){
@@ -165,11 +181,26 @@ public class PostService {
       PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());
       postDataApi.setTime(post.getTime().getTime());
-      postDataApi.setAuthorId(post.getAuthor().getId());
+
+      Person person = post.getAuthor();
+      PersonApiForPostApi personApiForPostApi = mapper.map(person, PersonApiForPostApi.class);
+
+      postDataApi.setAuthor(personApiForPostApi);
       postDataApi.setTitle(post.getTitle());
       postDataApi.setPostText(post.getPostText());
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
+      postDataApi.setMyLike(true);
+
+      List<PostComment> postComments = post.getPostComments();
+      List<CommentListApiForPostApi> commentListApiForPostApis = new ArrayList<>();
+      for(PostComment pc : postComments) {
+         for(CommentListApiForPostApi clafpa : commentListApiForPostApis) {
+            clafpa = mapper.map(pc, CommentListApiForPostApi.class);
+         }
+      }
+
+      postDataApi.setComments(commentListApiForPostApis);
       return postDataApi;
    }
 
@@ -177,12 +208,27 @@ public class PostService {
       CommentApi commentApi = new CommentApi();
       commentApi.setId(comment.getId());
       commentApi.setTime(comment.getTime().getTime());
-      commentApi.setAuthorId(comment.getAuthor().getId());
+
+      Person person = comment.getAuthor();
+      PersonApiForPostApi personApiForPostApi = mapper.map(person, PersonApiForPostApi.class);
+
+      commentApi.setAuthor(personApiForPostApi);
       commentApi.setCommentText(comment.getCommentText());
       //TODO какой ответ должен быть при отсутсвии родителя
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
+      commentApi.setMyLike(true);
+
+      List<PostComment> postCommentsSub = comment.getPostComments();
+      List<SubCommentApi> subCommentApis = new ArrayList<>();
+      for(PostComment pc : postCommentsSub) {
+         for(SubCommentApi sca : subCommentApis) {
+            sca = mapper.map(pc, SubCommentApi.class);
+         }
+      }
+
+      commentApi.setSubComments(subCommentApis);
       return commentApi;
    }
 }

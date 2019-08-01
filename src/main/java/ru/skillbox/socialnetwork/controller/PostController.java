@@ -57,8 +57,9 @@ public class PostController {
    @PostMapping("")
    public ResponseEntity addPost(
            @RequestBody PostApi request,
-           @RequestParam Long publishDate
+           @RequestParam(value = "publish_date", required = false) Long publishDate
            ) {
+      
       ResponseApi responseApi = postService.addPost(publishDate, request);
       return responseApi == null ? badRequestResponse() : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }

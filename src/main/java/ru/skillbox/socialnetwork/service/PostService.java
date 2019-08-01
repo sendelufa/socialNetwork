@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Service
 public class PostService {
@@ -37,8 +39,26 @@ public class PostService {
    }
 
    public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi request) {
+      Post post = new Post();
+      post.setTitle(request.getTitle());
+      post.setPostText(request.getPostText());
 
-      return null;
+      List<Tag> tags = new ArrayList<>();
+      List<String> tagsRequest = request.getTags();
+      for(Tag tag : tags) {
+          for(String t : tagsRequest) {
+              tag.setTag(t);
+          }
+      }
+
+      post.setTags(tags);
+
+      Date date = new Date();
+      date.setTime(publishDate);
+      post.setTime(date);
+      post.setAuthor(accountService.getCurrentUser());
+      postDAO.addPost(post);
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi getFeed(){
@@ -166,11 +186,22 @@ public class PostService {
       PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());
       postDataApi.setTime(post.getTime().getTime());
-      postDataApi.setAuthorId(post.getAuthor().getId());
+
+      Person personPost = post.getAuthor();
+      PersonApiForPostApi personApiPost = mapper.map(personPost, PersonApiForPostApi.class);
+      personApiPost.setId(personPost.getId());
+      personApiPost.setFirst_name(personPost.getFirstName());
+      personApiPost.setLast_name(personPost.getLastName());
+      personApiPost.setPhoto(personPost.getPhoto());
+      personApiPost.setLast_online_time(personPost.getLastOnlineTime() == null ? 0 : personPost.getLastOnlineTime().getTime());
+
+      postDataApi.setAuthor(personApiPost);
       postDataApi.setTitle(post.getTitle());
       postDataApi.setPostText(post.getPostText());
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
+      postDataApi.setMyLike(true);
+      //TODO сделать респонс массива тэгов и массива комментов
       return postDataApi;
    }
 
@@ -181,6 +212,11 @@ public class PostService {
 
       Person person = comment.getAuthor();
       PersonApi personApi = mapper.map(person, PersonApi.class);
+      personApi.setId(person.getId());
+      personApi.setFirst_name(person.getFirstName());
+      personApi.setLast_name(person.getLastName());
+      personApi.setPhoto(person.getPhoto());
+      personApi.setLast_online_time(person.getLastOnlineTime().getTime());
 
       commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());

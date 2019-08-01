@@ -19,27 +19,23 @@ import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 @Repository
 @Transactional
 public class FriendsDAO {
+  //TODO что считать верным статусом?
+  private static final int REQUEST_STATUS = 1;
+  private static final int FRIENDS_STATUS = 2;
 
   @Autowired
   private SessionFactory sessionFactory;
 
   @Autowired
-  PersonDAO personDAO;
+  private PersonDAO personDAO;
 
-  // FIXME: 24.07.2019 //временный тестовый метод
-  public List<Friendship> getAllFriendship() {
-    return getCurrentSession().createQuery("from Friendship f").list();
-  }
-
-
-  public List<Friendship> searchAllFriendForPerson(Person person) {
+  private List<Friendship> searchAllFriendForPerson(Person person) {
     String query = "from Friendship f where src_person_id = " + person.getId();
     List<Friendship> list = getCurrentSession().createQuery(query).list();
     return list;
   }
 
   public List<Friendship> searchFriend(FriendsParameters parameters) {
-
     String query = "from Friendship f where src_person_id = " + parameters.getId();
     query += parameters.getName().isEmpty() ? "" : " AND f." + parameters.getName();
     Query q = getCurrentSession().createQuery(query);
@@ -63,7 +59,7 @@ public class FriendsDAO {
 
   public List<Friendship> getRequestsByName(FriendsParameters parameters) {
     String query = "FROM Friendship f WHERE f.src_person_id = " + parameters.getId()
-        + " AND f.status_id = 1";
+        + " AND f.status_id = " + REQUEST_STATUS;
     Query q = getCurrentSession().createQuery(query);
     q.setFirstResult(parameters.getOffset());
     q.setMaxResults(parameters.getItemPerPage());
@@ -81,8 +77,7 @@ public class FriendsDAO {
     }
     try {
       if (found) {
-        // FIXME: 30.07.2019 какой статус устанавливать? На выбор есть 2-5-6
-        query = "UPDATE Friendship f SET f.status_id = 2 WHERE f.src_person_id = "
+        query = "UPDATE Friendship f SET f.status_id = " + FRIENDS_STATUS + " WHERE f.src_person_id = "
             + parameters.getId() + " AND f.dst_person_id = " + parameters.getTargetID();
         Query q = getCurrentSession().createQuery(query);
         q.executeUpdate();
@@ -90,7 +85,7 @@ public class FriendsDAO {
         // FIXME: 30.07.2019 еще более странная констукция со статусами
         Friendship f = new Friendship();
         FriendshipStatus fs = new FriendshipStatus();
-        fs.setId(1);
+        fs.setId(REQUEST_STATUS);
         fs.setCode(CodeFriendshipStatus.REQUEST);
         f.setFriendshipStatus(fs);
         f.setSrcPerson(parameters.getPerson());
@@ -105,7 +100,7 @@ public class FriendsDAO {
 
   public List<Friendship> getRecommendation(FriendsParameters parameters) {
     String query =
-        "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = 1";
+        "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = " + FRIENDS_STATUS;
     List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
 
     List<Friendship> list = new ArrayList<>();
@@ -138,7 +133,4 @@ public class FriendsDAO {
     return sessionFactory.getCurrentSession();
   }
 
-  private Query query(String s) {
-    return null;
-  }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
+import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
@@ -27,18 +28,15 @@ import ru.skillbox.socialnetwork.utils.PredicateOpt;
 @Service
 public class DialogService implements PredicateOpt {
 
+   private final String ERROR_DIALOG_NOT_EXIST = "This dialog doesn't exist";
    @Autowired
    private MessageDao messageDao;
-
    @Autowired
    private DialogDao dialogDao;
-
    @Autowired
    private AccountService accountService;
-
    @Autowired
    private DialogMapper dialogMapper;
-
    @Autowired
    private PersonDAO personDAO;
 
@@ -59,7 +57,7 @@ public class DialogService implements PredicateOpt {
             response.setSuccess(false);
          }
       } else {
-         response = new ResponseApi("This dialog doesn't exist", System.currentTimeMillis(),
+         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
              new ResponseApi.Message("invalid_request"));
          response.setSuccess(false);
       }
@@ -84,7 +82,7 @@ public class DialogService implements PredicateOpt {
             response.setSuccess(false);
          }
       } else {
-         response = new ResponseApi("This dialog doesn't exist", System.currentTimeMillis(),
+         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
              new ResponseApi.Message("invalid_request"));
          response.setSuccess(false);
       }
@@ -108,7 +106,7 @@ public class DialogService implements PredicateOpt {
             response.setSuccess(false);
          }
       } else {
-         response = new ResponseApi("This dialog doesn't exist", System.currentTimeMillis(),
+         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
              new ResponseApi.Message("invalid_request"));
          response.setSuccess(false);
       }
@@ -134,7 +132,7 @@ public class DialogService implements PredicateOpt {
             response.setSuccess(false);
          }
       } else {
-         response = new ResponseApi("This dialog doesn't exist", System.currentTimeMillis(),
+         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
              new ResponseApi.Message("invalid_request"));
          response.setSuccess(false);
       }
@@ -174,6 +172,10 @@ public class DialogService implements PredicateOpt {
       List<Integer> personIds = new ArrayList<>();
       Dialog dialog = dialogDao.getDialogById(dialogId);
 
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+
       Arrays.stream(dialogUsersApi.getUserIds())
           .mapToObj(personDAO::getPersonById)
           .filter(Objects::nonNull)
@@ -190,6 +192,9 @@ public class DialogService implements PredicateOpt {
 
    public ResponseApi removePersons(int dialogId) {
       Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
       List<Integer> personIds = dialog.getPersonList().stream()
           .map(Person::getId)
           .collect(Collectors.toList());
@@ -201,7 +206,21 @@ public class DialogService implements PredicateOpt {
           new DialogUserShortListApi(personIds.stream().mapToInt(i -> i).toArray()));
    }
 
+   public ResponseApi getInviteLink(int dialogId) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+      return getOKResponseApi(
+          new DialogInviteLink(dialog.getInviteCode()));
+   }
+
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);
+   }
+
+   private ResponseApi getErrorResponse(String error) {
+      return new ResponseApi(error, System.currentTimeMillis(),
+          new ResponseApi.Message("invalid_request"));
    }
 }

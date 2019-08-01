@@ -65,7 +65,7 @@ public class DialogController {
    @GetMapping("/{id:\\d+}/users/invite")
    public ResponseEntity getInviteToDialog(
        @PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getInviteLink(id), HttpStatus.OK);
    }
 
    /**

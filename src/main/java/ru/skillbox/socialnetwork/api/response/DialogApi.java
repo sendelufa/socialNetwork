@@ -1,50 +1,48 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import java.util.List;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
-import ru.skillbox.socialnetwork.model.User;
-
-import java.util.List;
 
 public class DialogApi extends AbstractResponse {
 
-    private int id;
+   private int id;
 
-    private int unreadСount;
+   private Integer unreadCount;
 
-    private List<User> users;
+   private List<Person> users;
 
-    private List<Message> messages;
+   private List<Message> messages;
 
-    public int getId() {
-        return id;
-    }
+   public int getId() {
+      return id;
+   }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+   public void setId(int id) {
+      this.id = id;
+   }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
+   public List<Message> getMessages() {
+      return messages;
+   }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
+   public void setMessages(List<Message> messages) {
+      this.messages = messages;
+   }
 
-    public int getUnreadСount() {
-        return unreadСount;
-    }
+   public Integer getUnreadCount() {
+      return unreadCount;
+   }
 
-    public void setUnreadСount(int unreadСount) {
-        this.unreadСount = unreadСount;
-    }
+   public void setUnreadCount(Integer unreadCount) {
+      this.unreadCount = unreadCount;
+   }
 
-    public List<User> getUsers() {
-        return users;
-    }
+   public List<Person> getUsers() {
+      return users;
+   }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
+   public void setUsers(List<Person> users) {
+      this.users = users;
+   }
 }

@@ -188,6 +188,19 @@ public class DialogService implements PredicateOpt {
           new DialogUserShortListApi(personIds.stream().mapToInt(i -> i).toArray()));
    }
 
+   public ResponseApi removePersons(int dialogId) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      List<Integer> personIds = dialog.getPersonList().stream()
+          .map(Person::getId)
+          .collect(Collectors.toList());
+
+      dialog.getPersonList().clear();
+      dialogDao.updateDialog(dialog);
+
+      return getOKResponseApi(
+          new DialogUserShortListApi(personIds.stream().mapToInt(i -> i).toArray()));
+   }
+
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);
    }

@@ -237,6 +237,11 @@ public class DialogService implements PredicateOpt {
           new DialogUserShortListApi(personIds));
    }
 
+   public ResponseApi getMessages(String query, int offset, int itemPerPage) {
+      //TODO
+      return getErrorResponse("заглушка");
+   }
+
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);
    }

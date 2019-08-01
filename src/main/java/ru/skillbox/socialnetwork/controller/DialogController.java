@@ -92,13 +92,18 @@ public class DialogController {
 
    @GetMapping("/{id:\\d+}/messages")
    public ResponseEntity getDialogMessages(
-       @PathVariable int id,
-       @RequestParam(value = "query") String searchQuery,
-       @RequestParam(value = "offset", required = false) Integer offset,
-       @RequestParam(value = "itemPerPage",
-           required = false, defaultValue = "20") Integer itemPerPage) {
+       @PathVariable
+           int id,
+       @RequestParam(value = "query")
+           String searchQuery,
+       @RequestParam(value = "offset", required = false)
+           Integer offset,
+       @RequestParam(value = "itemPerPage", required = false, defaultValue = "20")
+           Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
-      return new ResponseEntity<>(offset + " " + searchQuery + " " + itemPerPage, HttpStatus.OK);
+
+      return new ResponseEntity<>(dialogService.getMessages(searchQuery, offset, itemPerPage),
+          HttpStatus.OK);
    }
 
    /**

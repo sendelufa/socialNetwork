@@ -29,6 +29,7 @@ import ru.skillbox.socialnetwork.utils.PredicateOpt;
 public class DialogService implements PredicateOpt {
 
    private final String ERROR_DIALOG_NOT_EXIST = "This dialog doesn't exist";
+   private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
    @Autowired
    private MessageDao messageDao;
    @Autowired
@@ -195,15 +196,16 @@ public class DialogService implements PredicateOpt {
       if (dialog == null) {
          return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
       }
-      List<Integer> personIds = dialog.getPersonList().stream()
+      int[] personIds = dialog.getPersonList().stream()
           .map(Person::getId)
-          .collect(Collectors.toList());
+          .mapToInt(i -> i)
+          .toArray();
 
       dialog.getPersonList().clear();
       dialogDao.updateDialog(dialog);
 
       return getOKResponseApi(
-          new DialogUserShortListApi(personIds.stream().mapToInt(i -> i).toArray()));
+          new DialogUserShortListApi(personIds));
    }
 
    public ResponseApi getInviteLink(int dialogId) {
@@ -213,6 +215,26 @@ public class DialogService implements PredicateOpt {
       }
       return getOKResponseApi(
           new DialogInviteLink(dialog.getInviteCode()));
+   }
+
+   public ResponseApi join(int dialogId, String inviteLink) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+      if (!dialog.getInviteCode().equals(inviteLink)) {
+         return getErrorResponse(ERROR_INVITE_NOT_EQUALS);
+      }
+
+      int[] personIds = dialog.getPersonList().stream()
+          .map(Person::getId)
+          .mapToInt(i -> i)
+          .toArray();
+
+      dialogDao.addPersonToDialog(dialog, accountService.getCurrentUser());
+
+      return getOKResponseApi(
+          new DialogUserShortListApi(personIds));
    }
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {

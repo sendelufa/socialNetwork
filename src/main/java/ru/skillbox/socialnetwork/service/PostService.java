@@ -211,12 +211,12 @@ public class PostService {
       commentApi.setTime(comment.getTime().getTime());
 
       Person person = comment.getAuthor();
-      PersonApi personApi = mapper.map(person, PersonApi.class);
+      PersonApiForPostApi personApi = mapper.map(person, PersonApiForPostApi.class);
       personApi.setId(person.getId());
       personApi.setFirst_name(person.getFirstName());
       personApi.setLast_name(person.getLastName());
       personApi.setPhoto(person.getPhoto());
-      personApi.setLast_online_time(person.getLastOnlineTime().getTime());
+      personApi.setLast_online_time(person.getLastOnlineTime() == null ? 0 : person.getLastOnlineTime().getTime());
 
       commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());
@@ -225,11 +225,7 @@ public class PostService {
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
       commentApi.setMyLike(true);
-
-      List<PostComment> postComments = comment.getPostComments();
-      CommentListApi commentListApi = mapper.map(postComments, CommentListApi.class);
-
-      commentApi.setSubComments(commentListApi);
+      //TODO вывести массив субкомментов
       return commentApi;
    }
 }

@@ -37,7 +37,8 @@ public class FriendsDAO {
 
   public List<Friendship> searchFriend(FriendsParameters parameters) {
     String query = "from Friendship f where src_person_id = " + parameters.getId();
-    query += parameters.getName().isEmpty() ? "" : " AND f." + parameters.getName();
+    //FIXME поиск по имени некорректен, отключил
+//    query += parameters.getName().isEmpty() ? "" : " AND f." + parameters.getName();
     Query q = getCurrentSession().createQuery(query);
     q.setFirstResult(parameters.getOffset());
     q.setMaxResults(parameters.getItemPerPage());
@@ -46,8 +47,8 @@ public class FriendsDAO {
 
   public boolean deleteFriendById(FriendsParameters parameters) {
     //Будут ли удаляться связанные сущности?
-    String query = "DELETE Friendship f WHERE f.src_person_id = " + parameters.getId()
-        + " AND f.dst_person_id = " + parameters.getTargetID();
+    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
+        + " AND dst_person_id = " + parameters.getTargetID();
     Query q = getCurrentSession().createQuery(query);
     try {
       q.executeUpdate();
@@ -58,8 +59,8 @@ public class FriendsDAO {
   }
 
   public List<Friendship> getRequestsByName(FriendsParameters parameters) {
-    String query = "FROM Friendship f WHERE f.src_person_id = " + parameters.getId()
-        + " AND f.status_id = " + REQUEST_STATUS;
+    String query = "FROM Friendship f WHERE src_person_id = " + parameters.getId()
+        + " AND status_id = " + REQUEST_STATUS;
     Query q = getCurrentSession().createQuery(query);
     q.setFirstResult(parameters.getOffset());
     q.setMaxResults(parameters.getItemPerPage());
@@ -77,8 +78,8 @@ public class FriendsDAO {
     }
     try {
       if (found) {
-        query = "UPDATE Friendship f SET f.status_id = " + FRIENDS_STATUS + " WHERE f.src_person_id = "
-            + parameters.getId() + " AND f.dst_person_id = " + parameters.getTargetID();
+        query = "UPDATE Friendship f SET status_id = " + FRIENDS_STATUS + " WHERE src_person_id = "
+            + parameters.getId() + " AND dst_person_id = " + parameters.getTargetID();
         Query q = getCurrentSession().createQuery(query);
         q.executeUpdate();
       } else {

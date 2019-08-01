@@ -10,35 +10,22 @@ public class FriendsParameters {
   private Person person;
 
   //имя для поиска
-  String name;
+  private String name;
 
   //целевой ИД для удаления / добавления
-
   private int targetID;
+
   //Количество элементов на страницу
-
   private int itemPerPage;
-  //сдвиг от начала
 
+  //сдвиг от начала
   private int offset;
+
   public FriendsParameters(String name, Integer offset, Integer itemPerPage){
     this.name = name;
     this.offset = offset;
     this.itemPerPage = itemPerPage;
   }
-
-  public FriendsParameters(String name, Integer offset){
-    this(name, offset, 20);
-  }
-
-  public FriendsParameters(String name){
-    this(name, 0);
-  }
-
-  public FriendsParameters(){
-    this("");
-  }
-
 
   public void setPerson(Person person) {
     this.person = person;

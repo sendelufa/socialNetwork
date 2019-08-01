@@ -10,13 +10,17 @@ public class CommentApi extends AbstractResponse{
   private String postId;
   @JsonProperty("parent_id")
   private Integer parentId;
-
   @JsonProperty("author_id")
   private Integer authorId;
+  private PersonApi author;
   @JsonProperty("comment_text")
   private String commentText;
   @JsonProperty("is_blocked")
   private boolean isBlocked;
+  @JsonProperty("my_like")
+  private boolean myLike;
+  @JsonProperty("sub_comments")
+  private CommentListApi subComments;
 
   public int getId() {
     return id;
@@ -72,5 +76,29 @@ public class CommentApi extends AbstractResponse{
 
   public void setBlocked(boolean blocked) {
     isBlocked = blocked;
+  }
+
+  public PersonApi getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(PersonApi author) {
+    this.author = author;
+  }
+
+  public boolean isMyLike() {
+    return myLike;
+  }
+
+  public void setMyLike(boolean myLike) {
+    this.myLike = myLike;
+  }
+
+  public CommentListApi getSubComments() {
+    return subComments;
+  }
+
+  public void setSubComments(CommentListApi subComments) {
+    this.subComments = subComments;
   }
 }

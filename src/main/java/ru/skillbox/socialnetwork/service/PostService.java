@@ -3,19 +3,16 @@ package ru.skillbox.socialnetwork.service;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 
@@ -31,10 +28,17 @@ public class PostService {
    private PersonDAO personDAO;
    @Autowired
    private AccountService accountService;
+   @Autowired
+   private ModelMapper mapper;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
+   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi request) {
+
+      return null;
    }
 
    public ResponseApi getFeed(){
@@ -112,9 +116,11 @@ public class PostService {
       postComment.setCommentText(postCommentApi.getComment_text());
       postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
       postComment.setPost(postDAO.getPostById(postId));
-      postComment.setTime(new Date());
-      //TODO - Получить текущего пользователя (сейчас заглушка на юзера №1)
-      postComment.setAuthor(personDAO.getPersonById(1));
+      Date date = new Date();
+      date.setTime(postCommentApi.getTime());
+      postComment.setTime(date);
+      postComment.setAuthor(accountService.getCurrentUser());
+      postComment.setBlocked(postCommentApi.isIs_blocked());
       postDAO.addComment(postComment);
       return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
    }
@@ -172,12 +178,22 @@ public class PostService {
       CommentApi commentApi = new CommentApi();
       commentApi.setId(comment.getId());
       commentApi.setTime(comment.getTime().getTime());
-      commentApi.setAuthorId(comment.getAuthor().getId());
+
+      Person person = comment.getAuthor();
+      PersonApi personApi = mapper.map(person, PersonApi.class);
+
+      commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());
       //TODO какой ответ должен быть при отсутсвии родителя
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
+      commentApi.setMyLike(true);
+
+      List<PostComment> postComments = comment.getPostComments();
+      CommentListApi commentListApi = mapper.map(postComments, CommentListApi.class);
+
+      commentApi.setSubComments(commentListApi);
       return commentApi;
    }
 }

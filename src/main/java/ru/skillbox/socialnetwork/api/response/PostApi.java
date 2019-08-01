@@ -22,18 +22,18 @@ public class PostApi extends AbstractResponse {
 
    private long likes;
 
-   private PersonApiForPostApi author;
+   private AuthorApi author;
    private List<String> tags;
 
    @JsonProperty("my_like")
    private boolean myLike;
    private List<CommentApi> comments;
 
-   public PersonApiForPostApi getAuthor() {
+   public AuthorApi getAuthor() {
       return author;
    }
 
-   public void setAuthor(PersonApiForPostApi author) {
+   public void setAuthor(AuthorApi author) {
       this.author = author;
    }
 

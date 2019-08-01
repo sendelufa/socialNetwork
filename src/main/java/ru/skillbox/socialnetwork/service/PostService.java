@@ -188,12 +188,12 @@ public class PostService {
       postDataApi.setTime(post.getTime().getTime());
 
       Person personPost = post.getAuthor();
-      PersonApiForPostApi personApiPost = mapper.map(personPost, PersonApiForPostApi.class);
+      AuthorApi personApiPost = mapper.map(personPost, AuthorApi.class);
       personApiPost.setId(personPost.getId());
-      personApiPost.setFirst_name(personPost.getFirstName());
-      personApiPost.setLast_name(personPost.getLastName());
+      personApiPost.setFirstName(personPost.getFirstName());
+      personApiPost.setLastName(personPost.getLastName());
       personApiPost.setPhoto(personPost.getPhoto());
-      personApiPost.setLast_online_time(personPost.getLastOnlineTime() == null ? 0 : personPost.getLastOnlineTime().getTime());
+      personApiPost.setLastOnlineTime(personPost.getLastOnlineTime() == null ? 0 : personPost.getLastOnlineTime().getTime());
 
       postDataApi.setAuthor(personApiPost);
       postDataApi.setTitle(post.getTitle());
@@ -211,12 +211,12 @@ public class PostService {
       commentApi.setTime(comment.getTime().getTime());
 
       Person person = comment.getAuthor();
-      PersonApiForPostApi personApi = mapper.map(person, PersonApiForPostApi.class);
+      AuthorApi personApi = mapper.map(person, AuthorApi.class);
       personApi.setId(person.getId());
-      personApi.setFirst_name(person.getFirstName());
-      personApi.setLast_name(person.getLastName());
+      personApi.setFirstName(person.getFirstName());
+      personApi.setLastName(person.getLastName());
       personApi.setPhoto(person.getPhoto());
-      personApi.setLast_online_time(person.getLastOnlineTime() == null ? 0 : person.getLastOnlineTime().getTime());
+      personApi.setLastOnlineTime(person.getLastOnlineTime() == null ? 0 : person.getLastOnlineTime().getTime());
 
       commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());

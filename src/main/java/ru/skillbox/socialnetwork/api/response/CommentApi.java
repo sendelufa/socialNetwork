@@ -14,7 +14,7 @@ public class CommentApi extends AbstractResponse{
   private Integer parentId;
   @JsonProperty("author_id")
   private Integer authorId;
-  private PersonApiForPostApi author;
+  private AuthorApi author;
   @JsonProperty("comment_text")
   private String commentText;
   @JsonProperty("is_blocked")
@@ -80,11 +80,11 @@ public class CommentApi extends AbstractResponse{
     isBlocked = blocked;
   }
 
-  public PersonApiForPostApi getAuthor() {
+  public AuthorApi getAuthor() {
     return author;
   }
 
-  public void setAuthor(PersonApiForPostApi author) {
+  public void setAuthor(AuthorApi author) {
     this.author = author;
   }
 

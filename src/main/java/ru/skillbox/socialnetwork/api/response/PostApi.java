@@ -2,6 +2,8 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class PostApi extends AbstractResponse {
 
    private int id;
@@ -19,6 +21,29 @@ public class PostApi extends AbstractResponse {
    private boolean isBlocked;
 
    private long likes;
+
+   private AuthorApi author;
+   private List<String> tags;
+
+   @JsonProperty("my_like")
+   private boolean myLike;
+   private List<CommentApi> comments;
+
+   public AuthorApi getAuthor() {
+      return author;
+   }
+
+   public void setAuthor(AuthorApi author) {
+      this.author = author;
+   }
+
+   public boolean isMyLike() {
+      return myLike;
+   }
+
+   public void setMyLike(boolean myLike) {
+      this.myLike = myLike;
+   }
 
    public int getId() {
       return id;
@@ -75,5 +100,21 @@ public class PostApi extends AbstractResponse {
 
    public void setLikes(long likes) {
       this.likes = likes;
+   }
+
+   public List<CommentApi> getComments() {
+      return comments;
+   }
+
+   public void setComments(List<CommentApi> comments) {
+      this.comments = comments;
+   }
+
+   public List<String> getTags() {
+      return tags;
+   }
+
+   public void setTags(List<String> tags) {
+      this.tags = tags;
    }
 }

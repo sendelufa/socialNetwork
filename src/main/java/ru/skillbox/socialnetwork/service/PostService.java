@@ -1,23 +1,22 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Service
 public class PostService {
@@ -31,10 +30,35 @@ public class PostService {
    private PersonDAO personDAO;
    @Autowired
    private AccountService accountService;
+   @Autowired
+   private ModelMapper mapper;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
       return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+   }
+
+   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi request) {
+      Post post = new Post();
+      post.setTitle(request.getTitle());
+      post.setPostText(request.getPostText());
+
+      List<Tag> tags = new ArrayList<>();
+      List<String> tagsRequest = request.getTags();
+      for(Tag tag : tags) {
+          for(String t : tagsRequest) {
+              tag.setTag(t);
+          }
+      }
+
+      post.setTags(tags);
+
+      Date date = new Date();
+      date.setTime(publishDate);
+      post.setTime(date);
+      post.setAuthor(accountService.getCurrentUser());
+      postDAO.addPost(post);
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi getFeed(){
@@ -112,9 +136,11 @@ public class PostService {
       postComment.setCommentText(postCommentApi.getComment_text());
       postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
       postComment.setPost(postDAO.getPostById(postId));
-      postComment.setTime(new Date());
-      //TODO - Получить текущего пользователя (сейчас заглушка на юзера №1)
-      postComment.setAuthor(personDAO.getPersonById(1));
+      Date date = new Date();
+      date.setTime(postCommentApi.getTime());
+      postComment.setTime(date);
+      postComment.setAuthor(accountService.getCurrentUser());
+      postComment.setBlocked(postCommentApi.isIs_blocked());
       postDAO.addComment(postComment);
       return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
    }
@@ -160,11 +186,22 @@ public class PostService {
       PostApi postDataApi = new PostApi();
       postDataApi.setId(post.getId());
       postDataApi.setTime(post.getTime().getTime());
-      postDataApi.setAuthorId(post.getAuthor().getId());
+
+      Person personPost = post.getAuthor();
+      AuthorApi personApiPost = mapper.map(personPost, AuthorApi.class);
+      personApiPost.setId(personPost.getId());
+      personApiPost.setFirstName(personPost.getFirstName());
+      personApiPost.setLastName(personPost.getLastName());
+      personApiPost.setPhoto(personPost.getPhoto());
+      personApiPost.setLastOnlineTime(personPost.getLastOnlineTime() == null ? 0 : personPost.getLastOnlineTime().getTime());
+
+      postDataApi.setAuthor(personApiPost);
       postDataApi.setTitle(post.getTitle());
       postDataApi.setPostText(post.getPostText());
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
+      postDataApi.setMyLike(true);
+      //TODO сделать респонс массива тэгов и массива комментов
       return postDataApi;
    }
 
@@ -172,12 +209,23 @@ public class PostService {
       CommentApi commentApi = new CommentApi();
       commentApi.setId(comment.getId());
       commentApi.setTime(comment.getTime().getTime());
-      commentApi.setAuthorId(comment.getAuthor().getId());
+
+      Person person = comment.getAuthor();
+      AuthorApi personApi = mapper.map(person, AuthorApi.class);
+      personApi.setId(person.getId());
+      personApi.setFirstName(person.getFirstName());
+      personApi.setLastName(person.getLastName());
+      personApi.setPhoto(person.getPhoto());
+      personApi.setLastOnlineTime(person.getLastOnlineTime() == null ? 0 : person.getLastOnlineTime().getTime());
+
+      commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());
       //TODO какой ответ должен быть при отсутсвии родителя
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
+      commentApi.setMyLike(true);
+      //TODO вывести массив субкомментов
       return commentApi;
    }
 }

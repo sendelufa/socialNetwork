@@ -57,7 +57,7 @@ public class FriendsController {
 
 
     @GetMapping("friends/request")
-    public ResponseEntity getListOfRequests(@RequestParam String name,
+    public ResponseEntity getListOfRequests(@RequestParam(required = false, defaultValue = "") String name,
                                      @RequestParam(required = false) Integer offset,
                                      @RequestParam(required = false, defaultValue = "20") Integer itemPerPage){
         FriendsParameters friendsParameters = createParameters(

@@ -1,15 +1,18 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
 public class FriendshipStatusApi extends AbstractResponse{
 
+  @JsonProperty("user_id")
   private int id;
   @JsonIgnore
   private long time;
   @JsonIgnore
   private String name;
+  @JsonProperty("status")
   private CodeFriendshipStatus code;
 
   public FriendshipStatusApi(int id, CodeFriendshipStatus code) {

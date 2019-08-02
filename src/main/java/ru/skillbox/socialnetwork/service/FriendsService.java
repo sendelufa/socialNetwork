@@ -27,7 +27,6 @@ public class FriendsService {
 
 
   public AbstractResponse searchFriend(FriendsParameters parameters) {
-    parameters.setPerson(accountService.getCurrentUser());
     List<Friendship> allFriends = friendsDAO.searchFriend(parameters);
     if(allFriends.size() < 1)
       return sendError("НетЪ друзей");
@@ -58,7 +57,6 @@ public class FriendsService {
   }
 
   public AbstractResponse getRecommendations(FriendsParameters parameters) {
-    parameters.setPerson(accountService.getCurrentUser());
     List<Friendship> rec = friendsDAO.getRecommendation(parameters);
     return mapFriendshipToFriendsApi(rec, parameters);
   }

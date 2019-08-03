@@ -9,9 +9,6 @@ public class PostApi extends AbstractResponse {
    private int id;
    private long time;
 
-   @JsonProperty("author_id")
-   private Integer authorId;
-
    private String title;
 
    @JsonProperty("post_text")
@@ -27,6 +24,7 @@ public class PostApi extends AbstractResponse {
 
    @JsonProperty("my_like")
    private boolean myLike;
+
    private List<CommentApi> comments;
 
    public AuthorApi getAuthor() {
@@ -59,14 +57,6 @@ public class PostApi extends AbstractResponse {
 
    public void setTime(long time) {
       this.time = time;
-   }
-
-   public Integer getAuthorId() {
-      return authorId;
-   }
-
-   public void setAuthorId(Integer authorId) {
-      this.authorId = authorId;
    }
 
    public String getTitle() {

@@ -29,9 +29,6 @@ public class FriendsDAO {
   @Autowired
   private PersonDAO personDAO;
 
-  @Autowired
-  private NotificationDAO notificationDAO;
-
   private List<Friendship> searchAllFriendForPerson(Person person) {
     String query = "from Friendship f where src_person_id = " + person.getId();
     List<Friendship> list = getCurrentSession().createQuery(query).list();
@@ -48,28 +45,16 @@ public class FriendsDAO {
         select.add(f);
       }
     }
-    int offset = select.size() >= parameters.getOffset() ? parameters.getOffset() : select.size();
-    int itemPerPage = select.size() >= offset + parameters.getItemPerPage() ? offset + parameters.getItemPerPage() : select.size();
-//при превышении длины списка возвращает последнее значение
-    return select.subList(offset, itemPerPage);
+    return select.subList(parameters.getOffset(), parameters.getItemPerPage());
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    //Первый вариант
-//    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
-//        + " AND dst_person_id = " + parameters.getTargetID();
-//    Query q = getCurrentSession().createQuery(query);
-//    try {
-//      q.executeUpdate();
-//    } catch (HibernateException ex) {
-//      return false;
-//    }
-    //Второй вариант
-    Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
+    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
+        + " AND dst_person_id = " + parameters.getTargetID();
+    Query q = getCurrentSession().createQuery(query);
     try {
-      notificationDAO.deleteNotificationByFriendId(parameters);
-      getCurrentSession().delete(f);
-    } catch (HibernateException ex){
+      q.executeUpdate();
+    } catch (HibernateException ex) {
       return false;
     }
     return true;
@@ -86,26 +71,29 @@ public class FriendsDAO {
 
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
     List<Friendship> requests = getRequestsByName(parameters);
-    Friendship id = null;
+    String query = "";
     boolean found = false;
     for (Friendship f : requests) {
       if (f.getDstPerson().getId() == parameters.getTargetID()) {
         found = true;
-        id = f;
       }
     }
     try {
       if (found) {
-        FriendshipStatus statusFriend = getCurrentSession().get(FriendshipStatus.class, FRIENDS_STATUS);
-        id.setFriendshipStatus(statusFriend);
-        getCurrentSession().save(id);
+        query = "UPDATE Friendship f SET status_id = " + FRIENDS_STATUS + " WHERE src_person_id = "
+            + parameters.getId() + " AND dst_person_id = " + parameters.getTargetID();
+        Query q = getCurrentSession().createQuery(query);
+        q.executeUpdate();
       } else {
-        Friendship newFriend = new Friendship();
-        FriendshipStatus statusRequest = getCurrentSession().get(FriendshipStatus.class, REQUEST_STATUS);
-        newFriend.setFriendshipStatus(statusRequest);
-        newFriend.setSrcPerson(parameters.getPerson());
-        newFriend.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
-        getCurrentSession().save(newFriend);
+        // FIXME: 30.07.2019 еще более странная констукция со статусами
+        Friendship f = new Friendship();
+        FriendshipStatus fs = new FriendshipStatus();
+        fs.setId(REQUEST_STATUS);
+        fs.setCode(CodeFriendshipStatus.REQUEST);
+        f.setFriendshipStatus(fs);
+        f.setSrcPerson(parameters.getPerson());
+        f.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
+        getCurrentSession().save(f);
       }
     } catch (HibernateException ex) {
       return false;

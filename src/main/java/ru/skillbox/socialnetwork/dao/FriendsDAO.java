@@ -52,17 +52,9 @@ public class FriendsDAO {
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    //Первый вариант
-//    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
-//        + " AND dst_person_id = " + parameters.getTargetID();
-//    Query q = getCurrentSession().createQuery(query);
-//    try {
-//      q.executeUpdate();
-//    } catch (HibernateException ex) {
-//      return false;
-//    }
-    //Второй вариант
-    Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
+    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
+        + " AND dst_person_id = " + parameters.getTargetID();
+    Query q = getCurrentSession().createQuery(query);
     try {
       getCurrentSession().delete(f);
     } catch (HibernateException ex){

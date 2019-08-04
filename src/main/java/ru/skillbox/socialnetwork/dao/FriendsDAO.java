@@ -37,16 +37,18 @@ public class FriendsDAO {
 
   public List<Friendship> searchFriend(FriendsParameters parameters) {
     String query = "from Friendship f where src_person_id = " + parameters.getId();
-    //FIXME поиск по имени некорректен, отключил
-//    query += parameters.getName().isEmpty() ? "" : " AND f." + parameters.getName();
     Query q = getCurrentSession().createQuery(query);
-    q.setFirstResult(parameters.getOffset());
-    q.setMaxResults(parameters.getItemPerPage());
-    return q.list();
+    ArrayList<Friendship> all = (ArrayList<Friendship>)q.list();
+    ArrayList<Friendship> select = new ArrayList<>();
+    for(Friendship f : all){
+      if (f.getDstPerson().getFirstName().contains(parameters.getName()) || f.getDstPerson().getLastName().contains(parameters.getName())){
+        select.add(f);
+      }
+    }
+    return select.subList(parameters.getOffset(), parameters.getItemPerPage());
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    //Будут ли удаляться связанные сущности?
     String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
         + " AND dst_person_id = " + parameters.getTargetID();
     Query q = getCurrentSession().createQuery(query);

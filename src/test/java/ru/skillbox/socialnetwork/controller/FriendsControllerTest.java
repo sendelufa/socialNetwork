@@ -31,7 +31,7 @@ import ru.skillbox.socialnetwork.service.AccountService;
 @AutoConfigureMockMvc
 public class FriendsControllerTest {
 
-  private static final String EMAIL_1 = "vadikvasov@mail.ru";//email пользователя для авторизации в тестах
+  private static final String EMAIL_1 = "ivaniavanov@mail.ru";//email пользователя для авторизации в тестах
 
   @Autowired
   private MockMvc mvc;

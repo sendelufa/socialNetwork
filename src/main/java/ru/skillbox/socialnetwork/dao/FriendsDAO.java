@@ -80,7 +80,6 @@ public class FriendsDAO {
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
     List<Friendship> requests = getRequestsByName(parameters);
     Friendship id = null;
-    String query = "";
     boolean found = false;
     for (Friendship f : requests) {
       if (f.getDstPerson().getId() == parameters.getTargetID()) {
@@ -94,12 +93,12 @@ public class FriendsDAO {
         id.setFriendshipStatus(statusFriend);
         getCurrentSession().save(id);
       } else {
-        Friendship f = new Friendship();
+        Friendship newFriend = new Friendship();
         FriendshipStatus statusRequest = getCurrentSession().get(FriendshipStatus.class, REQUEST_STATUS);
-        f.setFriendshipStatus(statusRequest);
-        f.setSrcPerson(parameters.getPerson());
-        f.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
-        getCurrentSession().save(f);
+        newFriend.setFriendshipStatus(statusRequest);
+        newFriend.setSrcPerson(parameters.getPerson());
+        newFriend.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
+        getCurrentSession().save(newFriend);
       }
     } catch (HibernateException ex) {
       return false;

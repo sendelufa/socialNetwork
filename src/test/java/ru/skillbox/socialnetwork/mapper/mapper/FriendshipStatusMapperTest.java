@@ -46,7 +46,7 @@ public class FriendshipStatusMapperTest {
     {
         FriendshipStatusApi friendshipStatusApi = new FriendshipStatusApi();
         friendshipStatusApi.setId(96786);
-        friendshipStatusApi.setCode(FriendshipStatusApi.codes.BLOCKED);
+        friendshipStatusApi.setCode(CodeFriendshipStatus.BLOCKED);
         friendshipStatusApi.setName("Elena");
         friendshipStatusApi.setTime(89846373);
         FriendshipStatus friendshipStatus = mapper.map(friendshipStatusApi, FriendshipStatus.class);

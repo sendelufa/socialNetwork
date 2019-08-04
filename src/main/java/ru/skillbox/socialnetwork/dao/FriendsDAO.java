@@ -49,12 +49,20 @@ public class FriendsDAO {
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
-        + " AND dst_person_id = " + parameters.getTargetID();
-    Query q = getCurrentSession().createQuery(query);
+    //Первый вариант
+//    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
+//        + " AND dst_person_id = " + parameters.getTargetID();
+//    Query q = getCurrentSession().createQuery(query);
+//    try {
+//      q.executeUpdate();
+//    } catch (HibernateException ex) {
+//      return false;
+//    }
+    //Второй вариант
+    Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
     try {
-      q.executeUpdate();
-    } catch (HibernateException ex) {
+      getCurrentSession().delete(f);
+    } catch (HibernateException ex){
       return false;
     }
     return true;
@@ -85,10 +93,6 @@ public class FriendsDAO {
         FriendshipStatus statusFriend = getCurrentSession().get(FriendshipStatus.class, FRIENDS_STATUS);
         id.setFriendshipStatus(statusFriend);
         getCurrentSession().save(id);
-//        query = "UPDATE Friendship f SET status_id = " + FRIENDS_STATUS + " WHERE src_person_id = "
-//            + parameters.getId() + " AND dst_person_id = " + parameters.getTargetID();
-//        Query q = getCurrentSession().createQuery(query);
-//        q.executeUpdate();
       } else {
         Friendship f = new Friendship();
         FriendshipStatus statusRequest = getCurrentSession().get(FriendshipStatus.class, REQUEST_STATUS);

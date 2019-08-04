@@ -71,26 +71,28 @@ public class FriendsDAO {
 
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
     List<Friendship> requests = getRequestsByName(parameters);
+    Friendship id = null;
     String query = "";
     boolean found = false;
     for (Friendship f : requests) {
       if (f.getDstPerson().getId() == parameters.getTargetID()) {
         found = true;
+        id = f;
       }
     }
     try {
       if (found) {
-        query = "UPDATE Friendship f SET status_id = " + FRIENDS_STATUS + " WHERE src_person_id = "
-            + parameters.getId() + " AND dst_person_id = " + parameters.getTargetID();
-        Query q = getCurrentSession().createQuery(query);
-        q.executeUpdate();
+        FriendshipStatus statusFriend = getCurrentSession().get(FriendshipStatus.class, FRIENDS_STATUS);
+        id.setFriendshipStatus(statusFriend);
+        getCurrentSession().save(id);
+//        query = "UPDATE Friendship f SET status_id = " + FRIENDS_STATUS + " WHERE src_person_id = "
+//            + parameters.getId() + " AND dst_person_id = " + parameters.getTargetID();
+//        Query q = getCurrentSession().createQuery(query);
+//        q.executeUpdate();
       } else {
-        // FIXME: 30.07.2019 еще более странная констукция со статусами
         Friendship f = new Friendship();
-        FriendshipStatus fs = new FriendshipStatus();
-        fs.setId(REQUEST_STATUS);
-        fs.setCode(CodeFriendshipStatus.REQUEST);
-        f.setFriendshipStatus(fs);
+        FriendshipStatus statusRequest = getCurrentSession().get(FriendshipStatus.class, REQUEST_STATUS);
+        f.setFriendshipStatus(statusRequest);
         f.setSrcPerson(parameters.getPerson());
         f.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
         getCurrentSession().save(f);

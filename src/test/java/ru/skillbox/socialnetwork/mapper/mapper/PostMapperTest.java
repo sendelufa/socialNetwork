@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
 import ru.skillbox.socialnetwork.mapper.PostMapper;
@@ -44,7 +45,7 @@ public class PostMapperTest {
         assertEquals(post.getTime().getTime(), postApi.getTime());
         assertEquals(post.getTitle(), postApi.getTitle());
         assertEquals(post.isBlocked(), postApi.isBlocked());
-        assertEquals(post.getAuthor().getId(), postApi.getAuthorId().intValue());
+        assertEquals(post.getAuthor().getId(), postApi.getAuthor().getId().intValue());
     }
 
     @Test
@@ -53,7 +54,8 @@ public class PostMapperTest {
         PostApi postApi = new PostApi();
         postApi.setId(7);
         postApi.setTime(234238);
-        postApi.setAuthorId(6);
+        postApi.setAuthor(new AuthorApi());
+        postApi.getAuthor().setId(6);
         postApi.setTitle("Head");
         postApi.setPostText("Grand");
         postApi.setBlocked(false);
@@ -62,7 +64,7 @@ public class PostMapperTest {
         Post post = postMapper.toEntity(postApi);
         assertEquals(postApi.getId(), post.getId());
         assertEquals(postApi.getTime(), post.getTime().getTime());
-        assertEquals(postApi.getAuthorId().intValue(), post.getAuthor().getId());
+        assertEquals(postApi.getAuthor().getId().intValue(), post.getAuthor().getId());
         assertEquals(postApi.getTitle(), post.getTitle());
         assertEquals(postApi.getPostText(), post.getPostText());
         assertEquals(postApi.isBlocked(), post.isBlocked());

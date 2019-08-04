@@ -82,6 +82,7 @@ public class NotificationService {
         notificationListApi = new NotificationListApi();
         notificationListApi.setData(notifications.stream().map(notificationMapper::toApi)
                 .collect(Collectors.toList()));
+        notifications.forEach(notificationDAO::deleteNotification);
         notificationListApi.setTotal(notifications.size());
         notificationListApi.setSuccess(true);
         return notificationListApi;

@@ -22,7 +22,7 @@ public class CommentApi extends AbstractResponse{
   @JsonProperty("my_like")
   private boolean myLike;
   @JsonProperty("sub_comments")
-  private List<CommentApi> subComments;
+  private List<SubCommentApi> subComments;
 
   public int getId() {
     return id;
@@ -96,11 +96,11 @@ public class CommentApi extends AbstractResponse{
     this.myLike = myLike;
   }
 
-  public List<CommentApi> getSubComments() {
+  public List<SubCommentApi> getSubComments() {
     return subComments;
   }
 
-  public void setSubComments(List<CommentApi> subComments) {
+  public void setSubComments(List<SubCommentApi> subComments) {
     this.subComments = subComments;
   }
 }

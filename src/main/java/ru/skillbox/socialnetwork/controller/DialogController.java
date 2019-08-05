@@ -117,7 +117,8 @@ public class DialogController {
    public ResponseEntity sendMessage(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")),
+          HttpStatus.OK);
    }
 
    /**
@@ -131,7 +132,7 @@ public class DialogController {
    public ResponseEntity getPersonActivity(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getLastActivity(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -145,7 +146,8 @@ public class DialogController {
    public ResponseEntity getPrintStatus(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      //TODO what should happen when the status changes?
+      return new ResponseEntity<>(dialogService.setPrintStatus(id, userId), HttpStatus.OK);
    }
 
    /**

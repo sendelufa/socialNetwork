@@ -2,16 +2,20 @@ package ru.skillbox.socialnetwork.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.DialogActivityChangeApi;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
 import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
+import ru.skillbox.socialnetwork.api.response.DialogLastActivityApi;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
 import ru.skillbox.socialnetwork.api.response.DialogMessageListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
@@ -32,6 +36,8 @@ import ru.skillbox.socialnetwork.utils.PredicateOpt;
 public class DialogService implements PredicateOpt {
 
    private final String ERROR_DIALOG_NOT_EXIST = "This dialog doesn't exist";
+   private final String ERROR_PERSON_NOT_EXIST = "This person doesn't exist";
+   private final String ERROR_PERSON_NOT_IN_DIALOG = "Dialog not contains person";
    private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
    @Autowired
    private MessageDao messageDao;
@@ -281,6 +287,43 @@ public class DialogService implements PredicateOpt {
 
       return new ResponseApi("ok", System.currentTimeMillis(), messageListItemApi);
    }
+
+   public ResponseApi getLastActivity(int dialogId, int personId) {
+      DialogLastActivityApi lastActivityApi = new DialogLastActivityApi();
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      Person person = personDAO.getPersonById(personId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+      if (person == null) {
+         return getErrorResponse(ERROR_PERSON_NOT_EXIST);
+      }
+      if (!dialog.getPersonList().contains(person)) {
+         return getErrorResponse(ERROR_PERSON_NOT_IN_DIALOG);
+      }
+      //TODO what value LastActivity must contain? current - last Message timestamp
+      Optional<Message> lastMessageOptional =
+          dialog.getMessages()
+              .stream()
+              .filter(m -> m.getAuthor().equals(person))
+              .max(Comparator.comparing(Message::getTime));
+
+      long lastActivity = lastMessageOptional.map(message -> message.getTime().getTime())
+          .orElse(0L);
+
+      lastActivityApi.setLastActivity(lastActivity);
+      lastActivityApi.setOnline(person.isOnline());
+
+      return new ResponseApi("ok", System.currentTimeMillis(), lastActivityApi);
+   }
+
+   public ResponseApi setPrintStatus(int dialogId, int personId) {
+      //TODO not fully realised
+      DialogActivityChangeApi activityChangeApi = new DialogActivityChangeApi();
+      activityChangeApi.setMessage("message");
+      return new ResponseApi("ok", System.currentTimeMillis(), activityChangeApi);
+   }
+
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);

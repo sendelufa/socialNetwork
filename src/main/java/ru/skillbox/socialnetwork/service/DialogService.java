@@ -2,17 +2,25 @@ package ru.skillbox.socialnetwork.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.DialogActivityChangeApi;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
+import ru.skillbox.socialnetwork.api.response.DialogDeleteApi;
 import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
+import ru.skillbox.socialnetwork.api.response.DialogLastActivityApi;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
+import ru.skillbox.socialnetwork.api.response.DialogMessageListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
+import ru.skillbox.socialnetwork.api.response.MessageListItemApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.DialogDao;
@@ -29,7 +37,10 @@ import ru.skillbox.socialnetwork.utils.PredicateOpt;
 public class DialogService implements PredicateOpt {
 
    private final String ERROR_DIALOG_NOT_EXIST = "This dialog doesn't exist";
+   private final String ERROR_PERSON_NOT_EXIST = "This person doesn't exist";
+   private final String ERROR_PERSON_NOT_IN_DIALOG = "Dialog not contains person";
    private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
+   private final String ERROR_USER_NOT_OWNER = "Person %s not an owner of dialog %s";
    @Autowired
    private MessageDao messageDao;
    @Autowired
@@ -237,10 +248,102 @@ public class DialogService implements PredicateOpt {
           new DialogUserShortListApi(personIds));
    }
 
-   public ResponseApi getMessages(String query, int offset, int itemPerPage) {
-      //TODO
-      return getErrorResponse("заглушка");
+   public ResponseApi getMessages(int dialogId, String query, int offset, int itemPerPage) {
+      List<Message> messageList = dialogDao.getMessages(dialogId, query, offset, itemPerPage);
+      DialogMessageListApi messageListApi = new DialogMessageListApi();
+      messageListApi.setOffset(offset);
+      messageListApi.setPerPage(itemPerPage);
+      messageListApi.setTotal(messageList.size());
+      messageListApi.setError("ok");
+      messageListApi.setTimestamp(System.currentTimeMillis());
+
+      List<MessageListItemApi> messageListApiListItem = new ArrayList<>();
+
+      for (Message m : messageList) {
+         MessageListItemApi messageListItemApi = new MessageListItemApi(
+             m.getId(), m.getTime().getTime(), m.getMessageText(), m.getReadStatus(),
+             accountService.getCurrentUser().equals(m.getAuthor()));
+         messageListApiListItem.add(messageListItemApi);
+      }
+
+      messageListApi.setData(messageListApiListItem);
+
+      return messageListApi;
    }
+
+   public ResponseApi sendMessage(int dialogId, String text) {
+      Message message = new Message();
+      message.setTime(new Date());
+      message.setAuthor(accountService.getCurrentUser());
+      //TODO what recipient in dialog? cap is person with id=1
+      message.setRecipient(personDAO.getPersonById(1));
+      message.setMessageText(text);
+      message.setReadStatus(ReadStatusMessage.SENT);
+      message.setDialogId(dialogId);
+      messageDao.addMessage(message);
+
+      MessageListItemApi messageListItemApi = new MessageListItemApi(
+          message.getId(), message.getTime().getTime(), message.getMessageText(),
+          message.getReadStatus(),
+          accountService.getCurrentUser().equals(message.getAuthor()));
+
+      return new ResponseApi("ok", System.currentTimeMillis(), messageListItemApi);
+   }
+
+   public ResponseApi getLastActivity(int dialogId, int personId) {
+      DialogLastActivityApi lastActivityApi = new DialogLastActivityApi();
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      Person person = personDAO.getPersonById(personId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+      if (person == null) {
+         return getErrorResponse(ERROR_PERSON_NOT_EXIST);
+      }
+      if (!dialog.getPersonList().contains(person)) {
+         return getErrorResponse(ERROR_PERSON_NOT_IN_DIALOG);
+      }
+      //TODO what value LastActivity must contain? current - last Message timestamp
+      Optional<Message> lastMessageOptional =
+          dialog.getMessages()
+              .stream()
+              .filter(m -> m.getAuthor().equals(person))
+              .max(Comparator.comparing(Message::getTime));
+
+      long lastActivity = lastMessageOptional.map(message -> message.getTime().getTime())
+          .orElse(0L);
+
+      lastActivityApi.setLastActivity(lastActivity);
+      lastActivityApi.setOnline(person.isOnline());
+
+      return new ResponseApi("ok", System.currentTimeMillis(), lastActivityApi);
+   }
+
+   public ResponseApi setPrintStatus(int dialogId, int personId) {
+      //TODO not fully realised
+      DialogActivityChangeApi activityChangeApi = new DialogActivityChangeApi();
+      activityChangeApi.setMessage("message");
+      return new ResponseApi("ok", System.currentTimeMillis(), activityChangeApi);
+   }
+
+   public ResponseApi deleteDialog(int dialogId) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+
+      if (accountService.getCurrentUser().getId() != dialog.getOwnerId()) {
+         return getErrorResponse(String.format(ERROR_USER_NOT_OWNER,
+             accountService.getCurrentUser().getId(), dialogId));
+      }
+      dialog.setDeleted(true);
+      dialogDao.updateDialog(dialog);
+
+      DialogDeleteApi dialogDeleteApi = new DialogDeleteApi(dialogId);
+
+      return new ResponseApi("ok", System.currentTimeMillis(), dialogDeleteApi);
+   }
+
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);

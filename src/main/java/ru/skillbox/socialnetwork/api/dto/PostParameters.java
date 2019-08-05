@@ -81,7 +81,7 @@ public class PostParameters {
       this.queue = queue;
    }
 
-   public Long getDateFom() {
+   public Long getDateFrom() {
       return dateFom;
    }
 

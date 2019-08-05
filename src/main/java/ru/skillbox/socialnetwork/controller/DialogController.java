@@ -102,7 +102,7 @@ public class DialogController {
            Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
 
-      return new ResponseEntity<>(dialogService.getMessages(searchQuery, offset, itemPerPage),
+      return new ResponseEntity<>(dialogService.getMessages(id, searchQuery, offset, itemPerPage),
           HttpStatus.OK);
    }
 
@@ -117,7 +117,8 @@ public class DialogController {
    public ResponseEntity sendMessage(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("message_text"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")),
+          HttpStatus.OK);
    }
 
    /**
@@ -131,7 +132,7 @@ public class DialogController {
    public ResponseEntity getPersonActivity(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getLastActivity(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -145,7 +146,8 @@ public class DialogController {
    public ResponseEntity getPrintStatus(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      //TODO what should happen when the status changes?
+      return new ResponseEntity<>(dialogService.setPrintStatus(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -156,7 +158,7 @@ public class DialogController {
 
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deleteDialog(@PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.deleteDialog(id), HttpStatus.OK);
    }
 
    /**

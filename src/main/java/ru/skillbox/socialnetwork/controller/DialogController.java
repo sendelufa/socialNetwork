@@ -158,7 +158,7 @@ public class DialogController {
 
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deleteDialog(@PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.deleteDialog(id), HttpStatus.OK);
    }
 
    /**

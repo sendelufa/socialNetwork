@@ -14,6 +14,7 @@ import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogActivityChangeApi;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
+import ru.skillbox.socialnetwork.api.response.DialogDeleteApi;
 import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
 import ru.skillbox.socialnetwork.api.response.DialogLastActivityApi;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
@@ -39,6 +40,7 @@ public class DialogService implements PredicateOpt {
    private final String ERROR_PERSON_NOT_EXIST = "This person doesn't exist";
    private final String ERROR_PERSON_NOT_IN_DIALOG = "Dialog not contains person";
    private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
+   private final String ERROR_USER_NOT_OWNER = "Person %s not an owner of dialog %s";
    @Autowired
    private MessageDao messageDao;
    @Autowired
@@ -322,6 +324,24 @@ public class DialogService implements PredicateOpt {
       DialogActivityChangeApi activityChangeApi = new DialogActivityChangeApi();
       activityChangeApi.setMessage("message");
       return new ResponseApi("ok", System.currentTimeMillis(), activityChangeApi);
+   }
+
+   public ResponseApi deleteDialog(int dialogId) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null) {
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+
+      if (accountService.getCurrentUser().getId() != dialog.getOwnerId()) {
+         return getErrorResponse(String.format(ERROR_USER_NOT_OWNER,
+             accountService.getCurrentUser().getId(), dialogId));
+      }
+      dialog.setDeleted(true);
+      dialogDao.updateDialog(dialog);
+
+      DialogDeleteApi dialogDeleteApi = new DialogDeleteApi(dialogId);
+
+      return new ResponseApi("ok", System.currentTimeMillis(), dialogDeleteApi);
    }
 
 

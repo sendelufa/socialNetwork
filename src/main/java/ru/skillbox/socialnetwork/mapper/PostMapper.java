@@ -70,7 +70,7 @@ public class PostMapper extends Mapper<Post, PostApi> {
         person.setId(source.getAuthor().getId());
         destination.setAuthor(person);
 
-        if (Objects.isNull(source.getComments())) {
+        if (!Objects.isNull(source.getComments())) {
             List<PostComment> postCommentList = new ArrayList<>();
             for (CommentApi commentApi : source.getComments()) {
                 postCommentList.add(postCommentMapper.toEntity(commentApi));

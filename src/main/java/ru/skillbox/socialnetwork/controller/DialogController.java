@@ -102,7 +102,7 @@ public class DialogController {
            Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
 
-      return new ResponseEntity<>(dialogService.getMessages(searchQuery, offset, itemPerPage),
+      return new ResponseEntity<>(dialogService.getMessages(id, searchQuery, offset, itemPerPage),
           HttpStatus.OK);
    }
 

@@ -12,7 +12,9 @@ import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
 import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
+import ru.skillbox.socialnetwork.api.response.DialogMessageListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
+import ru.skillbox.socialnetwork.api.response.MessageListItemApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.DialogDao;
@@ -237,9 +239,27 @@ public class DialogService implements PredicateOpt {
           new DialogUserShortListApi(personIds));
    }
 
-   public ResponseApi getMessages(String query, int offset, int itemPerPage) {
-      //TODO
-      return getErrorResponse("заглушка");
+   public ResponseApi getMessages(int dialogId, String query, int offset, int itemPerPage) {
+      List<Message> messageList = dialogDao.getMessages(dialogId, query, offset, itemPerPage);
+      DialogMessageListApi messageListApi = new DialogMessageListApi();
+      messageListApi.setOffset(offset);
+      messageListApi.setPerPage(itemPerPage);
+      messageListApi.setTotal(messageList.size());
+      messageListApi.setError("ok");
+      messageListApi.setTimestamp(System.currentTimeMillis());
+
+      List<MessageListItemApi> messageListApiListItem = new ArrayList<>();
+
+      for (Message m : messageList) {
+         MessageListItemApi messageListItemApi = new MessageListItemApi(
+             m.getId(), m.getTime().getTime(), m.getMessageText(), m.getReadStatus(),
+             accountService.getCurrentUser().equals(m.getAuthor()));
+         messageListApiListItem.add(messageListItemApi);
+      }
+
+      messageListApi.setData(messageListApiListItem);
+
+      return messageListApi;
    }
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {

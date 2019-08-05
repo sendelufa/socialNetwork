@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.Dialog;
+import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
 
 @Repository
@@ -42,6 +44,19 @@ public class DialogDao {
          getCurrentSession().save(dialog);
       }
 
+   }
+
+   public List<Message> getMessages(int dialogId, @NotNull String searchText, int offset,
+       int itemPerPage) {
+      String query = String.format("from Message m where m.dialogId = %d AND"
+              + " locate('%s', m.messageText, 1) > 0 AND m.isDeleted = false ORDER BY m.time DESC",
+          dialogId, searchText);
+
+      System.out.println(query);
+      Query q = getCurrentSession().createQuery(query);
+      q.setFirstResult(offset);
+      q.setMaxResults(itemPerPage);
+      return q.list();
    }
 
    private Session getCurrentSession() {

@@ -53,7 +53,7 @@ public class SubCommentMapper extends Mapper<PostComment, SubCommentApi> {
 
     @Override
     void mapSpecificFieldsAE(SubCommentApi source, PostComment destination) {
-        if (Objects.isNull(source)) {
+        if (!Objects.isNull(source)) {
             return;
         }
 

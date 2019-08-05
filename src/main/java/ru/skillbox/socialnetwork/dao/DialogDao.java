@@ -37,8 +37,11 @@ public class DialogDao {
    }
 
    public void addPersonToDialog(Dialog dialog, Person person) {
-      dialog.getPersonList().add(person);
-      getCurrentSession().save(dialog);
+      List<Person> persons = dialog.getPersonList();
+      if (!persons.contains(person)) {
+         getCurrentSession().save(dialog);
+      }
+
    }
 
    private Session getCurrentSession() {

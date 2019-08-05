@@ -45,7 +45,10 @@ public class FriendsDAO {
         select.add(f);
       }
     }
-    return select.subList(parameters.getOffset(), parameters.getItemPerPage());
+    int offset = select.size() >= parameters.getOffset() ? parameters.getOffset() : select.size();
+    int itemPerPage = select.size() >= offset + parameters.getItemPerPage() ? offset + parameters.getItemPerPage() : select.size();
+//при превышении длины списка возвращает последнее значение
+    return select.subList(offset, itemPerPage);
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {

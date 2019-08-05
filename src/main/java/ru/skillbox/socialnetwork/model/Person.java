@@ -75,6 +75,12 @@ public class Person {
    @NotNull
    private boolean isOnline;
 
+   @ManyToMany(fetch = FetchType.LAZY)
+   @JoinTable(name = "dialogs",
+           joinColumns = @JoinColumn(name = "person_id"),
+           inverseJoinColumns = @JoinColumn(name = "dialog_id"))
+   private List<Dialog> dialogList;
+
    public int getId() {
       return id;
    }
@@ -218,4 +224,12 @@ public class Person {
     public void setOnline(boolean status) {
         isOnline = status;
     }
+
+   public List<Dialog> getDialogList() {
+      return dialogList;
+   }
+
+   public void setDialogList(List<Dialog> dialogList) {
+      this.dialogList = dialogList;
+   }
 }

@@ -109,7 +109,7 @@ public class DialogController {
    }
 
    /**
-    * Получить последнюю активность и текущий статус
+    * Получить последнюю активность и текущий статус.
     *
     * @param id id диалога
     * @param userId id пользователя
@@ -119,8 +119,25 @@ public class DialogController {
    public ResponseEntity getPersonActivity(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      AbstractResponse response = dialogService.getActivity(id, userId);
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
+
+   /**
+    * Изменить статус набора текста пользователем в диалоге.
+    *
+    * @param id id диалога
+    * @param userId id пользователя
+    */
+
+//   @PostMapping("/{id:\\d+}/activity/{user_id:\\d+}")
+//   public ResponseEntity postPersonActivity(
+//           @PathVariable int id,
+//           @PathVariable(value = "user_id") int userId) {
+//      AbstractResponse response = dialogService.setTextStatus(id, userId);
+//      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+//   }
+
 
    /**
     * Изменить статус набора текста пользователем в диалоге.
@@ -144,6 +161,7 @@ public class DialogController {
 
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deleteDialog(@PathVariable int id) {
+      AbstractResponse response = dialogService.deleteDialog(id);
       return new ResponseEntity<>(id, HttpStatus.OK);
    }
 
@@ -212,14 +230,30 @@ public class DialogController {
       return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
+   /**
+    * Получить список диалогов.
+    *
+    * @param query строка для поиска диалогов
+    * @param offset отступ от начала списка
+    * @param itemPerPage количество элементов на страницу
+    * @return
+    */
+
    @GetMapping
    public ResponseEntity getDialogs(
        @RequestParam String query,
        @RequestParam int offset,
-       @RequestParam int itemPerPage){
+       @RequestParam(defaultValue = "20") int itemPerPage){
       AbstractResponse response = dialogService.getDialogs(query,offset,itemPerPage);
       return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
+
+   /**
+    * Создать диалог
+    *
+    * @param dialogUsers id пользователей
+    * @return
+    */
 
    @PostMapping
    public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers){
@@ -227,15 +261,42 @@ public class DialogController {
       return new ResponseEntity<>(response, HttpStatus.OK);
    }
 
+   /**
+    * Получение общего кол-ва нерпочитаных сообщений.
+    *
+    * @return
+    */
+
+   @GetMapping("unreaded")
+   public ResponseEntity getUnreadedMessages(){
+      AbstractResponse response = dialogService.getUnreadedMessages();
+      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+   }
+
+
+   /**
+    * Получить данные для подключения к longpoll серверу.
+    *
+    * @return
+    */
+
    @GetMapping("longpoll")
    public ResponseEntity getLongpoll(){
       return new ResponseEntity<>(new LongpollServerResponseBodyApi(), HttpStatus.OK);
    }
 
+   /**
+    * Получить обновления личных сообщений пользователя.
+    *
+    * @param longpollPequest
+    * @return
+    */
+
    @PostMapping("longpoll/history")
    public ResponseEntity postLongollHistory(@RequestBody LongpollHistoryPequestBodyApi longpollPequest){
       return new ResponseEntity<>(new LongpollHistoryResponseApi(), HttpStatus.OK);
    }
+
 
 
 }

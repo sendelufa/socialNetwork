@@ -6,13 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.DialogApi;
-import ru.skillbox.socialnetwork.api.response.DialogListApi;
-import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
-import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
-import ru.skillbox.socialnetwork.api.response.PersonListId;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.DialogDao;
 import ru.skillbox.socialnetwork.dao.MessageDao;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
@@ -159,4 +153,51 @@ public class DialogService {
       personsIdApi.setData(dialogUsersApi.getUserIds());
       return new ResponseApi("ok", System.currentTimeMillis(), personsIdApi);
    }
+
+   public AbstractResponse getUnreadedMessages() {
+      Person person = accountService.getCurrentUser();
+      AbstractResponse response;
+      if(person != null) {
+         int countUnreadedMessages = person.getDialogList().stream().mapToInt(Dialog::getUnreadCount).sum();
+         response = new ResponseApi("string", System.currentTimeMillis(), new UnreadedCountApi(countUnreadedMessages));
+         response.setSuccess(true);
+      } else {
+         response = new ErrorApi("invalid_request", "unauthorized");
+         response.setSuccess(false);
+      }
+      return response;
+   }
+
+   public AbstractResponse deleteDialog(int id) {
+      AbstractResponse response;
+      Dialog dialog = dialogDao.getDialogById(id);
+      if(dialog != null) {
+         dialogDao.deleteDialog(dialog);
+         response = new ResponseApi();
+         response.setSuccess(true);
+      } else {
+         response = new ErrorApi("invalid_request", "This dialogs doesn't exist");
+         response.setSuccess(false);
+      }
+      return response;
+   }
+
+   public AbstractResponse getActivity(int id, int userId) {
+      AbstractResponse response;
+      Person person = personDAO.getPersonById(userId);
+      if(person != null) {
+         response = new ResponseApi("ok", System.currentTimeMillis(), new ActivityApi(person.isOnline(), person.getLastOnlineTime().getTime()));
+         response.setSuccess(true);
+      } else {
+         response = new ErrorApi("invalid_request", "This person doesn't exist");
+         response.setSuccess(false);
+      }
+      return response;
+   }
+
+//   public AbstractResponse setTextStatus(int id, int userId) {
+//      AbstractResponse response;
+//
+//      return response;
+//   }
 }

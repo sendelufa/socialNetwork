@@ -89,8 +89,8 @@ public class FriendsService {
     api.setPhone(f.getDstPerson().getPhone());
     api.setPhoto(f.getDstPerson().getPhoto());
     api.setAbout(f.getDstPerson().getAbout());
-    //TODO Как получить id города? И ид страны?
-//    api.setTown_id(f.getDstPerson().getTown());
+    api.setCity(f.getDstPerson().getTown());
+    api.setCountry(f.getDstPerson().getCountry());
     api.setMessages_permission(f.getDstPerson().getMessagesPermission());
     api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
     api.setIs_blocked(f.getDstPerson().isBlocked());

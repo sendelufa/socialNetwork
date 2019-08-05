@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import ru.skillbox.socialnetwork.api.response.CityApi;
+import ru.skillbox.socialnetwork.api.response.CountryApi;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 @Entity
@@ -48,10 +51,10 @@ public class Person {
    private String about;
 
    @Column(name = "town")
-   private String town;
+   private CityApi town;
 
    @Column(name = "country")
-   private String country;
+   private CountryApi country;
 
    @Column(name = "confirmation_code")
    private String confirmationCode;
@@ -155,19 +158,19 @@ public class Person {
       this.about = about;
    }
 
-   public String getTown() {
+   public CityApi getTown() {
       return town;
    }
 
-   public void setTown(String town) {
+   public void setTown(CityApi town) {
       this.town = town;
    }
 
-   public String getCountry() {
+   public CountryApi getCountry() {
       return country;
    }
 
-   public void setCountry(String country) {
+   public void setCountry(CountryApi country) {
       this.country = country;
    }
 

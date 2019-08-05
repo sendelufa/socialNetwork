@@ -11,7 +11,7 @@ public class MessageListItemApi extends AbstractResponse {
    private String messageText;
    @JsonProperty("read_status")
    private ReadStatusMessage readReadStatusMessage;
-   @JsonProperty("isSentByMe")
+
    private boolean isSentByMe;
 
    public MessageListItemApi(int id, long time, String messageText,
@@ -55,6 +55,7 @@ public class MessageListItemApi extends AbstractResponse {
       this.readReadStatusMessage = readReadStatusMessage;
    }
 
+   @JsonProperty("isSentByMe")
    public boolean isSentByMe() {
       return isSentByMe;
    }

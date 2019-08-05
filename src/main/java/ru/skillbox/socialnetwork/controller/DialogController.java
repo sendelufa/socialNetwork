@@ -117,7 +117,7 @@ public class DialogController {
    public ResponseEntity sendMessage(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("message_text"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")), HttpStatus.OK);
    }
 
    /**

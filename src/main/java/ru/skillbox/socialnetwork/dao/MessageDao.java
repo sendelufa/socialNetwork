@@ -18,6 +18,10 @@ public class MessageDao {
       return getCurrentSession().get(Message.class, id);
    }
 
+   public void addMessage(Message message) {
+      getCurrentSession().save(message);
+   }
+
    public void deleteMessage(Message message){
       getCurrentSession().delete(message);
    }

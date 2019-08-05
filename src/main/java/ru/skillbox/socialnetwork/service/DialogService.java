@@ -2,6 +2,7 @@ package ru.skillbox.socialnetwork.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -260,6 +261,25 @@ public class DialogService implements PredicateOpt {
       messageListApi.setData(messageListApiListItem);
 
       return messageListApi;
+   }
+
+   public ResponseApi sendMessage(int dialogId, String text) {
+      Message message = new Message();
+      message.setTime(new Date());
+      message.setAuthor(accountService.getCurrentUser());
+      //TODO what recipient in dialog? cap is person with id=1
+      message.setRecipient(personDAO.getPersonById(1));
+      message.setMessageText(text);
+      message.setReadStatus(ReadStatusMessage.SENT);
+      message.setDialogId(dialogId);
+      messageDao.addMessage(message);
+
+      MessageListItemApi messageListItemApi = new MessageListItemApi(
+          message.getId(), message.getTime().getTime(), message.getMessageText(),
+          message.getReadStatus(),
+          accountService.getCurrentUser().equals(message.getAuthor()));
+
+      return new ResponseApi("ok", System.currentTimeMillis(), messageListItemApi);
    }
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {

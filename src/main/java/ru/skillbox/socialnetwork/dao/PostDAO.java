@@ -49,11 +49,19 @@ public class PostDAO {
    }
 
    public List<Post> getFeed(int id){
+      // то, что код повторяется в гетВолл - нормально. Это временное являение - позже гетФид разрастется
        int maxItemsToShow = 10;
        String query = String.format("from Post p where p.author=%d", id);
        Query q = getCurrentSession().createQuery(query);
        q.setMaxResults(maxItemsToShow);
        return q.list();
+   }
+
+   public List<Post> getWall(int id){
+
+      String query = String.format("from Post p where p.author=%d", id);
+      Query q = getCurrentSession().createQuery(query);
+      return q.list();
    }
 
    public Post getPostById(int id) {

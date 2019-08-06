@@ -1,8 +1,16 @@
 package ru.skillbox.socialnetwork.model;
 
 import java.util.Date;
-import java.util.List;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
@@ -47,11 +55,13 @@ public class Person {
    @Column(name = "about")
    private String about;
 
-   @Column(name = "town")
-   private String town;
+   @ManyToOne
+   @JoinColumn(name = "town")
+   private Town town;
 
-   @Column(name = "country")
-   private String country;
+   @ManyToOne
+   @JoinColumn(name = "country")
+   private Country country;
 
    @Column(name = "confirmation_code")
    private String confirmationCode;
@@ -155,19 +165,19 @@ public class Person {
       this.about = about;
    }
 
-   public String getTown() {
+   public Town getTown() {
       return town;
    }
 
-   public void setTown(String town) {
+   public void setTown(Town town) {
       this.town = town;
    }
 
-   public String getCountry() {
+   public Country getCountry() {
       return country;
    }
 
-   public void setCountry(String country) {
+   public void setCountry(Country country) {
       this.country = country;
    }
 
@@ -211,11 +221,11 @@ public class Person {
       isBlocked = blocked;
    }
 
-    public boolean isOnline() {
-        return isOnline;
-    }
+   public boolean isOnline() {
+      return isOnline;
+   }
 
-    public void setOnline(boolean status) {
-        isOnline = status;
-    }
+   public void setOnline(boolean status) {
+      isOnline = status;
+   }
 }

@@ -1,6 +1,6 @@
 CREATE TABLE `country` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `short_name` VARCHAR(32) NOT NULL,
+  `title_short` VARCHAR(32) NOT NULL,
   `title` VARCHAR(64) NOT NULL,
   PRIMARY KEY (`id`));
 
@@ -27,7 +27,7 @@ ALTER TABLE `person`
 CHANGE COLUMN `town` `town` INT NULL DEFAULT NULL ,
 CHANGE COLUMN `country` `country` INT NULL DEFAULT NULL ;
 
-INSERT INTO `country` (`short_name`, `title`) VALUES ('RU', 'Россия');
+INSERT INTO `country` (`title_short`, `title`) VALUES ('RU', 'Россия');
 INSERT INTO `town` (`country_id`, `title`) VALUES ('1', 'Москва');
 
   UPDATE social_network.person

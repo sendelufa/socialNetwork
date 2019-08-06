@@ -1,5 +1,10 @@
 package ru.skillbox.socialnetwork.mapper.mapper;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -8,14 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.model.Country;
 import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Town;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class) // Необходимо для разворачивания контекста спринга чтобы внедрить бин модельмапера я
 @ContextConfiguration(classes= AppConfig.class)  //
@@ -40,7 +41,7 @@ public class PersonMapperTest {
         person.setMessagesPermission(MessagesPermissionPerson.ALL);
         person.setPhone("23723472934");
         person.setPhoto("res/jpg.jpg");
-        person.setTown("Moscow");
+        person.setTown(new Town(2, "Spb", new Country()));
         GregorianCalendar calendar = new GregorianCalendar(1992, Calendar.JANUARY, 24);
         Date birthDate = calendar.getTime();
         person.setBirthDate(birthDate);

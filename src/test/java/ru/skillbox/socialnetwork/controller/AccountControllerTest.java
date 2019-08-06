@@ -2,6 +2,7 @@ package ru.skillbox.socialnetwork.controller;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -47,16 +48,15 @@ public class AccountControllerTest {
     @MockBean
     private MailSender mailSender;
 
-  @WithUserDetails(EMAIL_1)//Удалить когда регистрация будет доступна для неавторизованых
   @Test
     public void correctRegistrationTest() throws Exception {
         RegistrationApi registrationApi = new RegistrationApi();
         registrationApi.setEmail(EMAIL_REGISTR);
         registrationApi.setFirstName("A");
         registrationApi.setLastName("B");
-        registrationApi.setPasswd1("1");
-        registrationApi.setPasswd2("1");
-        registrationApi.setCode(1);
+        registrationApi.setPasswd1("12345678");
+        registrationApi.setPasswd2("12345678");
+        registrationApi.setCode(12345);
 
         String json = mapper.writeValueAsString(registrationApi);
 
@@ -72,7 +72,6 @@ public class AccountControllerTest {
             .andDo(MockMvcResultHandlers.print());
     }
 
-  @WithUserDetails(EMAIL_1)//Удалить когда регистрация будет доступна для неавторизованых
   @Test
     public void failRegistrationTest() throws Exception {
         RegistrationApi registrationApi = new RegistrationApi();
@@ -115,7 +114,6 @@ public class AccountControllerTest {
 
     }
 
-    @WithUserDetails(EMAIL_1)//Удалить когда восстановление пароля будет доступно для неавторизованых
     @Test
     public void correctRecoveryPasswordTest() throws Exception {
         mvc.perform(put(PATH_ACC + "/password/recovery")
@@ -138,7 +136,6 @@ public class AccountControllerTest {
             );
     }
 
-    @WithUserDetails(EMAIL_1)//Удалить когда восстановление пароля будет доступно для неавторизованых
     @Test
     public void failRecoveryPasswordTest() throws Exception {
         mvc.perform(put(PATH_ACC + "/password/recovery")
@@ -155,7 +152,8 @@ public class AccountControllerTest {
     @Test
     public void correctSetPasswordTest() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
-        passwordApi.setPassword("123");
+        passwordApi.setPassword("12345678");
+        passwordApi.setToken("ad1fj118f11");
 
         String json = mapper.writeValueAsString(passwordApi);
 
@@ -176,6 +174,8 @@ public class AccountControllerTest {
     public void failSetPasswordTest() throws Exception {
         SetPasswordApi passwordApi = new SetPasswordApi();
         passwordApi.setPassword("");
+        passwordApi.setToken("");
+
         String json = mapper.writeValueAsString(passwordApi);
 
         mvc.perform(put(PATH_ACC + "/password/set")
@@ -222,7 +222,7 @@ public class AccountControllerTest {
         mvc.perform(put(PATH_ACC + "/notifications")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .with(csrf())
-            .content("{\"notification_type\": \"POST\","
+            .content("{\"notification_type\": \"MESSAGE\","
                 + "\"enable\": true}"))
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("error")))
@@ -245,6 +245,22 @@ public class AccountControllerTest {
             .andExpect(content().string(containsString("error_description")))
             .andDo(MockMvcResultHandlers.print());
     }
+
+
+  @WithUserDetails(EMAIL_1)
+  @Test
+  public void correctGetNotificationTest() throws Exception {
+    mvc.perform(get(PATH_ACC + "/notifications")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("error")))
+        .andExpect(content().string(containsString("timestamp")))
+        .andExpect(content().string(containsString("data")))
+        .andExpect(content().string(containsString("type")))
+        .andExpect(content().string(containsString("enable")))
+        .andDo(MockMvcResultHandlers.print());
+  }
 
     @WithUserDetails(EMAIL_1)
     @Test

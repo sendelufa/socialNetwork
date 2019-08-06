@@ -41,7 +41,7 @@ public class TagControllerTest {
     mvc.perform(post(PATH_USER + "/")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content("{\n"
-            + "  \"tag\": \"test tag\"\n"
+            + "  \"tag\": \"test5 tag\"\n"
             + "}")
         .with(csrf()))
         .andExpect(status().isOk())
@@ -58,7 +58,7 @@ public class TagControllerTest {
     mvc.perform(post(PATH_USER + "/")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content("{\n"
-            + "  \"tag\": \"test tag\"\n"
+            + "  \"tag\": \"test5 tag\"\n"
             + "}")
         .with(csrf()))
         .andExpect(status().isUnauthorized())
@@ -70,7 +70,7 @@ public class TagControllerTest {
   public void correctDeleteTagTest() throws Exception {
     mvc.perform(delete(PATH_USER + "/")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .param("id", "10")
+        .param("id", "2")
         .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("error")))

@@ -249,7 +249,7 @@ public class AccountService {
     }
 
     public Person getCurrentUser(){
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Person personByEmail = personDAO.getPersonByEmail(email);
         return personByEmail;
 

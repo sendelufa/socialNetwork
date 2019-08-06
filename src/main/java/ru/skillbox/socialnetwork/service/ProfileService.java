@@ -135,7 +135,7 @@ public class ProfileService {
         for (Post post : postsFromDB) {
             posts.add(modelMapper.map(post, PostApi.class));
         }
-        System.out.println(posts.size());
+        
         if (posts != null && !posts.isEmpty()) {
             postListApi.setData(posts);
             postListApi.setTotal(posts.size());

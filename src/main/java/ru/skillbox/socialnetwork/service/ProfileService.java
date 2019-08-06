@@ -251,15 +251,22 @@ public class ProfileService {
    public PersonApi map(Person person) {
       PersonApi personApi = modelMapper.map(person, PersonApi.class);
 
-      CityApi city = new CityApi();
-      city.setId(1);
-      city.setTitle(person.getTown().getTitle());
-      personApi.setCity(city);
+      try {
+         CityApi city = new CityApi();
+         city.setId(person.getTown().getId());
+         city.setTitle(person.getTown().getTitle());
+         personApi.setCity(city);
+      } catch (NullPointerException e) {
 
-      CountryApi country = new CountryApi();
-      country.setId(1);
-      country.setTitle(person.getCountry().getTitle());
-      personApi.setCountry(country);
+      }
+      try {
+         CountryApi country = new CountryApi();
+         country.setId(person.getCountry().getId());
+         country.setTitle(person.getCountry().getTitle());
+         personApi.setCountry(country);
+      } catch (NullPointerException e) {
+
+      }
 
       return personApi;
    }

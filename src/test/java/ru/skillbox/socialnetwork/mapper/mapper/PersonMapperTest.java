@@ -69,8 +69,6 @@ public class PersonMapperTest {
         personApi.setFirst_name("Vasya");
         personApi.setLast_name("Pupkin");
         personApi.setAbout("Worker");
-        personApi.setTown_id(5);
-        personApi.setCountry_id(3);
         personApi.setLast_online_time(12345);
         personApi.setMessages_permission(MessagesPermissionPerson.ALL);
         personApi.setBirth_date(2345546);

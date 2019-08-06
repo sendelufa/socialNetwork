@@ -1,5 +1,6 @@
 package ru.skillbox.socialnetwork.controller;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,6 @@ public class DialogController {
 
    @Autowired
    private DialogService dialogService;
-
 
 
    /**
@@ -45,7 +45,7 @@ public class DialogController {
    @DeleteMapping("/{id:\\d+}/users")
    public ResponseEntity deletePersonsFromDialog(
        @PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.removePersons(id), HttpStatus.OK);
    }
 
    /**
@@ -57,7 +57,7 @@ public class DialogController {
    @GetMapping("/{id:\\d+}/users/invite")
    public ResponseEntity getInviteToDialog(
        @PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getInviteLink(id), HttpStatus.OK);
    }
 
    /**
@@ -71,7 +71,7 @@ public class DialogController {
    public ResponseEntity joinDialog(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("link"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.join(id, params.get("link")), HttpStatus.OK);
    }
 
    /**
@@ -85,13 +85,18 @@ public class DialogController {
 
    @GetMapping("/{id:\\d+}/messages")
    public ResponseEntity getDialogMessages(
-       @PathVariable int id,
-       @RequestParam(value = "query") String searchQuery,
-       @RequestParam(value = "offset", required = false) Integer offset,
-       @RequestParam(value = "itemPerPage",
-           required = false, defaultValue = "20") Integer itemPerPage) {
+       @PathVariable
+           int id,
+       @RequestParam(value = "query")
+           String searchQuery,
+       @RequestParam(value = "offset", required = false)
+           Integer offset,
+       @RequestParam(value = "itemPerPage", required = false, defaultValue = "20")
+           Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
-      return new ResponseEntity<>(offset + " " + searchQuery + " " + itemPerPage, HttpStatus.OK);
+
+      return new ResponseEntity<>(dialogService.getMessages(id, searchQuery, offset, itemPerPage),
+          HttpStatus.OK);
    }
 
    /**
@@ -105,7 +110,8 @@ public class DialogController {
    public ResponseEntity sendMessage(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("message_text"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")),
+          HttpStatus.OK);
    }
 
    /**
@@ -119,8 +125,7 @@ public class DialogController {
    public ResponseEntity getPersonActivity(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      AbstractResponse response = dialogService.getActivity(id, userId);
-      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(dialogService.getLastActivity(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -150,7 +155,8 @@ public class DialogController {
    public ResponseEntity getPrintStatus(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      //TODO what should happen when the status changes?
+      return new ResponseEntity<>(dialogService.setPrintStatus(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -161,8 +167,7 @@ public class DialogController {
 
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deleteDialog(@PathVariable int id) {
-      AbstractResponse response = dialogService.deleteDialog(id);
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.deleteDialog(id), HttpStatus.OK);
    }
 
    /**

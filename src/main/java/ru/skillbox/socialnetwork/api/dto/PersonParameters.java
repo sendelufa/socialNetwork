@@ -14,8 +14,10 @@ public class PersonParameters {
      * Количество элементов на страницу
      */
     private int itemPerPage = 20;
-
-    public PersonParameters() {
+    public PersonParameters(String first_name, Integer offset, Integer itemPerPage) {
+        this.first_name = first_name;
+        this.offset = offset;
+        this.itemPerPage = itemPerPage;
     }
 
     public PersonParameters(String first_name, String last_name, int age_from, int age_to,
@@ -29,6 +31,7 @@ public class PersonParameters {
         this.offset = offset;
         this.itemPerPage = itemPerPage;
     }
+
 
     public String getFirst_name() {
         return first_name;

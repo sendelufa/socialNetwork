@@ -9,8 +9,8 @@ public class NotificationApi extends AbstractResponse{
   private Integer typeId;
   @JsonProperty("sent_time")
   private long sentTime;
-  @JsonProperty("person_id")
-  private Integer personId;
+  @JsonProperty("entity_author")
+  private AuthorApi entityAuthor;
   @JsonProperty("entity_id")
   private int entityId;
   private String contact;
@@ -48,12 +48,12 @@ public class NotificationApi extends AbstractResponse{
     this.info = info;
   }
 
-  public Integer getPerson_id() {
-    return personId;
+  public AuthorApi getEntityAuthor() {
+    return entityAuthor;
   }
 
-  public void setPerson_id(Integer person_id) {
-    this.personId = person_id;
+  public void setEntityAuthor(AuthorApi entityAuthor) {
+    this.entityAuthor = entityAuthor;
   }
 
   public int getEntity_id() {

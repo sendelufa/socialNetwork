@@ -21,7 +21,6 @@ public class Dialog {
    @Id
    @Column(name = "id")
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @NotNull
    private int id;
 
    @Column(name = "owner_id")
@@ -30,9 +29,15 @@ public class Dialog {
    @Column(name = "unread_count")
    private Integer unreadCount;
 
-   @JoinColumn(name = "invite_code")
+
+   @Column(name = "is_deleted")
+   @NotNull
+   private boolean isDeleted;
+
+   @Column(name = "invite_code")
    @NotNull
    private String inviteCode;
+
 
    @OneToMany(mappedBy = "dialogId", fetch = FetchType.LAZY)
    private List<Message> messages;
@@ -89,5 +94,13 @@ public class Dialog {
 
    public void setUnreadCount(Integer unreadCount) {
       this.unreadCount = unreadCount;
+   }
+
+   public boolean isDeleted() {
+      return isDeleted;
+   }
+
+   public void setDeleted(boolean deleted) {
+      isDeleted = deleted;
    }
 }

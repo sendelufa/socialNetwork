@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
+import ru.skillbox.socialnetwork.api.request.PostApi;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.PostService;
@@ -51,6 +52,16 @@ public class PostController {
           itemPerPage);
       ResponseApi responseApi = postService.search(postParameters);
       return new ResponseEntity<>(responseApi, HttpStatus.OK);
+   }
+
+   @PostMapping("")
+   public ResponseEntity addPost(
+           @RequestBody PostApi request,
+           @RequestParam(value = "publish_date", required = false) Long publishDate
+           ) {
+
+      ResponseApi responseApi = postService.addPost(publishDate, request);
+      return responseApi == null ? badRequestResponse() : new ResponseEntity<>(responseApi, HttpStatus.OK);
    }
 
    /**

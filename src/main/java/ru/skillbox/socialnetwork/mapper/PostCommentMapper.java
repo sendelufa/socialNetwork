@@ -3,18 +3,25 @@ package ru.skillbox.socialnetwork.mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
+import ru.skillbox.socialnetwork.api.response.SubCommentApi;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Component
 public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
 
     private final ModelMapper modelMapper;
+
+    @Autowired
+    private SubCommentMapper subCommentMapper;
 
     @Autowired
     public PostCommentMapper(ModelMapper modelMapper) {
@@ -28,11 +35,13 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
                 .addMappings(m -> m.skip(CommentApi::setPostId))
                 .addMappings(m -> m.skip(CommentApi::setParentId))
                 .addMappings(m -> m.skip(CommentApi::setAuthorId))
+                .addMappings(m -> m.skip(CommentApi::setSubComments))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(CommentApi.class, PostComment.class)
                 .addMappings(m -> m.skip(PostComment::setPost))
                 .addMappings(m -> m.skip(PostComment::setParent_id))
                 .addMappings(m -> m.skip(PostComment::setAuthor))
+                .addMappings(m -> m.skip(PostComment::setPostComments))
                 .setPostConverter(toEntityConverter());
     }
 
@@ -52,6 +61,16 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
 
         if (!Objects.isNull(source.getAuthor())) {
             destination.setAuthorId(source.getAuthor().getId());
+            destination.setAuthor(modelMapper.map(source.getAuthor(), AuthorApi.class));
+        }
+
+
+        if (!Objects.isNull(source.getPostComments())) {
+            List<SubCommentApi> subCommentApiList = new ArrayList<>();
+            for (PostComment postComment : source.getPostComments()) {
+                subCommentApiList.add(subCommentMapper.toApi(postComment));
+            }
+            destination.setSubComments(subCommentApiList);
         }
     }
 
@@ -72,5 +91,13 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
         Person person = new Person();
         person.setId(source.getAuthorId());
         destination.setAuthor(person);
+
+        if (!Objects.isNull(source.getSubComments())) {
+            List<PostComment> postCommentList = new ArrayList<>();
+            for (SubCommentApi subCommentApi : source.getSubComments()) {
+                postCommentList.add(subCommentMapper.toEntity(subCommentApi));
+            }
+            destination.setPostComments(postCommentList);
+        }
     }
 }

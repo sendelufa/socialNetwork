@@ -2,7 +2,6 @@ package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -31,8 +30,8 @@ public class PostDAO {
    public List<Post> getPosts(PostParameters postParameters) {
       String queryWhere = "";
 
-      queryWhere += postParameters.getDateFom() != null ?
-          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFom())) : "";
+      queryWhere += postParameters.getDateFrom() != null ?
+          String.format(" p.time > '%s' AND ", new Timestamp(postParameters.getDateFrom())) : "";
 
       queryWhere += postParameters.getDateTo() != null ?
           String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";

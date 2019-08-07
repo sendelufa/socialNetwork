@@ -20,8 +20,6 @@ public class PersonApi extends AbstractResponse {
   private String about;
   private CityApi city;
   private CountryApi country;
-  private int town_id;
-  private int country_id;
   @JsonProperty("messages_permission")
   private MessagesPermissionPerson messagesPermission;
 
@@ -70,10 +68,6 @@ public class PersonApi extends AbstractResponse {
 
   public void setBirth_date(long birth_date) {
     this.birthDate = birth_date;
-  }
-
-  public int getTown_id() {
-    return town_id;
   }
 
   public long getLast_online_time() {
@@ -138,18 +132,6 @@ public class PersonApi extends AbstractResponse {
 
   public void setMessages_permission(MessagesPermissionPerson messages_permission) {
     this.messagesPermission = messages_permission;
-  }
-
-  public void setTown_id(int town_id) {
-    this.town_id = town_id;
-  }
-
-  public int getCountry_id() {
-    return country_id;
-  }
-
-  public void setCountry_id(int country_id) {
-    this.country_id = country_id;
   }
 
   public boolean isIs_blocked() {

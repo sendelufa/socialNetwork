@@ -145,7 +145,7 @@ public class ProfileService {
    public AbstractResponse getWall(PostParameters postParameters) {
       AbstractResponse response;
       PostListApi postListApi = new PostListApi();
-      List<Post> postsFromDB = postDAO.getFeed(postParameters.getId());
+       List<Post> postsFromDB = postDAO.getWall(postParameters.getId());
 
       List<PostApi> posts = new ArrayList<>();
       for (Post post : postsFromDB) {

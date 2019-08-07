@@ -62,4 +62,8 @@ public class DialogDao {
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }
+
+   public void deleteDialog(Dialog dialog) {
+      getCurrentSession().delete(dialog);
+   }
 }

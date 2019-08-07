@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.DialogActivityChangeApi;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
@@ -43,12 +44,16 @@ public class DialogService implements PredicateOpt {
    private final String ERROR_USER_NOT_OWNER = "Person %s not an owner of dialog %s";
    @Autowired
    private MessageDao messageDao;
+
    @Autowired
    private DialogDao dialogDao;
+
    @Autowired
    private AccountService accountService;
+
    @Autowired
    private DialogMapper dialogMapper;
+
    @Autowired
    private PersonDAO personDAO;
 
@@ -353,4 +358,37 @@ public class DialogService implements PredicateOpt {
       return new ResponseApi(error, System.currentTimeMillis(),
           new ResponseApi.Message("invalid_request"));
    }
+
+   public AbstractResponse getUnreadedMessages() {
+      Person person = accountService.getCurrentUser();
+      AbstractResponse response;
+      if(person != null) {
+         int countUnreadedMessages = person.getDialogList().stream().mapToInt(Dialog::getUnreadCount).sum();
+         response = new ResponseApi("string", System.currentTimeMillis(), new UnreadedCountApi(countUnreadedMessages));
+         response.setSuccess(true);
+      } else {
+         response = new ErrorApi("invalid_request", "unauthorized");
+         response.setSuccess(false);
+      }
+      return response;
+   }
+
+   public AbstractResponse getActivity(int id, int userId) {
+      AbstractResponse response;
+      Person person = personDAO.getPersonById(userId);
+      if(person != null) {
+         response = new ResponseApi("ok", System.currentTimeMillis(), new ActivityApi(person.isOnline(), person.getLastOnlineTime().getTime()));
+         response.setSuccess(true);
+      } else {
+         response = new ErrorApi("invalid_request", "This person doesn't exist");
+         response.setSuccess(false);
+      }
+      return response;
+   }
+
+//   public AbstractResponse setTextStatus(int id, int userId) {
+//      AbstractResponse response;
+//
+//      return response;
+//   }
 }

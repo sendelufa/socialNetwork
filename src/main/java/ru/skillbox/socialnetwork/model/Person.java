@@ -1,16 +1,8 @@
 package ru.skillbox.socialnetwork.model;
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.util.List;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
@@ -84,6 +76,12 @@ public class Person {
    @Column(name = "is_online")
    @NotNull
    private boolean isOnline;
+
+   @ManyToMany(fetch = FetchType.LAZY)
+   @JoinTable(name = "dialogs",
+           joinColumns = @JoinColumn(name = "person_id"),
+           inverseJoinColumns = @JoinColumn(name = "dialog_id"))
+   private List<Dialog> dialogList;
 
    public int getId() {
       return id;
@@ -225,7 +223,11 @@ public class Person {
       return isOnline;
    }
 
-   public void setOnline(boolean status) {
-      isOnline = status;
+   public List<Dialog> getDialogList() {
+      return dialogList;
+   }
+
+   public void setDialogList(List<Dialog> dialogList) {
+      this.dialogList = dialogList;
    }
 }

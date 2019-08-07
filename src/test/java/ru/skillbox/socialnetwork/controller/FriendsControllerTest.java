@@ -31,7 +31,7 @@ import ru.skillbox.socialnetwork.service.AccountService;
 @AutoConfigureMockMvc
 public class FriendsControllerTest {
 
-  private static final String EMAIL_1 = "ivaniavanov@mail.ru";//email пользователя для авторизации в тестах
+  private static final String EMAIL_1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах
 
   @Autowired
   private MockMvc mvc;
@@ -78,7 +78,7 @@ public class FriendsControllerTest {
   public void correctDeleteFriendTest() throws Exception {
     serviceCurrentUser();
 
-    mvc.perform(delete("/friends/8")
+    mvc.perform(delete("/friends/1")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
         .andExpect(status().isOk())

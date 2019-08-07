@@ -8,12 +8,14 @@ import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
+import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +32,8 @@ public class PostService {
    private ModelMapper mapper;
    @Autowired
    private PostCommentMapper postCommentMapper;
+   @Autowired
+   private SubCommentMapper subCommentMapper;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
@@ -203,7 +207,15 @@ public class PostService {
       postDataApi.setMyLike(true);
 
       List<PostComment> postComments= post.getPostComments();
-      postDataApi.setComments(getCommentsApi(postComments));
+      List<CommentApi> commentApis = new ArrayList<>();
+      if(postComments != null) {
+         for (int i = 1; i <= postComments.size(); i++) {
+            PostComment postComment = postComments.get(i - 1);
+            CommentApi commentApi = postCommentMapper.toApi(postComment);
+            commentApis.add(commentApi);
+         }
+      }
+      postDataApi.setComments(commentApis);
       return postDataApi;
    }
 
@@ -219,22 +231,18 @@ public class PostService {
       commentApi.setPostId(String.valueOf(comment.getPost().getId()));
       commentApi.setBlocked(comment.isBlocked());
       commentApi.setMyLike(true);
-      //TODO вывести массив субкомментов
 
        List<PostComment> postComments = comment.getPostComments();
-       commentApi.setSubComments(getCommentsApi(postComments));
-
+       List<SubCommentApi> subCommentApis = new ArrayList<>();
+       if(postComments != null) {
+          for (int i = 1; i <= postComments.size(); i++) {
+             PostComment postComment = postComments.get(i - 1);
+             SubCommentApi subCommentApi = subCommentMapper.toApi(postComment);
+             subCommentApis.add(subCommentApi);
+          }
+       }
+       commentApi.setSubComments(subCommentApis);
       return commentApi;
-   }
-
-   private List<CommentApi> getCommentsApi(List<PostComment> comments) {
-       List<CommentApi> commentApis = new ArrayList<>();
-           for (int i = 1; i <= comments.size(); i++) {
-               PostComment postComment = comments.get(i - 1);
-               CommentApi subCommentApi = postCommentMapper.toApi(postComment);
-               commentApis.add(subCommentApi);
-           }
-       return commentApis;
    }
 
    private AuthorApi getAuthorApi(Person person) {

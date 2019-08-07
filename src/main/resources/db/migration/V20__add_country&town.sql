@@ -26,6 +26,9 @@ ADD CONSTRAINT `country_fk`
 UPDATE person
 SET city = NULL;
 
+UPDATE person
+SET country = NULL;
+
 ALTER TABLE `person`
 CHANGE COLUMN `city` `city` INT NULL DEFAULT NULL ,
 CHANGE COLUMN `country` `country` INT NULL DEFAULT NULL ;

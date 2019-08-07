@@ -27,11 +27,11 @@ public class PostControllerTest {
 
    private static final String EMAIL = "sidorovmaxim@mail.ru";//email пользователя для
    private final String PATH_POST = "/post";
+
    @Autowired
    private PostController controller;
    @Autowired
    private MockMvc mvc;
-   // авторизации в тестах (кроме смены эмаил)
 
    @WithUserDetails(EMAIL)
    @Test
@@ -71,7 +71,7 @@ public class PostControllerTest {
    @Test
    public void search_post_success_response() throws Exception {
       mvc.perform(get(PATH_POST + "/")
-          .param("text", "qwe")
+          .param("text", "Масленица")
           .contentType(MediaType.APPLICATION_JSON_UTF8)
           .with(csrf()))
           .andExpect(status().isOk())
@@ -93,7 +93,10 @@ public class PostControllerTest {
           .with(csrf())
           .content("{\n"
               + "  \"title\": \"string\",\n"
-              + "  \"post_text\": \"string\"\n"
+              + "  \"post_text\": \"string\",\n"
+              + "  \"tags\": [\n"
+              + "    \"tag1\"\n"
+              + "  ]\n"
               + "}"))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
@@ -125,6 +128,7 @@ public class PostControllerTest {
           .andExpect(content().string(containsString("error")))
           .andExpect(content().string(containsString("timestamp")))
           .andExpect(content().string(containsString("data")))
+          .andExpect(content().string(containsString("message")))
           .andDo(MockMvcResultHandlers.print());
    }
 
@@ -166,8 +170,18 @@ public class PostControllerTest {
           .param("offset", "0")
           .with(csrf())
           .content("{\n"
-              + "  \"parent_id\": \"1\",\n"
-              + "  \"comment_text\": \"string\"\n"
+              + "  \"parent_id\": 1,\n"
+              + "  \"comment_text\": \"string\",\n"
+              + "  \"id\": 111,\n"
+              + "  \"time\": 1559751301818,\n"
+              + "  \"author\": {\n"
+              + "    \"id\": 1,\n"
+              + "    \"first_name\": \"Петр\",\n"
+              + "    \"last_name\": \"Петрович\",\n"
+              + "    \"photo\": \"https://...../photos/image123.jpg\",\n"
+              + "    \"last_online_time\": 1559751301818\n"
+              + "  },\n"
+              + "  \"is_blocked\": true\n"
               + "}"))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
@@ -183,8 +197,18 @@ public class PostControllerTest {
           .contentType(MediaType.APPLICATION_JSON_UTF8)
           .with(csrf())
           .content("{\n"
-              + "  \"parent_id\": \"1\",\n"
-              + "  \"comment_text\": \"string\"\n"
+              + "  \"parent_id\": 1,\n"
+              + "  \"comment_text\": \"string\",\n"
+              + "  \"id\": 111,\n"
+              + "  \"time\": 1559751301818,\n"
+              + "  \"author\": {\n"
+              + "    \"id\": 1,\n"
+              + "    \"first_name\": \"Петр\",\n"
+              + "    \"last_name\": \"Петрович\",\n"
+              + "    \"photo\": \"https://...../photos/image123.jpg\",\n"
+              + "    \"last_online_time\": 1559751301818\n"
+              + "  },\n"
+              + "  \"is_blocked\": true\n"
               + "}"))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
@@ -229,6 +253,7 @@ public class PostControllerTest {
           .andExpect(content().string(containsString("error")))
           .andExpect(content().string(containsString("timestamp")))
           .andExpect(content().string(containsString("data")))
+          .andExpect(content().string(containsString("message")))
           .andDo(MockMvcResultHandlers.print());
    }
 }

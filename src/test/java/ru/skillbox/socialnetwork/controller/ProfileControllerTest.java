@@ -130,7 +130,6 @@ public class ProfileControllerTest {
     public void correctGetTest() throws Exception {
       mvc.perform(get(PATH_USER + "/1")
           .contentType(MediaType.APPLICATION_JSON_UTF8)
-          .param("id", "1")
           .with(csrf()))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
@@ -144,10 +143,9 @@ public class ProfileControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void failGetTest() throws Exception {
-        mvc.perform(get(PATH_USER + "/1")
+        mvc.perform(get(PATH_USER + "/f")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
-            .with(csrf())
-            .param("id", "f"))
+            .with(csrf()))
             .andExpect(status().isBadRequest())
             .andExpect(content().string(containsString("error")))
             .andExpect(content().string(containsString("error_description")))
@@ -159,10 +157,6 @@ public class ProfileControllerTest {
   public void correctGetWallTest() throws Exception {
     mvc.perform(get(PATH_USER + "/2/wall")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .param("queue", "false")
-        .param("id", "2")
-        .param("offset", "1")
-        .param("itemPerPage", "20")
         .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("error")))
@@ -178,12 +172,8 @@ public class ProfileControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void failGetWallTest() throws Exception {
-    mvc.perform(get(PATH_USER + "/2/wall")
+    mvc.perform(get(PATH_USER + "/f/wall")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .param("queue", "false")
-        .param("id", "f")
-        .param("offset", "1")
-        .param("itemPerPage", "20")
         .with(csrf()))
         .andExpect(status().isBadRequest())
         .andExpect(content().string(containsString("error")))
@@ -197,11 +187,12 @@ public class ProfileControllerTest {
     mvc.perform(post(PATH_USER + "/2/wall")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf())
-        .param("id", "2")
-        .param("publishDate", "")
         .content("{\n"
-            + "  \"title\": \"string\",\n"
-            + "  \"post_text\": \"string\"\n"
+            + "  \"title\": \"titleText\",\n"
+            + "  \"post_text\": \"postText\",\n"
+            + "  \"tags\": [\n"
+            + "    \"tag1\"\n"
+            + "  ]\n"
             + "}"))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("error")))
@@ -209,20 +200,23 @@ public class ProfileControllerTest {
         .andExpect(content().string(containsString("data")))
         .andExpect(content().string(containsString("id")))
         .andExpect(content().string(containsString("title")))
+        .andExpect(content().string(containsString("author")))
+        .andExpect(content().string(containsString("comments")))
         .andDo(MockMvcResultHandlers.print());
     }
 
   @WithUserDetails(EMAIL_1)
   @Test
   public void failPostWallTest() throws Exception {
-    mvc.perform(post(PATH_USER + "/2/wall")
+    mvc.perform(post(PATH_USER + "/f/wall")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf())
-        .param("id", "")
-        .param("publishDate", "")
         .content("{\n"
             + "  \"title\": \"string\",\n"
-            + "  \"post_text\": \"string\"\n"
+            + "  \"post_text\": \"string\",\n"
+            + "  \"tags\": [\n"
+            + "    \"tag1\"\n"
+            + "  ]\n"
             + "}"))
         .andExpect(status().isBadRequest())
         .andExpect(content().string(containsString("error")))
@@ -235,15 +229,7 @@ public class ProfileControllerTest {
     public void testSearch() throws Exception {
     mvc.perform(get(PATH_USER + "/search/")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
-        .with(csrf())
-        .param("first_name", "")
-        .param("last_name", "")
-        .param("age_from", "0")
-        .param("age_to", "0")
-        .param("country_id", "0")
-        .param("city_id", "0")
-        .param("offset", "0")
-        .param("itemPerPage", "10"))
+        .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("error")))
         .andExpect(content().string(containsString("timestamp")))
@@ -260,8 +246,7 @@ public class ProfileControllerTest {
     public void correctBlockTest() throws Exception {
       mvc.perform(put(PATH_USER + "/block/1")
           .contentType(MediaType.APPLICATION_JSON_UTF8)
-          .with(csrf())
-          .param("id", "1"))
+          .with(csrf()))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
           .andExpect(content().string(containsString("timestamp")))
@@ -273,7 +258,7 @@ public class ProfileControllerTest {
   @WithUserDetails(EMAIL_1)
     @Test
     public void failBlockTest() throws Exception {
-      mvc.perform(put(PATH_USER + "/block/1")
+      mvc.perform(put(PATH_USER + "/block/f")
           .contentType(MediaType.APPLICATION_JSON_UTF8)
           .with(csrf()))
           .andExpect(status().isBadRequest())
@@ -287,8 +272,7 @@ public class ProfileControllerTest {
     public void correctUnlockTest() throws Exception {
       mvc.perform(delete(PATH_USER + "/block/1")
           .contentType(MediaType.APPLICATION_JSON_UTF8)
-          .with(csrf())
-          .param("id", "1"))
+          .with(csrf()))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("error")))
           .andExpect(content().string(containsString("timestamp")))
@@ -300,7 +284,7 @@ public class ProfileControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void failUnlockTest() throws Exception {
-    mvc.perform(delete(PATH_USER + "/block/ ")
+    mvc.perform(delete(PATH_USER + "/block/f")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
         .andExpect(status().isBadRequest())

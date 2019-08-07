@@ -97,6 +97,13 @@ public class PostDAO {
       return q.list();
    }
 
+   public List<Post> getWall(int id){
+
+      String query = String.format("from Post p where p.author=%d", id);
+      Query q = getCurrentSession().createQuery(query);
+      return q.list();
+   }
+
    public PostComment recoverComment(int id) {
       PostComment postComment = getCommentById(id);
       postComment.setDeleted(false);

@@ -8,7 +8,7 @@ public class PersonEditBodyApi extends AbstractResponse{
   private String phone;
   private String photo_id;
   private String about;
-  private int town_id;
+  private int city_id;
   private int country_id;
   private messages_permissions messages_permission;
   public enum messages_permissions {ALL, FRIENDS}
@@ -69,12 +69,12 @@ public class PersonEditBodyApi extends AbstractResponse{
     this.messages_permission = messages_permission;
   }
 
-  public int getTown_id() {
-    return town_id;
+  public int getCity_id() {
+    return city_id;
   }
 
-  public void setTown_id(int town_id) {
-    this.town_id = town_id;
+  public void setCity_id(int city_id) {
+    this.city_id = city_id;
   }
 
   public int getCountry_id() {

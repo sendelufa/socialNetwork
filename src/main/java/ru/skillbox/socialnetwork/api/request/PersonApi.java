@@ -1,8 +1,7 @@
 package ru.skillbox.socialnetwork.api.request;
 
-import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
-
 import java.util.Date;
+import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 public class PersonApi {
 
@@ -64,7 +63,7 @@ public class PersonApi {
         this.about = about;
     }
 
-    public int getTown_id() {
+    public int getCityId() {
         return town_id;
     }
 
@@ -72,7 +71,7 @@ public class PersonApi {
         this.town_id = town_id;
     }
 
-    public int getCountry_id() {
+    public int getCountryId() {
         return country_id;
     }
 

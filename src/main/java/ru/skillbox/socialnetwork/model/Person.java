@@ -47,11 +47,13 @@ public class Person {
    @Column(name = "about")
    private String about;
 
-   @Column(name = "town")
-   private String town;
+   @ManyToOne
+   @JoinColumn(name = "city")
+   private City city;
 
-   @Column(name = "country")
-   private String country;
+   @ManyToOne
+   @JoinColumn(name = "country")
+   private Country country;
 
    @Column(name = "confirmation_code")
    private String confirmationCode;
@@ -161,19 +163,19 @@ public class Person {
       this.about = about;
    }
 
-   public String getTown() {
-      return town;
+   public City getCity() {
+      return city;
    }
 
-   public void setTown(String town) {
-      this.town = town;
+   public void setCity(City city) {
+      this.city = city;
    }
 
-   public String getCountry() {
+   public Country getCountry() {
       return country;
    }
 
-   public void setCountry(String country) {
+   public void setCountry(Country country) {
       this.country = country;
    }
 
@@ -217,13 +219,9 @@ public class Person {
       isBlocked = blocked;
    }
 
-    public boolean isOnline() {
-        return isOnline;
-    }
-
-    public void setOnline(boolean status) {
-        isOnline = status;
-    }
+   public boolean isOnline() {
+      return isOnline;
+   }
 
    public List<Dialog> getDialogList() {
       return dialogList;

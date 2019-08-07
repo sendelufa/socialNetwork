@@ -7,6 +7,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationSettings;
 import ru.skillbox.socialnetwork.model.NotificationType;
@@ -66,6 +67,16 @@ public class NotificationDAO {
 
     public void deleteNotification(Notification notification) {
         getCurrentSession().delete(notification);
+    }
+
+    public void deleteNotificationByFriendId(FriendsParameters parameters) {
+        String query = String.format("from Notification where person_id=%d and type_id=4 and entity_id=%d",
+                parameters.getId(), parameters.getTargetID());
+        List<Notification> list = getCurrentSession().createQuery(query).list();
+        if (list != null || list.size() > 0) {
+            for (Notification n : list)
+                getCurrentSession().delete(n);
+        }
     }
 
     public void addNotification(Notification notification) {

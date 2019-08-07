@@ -77,6 +77,10 @@ public class Person {
    @NotNull
    private boolean isOnline;
 
+   public void setOnline(boolean online){
+      this.isOnline = online;
+   }
+
    @ManyToMany(fetch = FetchType.LAZY)
    @JoinTable(name = "dialogs",
            joinColumns = @JoinColumn(name = "person_id"),

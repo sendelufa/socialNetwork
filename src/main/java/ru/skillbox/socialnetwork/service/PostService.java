@@ -45,10 +45,10 @@ public class PostService {
 
       List<Tag> tags = new ArrayList<>();
       List<String> tagsRequest = request.getTags();
-      for(Tag tag : tags) {
-          for(String t : tagsRequest) {
-              tag.setTag(t);
-          }
+      for(int i = 1; i <= tagsRequest.size(); i++) {
+          Tag tag = new Tag();
+          tag.setTag(tagsRequest.get(i-1));
+          tags.add(tag);
       }
 
       post.setTags(tags);
@@ -189,17 +189,21 @@ public class PostService {
 
       Person personPost = post.getAuthor();
       AuthorApi personApiPost = mapper.map(personPost, AuthorApi.class);
-      personApiPost.setId(personPost.getId());
-      personApiPost.setFirstName(personPost.getFirstName());
-      personApiPost.setLastName(personPost.getLastName());
-      personApiPost.setPhoto(personPost.getPhoto());
-      personApiPost.setLastOnlineTime(personPost.getLastOnlineTime() == null ? 0 : personPost.getLastOnlineTime().getTime());
 
       postDataApi.setAuthor(personApiPost);
       postDataApi.setTitle(post.getTitle());
       postDataApi.setPostText(post.getPostText());
       postDataApi.setBlocked(post.isBlocked());
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
+
+      List<Tag> tags = post.getTags();
+      List<String> tagsApi = new ArrayList<>();
+      for(int i = 1; i <= tags.size(); i++) {
+          String ta = tags.get(i-1).getTag();
+          tagsApi.add(ta);
+      }
+
+      postDataApi.setTags(tagsApi);
       postDataApi.setMyLike(true);
       //TODO сделать респонс массива тэгов и массива комментов
       return postDataApi;
@@ -212,11 +216,6 @@ public class PostService {
 
       Person person = comment.getAuthor();
       AuthorApi personApi = mapper.map(person, AuthorApi.class);
-      personApi.setId(person.getId());
-      personApi.setFirstName(person.getFirstName());
-      personApi.setLastName(person.getLastName());
-      personApi.setPhoto(person.getPhoto());
-      personApi.setLastOnlineTime(person.getLastOnlineTime() == null ? 0 : person.getLastOnlineTime().getTime());
 
       commentApi.setAuthor(personApi);
       commentApi.setCommentText(comment.getCommentText());

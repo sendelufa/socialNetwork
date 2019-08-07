@@ -31,7 +31,7 @@ import ru.skillbox.socialnetwork.service.AccountService;
 @AutoConfigureMockMvc
 public class FriendsControllerTest {
 
-  private static final String EMAIL_1 = "ivaniavanov@mail.ru";//email пользователя для авторизации в тестах
+  private static final String EMAIL_1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах
 
   @Autowired
   private MockMvc mvc;
@@ -42,9 +42,14 @@ public class FriendsControllerTest {
   @Autowired
   private PersonDAO personDAO;
 
+  @MockBean
+  private AccountService service;
+
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctGetFriendsTest() throws Exception {
+    serviceCurrentUser();
+
     mvc.perform(get("/friends")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
@@ -71,7 +76,9 @@ public class FriendsControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctDeleteFriendTest() throws Exception {
-    mvc.perform(delete("/friends/8")
+    serviceCurrentUser();
+
+    mvc.perform(delete("/friends/1")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
         .andExpect(status().isOk())
@@ -96,6 +103,8 @@ public class FriendsControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctAddFriendTest() throws Exception {
+    serviceCurrentUser();
+
     mvc.perform(post("/friends/3")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
@@ -119,6 +128,8 @@ public class FriendsControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctGetRequestFriendsTest() throws Exception {
+    serviceCurrentUser();
+
     mvc.perform(get("/friends/request")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
@@ -144,6 +155,8 @@ public class FriendsControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctGetFriendsRecommendationsTest() throws Exception {
+    serviceCurrentUser();
+
     mvc.perform(get("/friends/recommendations")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
@@ -169,6 +182,8 @@ public class FriendsControllerTest {
   @WithUserDetails(EMAIL_1)
   @Test
   public void correctIsFriendTest() throws Exception {
+    serviceCurrentUser();
+
     mvc.perform(post("/is/friends")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content("{"
@@ -192,5 +207,18 @@ public class FriendsControllerTest {
         .with(csrf()))
         .andExpect(status().isUnauthorized())
         .andDo(MockMvcResultHandlers.print());
+  }
+
+  public Person getCurrentUser() {
+    String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    Person personByEmail = personDAO.getPersonByEmail(email);
+    return personByEmail;
+
+  }
+
+  private void serviceCurrentUser() {
+    Mockito.doReturn(getCurrentUser())
+        .when(service)
+        .getCurrentUser();
   }
 }

@@ -55,10 +55,17 @@ public class FriendsDAO {
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
+    Friendship fr = null;
+    List<Friendship> list = searchFriend(parameters);
+    for(Friendship f : list){
+        if(f.getDstPerson().getId() == parameters.getTargetID()){
+            fr = f;
+        }
+    }
+
     try {
       notificationDAO.deleteNotificationByFriendId(parameters);
-      getCurrentSession().delete(f);
+      getCurrentSession().delete(fr);
     } catch (HibernateException ex){
       return false;
     }

@@ -39,7 +39,7 @@ public class FriendsDAO {
   }
 
   public List<Friendship> searchFriend(FriendsParameters parameters) {
-    String query = "from Friendship f where src_person_id = " + parameters.getId();
+    String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = " + FRIENDS_STATUS;
     Query q = getCurrentSession().createQuery(query);
     ArrayList<Friendship> all = (ArrayList<Friendship>)q.list();
     ArrayList<Friendship> select = new ArrayList<>();
@@ -55,16 +55,6 @@ public class FriendsDAO {
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    //Первый вариант
-//    String query = "DELETE Friendship f WHERE src_person_id = " + parameters.getId()
-//        + " AND dst_person_id = " + parameters.getTargetID();
-//    Query q = getCurrentSession().createQuery(query);
-//    try {
-//      q.executeUpdate();
-//    } catch (HibernateException ex) {
-//      return false;
-//    }
-    //Второй вариант
     Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
     try {
       notificationDAO.deleteNotificationByFriendId(parameters);

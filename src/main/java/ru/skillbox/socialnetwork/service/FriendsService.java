@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.CityApi;
+import ru.skillbox.socialnetwork.api.response.CountryApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.FriendsApi;
 import ru.skillbox.socialnetwork.api.response.FriendshipStatusApi;
@@ -95,8 +96,8 @@ public class FriendsService {
       api.setPhone(f.getDstPerson().getPhone());
       api.setPhoto(f.getDstPerson().getPhoto());
       api.setAbout(f.getDstPerson().getAbout());
-      api.setCity(
-          new CityApi(f.getDstPerson().getCity().getId(), f.getDstPerson().getCity().getTitle()));
+      api.setCity(new CityApi(f.getDstPerson().getCity().getId(), f.getDstPerson().getCity().getTitle()));
+      api.setCountry(new CountryApi(f.getDstPerson().getCountry().getId(), f.getDstPerson().getCountry().getTitle()));
       api.setMessages_permission(f.getDstPerson().getMessagesPermission());
       api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
       api.setIs_blocked(f.getDstPerson().isBlocked());

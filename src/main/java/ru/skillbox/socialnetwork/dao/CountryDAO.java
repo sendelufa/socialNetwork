@@ -1,38 +1,30 @@
 package ru.skillbox.socialnetwork.dao;
 
+import java.util.Optional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.skillbox.socialnetwork.model.Message;
+import ru.skillbox.socialnetwork.model.City;
+import ru.skillbox.socialnetwork.model.Country;
 
 @Repository
 @Transactional
-public class MessageDao {
+public class CountryDAO {
 
    @Autowired
    private SessionFactory sessionFactory;
 
-   public Message getMessageById(int id){
-      return getCurrentSession().get(Message.class, id);
+   public Optional<Country> getCountryById(int id) {
+      return Optional.of(getCurrentSession().get(Country.class, id));
    }
 
-   public void addMessage(Message message) {
-      getCurrentSession().save(message);
-   }
-
-   public void deleteMessage(Message message){
-      getCurrentSession().delete(message);
-   }
-
-   public void updateMessage(Message message){
-      getCurrentSession().update(message);
+   public Optional<City> getCityById(int id) {
+      return Optional.of(getCurrentSession().get(City.class, id));
    }
 
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }
-
-
 }

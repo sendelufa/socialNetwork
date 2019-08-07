@@ -28,7 +28,6 @@ public class DialogController {
    private DialogService dialogService;
 
 
-
    /**
     * Добавить пользователя в диалог
     *
@@ -53,7 +52,7 @@ public class DialogController {
    @DeleteMapping("/{id:\\d+}/users")
    public ResponseEntity deletePersonsFromDialog(
        @PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.removePersons(id), HttpStatus.OK);
    }
 
    /**
@@ -65,7 +64,7 @@ public class DialogController {
    @GetMapping("/{id:\\d+}/users/invite")
    public ResponseEntity getInviteToDialog(
        @PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getInviteLink(id), HttpStatus.OK);
    }
 
    /**
@@ -79,7 +78,7 @@ public class DialogController {
    public ResponseEntity joinDialog(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("link"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.join(id, params.get("link")), HttpStatus.OK);
    }
 
    /**
@@ -93,13 +92,18 @@ public class DialogController {
 
    @GetMapping("/{id:\\d+}/messages")
    public ResponseEntity getDialogMessages(
-       @PathVariable int id,
-       @RequestParam(value = "query") String searchQuery,
-       @RequestParam(value = "offset", required = false) Integer offset,
-       @RequestParam(value = "itemPerPage",
-           required = false, defaultValue = "20") Integer itemPerPage) {
+       @PathVariable
+           int id,
+       @RequestParam(value = "query")
+           String searchQuery,
+       @RequestParam(value = "offset", required = false)
+           Integer offset,
+       @RequestParam(value = "itemPerPage", required = false, defaultValue = "20")
+           Integer itemPerPage) {
       offset = offset == null ? 0 : offset;
-      return new ResponseEntity<>(offset + " " + searchQuery + " " + itemPerPage, HttpStatus.OK);
+
+      return new ResponseEntity<>(dialogService.getMessages(id, searchQuery, offset, itemPerPage),
+          HttpStatus.OK);
    }
 
    /**
@@ -113,7 +117,8 @@ public class DialogController {
    public ResponseEntity sendMessage(
        @PathVariable int id,
        @RequestBody Map<String, String> params) {
-      return new ResponseEntity<>(params.get("message_text"), HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.sendMessage(id, params.get("message_text")),
+          HttpStatus.OK);
    }
 
    /**
@@ -127,7 +132,7 @@ public class DialogController {
    public ResponseEntity getPersonActivity(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.getLastActivity(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -141,7 +146,8 @@ public class DialogController {
    public ResponseEntity getPrintStatus(
        @PathVariable int id,
        @PathVariable(value = "user_id") int userId) {
-      return new ResponseEntity<>(id + " " + userId, HttpStatus.OK);
+      //TODO what should happen when the status changes?
+      return new ResponseEntity<>(dialogService.setPrintStatus(id, userId), HttpStatus.OK);
    }
 
    /**
@@ -152,7 +158,7 @@ public class DialogController {
 
    @DeleteMapping("/{id:\\d+}")
    public ResponseEntity deleteDialog(@PathVariable int id) {
-      return new ResponseEntity<>(id, HttpStatus.OK);
+      return new ResponseEntity<>(dialogService.deleteDialog(id), HttpStatus.OK);
    }
 
    /**
@@ -166,9 +172,10 @@ public class DialogController {
    @DeleteMapping("/{dialog_id:\\d+}/messages/{message_id:\\d+}")
    public ResponseEntity deleteMessage(
        @PathVariable(value = "dialog_id") int dialogId,
-       @PathVariable(value = "message_id") int messageId){
+       @PathVariable(value = "message_id") int messageId) {
       AbstractResponse response = dialogService.deleteDialogMessages(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity(response,
+          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -183,9 +190,10 @@ public class DialogController {
    public ResponseEntity editMessage(
        @PathVariable(value = "dialog_id") int dialogId,
        @PathVariable(value = "message_id") int messageId,
-       @RequestBody MessageSendRequestBodyApi message){
+       @RequestBody MessageSendRequestBodyApi message) {
       AbstractResponse response = dialogService.editDialogMessage(dialogId, messageId, message);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity(response,
+          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -199,9 +207,10 @@ public class DialogController {
    @PutMapping("/{dialog_id:\\d+}/messages/{message_id:\\d+}/recover")
    public ResponseEntity recoverMessage(
        @PathVariable(value = "dialog_id") int dialogId,
-       @PathVariable(value = "message_id") int messageId){
+       @PathVariable(value = "message_id") int messageId) {
       AbstractResponse response = dialogService.recoverDialogMessage(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity(response,
+          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    /**
@@ -215,22 +224,24 @@ public class DialogController {
    @PutMapping("/{dialog_id:\\d+}/messages/{message_id:\\d+}/read")
    public ResponseEntity readMessage(
        @PathVariable(value = "dialog_id") int dialogId,
-       @PathVariable(value = "message_id") int messageId){
+       @PathVariable(value = "message_id") int messageId) {
       AbstractResponse response = dialogService.readDialogMessage(dialogId, messageId);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      return new ResponseEntity(response,
+          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    @GetMapping
    public ResponseEntity getDialogs(
        @RequestParam String query,
        @RequestParam int offset,
-       @RequestParam int itemPerPage){
-      AbstractResponse response = dialogService.getDialogs(query,offset,itemPerPage);
-      return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+       @RequestParam int itemPerPage) {
+      AbstractResponse response = dialogService.getDialogs(query, offset, itemPerPage);
+      return new ResponseEntity(response,
+          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
 
    @PostMapping
-   public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers){
+   public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers) {
       AbstractResponse response = dialogService.putDialogs(dialogUsers);
       return new ResponseEntity(response, HttpStatus.OK);
    }

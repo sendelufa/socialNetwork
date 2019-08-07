@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.service;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -11,7 +12,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
-import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.ErrorApi;
+import ru.skillbox.socialnetwork.api.response.NotificationSettingsListApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.ResponseNotificationSettingsApi;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.NotificationSettings;
@@ -19,8 +24,6 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
-
-import java.util.ArrayList;
 
 
 @Service
@@ -249,7 +252,7 @@ public class AccountService {
     }
 
     public Person getCurrentUser(){
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
         Person personByEmail = personDAO.getPersonByEmail(email);
         return personByEmail;
 

@@ -4,6 +4,10 @@ public class DialogUserShortListApi extends AbstractResponse {
 
    private int[] userIds;
 
+   public DialogUserShortListApi(int[] userIds) {
+      this.userIds = userIds;
+   }
+
    public int[] getUserIds() {
       return userIds;
    }

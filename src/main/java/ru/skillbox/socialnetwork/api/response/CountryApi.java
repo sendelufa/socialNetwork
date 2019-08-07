@@ -5,6 +5,14 @@ public class CountryApi extends AbstractResponse{
   private int id;
   private String title;
 
+  public CountryApi() {
+  }
+
+  public CountryApi(int id, String title) {
+    this.id = id;
+    this.title = title;
+  }
+
   public int getId() {
     return id;
   }

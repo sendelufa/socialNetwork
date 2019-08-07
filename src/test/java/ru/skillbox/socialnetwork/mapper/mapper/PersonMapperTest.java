@@ -13,9 +13,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
+import ru.skillbox.socialnetwork.model.City;
 import ru.skillbox.socialnetwork.model.Country;
 import ru.skillbox.socialnetwork.model.Person;
-import ru.skillbox.socialnetwork.model.Town;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
 @RunWith(SpringJUnit4ClassRunner.class) // Необходимо для разворачивания контекста спринга чтобы внедрить бин модельмапера я
@@ -41,7 +41,7 @@ public class PersonMapperTest {
         person.setMessagesPermission(MessagesPermissionPerson.ALL);
         person.setPhone("23723472934");
         person.setPhoto("res/jpg.jpg");
-        person.setTown(new Town(2, "Spb", new Country()));
+        person.setCity(new City(2, "Spb", new Country()));
         GregorianCalendar calendar = new GregorianCalendar(1992, Calendar.JANUARY, 24);
         Date birthDate = calendar.getTime();
         person.setBirthDate(birthDate);

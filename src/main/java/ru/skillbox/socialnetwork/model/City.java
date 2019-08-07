@@ -11,8 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "town")
-public class Town {
+@Table(name = "city")
+public class City {
 
    @Id
    @Column(name = "id", unique = true)
@@ -29,10 +29,10 @@ public class Town {
    @NotNull
    private Country country;
 
-   public Town() {
+   public City() {
    }
 
-   public Town(@NotNull int id, @NotNull String title,
+   public City(@NotNull int id, @NotNull String title,
        @NotNull Country country) {
       this.id = id;
       this.title = title;

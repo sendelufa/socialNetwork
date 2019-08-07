@@ -17,6 +17,7 @@ import ru.skillbox.socialnetwork.api.response.PersonListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.CountryDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
@@ -27,6 +28,8 @@ public class ProfileService {
 
    @Autowired
    private PersonDAO personDAO;
+   @Autowired
+   private CountryDAO countryDAO;
    @Autowired
    private PostDAO postDAO;
    @Autowired
@@ -68,7 +71,13 @@ public class ProfileService {
          person.setPhoto(personApi.getPhoto_id());
       }
       person.setAbout(personApi.getAbout());
-      //person.setTown(Integer.toString(personApi.getTown_id()));
+
+      if (personApi.getCityId() != 0) {
+         countryDAO.getCityById(personApi.getCityId()).ifPresent(person::setCity);
+      }
+      if (personApi.getCountryId() != 0) {
+         countryDAO.getCountryById(personApi.getCountryId()).ifPresent(person::setCountry);
+      }
       if (personApi.getMessages_permission() != null) {
          person.setMessagesPermission(personApi.getMessages_permission());
       }
@@ -253,8 +262,8 @@ public class ProfileService {
 
       try {
          CityApi city = new CityApi();
-         city.setId(person.getTown().getId());
-         city.setTitle(person.getTown().getTitle());
+         city.setId(person.getCity().getId());
+         city.setTitle(person.getCity().getTitle());
          personApi.setCity(city);
       } catch (NullPointerException e) {
 

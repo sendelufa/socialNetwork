@@ -56,8 +56,8 @@ public class Person {
    private String about;
 
    @ManyToOne
-   @JoinColumn(name = "town")
-   private Town town;
+   @JoinColumn(name = "city")
+   private City city;
 
    @ManyToOne
    @JoinColumn(name = "country")
@@ -165,12 +165,12 @@ public class Person {
       this.about = about;
    }
 
-   public Town getTown() {
-      return town;
+   public City getCity() {
+      return city;
    }
 
-   public void setTown(Town town) {
-      this.town = town;
+   public void setCity(City city) {
+      this.city = city;
    }
 
    public Country getCountry() {

@@ -29,6 +29,9 @@ public class FriendsDAO {
   @Autowired
   private PersonDAO personDAO;
 
+  @Autowired
+  private NotificationDAO notificationDAO;
+
   private List<Friendship> searchAllFriendForPerson(Person person) {
     String query = "from Friendship f where src_person_id = " + person.getId();
     List<Friendship> list = getCurrentSession().createQuery(query).list();
@@ -64,6 +67,7 @@ public class FriendsDAO {
     //Второй вариант
     Friendship f = getCurrentSession().get(Friendship.class, parameters.getId());
     try {
+      notificationDAO.deleteNotificationByFriendId(parameters);
       getCurrentSession().delete(f);
     } catch (HibernateException ex){
       return false;

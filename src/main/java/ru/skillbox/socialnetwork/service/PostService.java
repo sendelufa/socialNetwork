@@ -204,7 +204,7 @@ public class PostService {
       }
 
       postDataApi.setTags(tagsApi);
-      postDataApi.setMyLike(true);
+      postDataApi.setMyLike(false);
 
       List<PostComment> postComments= post.getPostComments();
       List<CommentApi> commentApis = new ArrayList<>();

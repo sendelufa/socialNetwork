@@ -22,6 +22,8 @@ import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Service
 public class ProfileService {
@@ -189,8 +191,23 @@ public class ProfileService {
       post.setPostText(newPost.getPostText());
       post.setTitle(newPost.getTitle());
       post.setTime(date);
+      post.setBlocked(false);
+      post.setDeleted(false);
+      List<Tag> tags = new ArrayList<>();
+      List<String> tagsRequest = newPost.getTags();
+      for(int i = 1; i <= tagsRequest.size(); i++) {
+          Tag tag = new Tag();
+          tag.setTag(tagsRequest.get(i-1));
+          tags.add(tag);
+      }
+      post.setTags(tags);
+      List<PostComment> comments = new ArrayList<>();
+      post.setPostComments(comments);
       postDAO.addPost(post);
-      PostApi postApi = modelMapper.map(post, PostApi.class);
+      PostApi postApi = modelMapper.map(post, ru.skillbox.socialnetwork.api.response.PostApi.class);
+      postApi.setLikes(0);
+      postApi.setMyLike(false);
+
       response = new ResponseApi("string", System.currentTimeMillis(), postApi);
       response.setSuccess(true);
       return response;

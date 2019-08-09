@@ -62,14 +62,14 @@ public class LikeController {
     /**
      * Убрать лайк
      *
-     * @param itemId ID объекта у которого необходимо получить "Лайки"
+     * @param item_id ID объекта у которого необходимо получить "Лайки"
      * @param type Тип сущности (пост или комментарий)
      */
     @DeleteMapping("likes")
-    public ResponseEntity removeLike (@RequestParam int itemId,
+    public ResponseEntity removeLike (@RequestParam int item_id,
                                       @RequestParam String type) {
 
-        AbstractResponse response = likeService.removeLike(itemId,type);
+        AbstractResponse response = likeService.removeLike(item_id,type);
 
         return new ResponseEntity(response,response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
     }

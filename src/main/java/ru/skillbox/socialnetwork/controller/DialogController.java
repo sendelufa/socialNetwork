@@ -11,7 +11,6 @@ import ru.skillbox.socialnetwork.api.request.LongpollHistoryPequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.service.DialogService;
 
-import java.util.Map;
 
 @Controller
 @RequestMapping("dialogs")

@@ -1,8 +1,6 @@
 package ru.skillbox.socialnetwork.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
@@ -10,7 +8,6 @@ import ru.skillbox.socialnetwork.api.request.RequestLikeApi;
 import ru.skillbox.socialnetwork.api.response.LikeApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.LikeDAO;
-import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.*;
 
@@ -19,8 +16,6 @@ import java.util.*;
 @Service
 public class LikeService {
 
-    @Autowired
-    private PersonDAO personDAO;
     @Autowired
     private LikeDAO likeDAO;
     @Autowired
@@ -159,7 +154,6 @@ public class LikeService {
             response.setSuccess(true);
             return response;
         }
-
 
         response = new ErrorApi("invalid_request", "Wrong type of entity");
         response.setSuccess(false);

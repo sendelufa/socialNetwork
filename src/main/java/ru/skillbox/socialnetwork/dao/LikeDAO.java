@@ -1,18 +1,14 @@
 package ru.skillbox.socialnetwork.dao;
 
-import org.hibernate.Criteria;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.CommentLike;
 import ru.skillbox.socialnetwork.model.PostLike;
-
 import java.util.List;
-import java.util.Set;
 
 @Repository
 @Transactional

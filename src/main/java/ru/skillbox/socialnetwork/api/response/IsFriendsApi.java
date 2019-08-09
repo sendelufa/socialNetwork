@@ -1,7 +1,6 @@
 package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Date;
 import java.util.List;
 
 public class IsFriendsApi extends AbstractResponse {

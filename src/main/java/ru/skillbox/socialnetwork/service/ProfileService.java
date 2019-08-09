@@ -124,20 +124,6 @@ public class ProfileService {
       return response;
    }
 
-   /**
-    * Получение записей на стене пользователя
-    *
-    * @param id ID пользователя
-    * @return Список записей
-    */
-   public List<PostApi> getWall(int id) {
-      List<Post> posts = postDAO.getAllPosts();
-      List<PostApi> result = new ArrayList<>();
-      for (Post post : posts) {
-         result.add(modelMapper.map(post, PostApi.class));
-      }
-      return result;
-   }
 
    /**
     * Получение записей на стене пользователя с параметрами

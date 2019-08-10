@@ -2,9 +2,6 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.skillbox.socialnetwork.model.Person;
-
-import java.util.List;
 import java.util.Set;
 
 public class LikeApi extends AbstractResponse{

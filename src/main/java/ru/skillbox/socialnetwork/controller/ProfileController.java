@@ -87,11 +87,9 @@ public class ProfileController {
       postParameters.setId(id);
       postParameters.setQueue(queue);
 
-      System.out.println("не понял");
       int defaultOffset = 0;
       int defaultItemPerPAge = 20;
 
-      System.out.println("offset:" + offset + " itemPP: " + itemPerPage);
       if(offset == null || offset.equals("undefined")){
           postParameters.setOffset(defaultOffset);
       } else {

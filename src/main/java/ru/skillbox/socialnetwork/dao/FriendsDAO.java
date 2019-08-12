@@ -45,21 +45,18 @@ public class FriendsDAO {
   }
 
   public boolean deleteFriendById(FriendsParameters parameters) {
-    Friendship fr = null;
-    List<Friendship> list = searchFriend(parameters);
-    for(Friendship f : list){
-        if(f.getDstPerson().getId() == parameters.getTargetID()){
-            fr = f;
-        }
-    }
-    try {
-      notificationDAO.deleteNotificationByFriendId(parameters);
-      Friendship f = getFriendshipByTargetID(parameters);
-      f.setCode(CodeFriendshipStatus.SUBSCRIBED);
-      getCurrentSession().save(f);
-      getCurrentSession().delete(fr);
-    } catch (HibernateException ex){
-      return false;
+    Friendship source = getFriendshipByID(parameters);
+    Friendship target = getFriendshipByTargetID(parameters);
+    if(source.getCode().equals(CodeFriendshipStatus.SUBSCRIBED)){
+        getCurrentSession().delete(source);
+        getCurrentSession().delete(target);
+    } else if (source.getCode().equals(CodeFriendshipStatus.FRIEND)){
+        source.setCode(CodeFriendshipStatus.DECLINED);
+        getCurrentSession().save(source);
+        target.setCode(CodeFriendshipStatus.SUBSCRIBED);
+        getCurrentSession().save(target);
+    } else {
+        return false;
     }
     return true;
   }
@@ -168,6 +165,13 @@ public class FriendsDAO {
   private Friendship getFriendshipByTargetID(FriendsParameters parameters){
     String query = "from Friendship f where src_person_id = " + parameters.getTargetID()
             + " and dst_person_id = " + parameters.getId();
+    Friendship f = (Friendship)getCurrentSession().createQuery(query).list().get(0);
+    return f;
+  }
+
+  private Friendship getFriendshipByID(FriendsParameters parameters){
+    String query = "from Friendship f where src_person_id = " + parameters.getId()
+            + " and dst_person_id = " + parameters.getTargetID();
     Friendship f = (Friendship)getCurrentSession().createQuery(query).list().get(0);
     return f;
   }

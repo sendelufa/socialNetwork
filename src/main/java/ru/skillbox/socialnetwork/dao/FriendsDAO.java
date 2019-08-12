@@ -74,7 +74,7 @@ public class FriendsDAO {
     Friendship source = getFriendshipByID(parameters);
     Friendship target = getFriendshipByTargetID(parameters);
     //нет записей
-    if (source == null || source.getCode().equals(CodeFriendshipStatus.DECLINED)){
+    if (source == null){
       Friendship newFriend = new Friendship();
       newFriend.setCode(CodeFriendshipStatus.SUBSCRIBED);
       newFriend.setSrcPerson(parameters.getPerson());
@@ -85,14 +85,14 @@ public class FriendsDAO {
       dstFriend.setSrcPerson(parameters.getTarget());
       dstFriend.setDstPerson(parameters.getPerson());
       getCurrentSession().save(dstFriend);
-    } //есть реквест
-    else if(source.getCode().equals(CodeFriendshipStatus.REQUEST)){
-      source.setCode(CodeFriendshipStatus.FRIEND);
-      getCurrentSession().save(source);
-      target.setCode(CodeFriendshipStatus.FRIEND);
-      getCurrentSession().save(target);
+    } //есть реквест или отказ
+      else if (source.getCode().equals(CodeFriendshipStatus.DECLINED) || source.getCode().equals(CodeFriendshipStatus.REQUEST)){
+        source.setCode(CodeFriendshipStatus.FRIEND);
+        getCurrentSession().save(source);
+        target.setCode(CodeFriendshipStatus.FRIEND);
+        getCurrentSession().save(target);
     } //остальные варианты
-    else {
+      else {
       return false;
     }
     return true;

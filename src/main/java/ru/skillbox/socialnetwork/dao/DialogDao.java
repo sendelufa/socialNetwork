@@ -46,9 +46,9 @@ public class DialogDao {
    public void addPersonToDialog(Dialog dialog, Person person) {
       List<Person> persons = dialog.getPersonList();
       if (!persons.contains(person)) {
+         persons.add(person);
          getCurrentSession().save(dialog);
       }
-
    }
 
    public List<Message> getMessages(int dialogId, @NotNull String searchText, int offset,

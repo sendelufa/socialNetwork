@@ -82,7 +82,8 @@ public class FriendsDAO {
     Friendship id = null;
     boolean found = false;
     for (Friendship f : requests) {
-      if (f.getDstPerson().getId() == parameters.getTargetID() && f.getCode().equals(CodeFriendshipStatus.REQUEST)) {
+      if (f.getDstPerson().getId() == parameters.getTargetID() && (f.getCode().equals(CodeFriendshipStatus.REQUEST)
+              || f.getCode().equals(CodeFriendshipStatus.SUBSCRIBED))) {
         found = true;
         id = f;
         break;

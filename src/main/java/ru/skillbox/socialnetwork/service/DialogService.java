@@ -293,6 +293,13 @@ public class DialogService implements PredicateOpt {
    }
 
    public ResponseApi sendMessage(int dialogId, String text) {
+      Dialog dialog = dialogDao.getDialogById(dialogId);
+      if (dialog == null){
+         return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
+      }
+      if (!dialog.getPersonList().contains(accountService.getCurrentUser())) {
+         return getErrorResponse(ERROR_PERSON_NOT_IN_DIALOG);
+      }
       Message message = new Message();
       message.setTime(new Date());
       message.setAuthor(accountService.getCurrentUser());

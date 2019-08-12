@@ -31,7 +31,7 @@ import ru.skillbox.socialnetwork.service.AccountService;
 @AutoConfigureMockMvc
 public class FriendsControllerTest {
 
-  private static final String EMAIL_1 = "sidorovmaxim@mail.ru";//email пользователя для авторизации в тестах
+  private static final String EMAIL_1 = "ivangubkin@mail.ru";//email пользователя для авторизации в тестах
 
   @Autowired
   private MockMvc mvc;
@@ -105,7 +105,7 @@ public class FriendsControllerTest {
   public void correctAddFriendTest() throws Exception {
     serviceCurrentUser();
 
-    mvc.perform(post("/friends/3")
+    mvc.perform(post("/friends/2")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
         .andExpect(status().isOk())

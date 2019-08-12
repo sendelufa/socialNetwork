@@ -7,23 +7,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
-import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.ActivityApi;
 import ru.skillbox.socialnetwork.api.response.DialogActivityChangeApi;
 import ru.skillbox.socialnetwork.api.response.DialogApi;
-import ru.skillbox.socialnetwork.api.response.DialogDeleteApi;
+import ru.skillbox.socialnetwork.api.response.DialogIdApi;
 import ru.skillbox.socialnetwork.api.response.DialogInviteLink;
 import ru.skillbox.socialnetwork.api.response.DialogLastActivityApi;
 import ru.skillbox.socialnetwork.api.response.DialogListApi;
 import ru.skillbox.socialnetwork.api.response.DialogMessageListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
+import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.MessageListItemApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.UnreadedCountApi;
 import ru.skillbox.socialnetwork.dao.DialogDao;
 import ru.skillbox.socialnetwork.dao.MessageDao;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
@@ -42,6 +45,8 @@ public class DialogService implements PredicateOpt {
    private final String ERROR_PERSON_NOT_IN_DIALOG = "Dialog not contains person";
    private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
    private final String ERROR_USER_NOT_OWNER = "Person %s not an owner of dialog %s";
+   private final String INVITE_SYMBOLS = "ABCDEFGHIJKLOMPQRSTUVWXYZ1234567890";
+   private final int INVITE_LENGTH = 18;
    @Autowired
    private MessageDao messageDao;
 
@@ -56,6 +61,14 @@ public class DialogService implements PredicateOpt {
 
    @Autowired
    private PersonDAO personDAO;
+
+   private static String generateInviteLink(Random rng, String characters, int length) {
+      char[] text = new char[length];
+      for (int i = 0; i < length; i++) {
+         text[i] = characters.charAt(rng.nextInt(characters.length()));
+      }
+      return new String(text);
+   }
 
    public AbstractResponse deleteDialogMessages(int dialogId, int messageId) {
       Dialog dialog = dialogDao.getDialogById(dialogId);
@@ -164,7 +177,7 @@ public class DialogService implements PredicateOpt {
              .collect(Collectors.toList());
          DialogListApi dialogListApi = new DialogListApi();
          dialogListApi.setDialogs(dialogApis);
-         response = dialogListApi;
+         response = getOKResponseApi(dialogListApi);
          response.setSuccess(true);
       } else {
          response = new ResponseApi("This dialogs doesn't exist", System.currentTimeMillis(),
@@ -174,15 +187,18 @@ public class DialogService implements PredicateOpt {
       return response;
    }
 
-   public AbstractResponse putDialogs(DialogUserShortListApi dialogUsers) {
+   public AbstractResponse putDialogs(DialogUsersApi dialogUsers) {
       Dialog dialog = new Dialog();
       List<Person> personList = new ArrayList<>();
       for (Integer i : dialogUsers.getUserIds()) {
          personList.add(personDAO.getPersonById(i));
       }
+      personList.add(accountService.getCurrentUser());
       dialog.setPersonList(personList);
+      dialog.setInviteCode(generateInviteLink(new Random(), INVITE_SYMBOLS, INVITE_LENGTH));
+      dialog.setOwnerId(accountService.getCurrentUser().getId());
       dialogDao.addDialog(dialog);
-      return getOKResponseApi(dialogMapper.toApi(dialog));
+      return getOKResponseApi(new DialogIdApi(dialog.getId()));
    }
 
    public ResponseApi putPersons(int dialogId, DialogUsersApi dialogUsersApi) {
@@ -344,11 +360,10 @@ public class DialogService implements PredicateOpt {
       dialog.setDeleted(true);
       dialogDao.updateDialog(dialog);
 
-      DialogDeleteApi dialogDeleteApi = new DialogDeleteApi(dialogId);
+      DialogIdApi dialogIdApi = new DialogIdApi(dialogId);
 
-      return new ResponseApi("ok", System.currentTimeMillis(), dialogDeleteApi);
+      return new ResponseApi("ok", System.currentTimeMillis(), dialogIdApi);
    }
-
 
    private ResponseApi getOKResponseApi(AbstractResponse abstractResponse) {
       return new ResponseApi("ok", System.currentTimeMillis(), abstractResponse);
@@ -362,9 +377,11 @@ public class DialogService implements PredicateOpt {
    public AbstractResponse getUnreadedMessages() {
       Person person = accountService.getCurrentUser();
       AbstractResponse response;
-      if(person != null) {
-         int countUnreadedMessages = person.getDialogList().stream().mapToInt(Dialog::getUnreadCount).sum();
-         response = new ResponseApi("string", System.currentTimeMillis(), new UnreadedCountApi(countUnreadedMessages));
+      if (person != null) {
+         int countUnreadedMessages = person.getDialogList().stream()
+             .mapToInt(Dialog::getUnreadCount).sum();
+         response = new ResponseApi("string", System.currentTimeMillis(),
+             new UnreadedCountApi(countUnreadedMessages));
          response.setSuccess(true);
       } else {
          response = new ErrorApi("invalid_request", "unauthorized");
@@ -376,8 +393,9 @@ public class DialogService implements PredicateOpt {
    public AbstractResponse getActivity(int id, int userId) {
       AbstractResponse response;
       Person person = personDAO.getPersonById(userId);
-      if(person != null) {
-         response = new ResponseApi("ok", System.currentTimeMillis(), new ActivityApi(person.isOnline(), person.getLastOnlineTime().getTime()));
+      if (person != null) {
+         response = new ResponseApi("ok", System.currentTimeMillis(),
+             new ActivityApi(person.isOnline(), person.getLastOnlineTime().getTime()));
          response.setSuccess(true);
       } else {
          response = new ErrorApi("invalid_request", "This person doesn't exist");
@@ -385,10 +403,4 @@ public class DialogService implements PredicateOpt {
       }
       return response;
    }
-
-//   public AbstractResponse setTextStatus(int id, int userId) {
-//      AbstractResponse response;
-//
-//      return response;
-//   }
 }

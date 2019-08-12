@@ -92,7 +92,7 @@ public class FriendsControllerTest {
 
   @Test
   public void failDeleteFriendTest() throws Exception {
-    mvc.perform(delete("/friends/8")
+    mvc.perform(delete("/friends/5")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .with(csrf()))
         .andExpect(status().isUnauthorized())

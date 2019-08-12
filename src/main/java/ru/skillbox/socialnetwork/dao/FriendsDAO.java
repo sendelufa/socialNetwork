@@ -71,38 +71,28 @@ public class FriendsDAO {
   }
 
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
-    List<Friendship> requests = searchAllFriendForPerson(parameters.getPerson());
-    Friendship id = null;
-    boolean found = false;
-    for (Friendship f : requests) {
-      if (f.getDstPerson().getId() == parameters.getTargetID() && (f.getCode().equals(CodeFriendshipStatus.REQUEST)
-              || f.getCode().equals(CodeFriendshipStatus.SUBSCRIBED))) {
-        found = true;
-        id = f;
-        break;
-      }
-      if (f.getDstPerson().getId() == parameters.getTargetID() && f.getCode().equals(CodeFriendshipStatus.FRIEND)){
-        return false;
-      }
-    }
-    try {
-      if (found) {
-        id.setCode(CodeFriendshipStatus.FRIEND);
-        getCurrentSession().save(id);
-        addPersonAsFriendById(reverseParameters(parameters));
-      } else {
-        Friendship newFriend = new Friendship();
-        newFriend.setCode(CodeFriendshipStatus.SUBSCRIBED);
-        newFriend.setSrcPerson(parameters.getPerson());
-        newFriend.setDstPerson(parameters.getTarget());
-        getCurrentSession().save(newFriend);
-        Friendship dstFriend = new Friendship();
-        dstFriend.setCode(CodeFriendshipStatus.REQUEST);
-        dstFriend.setSrcPerson(parameters.getTarget());
-        dstFriend.setDstPerson(parameters.getPerson());
-        getCurrentSession().save(dstFriend);
-      }
-    } catch (HibernateException ex) {
+    Friendship source = getFriendshipByID(parameters);
+    Friendship target = getFriendshipByTargetID(parameters);
+    //нет записей
+    if (source == null || source.getCode().equals(CodeFriendshipStatus.DECLINED)){
+      Friendship newFriend = new Friendship();
+      newFriend.setCode(CodeFriendshipStatus.SUBSCRIBED);
+      newFriend.setSrcPerson(parameters.getPerson());
+      newFriend.setDstPerson(parameters.getTarget());
+      getCurrentSession().save(newFriend);
+      Friendship dstFriend = new Friendship();
+      dstFriend.setCode(CodeFriendshipStatus.REQUEST);
+      dstFriend.setSrcPerson(parameters.getTarget());
+      dstFriend.setDstPerson(parameters.getPerson());
+      getCurrentSession().save(dstFriend);
+    } //есть реквест
+    else if(source.getCode().equals(CodeFriendshipStatus.REQUEST)){
+      source.setCode(CodeFriendshipStatus.FRIEND);
+      getCurrentSession().save(source);
+      target.setCode(CodeFriendshipStatus.FRIEND);
+      getCurrentSession().save(target);
+    } //остальные варианты
+    else {
       return false;
     }
     return true;
@@ -155,24 +145,17 @@ public class FriendsDAO {
     return list;
   }
 
-  private FriendsParameters reverseParameters(FriendsParameters parameters){
-    FriendsParameters param = new FriendsParameters("", parameters.getOffset(), parameters.getItemPerPage());
-    param.setPerson(parameters.getTarget());
-    param.setTarget(parameters.getPerson());
-    return param;
-  }
-
   private Friendship getFriendshipByTargetID(FriendsParameters parameters){
     String query = "from Friendship f where src_person_id = " + parameters.getTargetID()
             + " and dst_person_id = " + parameters.getId();
-    Friendship f = (Friendship)getCurrentSession().createQuery(query).list().get(0);
-    return f;
+    List<Friendship> list = getCurrentSession().createQuery(query).list();
+    return list.size() > 0 ? list.get(0) : null;
   }
 
   private Friendship getFriendshipByID(FriendsParameters parameters){
     String query = "from Friendship f where src_person_id = " + parameters.getId()
             + " and dst_person_id = " + parameters.getTargetID();
-    Friendship f = (Friendship)getCurrentSession().createQuery(query).list().get(0);
-    return f;
+    List<Friendship> list = getCurrentSession().createQuery(query).list();
+    return list.size() > 0 ? list.get(0) : null;
   }
 }

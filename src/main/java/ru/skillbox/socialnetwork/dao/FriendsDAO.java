@@ -29,7 +29,7 @@ public class FriendsDAO {
   private NotificationDAO notificationDAO;
 
   private List<Friendship> searchAllFriendForPerson(Person person) {
-    String query = "from Friendship f where src_person_id = " + person.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
+    String query = "from Friendship f where src_person_id = " + person.getId();
     List<Friendship> list = getCurrentSession().createQuery(query).list();
     return list;
   }
@@ -78,26 +78,35 @@ public class FriendsDAO {
   }
 
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
-    List<Friendship> requests = getRequestsByName(parameters);
+    List<Friendship> requests = searchAllFriendForPerson(parameters.getPerson());
     Friendship id = null;
     boolean found = false;
     for (Friendship f : requests) {
-      if (f.getDstPerson().getId() == parameters.getTargetID()) {
+      if (f.getDstPerson().getId() == parameters.getTargetID() && f.getCode().equals(CodeFriendshipStatus.REQUEST)) {
         found = true;
         id = f;
+        break;
+      }
+      if (f.getDstPerson().getId() == parameters.getTargetID() && f.getCode().equals(CodeFriendshipStatus.FRIEND)){
+        return false;
       }
     }
     try {
       if (found) {
-
         id.setCode(CodeFriendshipStatus.FRIEND);
         getCurrentSession().save(id);
+        addPersonAsFriendById(reverseParameters(parameters));
       } else {
         Friendship newFriend = new Friendship();
-        newFriend.setCode(CodeFriendshipStatus.REQUEST);
+        newFriend.setCode(CodeFriendshipStatus.SUBSCRIBED);
         newFriend.setSrcPerson(parameters.getPerson());
-        newFriend.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
+        newFriend.setDstPerson(parameters.getTarget());
         getCurrentSession().save(newFriend);
+        Friendship dstFriend = new Friendship();
+        dstFriend.setCode(CodeFriendshipStatus.REQUEST);
+        dstFriend.setSrcPerson(parameters.getTarget());
+        dstFriend.setDstPerson(parameters.getPerson());
+        getCurrentSession().save(dstFriend);
       }
     } catch (HibernateException ex) {
       return false;
@@ -146,4 +155,10 @@ public class FriendsDAO {
     return sessionFactory.getCurrentSession();
   }
 
+  private FriendsParameters reverseParameters(FriendsParameters parameters){
+    FriendsParameters param = new FriendsParameters("", parameters.getOffset(), parameters.getItemPerPage());
+    param.setPerson(personDAO.getPersonById(parameters.getTargetID()));
+    param.setTarget(parameters.getPerson());
+    return param;
+  }
 }

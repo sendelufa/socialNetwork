@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.service.AccountService;
 import ru.skillbox.socialnetwork.service.FriendsService;
 
@@ -19,6 +20,9 @@ public class FriendsController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    PersonDAO personDAO;
 
     /**
     * Получить список друзей
@@ -42,7 +46,7 @@ public class FriendsController {
     @DeleteMapping("friends/{id}")
     public ResponseEntity deleteFriend(@PathVariable int id) {
         FriendsParameters friendsParameters = createParameters();
-        friendsParameters.setTargetID(id);
+        friendsParameters.setTarget(personDAO.getPersonById(id));
         AbstractResponse response = friendsService.deleteFriendById(friendsParameters);
         return createResponse(response);
     }
@@ -50,7 +54,7 @@ public class FriendsController {
     @PostMapping("friends/{id}")
     public ResponseEntity addAsFriend(@PathVariable int id) {
         FriendsParameters friendsParameters = createParameters();
-        friendsParameters.setTargetID(id);
+        friendsParameters.setTarget(personDAO.getPersonById(id));
         AbstractResponse response = friendsService.addPersonAsFriendById(friendsParameters);
         return createResponse(response);
     }

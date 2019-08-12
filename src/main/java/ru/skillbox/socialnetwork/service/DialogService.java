@@ -383,14 +383,16 @@ public class DialogService implements PredicateOpt {
       Person person = accountService.getCurrentUser();
       AbstractResponse response;
       if (person != null) {
-         int countUnreadedMessages = person.getDialogList().stream()
-             .mapToInt(Dialog::getUnreadCount).sum();
+         int countUnreadMessages =
+             person.getDialogList().stream()
+                 .filter(PredicateOpt.not(Dialog::isDeleted))
+                 .mapToInt(Dialog::getUnreadCount)
+                 .sum();
          response = new ResponseApi("string", System.currentTimeMillis(),
-             new UnreadedCountApi(countUnreadedMessages));
+             new UnreadedCountApi(countUnreadMessages));
          response.setSuccess(true);
       } else {
-         response = new ErrorApi("invalid_request", "unauthorized");
-         response.setSuccess(false);
+         response = getErrorResponse(ERROR_PERSON_NOT_EXIST);
       }
       return response;
    }

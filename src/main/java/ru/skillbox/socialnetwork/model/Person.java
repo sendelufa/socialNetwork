@@ -2,7 +2,19 @@ package ru.skillbox.socialnetwork.model;
 
 import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
@@ -82,7 +94,7 @@ public class Person {
    }
 
    @ManyToMany(fetch = FetchType.LAZY)
-   @JoinTable(name = "dialogs",
+   @JoinTable(name = "person2dialog",
            joinColumns = @JoinColumn(name = "person_id"),
            inverseJoinColumns = @JoinColumn(name = "dialog_id"))
    private List<Dialog> dialogList;

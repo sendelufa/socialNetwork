@@ -12,16 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.model.Friendship;
-import ru.skillbox.socialnetwork.model.FriendshipStatus;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
 @Repository
 @Transactional
 public class FriendsDAO {
-  //TODO что считать верным статусом?
-  private static final int REQUEST_STATUS = 1;
-  private static final int FRIENDS_STATUS = 2;
 
   @Autowired
   private SessionFactory sessionFactory;
@@ -33,13 +29,13 @@ public class FriendsDAO {
   private NotificationDAO notificationDAO;
 
   private List<Friendship> searchAllFriendForPerson(Person person) {
-    String query = "from Friendship f where src_person_id = " + person.getId();
+    String query = "from Friendship f where src_person_id = " + person.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
     List<Friendship> list = getCurrentSession().createQuery(query).list();
     return list;
   }
 
   public List<Friendship> searchFriend(FriendsParameters parameters) {
-    String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = " + FRIENDS_STATUS;
+    String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
     Query q = getCurrentSession().createQuery(query);
     ArrayList<Friendship> all = (ArrayList<Friendship>)q.list();
     ArrayList<Friendship> select = new ArrayList<>();
@@ -73,8 +69,8 @@ public class FriendsDAO {
   }
 
   public List<Friendship> getRequestsByName(FriendsParameters parameters) {
-    String query = "FROM Friendship f WHERE src_person_id = " + parameters.getId()
-        + " AND status_id = " + REQUEST_STATUS;
+    String query = "FROM Friendship f WHERE dst_person_id = " + parameters.getId()
+        + " AND code = " + (CodeFriendshipStatus.REQUEST.ordinal() + 1);
     Query q = getCurrentSession().createQuery(query);
     q.setFirstResult(parameters.getOffset());
     q.setMaxResults(parameters.getItemPerPage());
@@ -93,13 +89,12 @@ public class FriendsDAO {
     }
     try {
       if (found) {
-        FriendshipStatus statusFriend = getCurrentSession().get(FriendshipStatus.class, FRIENDS_STATUS);
-        id.setFriendshipStatus(statusFriend);
+
+        id.setCode(CodeFriendshipStatus.FRIEND);
         getCurrentSession().save(id);
       } else {
         Friendship newFriend = new Friendship();
-        FriendshipStatus statusRequest = getCurrentSession().get(FriendshipStatus.class, REQUEST_STATUS);
-        newFriend.setFriendshipStatus(statusRequest);
+        newFriend.setCode(CodeFriendshipStatus.REQUEST);
         newFriend.setSrcPerson(parameters.getPerson());
         newFriend.setDstPerson(personDAO.getPersonById(parameters.getTargetID()));
         getCurrentSession().save(newFriend);
@@ -111,28 +106,34 @@ public class FriendsDAO {
   }
 
   public List<Friendship> getRecommendation(FriendsParameters parameters) {
-    String query =
-        "from Friendship f where src_person_id = " + parameters.getId() + " AND status_id = " + FRIENDS_STATUS;
+    String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
     List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
 
-    List<Friendship> list = new ArrayList<>();
+    query = "from Friendship f where src_person_id = " + parameters.getId();
+    List<Friendship> listAll = getCurrentSession().createQuery(query).list();
+
+    List<Friendship> listFriendsOfFriends = new ArrayList<>();
+    List<Friendship> listRecommendation = new ArrayList<>();
     for (Friendship myFriend : listMyFriend) {
       List<Friendship> listFriendsOfFriend = searchAllFriendForPerson(myFriend.getDstPerson());
-      for (Friendship friendOfFriend : listFriendsOfFriend) {
-        if (!listMyFriend.contains(friendOfFriend) && !friendOfFriend.getDstPerson()
-            .equals(parameters.getPerson())) {
-          list.add(friendOfFriend);
+      listFriendsOfFriends.addAll(listFriendsOfFriend);
+    }
+    listRecommendation.addAll(listFriendsOfFriends);
+    for (Friendship myFriend : listAll) {
+      for (Friendship friendship : listFriendsOfFriends) {
+        if (myFriend.getDstPerson().getId() == friendship.getDstPerson().getId() || friendship.getDstPerson().getId() == parameters.getId()){
+          listRecommendation.remove(friendship);
         }
       }
     }
-    return list;
+
+      return listRecommendation;
   }
 
   public List<Friendship> isAFriendOfUsers(int[] idsFriend, int currentId) {
     List<Friendship> idStatus = new ArrayList<>();
     for (int id : idsFriend) {
-      String query =
-          "from Friendship f where src_person_id = " + currentId + " AND dst_person_id = " + id;
+      String query = "from Friendship f where src_person_id = " + currentId + " AND dst_person_id = " + id;
       List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
       if (listMyFriend.size() > 0) {
         idStatus.add(listMyFriend.get(0));

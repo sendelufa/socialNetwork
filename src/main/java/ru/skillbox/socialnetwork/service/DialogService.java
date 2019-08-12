@@ -153,20 +153,16 @@ public class DialogService implements PredicateOpt {
          if (message != null && dialog.getMessages().contains(message)) {
             message.setReadStatus(ReadStatusMessage.READ);
             messageDao.updateMessage(message);
-            dialog.setUnreadCount(dialog.getUnreadCount() - 1);
+            dialog.setUnreadCount(dialog.getUnreadCount() > 0 ? dialog.getUnreadCount() - 1 : 0);
             dialogDao.updateDialog(dialog);
             response = new ResponseApi("string", System.currentTimeMillis(),
                 new ResponseApi.Message("ok"));
             response.setSuccess(true);
          } else {
-            response = new ResponseApi("This message doesn't exist", System.currentTimeMillis(),
-                new ResponseApi.Message("invalid_request"));
-            response.setSuccess(false);
+            response = getErrorResponse(ERROR_MESSAGE_NOT_EXIST);
          }
       } else {
-         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
-             new ResponseApi.Message("invalid_request"));
-         response.setSuccess(false);
+         response = getErrorResponse(ERROR_DIALOG_NOT_EXIST);
       }
       return response;
    }

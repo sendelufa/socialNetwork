@@ -28,12 +28,6 @@ public class FriendsDAO {
   @Autowired
   private NotificationDAO notificationDAO;
 
-  private List<Friendship> searchAllFriendForPerson(Person person) {
-    String query = "from Friendship f where src_person_id = " + person.getId();
-    List<Friendship> list = getCurrentSession().createQuery(query).list();
-    return list;
-  }
-
   public List<Friendship> searchFriend(FriendsParameters parameters) {
     String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
     Query q = getCurrentSession().createQuery(query);
@@ -58,9 +52,11 @@ public class FriendsDAO {
             fr = f;
         }
     }
-
     try {
       notificationDAO.deleteNotificationByFriendId(parameters);
+      Friendship f = getFriendshipByTargetID(parameters);
+      f.setCode(CodeFriendshipStatus.SUBSCRIBED);
+      getCurrentSession().save(f);
       getCurrentSession().delete(fr);
     } catch (HibernateException ex){
       return false;
@@ -156,10 +152,23 @@ public class FriendsDAO {
     return sessionFactory.getCurrentSession();
   }
 
+  private List<Friendship> searchAllFriendForPerson(Person person) {
+    String query = "from Friendship f where src_person_id = " + person.getId();
+    List<Friendship> list = getCurrentSession().createQuery(query).list();
+    return list;
+  }
+
   private FriendsParameters reverseParameters(FriendsParameters parameters){
     FriendsParameters param = new FriendsParameters("", parameters.getOffset(), parameters.getItemPerPage());
     param.setPerson(parameters.getTarget());
     param.setTarget(parameters.getPerson());
     return param;
+  }
+
+  private Friendship getFriendshipByTargetID(FriendsParameters parameters){
+    String query = "from Friendship f where src_person_id = " + parameters.getTargetID()
+            + " and dst_person_id = " + parameters.getId();
+    Friendship f = (Friendship)getCurrentSession().createQuery(query).list().get(0);
+    return f;
   }
 }

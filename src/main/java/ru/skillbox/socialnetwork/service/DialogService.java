@@ -42,9 +42,11 @@ public class DialogService implements PredicateOpt {
 
    private final String ERROR_DIALOG_NOT_EXIST = "This dialog doesn't exist";
    private final String ERROR_PERSON_NOT_EXIST = "This person doesn't exist";
+   private final String ERROR_MESSAGE_NOT_EXIST = "This message doesn't exist";
    private final String ERROR_PERSON_NOT_IN_DIALOG = "Dialog not contains person";
    private final String ERROR_INVITE_NOT_EQUALS = "invite not matches";
-   private final String ERROR_USER_NOT_OWNER = "Person %s not an owner of dialog %s";
+   private final String ERROR_USER_NOT_OWNER_DIALOG = "Person %s not an owner of dialog %s";
+   private final String ERROR_USER_NOT_OWNER_MESSAGE = "Person %s not an owner of message %s";
    private final String INVITE_SYMBOLS = "ABCDEFGHIJKLOMPQRSTUVWXYZ1234567890";
    private final int INVITE_LENGTH = 18;
    @Autowired
@@ -76,20 +78,20 @@ public class DialogService implements PredicateOpt {
       if (dialog != null) {
          Message message = messageDao.getMessageById(messageId);
          if (message != null && dialog.getMessages().contains(message)) {
+            if (!message.getAuthor().equals(accountService.getCurrentUser())) {
+               return getErrorResponse(String.format(ERROR_USER_NOT_OWNER_MESSAGE,
+                   accountService.getCurrentUser().getId(), message.getId()));
+            }
             message.setDeleted(true);
             messageDao.updateMessage(message);
             response = new ResponseApi("string", System.currentTimeMillis(),
                 new ResponseApi.Message("ok"));
             response.setSuccess(true);
          } else {
-            response = new ResponseApi("This message doesn't exist", System.currentTimeMillis(),
-                new ResponseApi.Message("invalid_request"));
-            response.setSuccess(false);
+            response = getErrorResponse(ERROR_MESSAGE_NOT_EXIST);
          }
       } else {
-         response = new ResponseApi(ERROR_DIALOG_NOT_EXIST, System.currentTimeMillis(),
-             new ResponseApi.Message("invalid_request"));
-         response.setSuccess(false);
+         response = getErrorResponse(ERROR_DIALOG_NOT_EXIST);
       }
       return response;
    }
@@ -294,7 +296,7 @@ public class DialogService implements PredicateOpt {
 
    public ResponseApi sendMessage(int dialogId, String text) {
       Dialog dialog = dialogDao.getDialogById(dialogId);
-      if (dialog == null){
+      if (dialog == null) {
          return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
       }
       if (!dialog.getPersonList().contains(accountService.getCurrentUser())) {
@@ -361,7 +363,7 @@ public class DialogService implements PredicateOpt {
       }
 
       if (accountService.getCurrentUser().getId() != dialog.getOwnerId()) {
-         return getErrorResponse(String.format(ERROR_USER_NOT_OWNER,
+         return getErrorResponse(String.format(ERROR_USER_NOT_OWNER_DIALOG,
              accountService.getCurrentUser().getId(), dialogId));
       }
       dialog.setDeleted(true);

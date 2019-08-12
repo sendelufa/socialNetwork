@@ -145,22 +145,6 @@ public class DialogController {
     * @param userId id пользователя
     */
 
-//   @PostMapping("/{id:\\d+}/activity/{user_id:\\d+}")
-//   public ResponseEntity postPersonActivity(
-//           @PathVariable int id,
-//           @PathVariable(value = "user_id") int userId) {
-//      AbstractResponse response = dialogService.setTextStatus(id, userId);
-//      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-//   }
-
-
-   /**
-    * Изменить статус набора текста пользователем в диалоге.
-    *
-    * @param id id диалога
-    * @param userId id пользователя
-    */
-
    @PostMapping("/{id:\\d+}/activity/{user_id:\\d+}")
    public ResponseEntity getPrintStatus(
        @PathVariable int id,

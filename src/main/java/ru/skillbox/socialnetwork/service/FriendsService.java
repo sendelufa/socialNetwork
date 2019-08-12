@@ -66,8 +66,7 @@ public class FriendsService {
    }
 
    public AbstractResponse isAFriendOfUsers(int[] ids) {
-      List<Friendship> friends = friendsDAO
-          .isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
+      List<Friendship> friends = friendsDAO.isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
       if (friends.size() < 1) {
          return sendError("Это не Ваши друзья");
       }
@@ -75,8 +74,7 @@ public class FriendsService {
       IsFriendsApi responseApi = new IsFriendsApi();
       List<FriendshipStatusApi> listStatusApi = new ArrayList<>();
       for (Friendship friend : friends) {
-         FriendshipStatusApi statusApi = new FriendshipStatusApi(friend.getDstPerson().getId(),
-             friend.getFriendshipStatus().getCode());
+         FriendshipStatusApi statusApi = new FriendshipStatusApi(friend.getDstPerson().getId(), friend.getCode());
          listStatusApi.add(statusApi);
       }
       responseApi.setData(listStatusApi);

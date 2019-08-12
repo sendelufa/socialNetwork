@@ -158,7 +158,7 @@ public class FriendsDAO {
 
   private FriendsParameters reverseParameters(FriendsParameters parameters){
     FriendsParameters param = new FriendsParameters("", parameters.getOffset(), parameters.getItemPerPage());
-    param.setPerson(personDAO.getPersonById(parameters.getTargetID()));
+    param.setPerson(parameters.getTarget());
     param.setTarget(parameters.getPerson());
     return param;
   }

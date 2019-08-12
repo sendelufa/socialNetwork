@@ -45,7 +45,7 @@ public class FriendsParameters {
 
   public void setTarget(Person target) {
     this.target = target;
-    setTargetID(target.getId());
+    this.targetID = target.getId();
   }
 
   public int getId() {

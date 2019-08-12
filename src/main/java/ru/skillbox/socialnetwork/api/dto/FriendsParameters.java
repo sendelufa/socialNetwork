@@ -15,12 +15,15 @@ public class FriendsParameters {
   //целевой ИД для удаления / добавления
   private int targetID;
 
+  //целевая персона
+
+  private Person target;
   //Количество элементов на страницу
+
   private int itemPerPage;
-
   //сдвиг от начала
-  private int offset;
 
+  private int offset;
   public FriendsParameters(String name, Integer offset, Integer itemPerPage){
     this.name = name;
     this.offset = offset;
@@ -34,6 +37,15 @@ public class FriendsParameters {
 
   public void setTargetID(int targetID) {
     this.targetID = targetID;
+  }
+
+  public Person getTarget() {
+    return target;
+  }
+
+  public void setTarget(Person target) {
+    this.target = target;
+    setTargetID(target.getId());
   }
 
   public int getId() {

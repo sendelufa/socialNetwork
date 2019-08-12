@@ -30,9 +30,9 @@ public class FriendsService {
 
    public AbstractResponse searchFriend(FriendsParameters parameters) {
       List<Friendship> allFriends = friendsDAO.searchFriend(parameters);
-      if (allFriends.size() < 1) {
-         return sendError("НетЪ друзей");
-      }
+//      if (allFriends.size() < 1) {
+//         return sendError("НетЪ друзей");
+//      }
       return mapFriendshipToFriendsApi(allFriends, parameters);
    }
 

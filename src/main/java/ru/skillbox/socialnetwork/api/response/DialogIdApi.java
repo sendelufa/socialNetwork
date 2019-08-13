@@ -1,10 +1,10 @@
 package ru.skillbox.socialnetwork.api.response;
 
-public class DialogDeleteApi extends AbstractResponse {
+public class DialogIdApi extends AbstractResponse {
 
    private int id;
 
-   public DialogDeleteApi(int id) {
+   public DialogIdApi(int id) {
       this.id = id;
    }
 

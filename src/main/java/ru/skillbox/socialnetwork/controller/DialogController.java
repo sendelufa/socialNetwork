@@ -5,10 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.skillbox.socialnetwork.api.request.DialogUsersApi;
 import ru.skillbox.socialnetwork.api.request.LongpollHistoryPequestBodyApi;
-import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.api.response.AbstractResponse;
+import ru.skillbox.socialnetwork.api.response.LongpollHistoryResponseApi;
+import ru.skillbox.socialnetwork.api.response.LongpollServerResponseBodyApi;
+import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.DialogService;
 
 
@@ -134,22 +145,6 @@ public class DialogController {
     * @param userId id пользователя
     */
 
-//   @PostMapping("/{id:\\d+}/activity/{user_id:\\d+}")
-//   public ResponseEntity postPersonActivity(
-//           @PathVariable int id,
-//           @PathVariable(value = "user_id") int userId) {
-//      AbstractResponse response = dialogService.setTextStatus(id, userId);
-//      return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
-//   }
-
-
-   /**
-    * Изменить статус набора текста пользователем в диалоге.
-    *
-    * @param id id диалога
-    * @param userId id пользователя
-    */
-
    @PostMapping("/{id:\\d+}/activity/{user_id:\\d+}")
    public ResponseEntity getPrintStatus(
        @PathVariable int id,
@@ -245,9 +240,9 @@ public class DialogController {
 
    @GetMapping
    public ResponseEntity getDialogs(
-       @RequestParam String query,
-       @RequestParam int offset,
-       @RequestParam(defaultValue = "20") int itemPerPage){
+       @RequestParam(required = false, defaultValue = "0") String query,
+       @RequestParam(required = false, defaultValue = "0") int offset,
+       @RequestParam(required = false, defaultValue = "20") int itemPerPage){
       AbstractResponse response = dialogService.getDialogs(query,offset,itemPerPage);
       return new ResponseEntity<>(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }
@@ -260,7 +255,7 @@ public class DialogController {
     */
 
    @PostMapping
-   public ResponseEntity putDialogs(@RequestParam DialogUserShortListApi dialogUsers){
+   public ResponseEntity putDialogs(@RequestBody DialogUsersApi dialogUsers){
       AbstractResponse response = dialogService.putDialogs(dialogUsers);
       return new ResponseEntity<>(response, HttpStatus.OK);
    }

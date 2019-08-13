@@ -27,7 +27,8 @@ public class Dialog {
    private Integer ownerId;
 
    @Column(name = "unread_count")
-   private Integer unreadCount;
+   @NotNull
+   private int unreadCount;
 
 
    @Column(name = "is_deleted")
@@ -35,7 +36,6 @@ public class Dialog {
    private boolean isDeleted;
 
    @Column(name = "invite_code")
-   @NotNull
    private String inviteCode;
 
 
@@ -88,11 +88,11 @@ public class Dialog {
       this.personList = personList;
    }
 
-   public Integer getUnreadCount() {
+   public int getUnreadCount() {
       return unreadCount;
    }
 
-   public void setUnreadCount(Integer unreadCount) {
+   public void setUnreadCount(int unreadCount) {
       this.unreadCount = unreadCount;
    }
 

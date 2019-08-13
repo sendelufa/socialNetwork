@@ -25,7 +25,7 @@ public class DialogDao {
 
    public List<Dialog> getDialogsWithParameters(String searchText, int offset, int itemPerPage) {
       // TODO реализовать полнотекстовый поиск диалогов в которых есть сообщения  с searchText
-      String query = searchText.isEmpty() ?
+      String query = searchText == null ?
           "from Dialog d where d.isDeleted = false ORDER BY d.id DESC" :
           "from Dialog d where d.isDeleted = false ORDER BY d.id DESC";
       TypedQuery<Dialog> queryTyped = getCurrentSession().createQuery(query, Dialog.class);

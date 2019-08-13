@@ -240,7 +240,7 @@ public class DialogController {
 
    @GetMapping
    public ResponseEntity getDialogs(
-       @RequestParam(required = false, defaultValue = "0") String query,
+       @RequestParam(required = false) String query,
        @RequestParam(required = false, defaultValue = "0") int offset,
        @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
       AbstractResponse response = dialogService.getDialogs(query, offset, itemPerPage);

@@ -71,6 +71,9 @@ public class FriendsDAO {
   }
 
   public boolean addPersonAsFriendById(FriendsParameters parameters) {
+    //самого себя в друзья в друзья не добавляем
+    if (parameters.getId() == parameters.getTargetID()) return false;
+
     Friendship source = getFriendshipByID(parameters);
     Friendship target = getFriendshipByTargetID(parameters);
     //нет записей

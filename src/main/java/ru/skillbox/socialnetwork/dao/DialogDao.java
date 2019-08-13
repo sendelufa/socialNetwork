@@ -1,9 +1,9 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.util.List;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +26,12 @@ public class DialogDao {
    public List<Dialog> getDialogsWithParameters(String searchText, int offset, int itemPerPage) {
       // TODO реализовать полнотекстовый поиск диалогов в которых есть сообщения  с searchText
       String query = searchText.isEmpty() ?
-          "from Dialog d ORDER BY d.id DESC" :
-          "from Dialog d ORDER BY d.id DESC";
-      Query q = getCurrentSession().createQuery(query);
-      q.setFirstResult(offset);
-      q.setMaxResults(itemPerPage);
-      return q.list();
+          "from Dialog d where d.isDeleted = false ORDER BY d.id DESC" :
+          "from Dialog d where d.isDeleted = false ORDER BY d.id DESC";
+      TypedQuery<Dialog> queryTyped = getCurrentSession().createQuery(query, Dialog.class);
+      queryTyped.setFirstResult(offset);
+      queryTyped.setMaxResults(itemPerPage);
+      return queryTyped.getResultList();
    }
 
    public void updateDialog(Dialog dialog) {
@@ -59,10 +59,10 @@ public class DialogDao {
               + " %s AND m.isDeleted = false ORDER BY m.time DESC",
           dialogId, searchCriteria);
 
-      Query q = getCurrentSession().createQuery(query);
-      q.setFirstResult(offset);
-      q.setMaxResults(itemPerPage);
-      return q.list();
+      TypedQuery<Message> queryTyped = getCurrentSession().createQuery(query, Message.class);
+      queryTyped.setFirstResult(offset);
+      queryTyped.setMaxResults(itemPerPage);
+      return queryTyped.getResultList();
    }
 
    private Session getCurrentSession() {

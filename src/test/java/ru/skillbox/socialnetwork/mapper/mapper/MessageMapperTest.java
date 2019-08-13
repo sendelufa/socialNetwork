@@ -1,21 +1,21 @@
 package ru.skillbox.socialnetwork.mapper.mapper;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.MessageApi;
+import ru.skillbox.socialnetwork.api.response.MessageApi.readStatuses;
 import ru.skillbox.socialnetwork.config.AppConfig;
 import ru.skillbox.socialnetwork.mapper.MessageMapper;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.ReadStatusMessage;
-
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {AppConfig.class, MessageMapper.class})
@@ -42,11 +42,11 @@ public class MessageMapperTest {
         MessageApi messageApi = messageMapper.toApi(message);
 
         assertEquals(message.getId(), messageApi.getId());
-        assertEquals(message.getMessageText(), messageApi.getMessage_text());
-        assertEquals(message.getReadStatus().toString(), messageApi.getRead_status().toString());
+        assertEquals(message.getMessageText(), messageApi.getMessageText());
+        assertEquals(message.getReadStatus().toString(), messageApi.getReadStatus().toString());
         assertEquals(message.getTime().getTime(), messageApi.getTime());
-        assertEquals(message.getAuthor().getId(), messageApi.getAuthor_id().intValue());
-        assertEquals(message.getRecipient().getId(), messageApi.getRecipient_id().intValue());
+        assertEquals(message.getAuthor().getId(), messageApi.getAuthorId().intValue());
+        assertEquals(message.getRecipient().getId(), messageApi.getRecipientId().intValue());
     }
 
     @Test
@@ -54,18 +54,18 @@ public class MessageMapperTest {
     {
         MessageApi messageApi = new MessageApi();
         messageApi.setId(89);
-        messageApi.setAuthor_id(1);
-        messageApi.setMessage_text("rock");
-        messageApi.setRead_status(MessageApi.statuses.READ);
-        messageApi.setRecipient_id(2);
+        messageApi.setAuthorId(1);
+        messageApi.setMessageText("rock");
+        messageApi.setReadStatus(readStatuses.READ);
+        messageApi.setRecipientId(2);
         messageApi.setTime(8902323);
         Message message = messageMapper.toEntity(messageApi);
 
         assertEquals(messageApi.getId(), message.getId());
-        assertEquals(messageApi.getMessage_text(), message.getMessageText());
-        assertEquals(messageApi.getRead_status().toString(), message.getReadStatus().toString());
+        assertEquals(messageApi.getMessageText(), message.getMessageText());
+        assertEquals(messageApi.getReadStatus().toString(), message.getReadStatus().toString());
         assertEquals(messageApi.getTime(), message.getTime().getTime());
-        assertEquals(messageApi.getAuthor_id().intValue(), message.getAuthor().getId());
-        assertEquals(messageApi.getRecipient_id().intValue(), message.getRecipient().getId());
+        assertEquals(messageApi.getAuthorId().intValue(), message.getAuthor().getId());
+        assertEquals(messageApi.getRecipientId().intValue(), message.getRecipient().getId());
     }
 }

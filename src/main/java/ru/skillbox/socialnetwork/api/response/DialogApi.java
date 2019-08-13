@@ -1,18 +1,25 @@
 package ru.skillbox.socialnetwork.api.response;
 
-import java.util.List;
-import ru.skillbox.socialnetwork.model.Message;
-import ru.skillbox.socialnetwork.model.Person;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DialogApi extends AbstractResponse {
 
    private int id;
-
+   @JsonProperty("unread_count")
    private Integer unreadCount;
 
-   private List<Person> users;
+   @JsonProperty("last_message")
+   private MessageApi lastMessage;
 
-   private List<Message> messages;
+   public DialogApi() {
+   }
+
+   public DialogApi(int id, Integer unreadCount,
+       MessageApi lastMessage) {
+      this.id = id;
+      this.unreadCount = unreadCount;
+      this.lastMessage = lastMessage;
+   }
 
    public int getId() {
       return id;
@@ -20,14 +27,6 @@ public class DialogApi extends AbstractResponse {
 
    public void setId(int id) {
       this.id = id;
-   }
-
-   public List<Message> getMessages() {
-      return messages;
-   }
-
-   public void setMessages(List<Message> messages) {
-      this.messages = messages;
    }
 
    public Integer getUnreadCount() {
@@ -38,11 +37,11 @@ public class DialogApi extends AbstractResponse {
       this.unreadCount = unreadCount;
    }
 
-   public List<Person> getUsers() {
-      return users;
+   public MessageApi getLastMessage() {
+      return lastMessage;
    }
 
-   public void setUsers(List<Person> users) {
-      this.users = users;
+   public void setLastMessage(MessageApi lastMessage) {
+      this.lastMessage = lastMessage;
    }
 }

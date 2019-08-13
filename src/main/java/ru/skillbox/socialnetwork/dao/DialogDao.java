@@ -26,9 +26,10 @@ public class DialogDao {
    }
 
    public List<Dialog> getDialogsWithParameters(String searchText, int offset, int itemPerPage) {
+      // TODO реализовать полнотекстовый поиск диалогов в которых есть сообщения  с searchText
       String query = searchText.isEmpty() ?
           "from Dialog d ORDER BY d.id DESC" :
-          "from Dialog d join d.messages ORDER BY d.id DESC";
+          "from Dialog d ORDER BY d.id DESC";
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(offset);
       q.setMaxResults(itemPerPage);
@@ -56,8 +57,6 @@ public class DialogDao {
       String query = String.format("from Message m where m.dialogId = %d AND"
               + " locate('%s', m.messageText, 1) > 0 AND m.isDeleted = false ORDER BY m.time DESC",
           dialogId, searchText);
-
-      System.out.println(query);
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(offset);
       q.setMaxResults(itemPerPage);

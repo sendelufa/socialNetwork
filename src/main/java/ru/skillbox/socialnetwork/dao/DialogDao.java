@@ -1,10 +1,9 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.util.List;
-import javax.validation.constraints.NotNull;
+import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,19 +19,22 @@ public class DialogDao {
    private SessionFactory sessionFactory;
 
 
-
    public Dialog getDialogById(int id) {
       return getCurrentSession().get(Dialog.class, id);
    }
 
    public List<Dialog> getDialogsWithParameters(String searchText, int offset, int itemPerPage) {
-      String query = searchText.isEmpty() ?
-          "from Dialog d ORDER BY d.id DESC" :
-          "from Dialog d join d.messages ORDER BY d.id DESC";
-      Query q = getCurrentSession().createQuery(query);
-      q.setFirstResult(offset);
-      q.setMaxResults(itemPerPage);
-      return q.list();
+      String query = searchText != null ?
+          "from Dialog d where d.isDeleted = false AND "
+              + " (select count(*) from Message m where m.dialogId = d.id "
+              + "AND locate('" + searchText + "', m.messageText, 1) > 0) > 0 "
+              + " ORDER BY d.id DESC" :
+          "from Dialog d where d.isDeleted = false ORDER BY d.id DESC";
+
+      TypedQuery<Dialog> queryTyped = getCurrentSession().createQuery(query, Dialog.class);
+      queryTyped.setFirstResult(offset);
+      queryTyped.setMaxResults(itemPerPage);
+      return queryTyped.getResultList();
    }
 
    public void updateDialog(Dialog dialog) {
@@ -51,17 +53,19 @@ public class DialogDao {
       }
    }
 
-   public List<Message> getMessages(int dialogId, @NotNull String searchText, int offset,
+   public List<Message> getMessages(int dialogId, String searchText, int offset,
        int itemPerPage) {
-      String query = String.format("from Message m where m.dialogId = %d AND"
-              + " locate('%s', m.messageText, 1) > 0 AND m.isDeleted = false ORDER BY m.time DESC",
-          dialogId, searchText);
+      String searchCriteria = searchText == null ? "" :
+          String.format("AND locate('%s', m.messageText, 1) > 0 ", searchText);
 
-      System.out.println(query);
-      Query q = getCurrentSession().createQuery(query);
-      q.setFirstResult(offset);
-      q.setMaxResults(itemPerPage);
-      return q.list();
+      String query = String.format("from Message m where m.dialogId = %d"
+              + " %s AND m.isDeleted = false ORDER BY m.time DESC",
+          dialogId, searchCriteria);
+
+      TypedQuery<Message> queryTyped = getCurrentSession().createQuery(query, Message.class);
+      queryTyped.setFirstResult(offset);
+      queryTyped.setMaxResults(itemPerPage);
+      return queryTyped.getResultList();
    }
 
    private Session getCurrentSession() {

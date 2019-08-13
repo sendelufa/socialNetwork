@@ -1,16 +1,11 @@
 package ru.skillbox.socialnetwork.mapper;
 
-import java.util.Objects;
-import javax.annotation.PostConstruct;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.skillbox.socialnetwork.api.response.DialogApi;
-import ru.skillbox.socialnetwork.model.Dialog;
 
 @Component
-public class DialogMapper extends Mapper<Dialog, DialogApi> {
-   private final ModelMapper modelMapper;
+public class DialogMapper //extends Mapper<Dialog, DialogApi>
+{
+   /*private final ModelMapper modelMapper;
 
    @Autowired
    public DialogMapper(ModelMapper modelMapper) {
@@ -21,13 +16,12 @@ public class DialogMapper extends Mapper<Dialog, DialogApi> {
    @PostConstruct
    public void setupMapper() {
       modelMapper.createTypeMap(Dialog.class, DialogApi.class)
-          .addMappings(m -> m.skip(DialogApi::setMessages))
-          .addMappings(m -> m.skip(DialogApi::setUsers))
+          .addMappings(m -> m.skip(DialogApi::setId))
           .addMappings(m -> m.skip(DialogApi::setUnreadCount))
+          .addMappings(m -> m.skip(DialogApi::setLastMessage))
           .setPostConverter(toApiConverter());
       modelMapper.createTypeMap(DialogApi.class, Dialog.class)
-          .addMappings(m -> m.skip(Dialog::setMessages))
-          .addMappings(m -> m.skip(Dialog::setPersonList))
+          .addMappings(m -> m.skip(Dialog::setId))
           .addMappings(m -> m.skip(Dialog::setUnreadCount))
           .setPostConverter(toEntityConverter());
    }
@@ -66,5 +60,7 @@ public class DialogMapper extends Mapper<Dialog, DialogApi> {
       if (!Objects.isNull(source.getUnreadCount())) {
          destination.setUnreadCount(source.getUnreadCount());
       }
-   }
+   }*/
 }
+
+

@@ -23,7 +23,10 @@ import ru.skillbox.socialnetwork.api.response.DialogListApi;
 import ru.skillbox.socialnetwork.api.response.DialogMessageListApi;
 import ru.skillbox.socialnetwork.api.response.DialogUserShortListApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
+import ru.skillbox.socialnetwork.api.response.MessageApi;
+import ru.skillbox.socialnetwork.api.response.MessageApi.readStatuses;
 import ru.skillbox.socialnetwork.api.response.MessageListItemApi;
+import ru.skillbox.socialnetwork.api.response.MessageRecipientApi;
 import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.UnreadedCountApi;
@@ -171,17 +174,36 @@ public class DialogService implements PredicateOpt {
       AbstractResponse response;
       List<Dialog> dialogs = dialogDao.getDialogsWithParameters(query, offset, itemPerPage);
       if (dialogs != null) {
-         List<DialogApi> dialogApis = dialogs.stream().map(e -> dialogMapper.toApi(e))
-             .collect(Collectors.toList());
+         List<DialogApi> dialogApis = dialogs.stream().map(d ->
+             {
+                List<Message> messages = dialogDao.getMessages(d.getId(), "", 0, 1);
+                MessageApi messageApi = null;
+                if (messages.size() > 0) {
+                   Message m = messages.get(0);
+                   messageApi = new MessageApi(m.getId(), m.getTime().getTime(), m.getAuthor().getId(),
+                       m.getRecipient().getId(), m.getMessageText(),
+                       m.getReadStatus() == ReadStatusMessage.SENT ? readStatuses.SENT
+                           : readStatuses.READ,
+                       accountService.getCurrentUser().equals(m.getAuthor()),
+                       new MessageRecipientApi(m.getRecipient().getId(),
+                           m.getRecipient().getFirstName(), m.getRecipient().getLastName(),
+                           m.getRecipient().getPhoto(), m.getRecipient().getLastOnlineTime().getTime())
+                   );
+                }
+                return new DialogApi(d.getId(),
+                    d.getUnreadCount(), messageApi);
+             }
+         ).collect(Collectors.toList());
          DialogListApi dialogListApi = new DialogListApi();
-         dialogListApi.setDialogs(dialogApis);
-         response = getOKResponseApi(dialogListApi);
-         response.setSuccess(true);
+         dialogListApi.setData(dialogApis);
+         dialogListApi.setTotal(dialogApis.size());
+         dialogListApi.setOffset(offset);
+         dialogListApi.setPerPage(itemPerPage);
+         response = dialogListApi;
       } else {
-         response = new ResponseApi("This dialogs doesn't exist", System.currentTimeMillis(),
-             new ResponseApi.Message("invalid_request"));
-         response.setSuccess(false);
+         response = getErrorResponse(ERROR_DIALOG_NOT_EXIST);
       }
+      response.setSuccess(true);
       return response;
    }
 

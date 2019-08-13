@@ -1,14 +1,13 @@
 package ru.skillbox.socialnetwork.mapper;
 
+import java.util.Objects;
+import javax.annotation.PostConstruct;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.skillbox.socialnetwork.api.response.MessageApi;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Person;
-
-import javax.annotation.PostConstruct;
-import java.util.Objects;
 
 @Component
 public class MessageMapper extends Mapper<Message, MessageApi> {
@@ -24,8 +23,8 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
     @PostConstruct
     public void setupMapper() {
         modelMapper.createTypeMap(Message.class, MessageApi.class)
-                .addMappings(m -> m.skip(MessageApi::setAuthor_id))
-                .addMappings(m -> m.skip(MessageApi::setRecipient_id))
+                .addMappings(m -> m.skip(MessageApi::setAuthorId))
+                .addMappings(m -> m.skip(MessageApi::setRecipientId))
                 .setPostConverter(toApiConverter());
         modelMapper.createTypeMap(MessageApi.class, Message.class)
                 .addMappings(m -> m.skip(Message::setAuthor))
@@ -40,11 +39,11 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
         }
 
         if (!Objects.isNull(source.getAuthor())) {
-            destination.setAuthor_id(source.getAuthor().getId());
+            destination.setAuthorId(source.getAuthor().getId());
         }
 
         if (!Objects.isNull(source.getRecipient())) {
-            destination.setRecipient_id(source.getRecipient().getId());
+            destination.setRecipientId(source.getRecipient().getId());
         }
     }
 
@@ -55,11 +54,11 @@ public class MessageMapper extends Mapper<Message, MessageApi> {
         }
 
         Person author = new Person();
-        author.setId(source.getAuthor_id());
+        author.setId(source.getAuthorId());
         destination.setAuthor(author);
 
         Person recipient = new Person();
-        recipient.setId(source.getRecipient_id());
+        recipient.setId(source.getRecipientId());
         destination.setRecipient(recipient);
     }
 }

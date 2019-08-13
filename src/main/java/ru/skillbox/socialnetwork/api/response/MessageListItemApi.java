@@ -14,6 +14,8 @@ public class MessageListItemApi extends AbstractResponse {
 
    private boolean isSentByMe;
 
+
+
    public MessageListItemApi(int id, long time, String messageText,
        ReadStatusMessage readReadStatusMessage, boolean isSentByMe) {
       this.id = id;

@@ -6,9 +6,14 @@ import java.util.List;
 
 public class PostApi {
 
+    private int post_id;
+
+    private String post_text;
+
+    private List<String> tags;
+
     private String title;
 
-    private String postText;
 
     public List<String> getTags() {
         return tags;
@@ -18,7 +23,6 @@ public class PostApi {
         this.tags = tags;
     }
 
-    private List<String> tags;
 
     public String getTitle() {
         return title;
@@ -29,11 +33,19 @@ public class PostApi {
     }
 
     public String getPostText() {
-        return postText;
+        return post_text;
     }
 
-    @JsonProperty("post_text")
+//    @JsonProperty("post_text")
     public void setPostText(String postText) {
-        this.postText = postText;
+        this.post_text = postText;
+    }
+
+    public int getPost_id() {
+        return post_id;
+    }
+
+    public void setPost_id(int post_id) {
+        this.post_id = post_id;
     }
 }

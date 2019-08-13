@@ -11,8 +11,8 @@ public class PersonApi {
     private String phone;
     private String photo_id;
     private String about;
-    private int town_id;
-    private int country_id;
+    private String city;
+    private String country;
     private MessagesPermissionPerson messages_permission;
 
     public String getFirst_name() {
@@ -63,20 +63,20 @@ public class PersonApi {
         this.about = about;
     }
 
-    public int getCityId() {
-        return town_id;
+    public String getCity() {
+        return city;
     }
 
-    public void setTown_id(int town_id) {
-        this.town_id = town_id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
-    public int getCountryId() {
-        return country_id;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountry_id(int country_id) {
-        this.country_id = country_id;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public MessagesPermissionPerson getMessages_permission() {

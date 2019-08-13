@@ -124,11 +124,11 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
             personApi.setAbout(person.getAbout());
             if (person.getCity() != null) {
                personApi.setCity(
-                   new CityApi(person.getCity().getId(), person.getCity().getTitle()));
+                   new CityApi(1, person.getCity()));
             }
             if (person.getCountry() != null) {
                personApi.setCountry(
-                   new CountryApi(person.getCountry().getId(), person.getCountry().getTitle()));
+                   new CountryApi(1, person.getCountry()));
             }
             personApi.setMessages_permission(person.getMessagesPermission());
             Optional.ofNullable(person.getLastOnlineTime())

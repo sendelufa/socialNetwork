@@ -59,13 +59,11 @@ public class Person {
    @Column(name = "about")
    private String about;
 
-   @ManyToOne
-   @JoinColumn(name = "city")
-   private City city;
+   @Column(name = "city")
+   private String city;
 
-   @ManyToOne
-   @JoinColumn(name = "country")
-   private Country country;
+   @Column(name = "country")
+   private String country;
 
    @Column(name = "confirmation_code")
    private String confirmationCode;
@@ -179,19 +177,19 @@ public class Person {
       this.about = about;
    }
 
-   public City getCity() {
+   public String getCity() {
       return city;
    }
 
-   public void setCity(City city) {
+   public void setCity(String city) {
       this.city = city;
    }
 
-   public Country getCountry() {
+   public String getCountry() {
       return country;
    }
 
-   public void setCountry(Country country) {
+   public void setCountry(String country) {
       this.country = country;
    }
 

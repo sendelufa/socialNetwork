@@ -1,9 +1,9 @@
 package ru.skillbox.socialnetwork.dao;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.HibernateException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -18,6 +18,7 @@ import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 @Repository
 @Transactional
 public class FriendsDAO {
+//TODO Перенести логику в Service
 
   @Autowired
   private SessionFactory sessionFactory;
@@ -102,28 +103,23 @@ public class FriendsDAO {
   }
 
   public List<Friendship> getRecommendation(FriendsParameters parameters) {
-    String query = "from Friendship f where src_person_id = " + parameters.getId() + " AND code = " + (CodeFriendshipStatus.FRIEND.ordinal() + 1);
-    List<Friendship> listMyFriend = getCurrentSession().createQuery(query).list();
+    List<Friendship> listMyFriend = searchAllFriendForPerson(parameters.getPerson());//getCurrentSession().createQuery(queryRequest).list();
+    List<Integer> listIdMyFriends = new ArrayList<>();
 
-    query = "from Friendship f where src_person_id = " + parameters.getId();
-    List<Friendship> listAll = getCurrentSession().createQuery(query).list();
-
-    List<Friendship> listFriendsOfFriends = new ArrayList<>();
-    List<Friendship> listRecommendation = new ArrayList<>();
-    for (Friendship myFriend : listMyFriend) {
-      List<Friendship> listFriendsOfFriend = searchAllFriendForPerson(myFriend.getDstPerson());
-      listFriendsOfFriends.addAll(listFriendsOfFriend);
-    }
-    listRecommendation.addAll(listFriendsOfFriends);
-    for (Friendship myFriend : listAll) {
-      for (Friendship friendship : listFriendsOfFriends) {
-        if (myFriend.getDstPerson().getId() == friendship.getDstPerson().getId() || friendship.getDstPerson().getId() == parameters.getId()){
-          listRecommendation.remove(friendship);
-        }
+    for (Friendship friendship : listMyFriend) {
+      if (friendship.getCode().equals(CodeFriendshipStatus.FRIEND)) {
+        listIdMyFriends.add(friendship.getDstPerson().getId());
       }
     }
 
-      return listRecommendation;
+    Query query = getCurrentSession().createQuery ("from Friendship f where src_person_id in (:friendsId) AND dst_person_id != " + parameters.getId());
+    query.setParameterList("friendsId", listIdMyFriends);
+    List<Friendship>  list = query.list();
+
+    return new ArrayList<>(list
+        .stream()
+        .collect(Collectors.toMap(f -> f.getDstPerson().getId(), Function.identity(), (o1, o2) -> o1))
+        .values());
   }
 
   public List<Friendship> isAFriendOfUsers(int[] idsFriend, int currentId) {

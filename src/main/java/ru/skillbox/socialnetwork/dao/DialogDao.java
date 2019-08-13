@@ -1,7 +1,6 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.util.List;
-import javax.validation.constraints.NotNull;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -18,7 +17,6 @@ public class DialogDao {
 
    @Autowired
    private SessionFactory sessionFactory;
-
 
 
    public Dialog getDialogById(int id) {
@@ -52,11 +50,15 @@ public class DialogDao {
       }
    }
 
-   public List<Message> getMessages(int dialogId, @NotNull String searchText, int offset,
+   public List<Message> getMessages(int dialogId, String searchText, int offset,
        int itemPerPage) {
-      String query = String.format("from Message m where m.dialogId = %d AND"
-              + " locate('%s', m.messageText, 1) > 0 AND m.isDeleted = false ORDER BY m.time DESC",
-          dialogId, searchText);
+      String searchCriteria = searchText == null ? "" :
+          String.format("AND locate('%s', m.messageText, 1) > 0 ", searchText);
+
+      String query = String.format("from Message m where m.dialogId = %d"
+              + " %s AND m.isDeleted = false ORDER BY m.time DESC",
+          dialogId, searchCriteria);
+
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(offset);
       q.setMaxResults(itemPerPage);

@@ -96,7 +96,7 @@ public class FriendsService {
       api.setPhoto(f.getDstPerson().getPhoto());
       api.setAbout(f.getDstPerson().getAbout());
       api.setCity(
-          new CityApi(f.getDstPerson().getCity().getId(), f.getDstPerson().getCity().getTitle()));
+          new CityApi(1, f.getDstPerson().getCity()));
       api.setMessages_permission(f.getDstPerson().getMessagesPermission());
       api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
       api.setIs_blocked(f.getDstPerson().isBlocked());

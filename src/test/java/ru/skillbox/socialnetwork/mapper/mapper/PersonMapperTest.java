@@ -13,8 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.config.AppConfig;
-import ru.skillbox.socialnetwork.model.City;
-import ru.skillbox.socialnetwork.model.Country;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 
@@ -41,7 +39,7 @@ public class PersonMapperTest {
         person.setMessagesPermission(MessagesPermissionPerson.ALL);
         person.setPhone("23723472934");
         person.setPhoto("res/jpg.jpg");
-        person.setCity(new City(2, "Spb", new Country()));
+        person.setCity("Spb");
         GregorianCalendar calendar = new GregorianCalendar(1992, Calendar.JANUARY, 24);
         Date birthDate = calendar.getTime();
         person.setBirthDate(birthDate);

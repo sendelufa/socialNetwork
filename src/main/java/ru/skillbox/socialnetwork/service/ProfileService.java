@@ -17,21 +17,15 @@ import ru.skillbox.socialnetwork.api.response.PersonListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.dao.CountryDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
-import ru.skillbox.socialnetwork.model.Person;
-import ru.skillbox.socialnetwork.model.Post;
-import ru.skillbox.socialnetwork.model.PostComment;
-import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.*;
 
 @Service
 public class ProfileService {
 
    @Autowired
    private PersonDAO personDAO;
-   @Autowired
-   private CountryDAO countryDAO;
    @Autowired
    private PostDAO postDAO;
    @Autowired
@@ -74,12 +68,15 @@ public class ProfileService {
       }
       person.setAbout(personApi.getAbout());
 
-      if (personApi.getCityId() != 0) {
-         countryDAO.getCityById(personApi.getCityId()).ifPresent(person::setCity);
-      }
-      if (personApi.getCountryId() != 0) {
-         countryDAO.getCountryById(personApi.getCountryId()).ifPresent(person::setCountry);
-      }
+//      if (personApi.getCityId() != 0) {
+//         countryDAO.getCityById(personApi.getCityId()).ifPresent(person::setCity);
+//      }
+//      if (personApi.getCountryId() != 0) {
+//         countryDAO.getCountryById(personApi.getCountryId()).ifPresent(person::setCountry);
+//      }
+
+      person.setCountry(personApi.getCountry());
+      person.setCity(personApi.getCity());
       if (personApi.getMessages_permission() != null) {
          person.setMessagesPermission(personApi.getMessages_permission());
       }
@@ -139,7 +136,6 @@ public class ProfileService {
       for (Post post : postsFromDB) {
          posts.add(modelMapper.map(post, PostApi.class));
       }
-      System.out.println(posts.size());
       if (posts != null && !posts.isEmpty()) {
          postListApi.setData(posts);
          postListApi.setTotal(posts.size());
@@ -265,16 +261,16 @@ public class ProfileService {
 
       try {
          CityApi city = new CityApi();
-         city.setId(person.getCity().getId());
-         city.setTitle(person.getCity().getTitle());
+         city.setId(1);
+         city.setTitle(person.getCity());
          personApi.setCity(city);
       } catch (NullPointerException e) {
 
       }
       try {
          CountryApi country = new CountryApi();
-         country.setId(person.getCountry().getId());
-         country.setTitle(person.getCountry().getTitle());
+         country.setId(1);
+         country.setTitle(person.getCountry());
          personApi.setCountry(country);
       } catch (NullPointerException e) {
 

@@ -1,6 +1,5 @@
 package ru.skillbox.socialnetwork.api.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -36,7 +35,6 @@ public class PostApi {
         return post_text;
     }
 
-//    @JsonProperty("post_text")
     public void setPostText(String postText) {
         this.post_text = postText;
     }

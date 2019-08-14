@@ -32,7 +32,7 @@ public class NotificationService {
         List<Notification> notifications = notificationDAO.getNotificationByPersonId(getCurrentPersonId());
         notifications = rangeNotifications(notifications, offset, itemPerPage);
         if (notifications == null || notifications.isEmpty()) {
-            return null;
+            return new NotificationListApi();
         }
         ResponseApi responseApi = new ResponseApi();
         notificationListApi = new NotificationListApi();

@@ -94,8 +94,8 @@ public class FriendsService {
       api.setPhone(f.getDstPerson().getPhone());
       api.setPhoto(f.getDstPerson().getPhoto());
       api.setAbout(f.getDstPerson().getAbout());
-      api.setCity(new CityApi(f.getDstPerson().getCity().getId(), f.getDstPerson().getCity().getTitle()));
-      api.setCountry(new CountryApi(f.getDstPerson().getCountry().getId(), f.getDstPerson().getCountry().getTitle()));
+      api.setCity(new CityApi(1, f.getDstPerson().getCity()));
+      api.setCountry(new CountryApi(1, f.getDstPerson().getCountry()));
       api.setMessages_permission(f.getDstPerson().getMessagesPermission());
       api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
       api.setIs_blocked(f.getDstPerson().isBlocked());

@@ -1,17 +1,18 @@
 package ru.skillbox.socialnetwork.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
 
 @Entity
 @Table(name = "friendship")
@@ -33,9 +34,10 @@ public class Friendship {
     @NotNull
     private Person dstPerson;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="id", referencedColumnName = "id")
-    private FriendshipStatus friendshipStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "code", columnDefinition="ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED')")
+    @NotNull
+    private CodeFriendshipStatus code;
 
     public int getId() {
         return id;
@@ -61,11 +63,12 @@ public class Friendship {
         this.dstPerson = dstPerson;
     }
 
-    public FriendshipStatus getFriendshipStatus() {
-        return friendshipStatus;
+    public CodeFriendshipStatus getCode() {
+        return code;
     }
 
-    public void setFriendshipStatus(FriendshipStatus friendshipStatus) {
-        this.friendshipStatus = friendshipStatus;
+    public void setCode(CodeFriendshipStatus code) {
+        this.code = code;
     }
+
 }

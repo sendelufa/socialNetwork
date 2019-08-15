@@ -46,7 +46,6 @@ public class ProfileController {
     */
    @PutMapping("/me")
    public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
-       System.out.println(personApi.getCity());
        AbstractResponse response = profileService.editMe(personApi);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
@@ -116,12 +115,15 @@ public class ProfileController {
    @PostMapping("/{id}/wall")
    public ResponseEntity postToWall(
            @PathVariable int id,
-           @RequestParam(required = false, defaultValue = "0") Long publishDate,
+           @RequestParam(required = false) Long publishDate,
            @RequestBody PostApi newPost) {
-       System.out.println("post_text: " + newPost.getPostText() + "\n" +
-               "post_title: " + newPost.getTitle() + "\n" +
-               "post_id: " + newPost.getPost_id() + "\n" +
-               "post_tags: " + newPost.getTags() + "\n" );
+
+       Long defaultPublishDate = new Long(0);
+
+       if(publishDate == null){
+          publishDate = defaultPublishDate;
+       }
+
       AbstractResponse response = profileService.addPostOnWall(id, publishDate, newPost);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }

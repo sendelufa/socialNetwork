@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DialogUsersApi {
 
-   @JsonProperty("user_ids")
+   @JsonProperty("users_ids")
    private int[] userIds;
 
    public int[] getUserIds() {

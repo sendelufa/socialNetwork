@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.CityApi;
+import ru.skillbox.socialnetwork.api.response.CountryApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.FriendsApi;
 import ru.skillbox.socialnetwork.api.response.FriendshipStatusApi;
@@ -29,9 +30,9 @@ public class FriendsService {
 
    public AbstractResponse searchFriend(FriendsParameters parameters) {
       List<Friendship> allFriends = friendsDAO.searchFriend(parameters);
-      if (allFriends.size() < 1) {
-         return sendError("НетЪ друзей");
-      }
+//      if (allFriends.size() < 1) {
+//         return sendError("НетЪ друзей");
+//      }
       return mapFriendshipToFriendsApi(allFriends, parameters);
    }
 
@@ -65,8 +66,7 @@ public class FriendsService {
    }
 
    public AbstractResponse isAFriendOfUsers(int[] ids) {
-      List<Friendship> friends = friendsDAO
-          .isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
+      List<Friendship> friends = friendsDAO.isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
       if (friends.size() < 1) {
          return sendError("Это не Ваши друзья");
       }
@@ -74,8 +74,7 @@ public class FriendsService {
       IsFriendsApi responseApi = new IsFriendsApi();
       List<FriendshipStatusApi> listStatusApi = new ArrayList<>();
       for (Friendship friend : friends) {
-         FriendshipStatusApi statusApi = new FriendshipStatusApi(friend.getDstPerson().getId(),
-             friend.getFriendshipStatus().getCode());
+         FriendshipStatusApi statusApi = new FriendshipStatusApi(friend.getDstPerson().getId(), friend.getCode());
          listStatusApi.add(statusApi);
       }
       responseApi.setData(listStatusApi);
@@ -95,8 +94,8 @@ public class FriendsService {
       api.setPhone(f.getDstPerson().getPhone());
       api.setPhoto(f.getDstPerson().getPhoto());
       api.setAbout(f.getDstPerson().getAbout());
-      api.setCity(
-          new CityApi(1, f.getDstPerson().getCity()));
+      api.setCity(new CityApi(1, f.getDstPerson().getCity()));
+      api.setCountry(new CountryApi(1, f.getDstPerson().getCountry()));
       api.setMessages_permission(f.getDstPerson().getMessagesPermission());
       api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
       api.setIs_blocked(f.getDstPerson().isBlocked());

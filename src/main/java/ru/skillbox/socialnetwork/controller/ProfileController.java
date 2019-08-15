@@ -1,7 +1,5 @@
 package ru.skillbox.socialnetwork.controller;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,6 @@ import ru.skillbox.socialnetwork.service.ProfileService;
 @RequestMapping("users")
 public class ProfileController {
 
-   private Logger logger = LogManager.getRootLogger();
 
     @Autowired
     private ProfileService profileService;
@@ -49,7 +46,6 @@ public class ProfileController {
     */
    @PutMapping("/me")
    public ResponseEntity editMe(@RequestBody ru.skillbox.socialnetwork.api.request.PersonApi personApi) {
-       logger.info(personApi.getCity());
        AbstractResponse response = profileService.editMe(personApi);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.UNAUTHORIZED);
    }
@@ -119,12 +115,15 @@ public class ProfileController {
    @PostMapping("/{id}/wall")
    public ResponseEntity postToWall(
            @PathVariable int id,
-           @RequestParam(required = false, defaultValue = "0") Long publishDate,
+           @RequestParam(required = false) Long publishDate,
            @RequestBody PostApi newPost) {
-       logger.info("post_text: " + newPost.getPostText() + "\n" +
-               "post_title: " + newPost.getTitle() + "\n" +
-               "post_id: " + newPost.getPost_id() + "\n" +
-               "post_tags: " + newPost.getTags() + "\n" );
+
+       Long defaultPublishDate = new Long(0);
+
+       if(publishDate == null){
+          publishDate = defaultPublishDate;
+       }
+
       AbstractResponse response = profileService.addPostOnWall(id, publishDate, newPost);
       return new ResponseEntity(response, response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
    }

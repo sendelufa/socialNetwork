@@ -174,6 +174,10 @@ public class DialogService implements PredicateOpt {
       AbstractResponse response;
       List<Dialog> dialogs = dialogDao.getDialogsWithParameters(query, offset, itemPerPage);
       if (dialogs != null) {
+         dialogs = dialogs.stream()
+             .filter(d -> d.getPersonList().contains(accountService.getCurrentUser()))
+             .collect(Collectors.toList());
+
          List<DialogApi> dialogApis = dialogs.stream().map(d ->
              {
                 List<Message> messages = dialogDao.getMessages(d.getId(), "", 0, 1);
@@ -218,6 +222,7 @@ public class DialogService implements PredicateOpt {
       dialog.setInviteCode(generateInviteLink(new Random(), INVITE_SYMBOLS, INVITE_LENGTH));
       dialog.setOwnerId(accountService.getCurrentUser().getId());
       dialogDao.addDialog(dialog);
+      sendMessage(dialog.getId(), "Добро пожаловать в беседу!");
       return getOKResponseApi(new DialogIdApi(dialog.getId()));
    }
 
@@ -313,6 +318,9 @@ public class DialogService implements PredicateOpt {
    }
 
    public ResponseApi sendMessage(int dialogId, String text) {
+      if (text == null) {
+         text = "";
+      }
       Dialog dialog = dialogDao.getDialogById(dialogId);
       if (dialog == null) {
          return getErrorResponse(ERROR_DIALOG_NOT_EXIST);
@@ -323,8 +331,13 @@ public class DialogService implements PredicateOpt {
       Message message = new Message();
       message.setTime(new Date());
       message.setAuthor(accountService.getCurrentUser());
-      //TODO what recipient in dialog? cap is person with id=1
-      message.setRecipient(personDAO.getPersonById(1));
+      int recipientId =
+          dialog.getPersonList().stream()
+              .filter(PredicateOpt.not(accountService.getCurrentUser()::equals))
+              .min(Comparator.comparing(Person::getId))
+              .orElse(personDAO.getPersonById(1))
+              .getId();
+      message.setRecipient(personDAO.getPersonById(recipientId));
       message.setMessageText(text);
       message.setReadStatus(ReadStatusMessage.SENT);
       message.setDialogId(dialogId);

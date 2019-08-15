@@ -1,6 +1,9 @@
 package ru.skillbox.socialnetwork.controller;
 
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,8 @@ import ru.skillbox.socialnetwork.service.AccountService;
 @RequestMapping("/api/test/")
 public class TestController {
 
+   private Logger logger = LogManager.getRootLogger();
+
    @Autowired
    private PersonDAO personDao;
    @Autowired
@@ -33,7 +38,7 @@ public class TestController {
    @GetMapping("/persons")
    public ResponseEntity<List> persons() {
       List<Person> allPersons = personDao.getAllPersons();
-      allPersons.stream().map(Person::getEmail).forEach(System.out::println);
+      allPersons.stream().map(Person::getEmail).forEach(logger::info);
       //System.out.println(accountService.getCurrentUser().getEmail());
       return new ResponseEntity<>(allPersons, HttpStatus.OK);
    }
@@ -41,7 +46,7 @@ public class TestController {
    @GetMapping("/posts")
    public ResponseEntity<List> posts() {
       List<Post> allPosts = postDAO.getAllPosts();
-      allPosts.stream().map(Post::getTitle).forEach(System.out::println);
+      allPosts.stream().map(Post::getTitle).forEach(logger::info);
       return new ResponseEntity<>(allPosts, HttpStatus.OK);
    }
 }

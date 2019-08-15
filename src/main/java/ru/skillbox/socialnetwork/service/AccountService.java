@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +31,8 @@ import ru.skillbox.socialnetwork.utils.EmailValidator;
 
 @Service
 public class AccountService {
+
+    private Logger logger = LogManager.getRootLogger();
 
     @Autowired
     private PersonDAO personDAO;
@@ -159,7 +164,7 @@ public class AccountService {
         
         Person person = getCurrentUser();
 
-        System.out.println("Putting new notification setting or updating current one! \n" +
+        logger.info("Putting new notification setting or updating current one! \n" +
                 "incoming notificaion type: " + notification_type + "\n" +
                 "is should be enabled: " + enable + "\n");
         AbstractResponse response;

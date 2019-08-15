@@ -2,6 +2,9 @@ package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -15,6 +18,8 @@ import ru.skillbox.socialnetwork.model.PostComment;
 @Repository
 @Transactional
 public class PostDAO {
+
+   private Logger logger = LogManager.getRootLogger();
 
    @Autowired
    private SessionFactory sessionFactory;
@@ -41,7 +46,7 @@ public class PostDAO {
               + " locate('%s', p.postText, 1) > 0 AND p.isDeleted = false ORDER BY p.time DESC",
           postParameters.getText());
 
-      System.out.println(query);
+      logger.debug(query);
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(postParameters.getOffset());
       q.setMaxResults(postParameters.getItemPerPage());
@@ -89,7 +94,7 @@ public class PostDAO {
       String query = String.format("FROM PostComment comment WHERE "
           + " comment.post.id=%d ORDER BY comment.time DESC", postId);
 
-      System.out.println(query);
+      logger.debug(query);
       Query q = getCurrentSession().createQuery(query);
       q.setFirstResult(offset);
       q.setMaxResults(itemPerPage);

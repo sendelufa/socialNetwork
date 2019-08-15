@@ -13,6 +13,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +37,7 @@ import ru.skillbox.socialnetwork.model.User;
 public class JwtUsernameAndPasswordAuthenticationFilter extends
     UsernamePasswordAuthenticationFilter {
 
+   private Logger logger = LogManager.getRootLogger();
    private final JwtConfig jwtConfig;
    private AuthenticationManager authManager;
    private PersonDAO personDAO;
@@ -150,7 +154,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
 
 
       } catch (Exception e) {
-         e.printStackTrace();
+         logger.error(e);
       }
    }
 

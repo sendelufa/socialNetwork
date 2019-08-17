@@ -15,7 +15,6 @@ import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +40,8 @@ public class PostService {
    }
 
    public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi request) {
+      if (publishDate == null) publishDate = System.currentTimeMillis();
+
       Post post = new Post();
       post.setTitle(request.getTitle());
       post.setPostText(request.getPostText());

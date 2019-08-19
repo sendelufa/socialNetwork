@@ -140,7 +140,6 @@ public class PostService {
       postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
       postComment.setPost(postDAO.getPostById(postId));
       Date date = new Date();
-      date.setTime(postCommentApi.getTime());
       postComment.setTime(date);
       postComment.setAuthor(accountService.getCurrentUser());
       postComment.setBlocked(postCommentApi.isIs_blocked());

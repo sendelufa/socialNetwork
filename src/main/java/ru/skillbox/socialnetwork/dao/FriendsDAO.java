@@ -107,7 +107,7 @@ public class FriendsDAO {
     List<Integer> listIdMyFriends = new ArrayList<>();
 
     for (Friendship friendship : listMyFriend) {
-      if (friendship.getCode().equals(CodeFriendshipStatus.FRIEND)) {
+      if (friendship.getCode().equals(CodeFriendshipStatus.FRIEND)  && friendship.getDstPerson().getId() != parameters.getPerson().getId()) {
         listIdMyFriends.add(friendship.getDstPerson().getId());
       }
     }

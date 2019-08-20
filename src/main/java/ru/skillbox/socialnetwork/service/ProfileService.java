@@ -38,6 +38,9 @@ public class ProfileService {
       AbstractResponse response;
       Person person = accountService.getCurrentUser();
       if (person != null) {
+         Date date = new Date();
+         person.setLastOnlineTime(date);
+         personDAO.updatePerson(person);
          PersonApi personApi = map(person);
          response = new ResponseApi("string", System.currentTimeMillis(), personApi);
          response.setSuccess(true);
@@ -258,7 +261,6 @@ public class ProfileService {
 
    public PersonApi map(Person person) {
       PersonApi personApi = modelMapper.map(person, PersonApi.class);
-
       try {
          CityApi city = new CityApi();
          city.setId(1);

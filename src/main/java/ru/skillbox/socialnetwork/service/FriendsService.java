@@ -89,7 +89,9 @@ public class FriendsService {
       api.setFirst_name(f.getDstPerson().getFirstName());
       api.setLast_name(f.getDstPerson().getLastName());
       api.setReg_date(f.getDstPerson().getRegDate().getTime());
-      api.setBirth_date(f.getDstPerson().getBirthDate().getTime());
+      if(f.getDstPerson().getBirthDate() != null) {
+         api.setBirth_date(f.getDstPerson().getBirthDate().getTime());
+      }
       api.setEmail(f.getDstPerson().getEmail());
       api.setPhone(f.getDstPerson().getPhone());
       api.setPhoto(f.getDstPerson().getPhoto());

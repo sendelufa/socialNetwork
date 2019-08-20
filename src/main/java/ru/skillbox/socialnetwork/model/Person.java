@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
@@ -86,6 +85,10 @@ public class Person {
    @Column(name = "is_online")
    @NotNull
    private boolean isOnline;
+
+   @Column(name = "is_deleted")
+   @NotNull
+   private boolean isDeleted;
 
    public void setOnline(boolean online){
       this.isOnline = online;
@@ -235,6 +238,14 @@ public class Person {
 
    public boolean isOnline() {
       return isOnline;
+   }
+
+   public boolean isDeleted() {
+      return isDeleted;
+   }
+
+   public void setDeleted(boolean deleted) {
+      isDeleted = deleted;
    }
 
    public List<Dialog> getDialogList() {

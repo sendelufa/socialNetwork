@@ -1,5 +1,8 @@
 package ru.skillbox.socialnetwork.dao;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -9,9 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.model.Person;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 @Repository
 @Transactional
@@ -40,7 +40,8 @@ public class PersonDAO {
     }
 
     public void deletePerson(Person person) {
-        getCurrentSession().delete(person);
+        person.setDeleted(true);
+        getCurrentSession().update(person);
     }
 
     public void addPerson(Person person) {

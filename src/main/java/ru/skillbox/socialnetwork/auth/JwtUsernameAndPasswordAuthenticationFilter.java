@@ -13,7 +13,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -37,8 +36,8 @@ import ru.skillbox.socialnetwork.model.User;
 public class JwtUsernameAndPasswordAuthenticationFilter extends
     UsernamePasswordAuthenticationFilter {
 
-   private Logger logger = LogManager.getRootLogger();
    private final JwtConfig jwtConfig;
+   private Logger logger = LogManager.getRootLogger();
    private AuthenticationManager authManager;
    private PersonDAO personDAO;
 
@@ -97,6 +96,15 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
           .compact();
 
       response.addHeader(jwtConfig.getHeader(), jwtConfig.getPrefix() + token);
+
+      Person person = personDAO.getPersonByEmail(auth.getName());
+      if (person.isBlocked() || person.isDeleted()) {
+         ErrorApi errorApi = new ErrorApi("invalid_request", String.format("user block(%s) or "
+             + "deleted(%s)!", person.isBlocked(), person.isDeleted()));
+         response.getOutputStream()
+             .println(objectMapper.writeValueAsString(errorApi));
+         response.setStatus(HttpStatus.UNAUTHORIZED.value());
+      }
 
       enrichAuthenticationResponse(response, true, auth.getName(), token);
    }

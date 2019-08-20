@@ -2,7 +2,6 @@ package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -53,12 +52,12 @@ public class PostDAO {
       return q.list();
    }
 
-   public List<Post> getFeed(int id){
-       int maxItemsToShow = 10;
-       String query = String.format("from Post p where p.author=%d", id);
-       Query q = getCurrentSession().createQuery(query);
-       q.setMaxResults(maxItemsToShow);
-       return q.list();
+   public List<Post> getFeed(int id) {
+      int maxItemsToShow = 10;
+      String query = String.format("from Post p where p.author=%d", id);
+      Query q = getCurrentSession().createQuery(query);
+      q.setMaxResults(maxItemsToShow);
+      return q.list();
    }
 
    public Post getPostById(int id) {
@@ -102,9 +101,10 @@ public class PostDAO {
       return q.list();
    }
 
-   public List<Post> getWall(int id){
+   public List<Post> getWall(int id) {
 
-      String query = String.format("from Post p where p.author=%d", id);
+      String query = String.format("from Post p where p.author=%d and p.isBlocked <> true and p"
+          + ".isDeleted <> true", id);
       Query q = getCurrentSession().createQuery(query);
       return q.list();
    }
@@ -135,6 +135,7 @@ public class PostDAO {
       comment.setDeleted(true);
       getCurrentSession().update(comment);
    }
+
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

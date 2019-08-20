@@ -19,7 +19,10 @@ import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
-import ru.skillbox.socialnetwork.model.*;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
 
 @Service
 public class ProfileService {
@@ -113,10 +116,20 @@ public class ProfileService {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
       if (person != null) {
-         PersonApi personApi = map(person);
+         if (person.isDeleted()) {
+            response = new ErrorApi("invalid_request", String.format("person %s is deleted",
+                person.getId()));
+            response.setSuccess(false);
+         } else if (person.isBlocked()) {
+            response = new ErrorApi("invalid_request", String.format("person %s is blocked",
+                person.getId()));
+            response.setSuccess(false);
+         } else {
+            PersonApi personApi = map(person);
 
-         response = new ResponseApi("string", System.currentTimeMillis(), personApi);
-         response.setSuccess(true);
+            response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+            response.setSuccess(true);
+         }
       } else {
          response = new ErrorApi("invalid_request", "id doesn't exist");
          response.setSuccess(false);
@@ -133,7 +146,7 @@ public class ProfileService {
    public AbstractResponse getWall(PostParameters postParameters) {
       AbstractResponse response;
       PostListApi postListApi = new PostListApi();
-       List<Post> postsFromDB = postDAO.getWall(postParameters.getId());
+      List<Post> postsFromDB = postDAO.getWall(postParameters.getId());
 
       List<PostApi> posts = new ArrayList<>();
       for (Post post : postsFromDB) {
@@ -180,10 +193,10 @@ public class ProfileService {
       post.setDeleted(false);
       List<Tag> tags = new ArrayList<>();
       List<String> tagsRequest = newPost.getTags();
-      for(int i = 1; i <= tagsRequest.size(); i++) {
-          Tag tag = new Tag();
-          tag.setTag(tagsRequest.get(i-1));
-          tags.add(tag);
+      for (int i = 1; i <= tagsRequest.size(); i++) {
+         Tag tag = new Tag();
+         tag.setTag(tagsRequest.get(i - 1));
+         tags.add(tag);
       }
       post.setTags(tags);
       List<PostComment> comments = new ArrayList<>();

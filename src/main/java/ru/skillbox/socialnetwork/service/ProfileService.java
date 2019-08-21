@@ -140,10 +140,9 @@ public class ProfileService {
     *
     * @param postParameters параметры записей
     */
-   public AbstractResponse getWall(PostParameters postParameters) {
-      AbstractResponse response;
-      PostListApi postListApi = new PostListApi();
+   public ResponseApi getWall(PostParameters postParameters) {
       List<Post> postsFromDB = postDAO.getWall(postParameters);
+      PostListApi postListApi = new PostListApi();
 
       List<PostApi> posts = new ArrayList<>();
       for (Post post : postsFromDB) {
@@ -153,9 +152,8 @@ public class ProfileService {
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
       postListApi.setPerPage(postParameters.getItemPerPage());
-      response = postListApi;
-      response.setSuccess(true);
-      return response;
+      postListApi.setSuccess(true);
+      return postListApi;
 
    }
 

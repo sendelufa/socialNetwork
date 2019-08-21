@@ -18,18 +18,22 @@ import ru.skillbox.socialnetwork.api.response.PersonListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
 @Service
 public class ProfileService {
 
    @Autowired
    private PersonDAO personDAO;
+   @Autowired
+   private FriendsDAO friendsDAO;
    @Autowired
    private PostDAO postDAO;
    @Autowired
@@ -225,8 +229,7 @@ public class ProfileService {
    public AbstractResponse blockPersonById(int id) {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
-      person.setBlocked(true);
-      personDAO.updatePerson(person);
+      friendsDAO.changeStatus(person, FriendshipStatusCode.BLOCKED);
       response = new ResponseApi("string", System.currentTimeMillis(),
           new ResponseApi.Message("ok"));
       response.setSuccess(true);
@@ -241,8 +244,7 @@ public class ProfileService {
    public AbstractResponse unblockPersonById(int id) {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
-      person.setBlocked(false);
-      personDAO.updatePerson(person);
+      friendsDAO.changeStatus(person, FriendshipStatusCode.SUBSCRIBED);
       response = new ResponseApi("string", System.currentTimeMillis(),
           new ResponseApi.Message("ok"));
       response.setSuccess(true);

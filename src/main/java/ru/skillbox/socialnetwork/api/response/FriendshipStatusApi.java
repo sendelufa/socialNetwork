@@ -2,7 +2,7 @@ package ru.skillbox.socialnetwork.api.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
 public class FriendshipStatusApi extends AbstractResponse{
 
@@ -13,9 +13,9 @@ public class FriendshipStatusApi extends AbstractResponse{
   @JsonIgnore
   private String name;
   @JsonProperty("status")
-  private CodeFriendshipStatus code;
+  private FriendshipStatusCode code;
 
-  public FriendshipStatusApi(int id, CodeFriendshipStatus code) {
+  public FriendshipStatusApi(int id, FriendshipStatusCode code) {
     this.id = id;
     this.code = code;
   }
@@ -46,11 +46,11 @@ public class FriendshipStatusApi extends AbstractResponse{
     this.name = name;
   }
 
-  public CodeFriendshipStatus getCode() {
+  public FriendshipStatusCode getCode() {
     return code;
   }
 
-  public void setCode(CodeFriendshipStatus code) {
+  public void setCode(FriendshipStatusCode code) {
     this.code = code;
   }
 }

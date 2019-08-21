@@ -1,8 +1,9 @@
 package ru.skillbox.socialnetwork.dao;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.persistence.TypedQuery;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,68 +18,60 @@ import ru.skillbox.socialnetwork.model.Person;
 @Transactional
 public class PersonDAO {
 
-    @Autowired
-    private SessionFactory sessionFactory;
+   @Autowired
+   private SessionFactory sessionFactory;
 
-    public Person getPersonByEmail(String email) {
-        Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Person.class)
-                .add(Restrictions.eq("email", email));
-        return (Person) criteria.uniqueResult();
-    }
+   public Person getPersonByEmail(String email) {
+      Session session = sessionFactory.getCurrentSession();
+      Criteria criteria = session.createCriteria(Person.class)
+          .add(Restrictions.eq("email", email));
+      return (Person) criteria.uniqueResult();
+   }
 
-    public Person getPersonById(int id) {
-        return getCurrentSession().get(Person.class, id);
-    }
+   public Person getPersonById(int id) {
+      return getCurrentSession().get(Person.class, id);
+   }
 
-    public List<Person> getAllPersons() {
-        return getCurrentSession().createQuery("from Person p").list();
-    }
+   public List<Person> getAllPersons() {
+      return getCurrentSession().createQuery("from Person p").list();
+   }
 
-    public void updatePerson(Person person) {
-        getCurrentSession().update(person);
-    }
+   public void updatePerson(Person person) {
+      getCurrentSession().update(person);
+   }
 
-    public void deletePerson(Person person) {
-        person.setDeleted(true);
-        getCurrentSession().update(person);
-    }
+   public void deletePerson(Person person) {
+      person.setDeleted(true);
+      getCurrentSession().update(person);
+   }
 
-    public void addPerson(Person person) {
-        getCurrentSession().save(person);
-    }
+   public void addPerson(Person person) {
+      getCurrentSession().save(person);
+   }
 
-    private Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+   private Session getCurrentSession() {
+      return sessionFactory.getCurrentSession();
+   }
 
-    public List<Person> getPersonsByParameters(PersonParameters parameters) {
-        Calendar calendar;
-        Date dateTo;
-        Date dateFrom;
-        Criteria criteria = getCurrentSession().createCriteria(Person.class);
-        if (!parameters.getFirst_name().isEmpty()) {
-            criteria.add(Restrictions.like("firstName", parameters.getFirst_name()));
-        }
-        if (!parameters.getLast_name().isEmpty()) {
-            criteria.add(Restrictions.like("lastName", parameters.getLast_name()));
-        }
-        if (parameters.getAge_from() > 0) {
-            calendar = Calendar.getInstance();
-            calendar.add(Calendar.YEAR, -parameters.getAge_from());
-            dateFrom = calendar.getTime();
-            criteria.add(Restrictions.ge("birthDate", dateFrom));
-        }
-        if (parameters.getAge_to() > 0) {
-            calendar = Calendar.getInstance();
-            calendar.add(Calendar.YEAR, -parameters.getAge_to());
-            dateTo = calendar.getTime();
-            criteria.add(Restrictions.le("birthDate", dateTo));
-        }
+   public List<Person> getPersonsByParameters(PersonParameters parameters) {
+      String query = "from Person p";
 
-        //TODO: Вернуть когда обновится персона
-//                .add(Restrictions.eq("countryId", parameters.getLast_name()))
-//                .add(Restrictions.eq("cityId", parameters.getLast_name()))
-        return (List<Person>) criteria.list();
-    }
+      TypedQuery<Person> q = getCurrentSession().createQuery(query, Person.class);
+      q.setFirstResult(parameters.getOffset());
+      q.setMaxResults(parameters.getItemPerPage());
+      List<Person> persons = q.getResultList();
+
+      final long ONE_YEAR = 1_000L * 60L * 60L * 24L * 365L;
+
+      return persons.stream()
+          .filter(p -> (
+              new Date().getTime() - p.getBirthDate().getTime()) <
+              (ONE_YEAR * parameters.getAgeTo()))
+          .filter(p -> (
+              new Date().getTime() - p.getBirthDate().getTime()) >
+              (ONE_YEAR * parameters.getAgeFrom()))
+          .filter(p -> (p.getFirstName().contains(parameters.getFirst_name())))
+          .filter(p -> (p.getLastName().contains(parameters.getLast_name())))
+          .collect(Collectors.toList());
+   }
 }

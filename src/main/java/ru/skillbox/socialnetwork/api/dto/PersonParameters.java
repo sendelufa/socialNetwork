@@ -49,7 +49,7 @@ public class PersonParameters {
         this.last_name = last_name;
     }
 
-    public int getAge_from() {
+    public int getAgeFrom() {
         return age_from;
     }
 
@@ -57,7 +57,7 @@ public class PersonParameters {
         this.age_from = age_from;
     }
 
-    public int getAge_to() {
+    public int getAgeTo() {
         return age_to;
     }
 

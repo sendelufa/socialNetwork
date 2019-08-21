@@ -205,18 +205,12 @@ public class ProfileService {
       for (Person person : personsFromDB) {
          persons.add(modelMapper.map(person, PersonApi.class));
       }
-      if (persons != null && !persons.isEmpty()) {
-         personListApi.setData(persons);
-         personListApi.setTotal(persons.size());
-         personListApi.setOffset(parameters.getOffset());
-         personListApi.setPerPage(parameters.getItemPerPage());
-         response = personListApi;
-         response.setSuccess(true);
-      } else {
-         response = new ErrorApi("invalid_request",
-             "Persons with this parameters doesn't exist");
-         response.setSuccess(false);
-      }
+      personListApi.setData(persons);
+      personListApi.setTotal(persons.size());
+      personListApi.setOffset(parameters.getOffset());
+      personListApi.setPerPage(parameters.getItemPerPage());
+      response = personListApi;
+      response.setSuccess(true);
       return response;
    }
 

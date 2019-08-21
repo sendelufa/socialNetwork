@@ -133,16 +133,16 @@ public class ProfileController {
     * @param offset Отступ от начала списка
     * @param itemPerPage Количество элементов на страницу
     */
-   @GetMapping("/search/")
+   @GetMapping("/search")
    public ResponseEntity search(
        @RequestParam(required = false, defaultValue = "") String first_name,
        @RequestParam(required = false, defaultValue = "") String last_name,
-       @RequestParam(required = false, defaultValue = "0") int age_from,
-       @RequestParam(required = false, defaultValue = "0") int age_to,
-       @RequestParam(required = false, defaultValue = "0") int country_id,
-       @RequestParam(required = false, defaultValue = "0") int city_id,
-       @RequestParam(required = false, defaultValue = "0") int offset,
-       @RequestParam(required = false, defaultValue = "20") int itemPerPage) {
+       @RequestParam(required = false, defaultValue = "0") Integer age_from,
+       @RequestParam(required = false, defaultValue = "200") Integer age_to,
+       @RequestParam(required = false, defaultValue = "1") Integer country_id,
+       @RequestParam(required = false, defaultValue = "1") Integer city_id,
+       @RequestParam(required = false, defaultValue = "0") Integer offset,
+       @RequestParam(required = false, defaultValue = "20") Integer itemPerPage) {
       PersonParameters personParameters = new PersonParameters(first_name, last_name, age_from,
           age_to, country_id, city_id, offset, itemPerPage);
       AbstractResponse response = profileService.searchPerson(personParameters);

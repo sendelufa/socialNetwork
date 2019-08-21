@@ -146,28 +146,20 @@ public class ProfileService {
    public AbstractResponse getWall(PostParameters postParameters) {
       AbstractResponse response;
       PostListApi postListApi = new PostListApi();
-      List<Post> postsFromDB = postDAO.getWall(postParameters.getId());
+      List<Post> postsFromDB = postDAO.getWall(postParameters);
 
       List<PostApi> posts = new ArrayList<>();
       for (Post post : postsFromDB) {
          posts.add(modelMapper.map(post, PostApi.class));
       }
-      if (posts != null && !posts.isEmpty()) {
-         postListApi.setData(posts);
-         postListApi.setTotal(posts.size());
-         postListApi.setOffset(postParameters.getOffset());
-         postListApi.setPerPage(postParameters.getItemPerPage());
-         response = postListApi;
-         response.setSuccess(true);
-         return response;
-      } else if (posts.isEmpty()) {
-         response = postListApi;
-         response.setSuccess(true);
-         return response;
-      }
-      response = new ErrorApi("invalid_request", "incorrect parameters");
-      response.setSuccess(false);
+      postListApi.setData(posts);
+      postListApi.setTotal(posts.size());
+      postListApi.setOffset(postParameters.getOffset());
+      postListApi.setPerPage(postParameters.getItemPerPage());
+      response = postListApi;
+      response.setSuccess(true);
       return response;
+
    }
 
    /**

@@ -9,7 +9,7 @@ import ru.skillbox.socialnetwork.model.Message;
 
 @Repository
 @Transactional
-public class MessageDao {
+public class MessageDAO {
 
    @Autowired
    private SessionFactory sessionFactory;

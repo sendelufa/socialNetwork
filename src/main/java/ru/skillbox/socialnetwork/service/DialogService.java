@@ -31,7 +31,7 @@ import ru.skillbox.socialnetwork.api.response.MessageSendRequestBodyApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.UnreadedCountApi;
 import ru.skillbox.socialnetwork.dao.DialogDao;
-import ru.skillbox.socialnetwork.dao.MessageDao;
+import ru.skillbox.socialnetwork.dao.MessageDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.mapper.DialogMapper;
 import ru.skillbox.socialnetwork.model.Dialog;
@@ -53,7 +53,7 @@ public class DialogService implements PredicateOpt {
    private final String INVITE_SYMBOLS = "ABCDEFGHIJKLOMPQRSTUVWXYZ1234567890";
    private final int INVITE_LENGTH = 18;
    @Autowired
-   private MessageDao messageDao;
+   private MessageDAO messageDao;
 
    @Autowired
    private DialogDao dialogDao;

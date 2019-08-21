@@ -114,15 +114,8 @@ public class ProfileController {
    @PostMapping("/{id}/wall")
    public ResponseEntity postToWall(
        @PathVariable int id,
-       @RequestParam(required = false) Long publishDate,
+       @RequestParam(value = "publish_date", required = false) Long publishDate,
        @RequestBody PostApi newPost) {
-
-      Long defaultPublishDate = new Long(0);
-
-      if (publishDate == null) {
-         publishDate = defaultPublishDate;
-      }
-
       AbstractResponse response = profileService.addPostOnWall(id, publishDate, newPost);
       return new ResponseEntity(response,
           response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);

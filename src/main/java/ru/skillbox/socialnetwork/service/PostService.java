@@ -1,11 +1,23 @@
 package ru.skillbox.socialnetwork.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
+import ru.skillbox.socialnetwork.api.response.CommentApi;
+import ru.skillbox.socialnetwork.api.response.CommentListApi;
+import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
+import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ReportApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.SubCommentApi;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
@@ -13,11 +25,6 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -64,10 +71,9 @@ public class PostService {
       return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
-   public ResponseApi getFeed(){
-
-      int currentPersinId = accountService.getCurrentUser().getId();
-      List<Post> posts = postDAO.getFeed(currentPersinId);
+   public ResponseApi getFeed(PostParameters postParameters){
+      postParameters.setId(accountService.getCurrentUser().getId());
+      List<Post> posts = postDAO.getFeed(postParameters);
       postListApi = new PostListApi();
       postListApi.setData(posts.stream().map(this::fillPostApi)
               .collect(Collectors.toList()));

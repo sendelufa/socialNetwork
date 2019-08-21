@@ -43,11 +43,14 @@ public class PostService {
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
    }
 
-   public ResponseApi addPost(Long publishDate, ru.skillbox.socialnetwork.api.request.PostApi request) {
-      if (publishDate == null) publishDate = System.currentTimeMillis();
+   public ResponseApi addPost(Long publishDate,
+       ru.skillbox.socialnetwork.api.request.PostApi request) {
+      if (publishDate == null) {
+         publishDate = System.currentTimeMillis();
+      }
 
       Post post = new Post();
       post.setTitle(request.getTitle());
@@ -55,10 +58,10 @@ public class PostService {
 
       List<Tag> tags = new ArrayList<>();
       List<String> tagsRequest = request.getTags();
-      for(int i = 1; i <= tagsRequest.size(); i++) {
-          Tag tag = new Tag();
-          tag.setTag(tagsRequest.get(i-1));
-          tags.add(tag);
+      for (int i = 1; i <= tagsRequest.size(); i++) {
+         Tag tag = new Tag();
+         tag.setTag(tagsRequest.get(i - 1));
+         tags.add(tag);
       }
 
       post.setTags(tags);
@@ -68,24 +71,25 @@ public class PostService {
       post.setTime(date);
       post.setAuthor(accountService.getCurrentUser());
       postDAO.addPost(post);
-      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+      return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
    }
 
-   public ResponseApi getFeed(PostParameters postParameters){
+   public ResponseApi getFeed(PostParameters postParameters) {
       postParameters.setId(accountService.getCurrentUser().getId());
       List<Post> posts = postDAO.getFeed(postParameters);
       postListApi = new PostListApi();
-      postListApi.setData(posts.stream().map(this::fillPostApi)
-              .collect(Collectors.toList()));
+      postListApi.setData(posts.stream()
+          .map(p -> mapper.map(p, PostApi.class))
+          .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setSuccess(true);
-      return  postListApi;
+      return postListApi;
    }
 
    public ResponseApi search(PostParameters postParameters) {
       List<Post> posts = postDAO.getPosts(postParameters);
       postListApi = new PostListApi();
-      postListApi.setData(posts.stream().map(this::fillPostApi)
+      postListApi.setData(posts.stream().map(p -> mapper.map(p, PostApi.class))
           .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
@@ -105,7 +109,7 @@ public class PostService {
       post.setPostText(postApiRequest.getPostText());
       post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
       postDAO.updatePost(post);
-      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+      return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
    }
 
    public ResponseApi delete(int id) {
@@ -118,7 +122,7 @@ public class PostService {
 
    public ResponseApi recover(int id) {
       Post post = postDAO.recoverPost(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
    }
 
    public ResponseApi reportPost(int id) {
@@ -204,17 +208,17 @@ public class PostService {
 
       List<Tag> tags = post.getTags();
       List<String> tagsApi = new ArrayList<>();
-      for(int i = 1; i <= tags.size(); i++) {
-          String ta = tags.get(i-1).getTag();
-          tagsApi.add(ta);
+      for (int i = 1; i <= tags.size(); i++) {
+         String ta = tags.get(i - 1).getTag();
+         tagsApi.add(ta);
       }
 
       postDataApi.setTags(tagsApi);
       postDataApi.setMyLike(false);
 
-      List<PostComment> postComments= post.getPostComments();
+      List<PostComment> postComments = post.getPostComments();
       List<CommentApi> commentApis = new ArrayList<>();
-      if(postComments != null) {
+      if (postComments != null) {
          for (int i = 1; i <= postComments.size(); i++) {
             PostComment postComment = postComments.get(i - 1);
             CommentApi commentApi = postCommentMapper.toApi(postComment);
@@ -238,20 +242,20 @@ public class PostService {
       commentApi.setBlocked(comment.isBlocked());
       commentApi.setMyLike(true);
 
-       List<PostComment> postComments = comment.getPostComments();
-       List<SubCommentApi> subCommentApis = new ArrayList<>();
-       if(postComments != null) {
-          for (int i = 1; i <= postComments.size(); i++) {
-             PostComment postComment = postComments.get(i - 1);
-             SubCommentApi subCommentApi = subCommentMapper.toApi(postComment);
-             subCommentApis.add(subCommentApi);
-          }
-       }
-       commentApi.setSubComments(subCommentApis);
+      List<PostComment> postComments = comment.getPostComments();
+      List<SubCommentApi> subCommentApis = new ArrayList<>();
+      if (postComments != null) {
+         for (int i = 1; i <= postComments.size(); i++) {
+            PostComment postComment = postComments.get(i - 1);
+            SubCommentApi subCommentApi = subCommentMapper.toApi(postComment);
+            subCommentApis.add(subCommentApi);
+         }
+      }
+      commentApi.setSubComments(subCommentApis);
       return commentApi;
    }
 
    private AuthorApi getAuthorApi(Person person) {
-       return mapper.map(person, AuthorApi.class);
+      return mapper.map(person, AuthorApi.class);
    }
 }

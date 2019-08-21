@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -168,24 +169,16 @@ public class ProfileService {
        ru.skillbox.socialnetwork.api.request.PostApi newPost) {
       AbstractResponse response;
       Post post = new Post();
-      Date date = new Date();
-      if (publishDate != null && publishDate > 0) {
-         date = new Date(publishDate);
-      }
+      Date date = (publishDate != null && publishDate > 0) ?
+          new Date(publishDate) : new Date();
       post.setAuthor(personDAO.getPersonById(id));
       post.setPostText(newPost.getPostText());
       post.setTitle(newPost.getTitle());
       post.setTime(date);
-      post.setBlocked(false);
-      post.setDeleted(false);
-      List<Tag> tags = new ArrayList<>();
-      List<String> tagsRequest = newPost.getTags();
-      for (int i = 1; i <= tagsRequest.size(); i++) {
-         Tag tag = new Tag();
-         tag.setTag(tagsRequest.get(i - 1));
-         tags.add(tag);
-      }
-      post.setTags(tags);
+      post.setTags(newPost.getTags()
+          .stream()
+          .map(Tag::new)
+          .collect(Collectors.toList()));
       List<PostComment> comments = new ArrayList<>();
       post.setPostComments(comments);
       postDAO.addPost(post);

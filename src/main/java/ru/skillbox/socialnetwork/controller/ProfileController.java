@@ -1,5 +1,7 @@
 package ru.skillbox.socialnetwork.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.service.ProfileService;
 
 /**
@@ -95,9 +98,10 @@ public class ProfileController {
       postParameters.setOffset(offset);
       postParameters.setItemPerPage(itemPerPage);
 
-      AbstractResponse response = profileService.getWall(postParameters);
-      return new ResponseEntity(response,
-          response.isSuccess() ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+      ResponseApi response = profileService.getWall(postParameters);
+
+      return response == null ? badRequestResponse()
+          : new ResponseEntity<>(response, HttpStatus.OK);
    }
 
    /**
@@ -182,5 +186,12 @@ public class ProfileController {
    public ResponseEntity exception(Exception e) {
       return new ResponseEntity<>(new ErrorApi("invalid_request", e.getMessage()),
           HttpStatus.BAD_REQUEST);
+   }
+
+   private ResponseEntity<Object> badRequestResponse() {
+      Map<String, String> response = new HashMap<>();
+      response.put("error", "invalid_request");
+      response.put("error_description", "not_found");
+      return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
    }
 }

@@ -1,6 +1,6 @@
 package ru.skillbox.socialnetwork.model.enumeration;
 
-public enum CodeFriendshipStatus {
+public enum FriendshipStatusCode {
     REQUEST("Запрос на добавление в друзья"),
     FRIEND("Друзья"),
     BLOCKED("Пользователь в чёрном списке"),
@@ -9,7 +9,7 @@ public enum CodeFriendshipStatus {
 
     private String description;
 
-    CodeFriendshipStatus(String description) {
+    FriendshipStatusCode(String description) {
         this.description = description;
     }
 

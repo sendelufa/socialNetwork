@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,22 @@ import ru.skillbox.socialnetwork.api.response.PersonListApi;
 import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
-import ru.skillbox.socialnetwork.model.*;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
 @Service
 public class ProfileService {
 
    @Autowired
    private PersonDAO personDAO;
+   @Autowired
+   private FriendsDAO friendsDAO;
    @Autowired
    private PostDAO postDAO;
    @Autowired
@@ -113,10 +121,20 @@ public class ProfileService {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
       if (person != null) {
-         PersonApi personApi = map(person);
+         if (person.isDeleted()) {
+            response = new ErrorApi("invalid_request", String.format("person %s is deleted",
+                person.getId()));
+            response.setSuccess(false);
+         } else if (person.isBlocked()) {
+            response = new ErrorApi("invalid_request", String.format("person %s is blocked",
+                person.getId()));
+            response.setSuccess(false);
+         } else {
+            PersonApi personApi = map(person);
 
-         response = new ResponseApi("string", System.currentTimeMillis(), personApi);
-         response.setSuccess(true);
+            response = new ResponseApi("string", System.currentTimeMillis(), personApi);
+            response.setSuccess(true);
+         }
       } else {
          response = new ErrorApi("invalid_request", "id doesn't exist");
          response.setSuccess(false);
@@ -130,31 +148,21 @@ public class ProfileService {
     *
     * @param postParameters параметры записей
     */
-   public AbstractResponse getWall(PostParameters postParameters) {
-      AbstractResponse response;
+   public ResponseApi getWall(PostParameters postParameters) {
+      List<Post> postsFromDB = postDAO.getWall(postParameters);
       PostListApi postListApi = new PostListApi();
-       List<Post> postsFromDB = postDAO.getWall(postParameters.getId());
 
       List<PostApi> posts = new ArrayList<>();
       for (Post post : postsFromDB) {
          posts.add(modelMapper.map(post, PostApi.class));
       }
-      if (posts != null && !posts.isEmpty()) {
-         postListApi.setData(posts);
-         postListApi.setTotal(posts.size());
-         postListApi.setOffset(postParameters.getOffset());
-         postListApi.setPerPage(postParameters.getItemPerPage());
-         response = postListApi;
-         response.setSuccess(true);
-         return response;
-      } else if (posts.isEmpty()) {
-         response = postListApi;
-         response.setSuccess(true);
-         return response;
-      }
-      response = new ErrorApi("invalid_request", "incorrect parameters");
-      response.setSuccess(false);
-      return response;
+      postListApi.setData(posts);
+      postListApi.setTotal(posts.size());
+      postListApi.setOffset(postParameters.getOffset());
+      postListApi.setPerPage(postParameters.getItemPerPage());
+      postListApi.setSuccess(true);
+      return postListApi;
+
    }
 
    /**
@@ -168,24 +176,16 @@ public class ProfileService {
        ru.skillbox.socialnetwork.api.request.PostApi newPost) {
       AbstractResponse response;
       Post post = new Post();
-      Date date = new Date();
-      if (publishDate != null && publishDate > 0) {
-         date = new Date(publishDate);
-      }
+      Date date = (publishDate != null && publishDate > 0) ?
+          new Date(publishDate) : new Date();
       post.setAuthor(personDAO.getPersonById(id));
       post.setPostText(newPost.getPostText());
       post.setTitle(newPost.getTitle());
       post.setTime(date);
-      post.setBlocked(false);
-      post.setDeleted(false);
-      List<Tag> tags = new ArrayList<>();
-      List<String> tagsRequest = newPost.getTags();
-      for(int i = 1; i <= tagsRequest.size(); i++) {
-          Tag tag = new Tag();
-          tag.setTag(tagsRequest.get(i-1));
-          tags.add(tag);
-      }
-      post.setTags(tags);
+      post.setTags(newPost.getTags()
+          .stream()
+          .map(Tag::new)
+          .collect(Collectors.toList()));
       List<PostComment> comments = new ArrayList<>();
       post.setPostComments(comments);
       postDAO.addPost(post);
@@ -212,18 +212,12 @@ public class ProfileService {
       for (Person person : personsFromDB) {
          persons.add(modelMapper.map(person, PersonApi.class));
       }
-      if (persons != null && !persons.isEmpty()) {
-         personListApi.setData(persons);
-         personListApi.setTotal(persons.size());
-         personListApi.setOffset(parameters.getOffset());
-         personListApi.setPerPage(parameters.getItemPerPage());
-         response = personListApi;
-         response.setSuccess(true);
-      } else {
-         response = new ErrorApi("invalid_request",
-             "Persons with this parameters doesn't exist");
-         response.setSuccess(false);
-      }
+      personListApi.setData(persons);
+      personListApi.setTotal(persons.size());
+      personListApi.setOffset(parameters.getOffset());
+      personListApi.setPerPage(parameters.getItemPerPage());
+      response = personListApi;
+      response.setSuccess(true);
       return response;
    }
 
@@ -235,8 +229,7 @@ public class ProfileService {
    public AbstractResponse blockPersonById(int id) {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
-      person.setBlocked(true);
-      personDAO.updatePerson(person);
+      friendsDAO.changeStatus(person, FriendshipStatusCode.BLOCKED);
       response = new ResponseApi("string", System.currentTimeMillis(),
           new ResponseApi.Message("ok"));
       response.setSuccess(true);
@@ -251,8 +244,7 @@ public class ProfileService {
    public AbstractResponse unblockPersonById(int id) {
       AbstractResponse response;
       Person person = personDAO.getPersonById(id);
-      person.setBlocked(false);
-      personDAO.updatePerson(person);
+      friendsDAO.changeStatus(person, FriendshipStatusCode.SUBSCRIBED);
       response = new ResponseApi("string", System.currentTimeMillis(),
           new ResponseApi.Message("ok"));
       response.setSuccess(true);

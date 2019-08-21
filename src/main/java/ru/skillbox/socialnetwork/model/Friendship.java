@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import ru.skillbox.socialnetwork.model.enumeration.CodeFriendshipStatus;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
 @Entity
 @Table(name = "friendship")
@@ -37,7 +37,7 @@ public class Friendship {
     @Enumerated(EnumType.STRING)
     @Column(name = "code", columnDefinition="ENUM('REQUEST', 'FRIEND', 'BLOCKED', 'DECLINED', 'SUBSCRIBED')")
     @NotNull
-    private CodeFriendshipStatus code;
+    private FriendshipStatusCode code;
 
     public int getId() {
         return id;
@@ -63,11 +63,11 @@ public class Friendship {
         this.dstPerson = dstPerson;
     }
 
-    public CodeFriendshipStatus getCode() {
+    public FriendshipStatusCode getCode() {
         return code;
     }
 
-    public void setCode(CodeFriendshipStatus code) {
+    public void setCode(FriendshipStatusCode code) {
         this.code = code;
     }
 

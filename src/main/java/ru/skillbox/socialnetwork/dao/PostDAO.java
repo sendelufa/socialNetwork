@@ -2,12 +2,12 @@ package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
 import java.util.List;
-
+import java.util.stream.Collectors;
+import javax.persistence.TypedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +29,7 @@ public class PostDAO {
    }
 
    public List<Post> getAllPosts() {
-      return getCurrentSession().createQuery("from Post p").list();
+      return getCurrentSession().createQuery("from Post p", Post.class).getResultList();
    }
 
    public List<Post> getPosts(PostParameters postParameters) {
@@ -41,24 +41,27 @@ public class PostDAO {
       queryWhere += postParameters.getDateTo() != null ?
           String.format(" p.time < '%s' AND ", new Timestamp(postParameters.getDateTo())) : "";
 
+      queryWhere += postParameters.getText() != null ?
+          String.format(" locate('%s', p.postText, 1) > 0 AND ", postParameters.getText()) : "";
+
       String query = String.format("from Post p where "
               + queryWhere
-              + " locate('%s', p.postText, 1) > 0 AND p.isDeleted = false ORDER BY p.time DESC",
+              + " p.isDeleted = false ORDER BY p.time DESC",
           postParameters.getText());
 
       logger.debug(query);
-      Query q = getCurrentSession().createQuery(query);
+      TypedQuery<Post> q = getCurrentSession().createQuery(query, Post.class);
       q.setFirstResult(postParameters.getOffset());
       q.setMaxResults(postParameters.getItemPerPage());
-      return q.list();
+      return q.getResultList();
    }
 
-   public List<Post> getFeed(int id){
-       int maxItemsToShow = 10;
-       String query = String.format("from Post p where p.author=%d", id);
-       Query q = getCurrentSession().createQuery(query);
-       q.setMaxResults(maxItemsToShow);
-       return q.list();
+   public List<Post> getFeed(PostParameters postParameters) {
+      return getPosts(postParameters)
+          .stream()
+          .filter(p -> p.getAuthor().getId() != postParameters.getId())
+          .collect(Collectors.toList());
+
    }
 
    public Post getPostById(int id) {
@@ -95,18 +98,18 @@ public class PostDAO {
           + " comment.post.id=%d ORDER BY comment.time DESC", postId);
 
       logger.debug(query);
-      Query q = getCurrentSession().createQuery(query);
+      TypedQuery<PostComment> q = getCurrentSession().createQuery(query, PostComment.class);
       q.setFirstResult(offset);
       q.setMaxResults(itemPerPage);
 
-      return q.list();
+      return q.getResultList();
    }
 
-   public List<Post> getWall(int id){
-
-      String query = String.format("from Post p where p.author=%d", id);
-      Query q = getCurrentSession().createQuery(query);
-      return q.list();
+   public List<Post> getWall(PostParameters postParameters) {
+      return getPosts(postParameters)
+          .stream()
+          .filter(p -> p.getAuthor().getId() == postParameters.getId())
+          .collect(Collectors.toList());
    }
 
    public PostComment recoverComment(int id) {
@@ -135,6 +138,7 @@ public class PostDAO {
       comment.setDeleted(true);
       getCurrentSession().update(comment);
    }
+
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

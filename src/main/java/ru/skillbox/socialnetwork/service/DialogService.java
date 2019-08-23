@@ -183,16 +183,27 @@ public class DialogService implements PredicateOpt {
                 List<Message> messages = dialogDao.getMessages(d.getId(), "", 0, 1);
                 MessageApi messageApi = null;
                 if (messages.size() > 0) {
-                   Message m = messages.get(0);
-                   messageApi = new MessageApi(m.getId(), m.getTime().getTime(), m.getAuthor().getId(),
-                       m.getRecipient().getId(), m.getMessageText(),
-                       m.getReadStatus() == ReadStatusMessage.SENT ? readStatuses.SENT
-                           : readStatuses.READ,
-                       accountService.getCurrentUser().equals(m.getAuthor()),
-                       new MessageRecipientApi(m.getRecipient().getId(),
-                           m.getRecipient().getFirstName(), m.getRecipient().getLastName(),
-                           m.getRecipient().getPhoto(), m.getRecipient().getLastOnlineTime().getTime())
-                   );
+                    Message m = messages.get(0);
+                    messageApi = new MessageApi(m.getId(), m.getTime().getTime(), m.getAuthor().getId(),
+                            m.getRecipient().getId(), m.getMessageText(),
+                            m.getReadStatus() == ReadStatusMessage.SENT ? readStatuses.SENT
+                                    : readStatuses.READ,
+                            accountService.getCurrentUser().equals(m.getAuthor()),
+                            new MessageRecipientApi(m.getRecipient().getId(),
+                                    m.getRecipient().getFirstName(), m.getRecipient().getLastName(),
+                                    m.getRecipient().getPhoto(), m.getRecipient().getLastOnlineTime().getTime())
+                    );
+                } else if(messages.size() == 0)
+                {
+                    messageApi = new MessageApi();
+                    messageApi.setMessageText("");
+                    messageApi.setReadStatus(readStatuses.SENT);
+                    messageApi.setRecipientId(-1);
+                    messageApi.setAuthorId(accountService.getCurrentUser().getId());
+                    MessageRecipientApi messageRecipientApi = new MessageRecipientApi(-1,
+                            "", "",
+                            "", 0L );
+                    messageApi.setRecipient(messageRecipientApi);
                 }
                 return new DialogApi(d.getId(),
                     d.getUnreadCount(), messageApi);
@@ -296,6 +307,7 @@ public class DialogService implements PredicateOpt {
 
    public ResponseApi getMessages(int dialogId, String query, int offset, int itemPerPage) {
       List<Message> messageList = dialogDao.getMessages(dialogId, query, offset, itemPerPage);
+      //System.out.println("!!!!!!!!!!" + "\n" + messageList.isEmpty() + "\n" + "!!!!!!!!!!!!!!!!!!");
       DialogMessageListApi messageListApi = new DialogMessageListApi();
       messageListApi.setOffset(offset);
       messageListApi.setPerPage(itemPerPage);

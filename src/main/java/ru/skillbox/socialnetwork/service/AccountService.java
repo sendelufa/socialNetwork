@@ -61,6 +61,9 @@ public class AccountService {
                 person.setFirstName(registration.getFirstName());
                 person.setEmail(userEmail);
 
+                person.setBirthDate(new Date());
+                person.setCity("Москва");
+                person.setCountry("Россия");
                 person.setRegDate(new Date());
                 person.setMessagesPermission(MessagesPermissionPerson.ALL);
                 person.setOnline(true);

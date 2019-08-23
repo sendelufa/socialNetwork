@@ -208,12 +208,10 @@ public class ProfileService {
       AbstractResponse response;
       PersonListApi personListApi = new PersonListApi();
       List<Person> personsFromDB = personDAO.getPersonsByParameters(parameters);
-      List<PersonApi> persons = new ArrayList<>();
-      for (Person person : personsFromDB) {
-         persons.add(modelMapper.map(person, PersonApi.class));
-      }
-      personListApi.setData(persons);
-      personListApi.setTotal(persons.size());
+      personListApi.setData(personsFromDB.stream()
+                        .map(person -> modelMapper.map(person, PersonApi.class))
+                        .collect(Collectors.toList()));
+      personListApi.setTotal(personsFromDB.size());
       personListApi.setOffset(parameters.getOffset());
       personListApi.setPerPage(parameters.getItemPerPage());
       response = personListApi;

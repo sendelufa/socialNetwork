@@ -140,6 +140,19 @@ public class FriendsDAO {
           .values());
    }
 
+   public List<Person> getAllFriends(){
+      List<Person> friends = new ArrayList<>();
+
+      List<Friendship> friendships = searchAllFriendForPerson(accountService.getCurrentUser());
+      for(Friendship friendship : friendships){
+          if(friendship.getCode().equals(FriendshipStatusCode.FRIEND)){
+              friends.add(personDAO.getPersonById(friendship.getDstPerson().getId()));
+          }
+      }
+
+      return friends;
+   }
+
    public List<Friendship> isAFriendOfUsers(int[] idsFriend, int currentId) {
       List<Friendship> idStatus = new ArrayList<>();
       for (int id : idsFriend) {

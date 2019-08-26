@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.mapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.enumeration.TypePost;
 
 @Component
 public class PostMapper extends Mapper<Post, PostApi> {
@@ -47,6 +49,14 @@ public class PostMapper extends Mapper<Post, PostApi> {
          return;
       }
 
+      if (!Objects.isNull(source.getTime())) {
+         if (source.getTime().before(new Date()))
+         destination.setType(TypePost.POSTED);
+         else {
+            destination.setType(TypePost.QUEUED);
+         }
+      }
+      
       if (!Objects.isNull(source.getAuthor())) {
          destination.setAuthor(modelMapper.map(source.getAuthor(), AuthorApi.class));
       }

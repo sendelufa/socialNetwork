@@ -3,6 +3,7 @@ package ru.skillbox.socialnetwork.api.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
+import ru.skillbox.socialnetwork.model.enumeration.TypePost;
 
 public class PostApi extends AbstractResponse {
 
@@ -26,6 +27,8 @@ public class PostApi extends AbstractResponse {
    private boolean myLike;
 
    private List<CommentApi> comments;
+
+   private TypePost type;
 
    public AuthorApi getAuthor() {
       return author;
@@ -106,5 +109,13 @@ public class PostApi extends AbstractResponse {
 
    public void setTags(List<String> tags) {
       this.tags = tags;
+   }
+
+   public TypePost getType() {
+      return type;
+   }
+
+   public void setType(TypePost type) {
+      this.type = type;
    }
 }

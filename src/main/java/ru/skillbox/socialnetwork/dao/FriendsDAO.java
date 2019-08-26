@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
 import ru.skillbox.socialnetwork.model.Friendship;
+import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 import ru.skillbox.socialnetwork.service.AccountService;
@@ -101,6 +103,7 @@ public class FriendsDAO {
          dstFriend.setSrcPerson(parameters.getTarget());
          dstFriend.setDstPerson(parameters.getPerson());
          getCurrentSession().save(dstFriend);
+         createNotification(parameters);
       } //есть реквест или отказ
       else if (source.getCode().equals(FriendshipStatusCode.DECLINED) || source.getCode()
           .equals(FriendshipStatusCode.REQUEST)) {
@@ -217,4 +220,15 @@ public class FriendsDAO {
       }
    }
 
+   private void createNotification(FriendsParameters parameters) {
+      Notification n = new Notification();
+      n.setSentTime(new Date());
+      n.setPerson(parameters.getTarget());
+      //FIXME поправить setPerson() для установки контакта
+      n.setContact(parameters.getTarget().getEmail());
+      n.setNotificationType(notificationDAO.getNotificationTypeByName("FRIEND_REQUEST"));
+      n.setEntityId(parameters.getId());
+      n.setReaded(false);
+      notificationDAO.addNotification(n);
+   }
 }

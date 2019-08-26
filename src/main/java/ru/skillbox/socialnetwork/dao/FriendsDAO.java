@@ -116,27 +116,27 @@ public class FriendsDAO {
    }
 
    public List<Friendship> getRecommendation(FriendsParameters parameters) {
-      List<Friendship> listMyFriend = searchAllFriendForPerson(
-          parameters.getPerson());//getCurrentSession().createQuery(queryRequest).list();
+      List<Friendship> listMyRequestsAndFriend = searchAllFriendForPerson(parameters.getPerson());
+      List<Integer> listIdMyRequests = new ArrayList<>();
       List<Integer> listIdMyFriends = new ArrayList<>();
 
-      for (Friendship friendship : listMyFriend) {
-         if (friendship.getCode().equals(FriendshipStatusCode.FRIEND)
-             && friendship.getDstPerson().getId() != parameters.getPerson().getId()) {
+      for (Friendship friendship : listMyRequestsAndFriend) {
+         listIdMyRequests.add(friendship.getDstPerson().getId());
+         if (friendship.getCode().equals(FriendshipStatusCode.FRIEND)) {
             listIdMyFriends.add(friendship.getDstPerson().getId());
          }
       }
 
-      Query query = getCurrentSession().createQuery(
-          "from Friendship f where src_person_id in (:friendsId) AND dst_person_id != " + parameters
-              .getId());
+      if (listIdMyFriends.size() <= 0) return new ArrayList<>();
+
+      Query query = getCurrentSession().createQuery("from Friendship f where src_person_id in (:friendsId) AND NOT dst_person_id = " + parameters.getId());
       query.setParameterList("friendsId", listIdMyFriends);
       List<Friendship> list = query.list();
 
       return new ArrayList<>(list
           .stream()
-          .collect(
-              Collectors.toMap(f -> f.getDstPerson().getId(), Function.identity(), (o1, o2) -> o1))
+          .filter(f -> !listIdMyRequests.contains(f.getDstPerson().getId()) && f.getCode().equals(FriendshipStatusCode.FRIEND))
+          .collect(Collectors.toMap(f -> f.getDstPerson().getId(), Function.identity(), (o1, o2) -> o1))
           .values());
    }
 

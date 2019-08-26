@@ -1,6 +1,9 @@
 package ru.skillbox.socialnetwork.api.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ResponseNotificationSettingsApi extends AbstractResponse {
+    @JsonProperty("type")
     private String notification_type;
     private boolean enable;
 

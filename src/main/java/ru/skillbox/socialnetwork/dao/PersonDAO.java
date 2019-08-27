@@ -64,12 +64,14 @@ public class PersonDAO {
       final long ONE_YEAR = 1_000L * 60L * 60L * 24L * 365L;
 
       return persons.stream()
-          .filter(p -> (
-              new Date().getTime() - p.getBirthDate().getTime()) <
-              (ONE_YEAR * parameters.getAgeTo()))
-          .filter(p -> (
-              new Date().getTime() - p.getBirthDate().getTime()) >
-              (ONE_YEAR * parameters.getAgeFrom()))
+          .filter(p -> {
+              Date birthday = p.getBirthDate() != null ? p.getBirthDate() : new Date();
+              return new Date().getTime() - birthday.getTime() < ONE_YEAR * parameters.getAgeTo();
+          })
+          .filter(p -> {
+              Date birthday = p.getBirthDate() != null ? p.getBirthDate() : new Date();
+              return new Date().getTime() - birthday.getTime() > ONE_YEAR * parameters.getAgeFrom();
+          })
           .filter(p -> (p.getFirstName().contains(parameters.getFirst_name())))
           .filter(p -> (p.getLastName().contains(parameters.getLast_name())))
           .collect(Collectors.toList());

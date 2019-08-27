@@ -3,7 +3,6 @@ package ru.skillbox.socialnetwork.service;
 import org.apache.commons.lang3.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.NotificationApi;
@@ -18,6 +17,7 @@ import ru.skillbox.socialnetwork.model.NotificationType;
 import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +51,7 @@ public class NotificationService {
         if (notifications == null || notifications.isEmpty()) {
             return new NotificationListApi();
         }
-        ResponseApi responseApi = new ResponseApi();
+
         notificationListApi = new NotificationListApi();
         List<NotificationApi> notificationApis = new ArrayList<>();
         for(Notification notification : notifications)
@@ -63,8 +63,7 @@ public class NotificationService {
             }
             notificationApis.add(notificationApi);
         }
-//        notificationListApi.setData(notifications.stream().map(notificationMapper::toApi)
-//                .collect(Collectors.toList()));
+        Collections.reverse(notificationApis);
         notificationListApi.setData(notificationApis);
         notificationListApi.setTotal(notifications.size());
         notificationListApi.setOffset(offset);
@@ -106,34 +105,50 @@ public class NotificationService {
         notifications.forEach(n -> n.setReaded(true));
         notifications.forEach(n -> notificationDAO.updateNotification(n));
 
-        ResponseApi responseApi = new ResponseApi();
         notificationListApi = new NotificationListApi();
         notificationListApi.setData(notifications.stream().map(notificationMapper::toApi)
                 .collect(Collectors.toList()));
-        notifications.forEach(notificationDAO::deleteNotification);
         notificationListApi.setTotal(notifications.size());
         notificationListApi.setSuccess(true);
         return notificationListApi;
     }
 
-    void postBdayNotifications(){
+    private void postBdayNotifications(){
         List<Person> friends = friendsDAO.getAllFriends();
 
         Date today = new Date();
         for(Person friend : friends){
             if(DateUtils.isSameDay(today,friend.getBirthDate())){
                 Notification notification = new Notification();
-                NotificationType notificationType = notificationDAO.getNotificationTypeById(1);
+                NotificationType notificationType = notificationDAO.getNotificationTypeByName("FRIEND_BIRTHDAY");
                 notification.setNotificationType(notificationType);
                 notification.setSentTime(today);
-                notification.setPerson(accountService.getCurrentUser());
+                Person person = accountService.getCurrentUser();
+                notification.setPerson(person);
                 notification.setEntityId(friend.getId());
-                notification.setContact(accountService.getCurrentUser().getEmail());
+                notification.setContact(person.getEmail());
                 notification.setReaded(false);
 
-                notificationDAO.addNotification(notification);
+                if(!ifNotificationAlreadyExist(notificationType.getName().toString(), person.getId(), friend.getId(), today)) {
+                    notificationDAO.addNotification(notification);
+                }
             }
         }
+    }
+
+    private boolean ifNotificationAlreadyExist(String type, int person_id, int entity_id, Date today){
+        List<Notification> notifications = notificationDAO.getNotificationByPersonId(person_id);
+        NotificationType notificationType = notificationDAO.getNotificationTypeByName(type);
+        Person person = personDAO.getPersonById(person_id);
+        for(Notification notification : notifications){
+            if(notification.getNotificationType().equals(notificationType)
+            && notification.getPerson().equals(person)
+            && notification.getEntityId() == entity_id
+            && DateUtils.isSameDay(today, notification.getSentTime())){
+                return true;
+            }
+        }
+        return false;
     }
 
     private int getCurrentPersonId() {

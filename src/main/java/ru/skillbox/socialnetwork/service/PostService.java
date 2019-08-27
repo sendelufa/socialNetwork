@@ -8,17 +8,6 @@ import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
-import ru.skillbox.socialnetwork.api.response.AuthorApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.api.response.SubCommentApi;
-import ru.skillbox.socialnetwork.dao.FriendsDAO;
-import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
@@ -47,11 +36,7 @@ public class PostService {
    @Autowired
    private FriendsDAO friendsDAO;
   @Autowired
-  private NotificationService notificationService;
-  @Autowired
   private NotificationDAO notificationDAO;
-  @Autowired
-  private FriendsDAO friendsDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);

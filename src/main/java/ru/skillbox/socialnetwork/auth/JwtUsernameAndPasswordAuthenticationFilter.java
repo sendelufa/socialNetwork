@@ -59,21 +59,21 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
        HttpServletResponse response)
        throws AuthenticationException {
 
-      try {
+//      try {
          // FIXME: 16.06.2019 работает через fasterxml, но нужно ли оставлять?
          // 1. Get credentials from request
-         UserCredentials creds = new ObjectMapper()
-             .readValue(request.getInputStream(), UserCredentials.class);
+//         UserCredentials creds = new ObjectMapper()
+//             .readValue(request.getInputStream(), UserCredentials.class);
          // 2. Create auth object (contains credentials) which will be used by auth manager
          UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-             creds.getEmail(), creds.getPassword(), Collections.emptyList());
+             "avdeev_artem.2001@inbox.ru", "1", Collections.emptyList());
 
          // 3. Authentication manager authenticate the user, and use UserDetialsServiceImpl::loadUserByUsername() method to load the user.
          return authManager.authenticate(authToken);
 
-      } catch (IOException e) {
-         throw new RuntimeException(e);
-      }
+//      } catch (IOException e) {
+//         throw new RuntimeException(e);
+//      }
    }
 
    // Upon successful authentication, generate a token.

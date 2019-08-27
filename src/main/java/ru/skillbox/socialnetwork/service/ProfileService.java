@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.time.DateUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,10 @@ import ru.skillbox.socialnetwork.api.response.PostApi;
 import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
-import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.*;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
-import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 
 @Service
 public class ProfileService {
@@ -39,8 +36,6 @@ public class ProfileService {
    private PostDAO postDAO;
    @Autowired
    private ModelMapper modelMapper;
-   @Autowired
-   private NotificationDAO notificationDAO;
 
    @Autowired
    private AccountService accountService;

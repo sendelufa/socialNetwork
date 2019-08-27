@@ -9,25 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.AuthorApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.api.response.SubCommentApi;
-import ru.skillbox.socialnetwork.dao.FriendsDAO;
+import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
-import ru.skillbox.socialnetwork.model.Friendship;
-import ru.skillbox.socialnetwork.model.Person;
-import ru.skillbox.socialnetwork.model.Post;
-import ru.skillbox.socialnetwork.model.PostComment;
-import ru.skillbox.socialnetwork.model.Tag;
-import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
+import ru.skillbox.socialnetwork.model.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -45,6 +37,10 @@ public class PostService {
    private SubCommentMapper subCommentMapper;
    @Autowired
    private FriendsDAO friendsDAO;
+  @Autowired
+  private NotificationService notificationService;
+  @Autowired
+  private NotificationDAO notificationDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);

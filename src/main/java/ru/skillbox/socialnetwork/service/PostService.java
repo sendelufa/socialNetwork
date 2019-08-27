@@ -18,13 +18,16 @@ import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.SubCommentApi;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
+import ru.skillbox.socialnetwork.model.Friendship;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
 @Service
 public class PostService {
@@ -40,6 +43,8 @@ public class PostService {
    private PostCommentMapper postCommentMapper;
    @Autowired
    private SubCommentMapper subCommentMapper;
+   @Autowired
+   private FriendsDAO friendsDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
@@ -75,8 +80,17 @@ public class PostService {
    }
 
    public ResponseApi getFeed(PostParameters postParameters) {
-      postParameters.setId(accountService.getCurrentUser().getId());
-      List<Post> posts = postDAO.getFeed(postParameters);
+      List<Friendship> listMyRequestsAndFriend = friendsDAO.searchAllFriendForPerson(accountService.getCurrentUser());
+      List<Integer> listIdSubscAndFriend = new ArrayList<>();
+      listIdSubscAndFriend.add(accountService.getCurrentUser().getId());
+      for (Friendship friendship : listMyRequestsAndFriend) {
+         if (friendship.getCode().equals(FriendshipStatusCode.FRIEND) ||
+             friendship.getCode().equals(FriendshipStatusCode.SUBSCRIBED)) {
+            listIdSubscAndFriend.add(friendship.getDstPerson().getId());
+         }
+      }
+
+      List<Post> posts = postDAO.getFeed(listIdSubscAndFriend, postParameters);
       postListApi = new PostListApi();
       postListApi.setData(posts.stream()
           .map(p -> mapper.map(p, PostApi.class))

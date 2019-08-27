@@ -59,7 +59,7 @@ public class DialogDao {
           String.format("AND locate('%s', m.messageText, 1) > 0 ", searchText);
 
       String query = String.format("from Message m where m.dialogId = %d"
-              + " %s AND m.isDeleted = false ORDER BY m.time DESC",
+              + " %s AND m.isDeleted = false ORDER BY m.time ASC",
           dialogId, searchCriteria);
 
       TypedQuery<Message> queryTyped = getCurrentSession().createQuery(query, Message.class);

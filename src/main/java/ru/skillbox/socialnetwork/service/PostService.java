@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
 import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.api.response.AuthorApi;
 import ru.skillbox.socialnetwork.api.response.CommentApi;
@@ -59,6 +60,8 @@ public class PostService {
   private NotificationService notificationService;
   @Autowired
   private NotificationDAO notificationDAO;
+  @Autowired
+  private FriendsDAO friendsDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);

@@ -102,7 +102,15 @@ public class LikeService {
             }
             postLike.setPost(post);
 
-            likeDAO.addPostLike(postLike);
+            List<PostLike> postLikes = likeDAO.getAllPostLikes();
+            postLikes.forEach(like -> {
+                if (likeApi.getItem_id() == like.getPost().getId() && person == like.getPerson()) {
+                    likeDAO.deletePostLike(like);
+                    likeDAO.addPostLike(postLike);
+                } else {
+                    likeDAO.addPostLike(postLike);
+                }
+            });
 
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);

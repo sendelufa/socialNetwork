@@ -170,7 +170,7 @@ public class FriendsDAO {
       return sessionFactory.getCurrentSession();
    }
 
-   private List<Friendship> searchAllFriendForPerson(Person person) {
+   public List<Friendship> searchAllFriendForPerson(Person person) {
       String query = "from Friendship f where src_person_id = " + person.getId();
       List<Friendship> list = getCurrentSession().createQuery(query).list();
       return list;

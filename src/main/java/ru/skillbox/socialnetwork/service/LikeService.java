@@ -101,15 +101,11 @@ public class LikeService {
                 return response;
             }
             postLike.setPost(post);
-
-            List<PostLike> postLikes = likeDAO.getAllPostLikes();
+            List<PostLike> postLikes = likeDAO.getPostLikesListByPostId(post.getId());
             postLikes.forEach(like -> {
-                if (likeApi.getItem_id() == like.getPost().getId() && person == like.getPerson()) {
+                if (person == like.getPerson())
                     likeDAO.deletePostLike(like);
-                    likeDAO.addPostLike(postLike);
-                } else {
-                    likeDAO.addPostLike(postLike);
-                }
+                else likeDAO.addPostLike(postLike);
             });
 
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));

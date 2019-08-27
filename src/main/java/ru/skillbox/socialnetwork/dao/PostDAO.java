@@ -120,9 +120,7 @@ public class PostDAO {
    }
 
    public long getLikesNumber(int id) {
-      String query = String.format("select count(*) from PostLike likes where "
-          + "likes"
-          + ".post=%d", id);
+      String query = String.format("select count(*) from PostLike likes where likes.post=%d", id);
       return (long) getCurrentSession().createQuery(query).uniqueResult();
    }
 

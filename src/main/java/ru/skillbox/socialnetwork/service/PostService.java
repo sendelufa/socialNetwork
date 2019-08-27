@@ -22,7 +22,6 @@ import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.SubCommentApi;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
-import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
@@ -57,11 +56,7 @@ public class PostService {
    @Autowired
    private FriendsDAO friendsDAO;
   @Autowired
-  private NotificationService notificationService;
-  @Autowired
   private NotificationDAO notificationDAO;
-  @Autowired
-  private FriendsDAO friendsDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);

@@ -36,6 +36,8 @@ public class ProfileService {
    private PostDAO postDAO;
    @Autowired
    private ModelMapper modelMapper;
+   @Autowired
+   private NotificationDAO notificationDAO;
 
    @Autowired
    private AccountService accountService;

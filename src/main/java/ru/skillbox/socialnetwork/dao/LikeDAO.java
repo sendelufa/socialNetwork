@@ -24,6 +24,10 @@ public class LikeDAO {
          return (List<PostLike>) getCurrentSession().createQuery(query).list();
     }
 
+    public List<PostLike> getAllPostLikes() {
+        return getCurrentSession().createQuery("from PostLike p", PostLike.class).getResultList();
+    }
+
     public PostLike getLikedPost(int userId, int postId){
 
         String query = String.format("from PostLike likes where likes.post=%d and likes.person=%d", postId,userId);

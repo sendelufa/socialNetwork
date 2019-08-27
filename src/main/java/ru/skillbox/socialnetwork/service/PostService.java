@@ -5,11 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.*;
+import ru.skillbox.socialnetwork.api.response.AuthorApi;
+import ru.skillbox.socialnetwork.api.response.CommentApi;
+import ru.skillbox.socialnetwork.api.response.CommentListApi;
+import ru.skillbox.socialnetwork.api.response.PostApi;
+import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
+import ru.skillbox.socialnetwork.api.response.PostListApi;
+import ru.skillbox.socialnetwork.api.response.ReportApi;
+import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.SubCommentApi;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
+import ru.skillbox.socialnetwork.model.Friendship;
+import ru.skillbox.socialnetwork.model.Person;
+import ru.skillbox.socialnetwork.model.Post;
+import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.model.Tag;
+import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 import ru.skillbox.socialnetwork.model.*;
 
 import java.util.ArrayList;
@@ -20,44 +35,46 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
 
-  private PostListApi postListApi;
-  @Autowired
-  private PostDAO postDAO;
-  @Autowired
-  private AccountService accountService;
-  @Autowired
-  private ModelMapper mapper;
-  @Autowired
-  private PostCommentMapper postCommentMapper;
-  @Autowired
-  private SubCommentMapper subCommentMapper;
+   private PostListApi postListApi;
+   @Autowired
+   private PostDAO postDAO;
+   @Autowired
+   private AccountService accountService;
+   @Autowired
+   private ModelMapper mapper;
+   @Autowired
+   private PostCommentMapper postCommentMapper;
+   @Autowired
+   private SubCommentMapper subCommentMapper;
+   @Autowired
+   private FriendsDAO friendsDAO;
   @Autowired
   private NotificationService notificationService;
   @Autowired
   private NotificationDAO notificationDAO;
 
-  public ResponseApi get(int id) {
-    Post post = postDAO.getPostById(id);
-    return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
-  }
+   public ResponseApi get(int id) {
+      Post post = postDAO.getPostById(id);
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+   }
 
-  public ResponseApi addPost(Long publishDate,
-                             ru.skillbox.socialnetwork.api.request.PostApi request) {
-    if (publishDate == null) {
-      publishDate = System.currentTimeMillis();
-    }
+   public ResponseApi addPost(Long publishDate,
+       ru.skillbox.socialnetwork.api.request.PostApi request) {
+      if (publishDate == null) {
+         publishDate = System.currentTimeMillis();
+      }
 
-    Post post = new Post();
-    post.setTitle(request.getTitle());
-    post.setPostText(request.getPostText());
+      Post post = new Post();
+      post.setTitle(request.getTitle());
+      post.setPostText(request.getPostText());
 
-    List<Tag> tags = new ArrayList<>();
-    List<String> tagsRequest = request.getTags();
-    for (int i = 1; i <= tagsRequest.size(); i++) {
-      Tag tag = new Tag();
-      tag.setTag(tagsRequest.get(i - 1));
-      tags.add(tag);
-    }
+      List<Tag> tags = new ArrayList<>();
+      List<String> tagsRequest = request.getTags();
+      for (int i = 1; i <= tagsRequest.size(); i++) {
+         Tag tag = new Tag();
+         tag.setTag(tagsRequest.get(i - 1));
+         tags.add(tag);
+      }
 
     post.setTags(tags);
 
@@ -93,27 +110,27 @@ public class PostService {
     return postListApi;
   }
 
-  public ResponseApi edit(int id,
-                          ru.skillbox.socialnetwork.api.request.PostApi postApiRequest,
-                          Long publishDate) {
-    Post post = postDAO.getPostById(id);
-    if (post == null) {
-      return null;
-    }
-    post.setTitle(postApiRequest.getTitle());
-    post.setPostText(postApiRequest.getPostText());
-    post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
-    postDAO.updatePost(post);
-    return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
-  }
+   public ResponseApi edit(int id,
+       ru.skillbox.socialnetwork.api.request.PostApi postApiRequest,
+       Long publishDate) {
+      Post post = postDAO.getPostById(id);
+      if (post == null) {
+         return null;
+      }
+      post.setTitle(postApiRequest.getTitle());
+      post.setPostText(postApiRequest.getPostText());
+      post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
+      postDAO.updatePost(post);
+      return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+   }
 
-  public ResponseApi delete(int id) {
-    PostDeleteApi postDeleteApi = new PostDeleteApi();
-    Post post = postDAO.getPostById(id);
-    postDAO.deletePost(post);
-    postDeleteApi.setId(id);
-    return new ResponseApi("none", new Date().getTime(), postDeleteApi);
-  }
+   public ResponseApi delete(int id) {
+      PostDeleteApi postDeleteApi = new PostDeleteApi();
+      Post post = postDAO.getPostById(id);
+      postDAO.deletePost(post);
+      postDeleteApi.setId(id);
+      return new ResponseApi("none", new Date().getTime(), postDeleteApi);
+   }
 
   public ResponseApi recover(int id) {
     Post post = postDAO.recoverPost(id);

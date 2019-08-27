@@ -1,6 +1,7 @@
 package ru.skillbox.socialnetwork.dao;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.persistence.TypedQuery;
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,12 +58,13 @@ public class PostDAO {
       return q.getResultList();
    }
 
-   public List<Post> getFeed(PostParameters postParameters) {
-      return getPosts(postParameters)
-          .stream()
-          .filter(p -> p.getAuthor().getId() != postParameters.getId())
-          .collect(Collectors.toList());
-
+   public List<Post> getFeed(List<Integer> authorList, PostParameters postParameters) {
+      Query query = getCurrentSession().createQuery("from Post p where author_id in (:authorId) AND time < :nowDate ORDER BY p.time DESC");
+      query.setParameterList("authorId", authorList);
+      query.setParameter("nowDate", new Date());
+      query.setFirstResult(postParameters.getOffset());
+      query.setMaxResults(postParameters.getItemPerPage());
+      return query.getResultList();
    }
 
    public Post getPostById(int id) {

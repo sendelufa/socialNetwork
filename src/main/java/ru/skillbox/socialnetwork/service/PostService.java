@@ -14,6 +14,8 @@ import ru.skillbox.socialnetwork.api.response.PostListApi;
 import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.SubCommentApi;
+import ru.skillbox.socialnetwork.dao.FriendsDAO;
+import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;

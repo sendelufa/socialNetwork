@@ -13,6 +13,8 @@ public class FlywayConf {
    private String user;
    @Value("${spring.datasource.password}")
    private String password;
+   @Value("${socialnetwork.profile:prod}")
+   private String profile;
 
    @Bean(initMethod = "migrate")
    public Flyway flyway() {

@@ -129,7 +129,14 @@ public class ProfileService {
             response.setSuccess(false);
          } else {
             PersonApi personApi = map(person);
-
+           int[] ids = {id};
+           List<Friendship> aFriendOfUsers = friendsDAO.isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
+           if (aFriendOfUsers.size() > 0) {
+             if (aFriendOfUsers.get(0).getCode().equals(FriendshipStatusCode.FRIEND)
+                 || aFriendOfUsers.get(0).getCode().equals(FriendshipStatusCode.REQUEST)) {
+               personApi.setFriend(true);
+             }
+           }
             response = new ResponseApi("string", System.currentTimeMillis(), personApi);
             response.setSuccess(true);
          }

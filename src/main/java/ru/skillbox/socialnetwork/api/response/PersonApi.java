@@ -27,6 +27,8 @@ public class PersonApi extends AbstractResponse {
   private long lastOnlineTime;
   @JsonProperty("is_blocked")
   private boolean isBlocked;
+  @JsonProperty("is_friend")
+  private boolean isFriend;
 
   private String token;
 
@@ -148,5 +150,13 @@ public class PersonApi extends AbstractResponse {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public boolean isFriend() {
+    return isFriend;
+  }
+
+  public void setFriend(boolean friend) {
+    isFriend = friend;
   }
 }

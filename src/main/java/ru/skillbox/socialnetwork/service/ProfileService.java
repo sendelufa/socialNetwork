@@ -133,7 +133,7 @@ public class ProfileService {
            List<Friendship> aFriendOfUsers = friendsDAO.isAFriendOfUsers(ids, accountService.getCurrentUser().getId());
            if (aFriendOfUsers.size() > 0) {
              if (aFriendOfUsers.get(0).getCode().equals(FriendshipStatusCode.FRIEND)
-                 || aFriendOfUsers.get(0).getCode().equals(FriendshipStatusCode.REQUEST)) {
+                 || aFriendOfUsers.get(0).getCode().equals(FriendshipStatusCode.SUBSCRIBED)) {
                personApi.setFriend(true);
              }
            }

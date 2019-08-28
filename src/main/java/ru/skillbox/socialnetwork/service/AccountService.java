@@ -3,23 +3,18 @@ package ru.skillbox.socialnetwork.service;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.request.RegistrationApi;
+import ru.skillbox.socialnetwork.api.request.SetPasswordApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.NotificationSettingsListApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.api.response.ResponseNotificationSettingsApi;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.NotificationSettings;
@@ -28,11 +23,12 @@ import ru.skillbox.socialnetwork.model.enumeration.MessagesPermissionPerson;
 import ru.skillbox.socialnetwork.model.enumeration.NameNotificationType;
 import ru.skillbox.socialnetwork.utils.EmailValidator;
 
+import java.util.ArrayList;
+import java.util.Date;
+
 
 @Service
 public class AccountService {
-
-    private Logger logger = LogManager.getRootLogger();
 
     @Autowired
     private PersonDAO personDAO;
@@ -61,9 +57,6 @@ public class AccountService {
                 person.setFirstName(registration.getFirstName());
                 person.setEmail(userEmail);
 
-                person.setBirthDate(new Date());
-                person.setCity("Москва");
-                person.setCountry("Россия");
                 person.setRegDate(new Date());
                 person.setMessagesPermission(MessagesPermissionPerson.ALL);
                 person.setOnline(true);
@@ -106,7 +99,7 @@ public class AccountService {
 
             String encodedPassword = encoder.encode(password);
 
-            Person person  = getCurrentUser();
+            Person person  = getCurrentPersonFromSecurityContext();
             person.setPassword(encodedPassword);
 
             personDAO.updatePerson(person);
@@ -124,7 +117,7 @@ public class AccountService {
 
     public AbstractResponse setEmail(String email) {
 
-        Person person = getCurrentUser();
+        Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
 
         if (!EmailValidator.isValid(email)){
@@ -164,12 +157,9 @@ public class AccountService {
     }
 
     public AbstractResponse notification(String notification_type,boolean enable){
-        
-        Person person = getCurrentUser();
 
-        logger.info("Putting new notification setting or updating current one! \n" +
-                "incoming notificaion type: " + notification_type + "\n" +
-                "is should be enabled: " + enable + "\n");
+        Person person = getCurrentPersonFromSecurityContext();
+
         AbstractResponse response;
         boolean isSettingFound = false;
         ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
@@ -209,32 +199,9 @@ public class AccountService {
 
     }
 
-    public AbstractResponse getNotifications(){
-
-        Person person = getCurrentUser();
-
-        AbstractResponse response;
-        ArrayList<NotificationSettings> ns = new ArrayList<>(notificationDAO.getNotificationSettingsByPersonId(person.getId()));
-        List<ResponseNotificationSettingsApi> data = new ArrayList<>();
-
-
-        for(NotificationSettings setting : ns){
-            ResponseNotificationSettingsApi temp = new ResponseNotificationSettingsApi();
-
-            NameNotificationType nameNotificationType = notificationDAO.getNotificationTypeById(setting.getNotificationType()).getName();
-            temp.setNotification_type(nameNotificationType.toString());
-            temp.setEnable(setting.isEnable());
-            data.add(temp);
-        }
-
-        response = new NotificationSettingsListApi("string", System.currentTimeMillis(), data);
-        response.setSuccess(true);
-        return response;
-    }
-
 
     public AbstractResponse status(String status){
-        Person person = getCurrentUser();
+        Person person = getCurrentPersonFromSecurityContext();
         AbstractResponse response;
 
         if(status.equals("online")) {
@@ -259,18 +226,22 @@ public class AccountService {
 
     }
 
-    public Person getCurrentUser(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        Person personByEmail = personDAO.getPersonByEmail(email);
-        return personByEmail;
+    private Person getCurrentPersonFromSecurityContext(){
+
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return personDAO.getPersonByEmail(user.getUsername());
 
     }
 
     public String randomKey(int length) {
         final Random random = new SecureRandom();
         return String.format("%" + length + "s", new BigInteger(length * 5/*base 32,2^5*/, random)
-            .toString(32)).replace('\u0020', '0');
+                .toString(32)).replace('\u0020', '0');
     }
 
-
+    public Person getCurrentUser() {
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Person personByEmail = personDAO.getPersonByEmail(email);
+        return personByEmail;
+    }
 }

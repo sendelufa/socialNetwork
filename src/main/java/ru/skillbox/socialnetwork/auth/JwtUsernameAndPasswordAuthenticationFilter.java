@@ -56,17 +56,17 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
 
    @Override
    public Authentication attemptAuthentication(HttpServletRequest request,
-       HttpServletResponse response)
-       throws AuthenticationException {
+                                               HttpServletResponse response)
+           throws AuthenticationException {
 
       try {
          // FIXME: 16.06.2019 работает через fasterxml, но нужно ли оставлять?
          // 1. Get credentials from request
          UserCredentials creds = new ObjectMapper()
-             .readValue(request.getInputStream(), UserCredentials.class);
+                 .readValue(request.getInputStream(), UserCredentials.class);
          // 2. Create auth object (contains credentials) which will be used by auth manager
          UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-             creds.getEmail(), creds.getPassword(), Collections.emptyList());
+                 creds.getEmail(), creds.getPassword(), Collections.emptyList());
 
          // 3. Authentication manager authenticate the user, and use UserDetialsServiceImpl::loadUserByUsername() method to load the user.
          return authManager.authenticate(authToken);
@@ -75,6 +75,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
          throw new RuntimeException(e);
       }
    }
+
 
    // Upon successful authentication, generate a token.
    // The 'auth' passed to successfulAuthentication() is the current authenticated user.

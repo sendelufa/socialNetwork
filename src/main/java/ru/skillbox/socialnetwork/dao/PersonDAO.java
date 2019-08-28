@@ -1,9 +1,5 @@
 package ru.skillbox.socialnetwork.dao;
 
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.TypedQuery;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +9,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.model.Person;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -54,24 +54,28 @@ public class PersonDAO {
    }
 
    public List<Person> getPersonsByParameters(PersonParameters parameters) {
-      String query = "from Person p";
 
-      TypedQuery<Person> q = getCurrentSession().createQuery(query, Person.class);
-      q.setFirstResult(parameters.getOffset());
-      q.setMaxResults(parameters.getItemPerPage());
-      List<Person> persons = q.getResultList();
+      Calendar calendar;
+      Date dateTo;
+      Date dateFrom;
+      Criteria criteria = getCurrentSession().createCriteria(Person.class);
+      if (!parameters.getFirst_name().isEmpty()) {
+         criteria.add(Restrictions.like("firstName", parameters.getFirst_name()));
+      }
+      if (!parameters.getLast_name().isEmpty()) {
+         criteria.add(Restrictions.like("lastName", parameters.getLast_name()));
+      }
 
-      final long ONE_YEAR = 1_000L * 60L * 60L * 24L * 365L;
+      calendar = Calendar.getInstance();
+      calendar.add(Calendar.YEAR, -parameters.getAgeFrom());
+      dateTo = calendar.getTime();
+      criteria.add(Restrictions.le("birthDate", dateTo));
 
-      return persons.stream()
-          .filter(p -> (
-              new Date().getTime() - p.getBirthDate().getTime()) <
-              (ONE_YEAR * parameters.getAgeTo()))
-          .filter(p -> (
-              new Date().getTime() - p.getBirthDate().getTime()) >
-              (ONE_YEAR * parameters.getAgeFrom()))
-          .filter(p -> (p.getFirstName().contains(parameters.getFirst_name())))
-          .filter(p -> (p.getLastName().contains(parameters.getLast_name())))
-          .collect(Collectors.toList());
+      calendar = Calendar.getInstance();
+      calendar.add(Calendar.YEAR, -parameters.getAgeTo());
+      dateFrom = calendar.getTime();
+      criteria.add(Restrictions.ge("birthDate", dateFrom));
+
+      return criteria.list();
    }
 }

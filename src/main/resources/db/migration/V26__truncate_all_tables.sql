@@ -1,0 +1,18 @@
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE block_history;
+TRUNCATE TABLE comment_like;
+TRUNCATE TABLE dialog;
+TRUNCATE TABLE friendship;
+TRUNCATE TABLE message;
+TRUNCATE TABLE notification;
+TRUNCATE TABLE notification_settings;
+TRUNCATE TABLE person;
+TRUNCATE TABLE person2dialog;
+TRUNCATE TABLE post;
+TRUNCATE TABLE post2tag;
+TRUNCATE TABLE post_comment;
+TRUNCATE TABLE post_file;
+TRUNCATE TABLE post_like;
+TRUNCATE TABLE tag;
+TRUNCATE TABLE user;
+SET FOREIGN_KEY_CHECKS = 1;

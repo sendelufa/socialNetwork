@@ -107,7 +107,6 @@ public class LikeService {
                     likeDAO.deletePostLike(like);
                 else likeDAO.addPostLike(postLike);
             });
-
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;
@@ -127,7 +126,12 @@ public class LikeService {
             }
             commentLike.setPostComment(postComment);
 
-            likeDAO.addCommentLike(commentLike);
+            List<CommentLike> commentLikes = likeDAO.getCommentLikesListByCommentId(postComment.getId());
+            commentLikes.forEach(l -> {
+                if (person == l.getPerson())
+                    likeDAO.deleteCommentLike(l);
+                else likeDAO.addCommentLike(commentLike);
+            });
 
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);

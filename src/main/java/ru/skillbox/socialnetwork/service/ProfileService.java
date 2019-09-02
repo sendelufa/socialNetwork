@@ -1,29 +1,22 @@
 package ru.skillbox.socialnetwork.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PersonParameters;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.CityApi;
-import ru.skillbox.socialnetwork.api.response.CountryApi;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.PersonApi;
-import ru.skillbox.socialnetwork.api.response.PersonListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.mapper.PersonMapper;
 import ru.skillbox.socialnetwork.model.*;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProfileService {
@@ -36,6 +29,9 @@ public class ProfileService {
    private PostDAO postDAO;
    @Autowired
    private ModelMapper modelMapper;
+   //TODO: заглушка, чтобы отображались найденные польозователи
+   @Autowired
+   private PersonMapper personMapper;
 
    @Autowired
    private AccountService accountService;
@@ -214,7 +210,8 @@ public class ProfileService {
       PersonListApi personListApi = new PersonListApi();
       List<Person> personsFromDB = personDAO.getPersonsByParameters(parameters);
       personListApi.setData(personsFromDB.stream()
-                        .map(person -> modelMapper.map(person, PersonApi.class))
+                        //TODO: заглушка, чтобы отображались найденные польозователи
+                        .map(person -> personMapper.toApi(person))
                         .collect(Collectors.toList()));
       personListApi.setTotal(personsFromDB.size());
       personListApi.setOffset(parameters.getOffset());

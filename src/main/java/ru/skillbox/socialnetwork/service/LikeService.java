@@ -101,9 +101,12 @@ public class LikeService {
                 return response;
             }
             postLike.setPost(post);
-
-            likeDAO.addPostLike(postLike);
-
+            List<PostLike> postLikes = likeDAO.getPostLikesListByPostId(post.getId());
+            postLikes.forEach(like -> {
+                if (person == like.getPerson())
+                    likeDAO.deletePostLike(like);
+                else likeDAO.addPostLike(postLike);
+            });
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;
@@ -123,7 +126,12 @@ public class LikeService {
             }
             commentLike.setPostComment(postComment);
 
-            likeDAO.addCommentLike(commentLike);
+            List<CommentLike> commentLikes = likeDAO.getCommentLikesListByCommentId(postComment.getId());
+            commentLikes.forEach(l -> {
+                if (person == l.getPerson())
+                    likeDAO.deleteCommentLike(l);
+                else likeDAO.addCommentLike(commentLike);
+            });
 
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
@@ -143,13 +151,23 @@ public class LikeService {
 
         if(type.equals("Post")){
             PostLike postLike = likeDAO.getLikedPost(person.getId(), itemId);
-            likeDAO.deletePostLike(postLike);
+            try {
+                likeDAO.deletePostLike(postLike);
+            }
+            catch (IllegalArgumentException e) {
+                e.getMessage();
+            }
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;
         } else if(type.equals("Comment")) {
             CommentLike commentLike = likeDAO.getLikedComment(person.getId(), itemId);
-            likeDAO.deleteCommentLike(commentLike);
+            try {
+                likeDAO.deleteCommentLike(commentLike);
+            }
+            catch (IllegalArgumentException e) {
+                e.getMessage();
+            }
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;

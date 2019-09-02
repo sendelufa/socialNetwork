@@ -66,7 +66,11 @@ public class PersonMapper extends Mapper<Person, PersonApi> {
          destination.setCountry(countryApi);
       }
 
-      destination.setPhoto("https://cardrise.ru/wp-content/uploads/2019/07/dobroy-nochi-5-300x300.jpg");
+      if(!Objects.isNull(source.getPhoto())) {
+         destination.setPhoto(source.getPhoto());
+      } else {
+         destination.setPhoto("http://res.cloudinary.com/ryker/image/upload/v1567446640/ksqjb1wrhmg5uyid8h04.jpg");
+      }
    }
 
    @Override
@@ -76,6 +80,5 @@ public class PersonMapper extends Mapper<Person, PersonApi> {
       }
       destination.setCity(source.getCity().getTitle());
       destination.setCountry(source.getCountry().getTitle());
-      destination.setPhoto("https://cardrise.ru/wp-content/uploads/2019/07/dobroy-nochi-5-300x300.jpg");
    }
 }

@@ -1,9 +1,5 @@
 package ru.skillbox.socialnetwork.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +15,7 @@ import ru.skillbox.socialnetwork.api.response.ReportApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.api.response.SubCommentApi;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
+import ru.skillbox.socialnetwork.dao.NotificationDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
 import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
@@ -28,6 +25,12 @@ import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
+import ru.skillbox.socialnetwork.model.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -45,6 +48,8 @@ public class PostService {
    private SubCommentMapper subCommentMapper;
    @Autowired
    private FriendsDAO friendsDAO;
+  @Autowired
+  private NotificationDAO notificationDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
@@ -158,18 +163,21 @@ public class PostService {
       return commentListApi;
    }
 
-   public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
-      PostComment postComment = new PostComment();
-      postComment.setCommentText(postCommentApi.getComment_text());
-      postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
-      postComment.setPost(postDAO.getPostById(postId));
-      Date date = new Date();
-      postComment.setTime(date);
-      postComment.setAuthor(accountService.getCurrentUser());
-      postComment.setBlocked(postCommentApi.isIs_blocked());
-      postDAO.addComment(postComment);
-      return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
-   }
+  public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
+
+    notificationDAO.addNotification(createNotification(postCommentApi));
+
+    PostComment postComment = new PostComment();
+    postComment.setCommentText(postCommentApi.getComment_text());
+    postComment.setParent_id(postDAO.getCommentById(postCommentApi.getParent_id()));
+    postComment.setPost(postDAO.getPostById(postId));
+    Date date = new Date();
+    postComment.setTime(date);
+    postComment.setAuthor(accountService.getCurrentUser());
+    postComment.setBlocked(postCommentApi.isIs_blocked());
+    postDAO.addComment(postComment);
+    return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
+  }
 
    public ResponseApi editComment(int postId, int commentId, PostCommentApi request) {
       PostComment postComment = postDAO.getCommentById(commentId);
@@ -269,7 +277,24 @@ public class PostService {
       return commentApi;
    }
 
-   private AuthorApi getAuthorApi(Person person) {
-      return mapper.map(person, AuthorApi.class);
-   }
+  private AuthorApi getAuthorApi(Person person) {
+    return mapper.map(person, AuthorApi.class);
+  }
+
+  private Notification createNotification(PostCommentApi api) {
+    Notification n = new Notification();
+    n.setSentTime(new Date());
+    Person p = accountService.getCurrentUser();
+    n.setPerson(p);
+    n.setContact(p.getEmail());
+    if(api.getParent_id() == 0){
+      n.setNotificationType(notificationDAO.getNotificationTypeByName("POST_COMMENT"));
+      n.setEntityId(api.getId());
+    } else {
+      n.setNotificationType(notificationDAO.getNotificationTypeByName("COMMENT_COMMENT"));
+      n.setEntityId(api.getParent_id());
+    }
+    n.setReaded(false);
+    return n;
+  }
 }

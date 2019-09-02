@@ -101,15 +101,11 @@ public class LikeService {
                 return response;
             }
             postLike.setPost(post);
-
-            List<PostLike> postLikes = likeDAO.getAllPostLikes();
+            List<PostLike> postLikes = likeDAO.getPostLikesListByPostId(post.getId());
             postLikes.forEach(like -> {
-                if (likeApi.getItem_id() == like.getPost().getId() && person == like.getPerson()) {
+                if (person == like.getPerson())
                     likeDAO.deletePostLike(like);
-                    likeDAO.addPostLike(postLike);
-                } else {
-                    likeDAO.addPostLike(postLike);
-                }
+                else likeDAO.addPostLike(postLike);
             });
 
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
@@ -151,13 +147,23 @@ public class LikeService {
 
         if(type.equals("Post")){
             PostLike postLike = likeDAO.getLikedPost(person.getId(), itemId);
-            likeDAO.deletePostLike(postLike);
+            try {
+                likeDAO.deletePostLike(postLike);
+            }
+            catch (IllegalArgumentException e) {
+                e.getMessage();
+            }
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;
         } else if(type.equals("Comment")) {
             CommentLike commentLike = likeDAO.getLikedComment(person.getId(), itemId);
-            likeDAO.deleteCommentLike(commentLike);
+            try {
+                likeDAO.deleteCommentLike(commentLike);
+            }
+            catch (IllegalArgumentException e) {
+                e.getMessage();
+            }
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;

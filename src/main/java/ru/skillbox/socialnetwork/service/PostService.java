@@ -1,26 +1,17 @@
 package ru.skillbox.socialnetwork.service;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.api.request.PostCommentApi;
-import ru.skillbox.socialnetwork.api.response.AuthorApi;
-import ru.skillbox.socialnetwork.api.response.CommentApi;
-import ru.skillbox.socialnetwork.api.response.CommentListApi;
-import ru.skillbox.socialnetwork.api.response.PostApi;
-import ru.skillbox.socialnetwork.api.response.PostDeleteApi;
-import ru.skillbox.socialnetwork.api.response.PostListApi;
-import ru.skillbox.socialnetwork.api.response.ReportApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
-import ru.skillbox.socialnetwork.api.response.SubCommentApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.NotificationDAO;
+import ru.skillbox.socialnetwork.dao.LikeDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.mapper.PostCommentMapper;
-import ru.skillbox.socialnetwork.mapper.SubCommentMapper;
+import ru.skillbox.socialnetwork.mapper.PostMapper;
 import ru.skillbox.socialnetwork.model.Friendship;
-import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
 import ru.skillbox.socialnetwork.model.Tag;
@@ -41,19 +32,19 @@ public class PostService {
    @Autowired
    private AccountService accountService;
    @Autowired
-   private ModelMapper mapper;
-   @Autowired
    private PostCommentMapper postCommentMapper;
-   @Autowired
-   private SubCommentMapper subCommentMapper;
    @Autowired
    private FriendsDAO friendsDAO;
   @Autowired
   private NotificationDAO notificationDAO;
+   @Autowired
+   private PostMapper postMapper;
+   @Autowired
+   private LikeDAO likeDAO;
 
    public ResponseApi get(int id) {
       Post post = postDAO.getPostById(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi addPost(Long publishDate,
@@ -81,7 +72,7 @@ public class PostService {
       post.setTime(date);
       post.setAuthor(accountService.getCurrentUser());
       postDAO.addPost(post);
-      return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi getFeed(PostParameters postParameters) {
@@ -97,9 +88,8 @@ public class PostService {
 
       List<Post> posts = postDAO.getFeed(listIdSubscAndFriend, postParameters);
       postListApi = new PostListApi();
-      postListApi.setData(posts.stream()
-          .map(p -> mapper.map(p, PostApi.class))
-          .collect(Collectors.toList()));
+      postListApi.setData(posts.stream().map(this::fillPostApi)
+              .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setSuccess(true);
       return postListApi;
@@ -108,8 +98,8 @@ public class PostService {
    public ResponseApi search(PostParameters postParameters) {
       List<Post> posts = postDAO.getPosts(postParameters);
       postListApi = new PostListApi();
-      postListApi.setData(posts.stream().map(p -> mapper.map(p, PostApi.class))
-          .collect(Collectors.toList()));
+      postListApi.setData(posts.stream().map(this::fillPostApi)
+              .collect(Collectors.toList()));
       postListApi.setTotal(posts.size());
       postListApi.setOffset(postParameters.getOffset());
       postListApi.setPerPage(postParameters.getItemPerPage());
@@ -128,7 +118,7 @@ public class PostService {
       post.setPostText(postApiRequest.getPostText());
       post.setTime(publishDate != null ? new java.sql.Date(publishDate) : post.getTime());
       postDAO.updatePost(post);
-      return new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+      return new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi delete(int id) {
@@ -141,7 +131,7 @@ public class PostService {
 
    public ResponseApi recover(int id) {
       Post post = postDAO.recoverPost(id);
-      return post == null ? null : new ResponseApi("none", new Date().getTime(), mapper.map(post, PostApi.class));
+      return post == null ? null : new ResponseApi("none", new Date().getTime(), fillPostApi(post));
    }
 
    public ResponseApi reportPost(int id) {
@@ -217,69 +207,20 @@ public class PostService {
    }
 
    private PostApi fillPostApi(Post post) {
-      PostApi postDataApi = new PostApi();
-      postDataApi.setId(post.getId());
-      postDataApi.setTime(post.getTime().getTime());
-
-      Person personPost = post.getAuthor();
-      postDataApi.setAuthor(getAuthorApi(personPost));
-      postDataApi.setTitle(post.getTitle());
-      postDataApi.setPostText(post.getPostText());
-      postDataApi.setBlocked(post.isBlocked());
+      PostApi postDataApi = postMapper.toApi(post);
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
-
-      List<Tag> tags = post.getTags();
-      List<String> tagsApi = new ArrayList<>();
-      for (int i = 1; i <= tags.size(); i++) {
-         String ta = tags.get(i - 1).getTag();
-         tagsApi.add(ta);
-      }
-
-      postDataApi.setTags(tagsApi);
-      postDataApi.setMyLike(false);
-
-      List<PostComment> postComments = post.getPostComments();
-      List<CommentApi> commentApis = new ArrayList<>();
-      if (postComments != null) {
-         for (int i = 1; i <= postComments.size(); i++) {
-            PostComment postComment = postComments.get(i - 1);
-            CommentApi commentApi = postCommentMapper.toApi(postComment);
-            commentApis.add(commentApi);
-         }
-      }
-      postDataApi.setComments(commentApis);
+      if (likeDAO.getLikedPost(getCurrentPersonId(), post.getId()) == null) postDataApi.setMyLike(false);
+      else postDataApi.setMyLike(true);
       return postDataApi;
    }
 
    private CommentApi fillCommentApi(PostComment comment) {
-      CommentApi commentApi = new CommentApi();
-      commentApi.setId(comment.getId());
-      commentApi.setTime(comment.getTime().getTime());
-
-      Person person = comment.getAuthor();
-      commentApi.setAuthor(getAuthorApi(person));
-      commentApi.setCommentText(comment.getCommentText());
+      CommentApi commentApi = postCommentMapper.toApi(comment);
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
-      commentApi.setPostId(String.valueOf(comment.getPost().getId()));
-      commentApi.setBlocked(comment.isBlocked());
-      commentApi.setMyLike(true);
-
-      List<PostComment> postComments = comment.getPostComments();
-      List<SubCommentApi> subCommentApis = new ArrayList<>();
-      if (postComments != null) {
-         for (int i = 1; i <= postComments.size(); i++) {
-            PostComment postComment = postComments.get(i - 1);
-            SubCommentApi subCommentApi = subCommentMapper.toApi(postComment);
-            subCommentApis.add(subCommentApi);
-         }
-      }
-      commentApi.setSubComments(subCommentApis);
+      if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null) commentApi.setMyLike(false);
+      else commentApi.setMyLike(true);
       return commentApi;
    }
-
-  private AuthorApi getAuthorApi(Person person) {
-    return mapper.map(person, AuthorApi.class);
-  }
 
   private Notification createNotification(PostCommentApi api) {
     Notification n = new Notification();
@@ -297,4 +238,7 @@ public class PostService {
     n.setReaded(false);
     return n;
   }
+   private int getCurrentPersonId() {
+      return accountService.getCurrentUser().getId();
+   }
 }

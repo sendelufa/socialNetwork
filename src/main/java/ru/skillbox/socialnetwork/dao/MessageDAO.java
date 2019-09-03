@@ -7,8 +7,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.model.Message;
 import ru.skillbox.socialnetwork.model.Notification;
+import ru.skillbox.socialnetwork.model.NotificationType;
+import ru.skillbox.socialnetwork.model.Person;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -26,7 +29,11 @@ public class MessageDAO {
 
    public void addMessage(Message message) {
       getCurrentSession().save(message);
-      createNotification(message);
+   }
+
+   public List<Message> getMessageForNotification(Person author, Person recipient){
+       String query = String.format("from Message where author_id=%d and recipient_id=%d", author.getId(),recipient.getId());
+       return (List<Message>) getCurrentSession().createQuery(query).list();
    }
 
    public void deleteMessage(Message message){
@@ -41,13 +48,14 @@ public class MessageDAO {
       return sessionFactory.getCurrentSession();
    }
 
-   private void createNotification(Message message) {
+   public void createNotification(Message message) {
       Notification n = new Notification();
+      NotificationType notificationType = notificationDAO.getNotificationTypeByName("MESSAGE");
+      n.setNotificationType(notificationType);
       n.setSentTime(message.getTime());
       n.setPerson(message.getRecipient());
       //FIXME поправить setPerson() для установки контакта
       n.setContact(message.getRecipient().getEmail());
-      n.setNotificationType(notificationDAO.getNotificationTypeByName("MESSAGE"));
       n.setEntityId(message.getId());
       n.setReaded(false);
       notificationDAO.addNotification(n);

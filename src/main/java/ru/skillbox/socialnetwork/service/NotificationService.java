@@ -16,10 +16,7 @@ import ru.skillbox.socialnetwork.model.Notification;
 import ru.skillbox.socialnetwork.model.NotificationType;
 import ru.skillbox.socialnetwork.model.Person;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,8 +54,9 @@ public class NotificationService {
         for(Notification notification : notifications)
         {
             NotificationApi notificationApi = notificationMapper.toApi(notification);
-            notificationApi.setEntityAuthor(mapper.map(personDAO.getPersonById(notification.getEntityId()), AuthorApi.class));
+
             if(notification.getNotificationType().getName().toString().equals("FRIEND_BIRTHDAY")){
+                notificationApi.setEntityAuthor(mapper.map(personDAO.getPersonById(notification.getEntityId()), AuthorApi.class));
                 notificationApi.setInfo("День рождение друга! Поздравьте его!");
             }
             notificationApis.add(notificationApi);
@@ -115,15 +113,15 @@ public class NotificationService {
 
     private void postBdayNotifications(){
         List<Person> friends = friendsDAO.getAllFriends();
-
+        Person person = accountService.getCurrentUser();
         Date today = new Date();
+
         for(Person friend : friends){
-            if(DateUtils.isSameDay(today,friend.getBirthDate())){
+            if(isSameDay(today,friend.getBirthDate())){
                 Notification notification = new Notification();
                 NotificationType notificationType = notificationDAO.getNotificationTypeByName("FRIEND_BIRTHDAY");
                 notification.setNotificationType(notificationType);
                 notification.setSentTime(today);
-                Person person = accountService.getCurrentUser();
                 notification.setPerson(person);
                 notification.setEntityId(friend.getId());
                 notification.setContact(person.getEmail());
@@ -153,5 +151,19 @@ public class NotificationService {
 
     private int getCurrentPersonId() {
         return accountService.getCurrentUser().getId();
+    }
+
+    private boolean isSameDay(Date today, Date anotherDate){
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(today);
+
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(anotherDate);
+
+        if(cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)
+        && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)){
+            return true;
+        }
+        return false;
     }
 }

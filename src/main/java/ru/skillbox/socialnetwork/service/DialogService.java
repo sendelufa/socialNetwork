@@ -1,13 +1,6 @@
 package ru.skillbox.socialnetwork.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -307,7 +300,6 @@ public class DialogService implements PredicateOpt {
 
    public ResponseApi getMessages(int dialogId, String query, int offset, int itemPerPage) {
       List<Message> messageList = dialogDao.getMessages(dialogId, query, offset, itemPerPage);
-      //System.out.println("!!!!!!!!!!" + "\n" + messageList.isEmpty() + "\n" + "!!!!!!!!!!!!!!!!!!");
       DialogMessageListApi messageListApi = new DialogMessageListApi();
       messageListApi.setOffset(offset);
       messageListApi.setPerPage(itemPerPage);
@@ -354,6 +346,9 @@ public class DialogService implements PredicateOpt {
       message.setReadStatus(ReadStatusMessage.SENT);
       message.setDialogId(dialogId);
       messageDao.addMessage(message);
+      List<Message> messageForNotification = messageDao.getMessageForNotification(message.getAuthor(),message.getRecipient());
+      Collections.reverse(messageForNotification);
+      messageDao.createNotification(messageForNotification.get(0));
 
       MessageListItemApi messageListItemApi = new MessageListItemApi(
           message.getId(), message.getTime().getTime(), message.getMessageText(),

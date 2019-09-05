@@ -5,36 +5,32 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 
-@Configuration
-@Order(100)
-@ConditionalOnProperty(
-    value = "profile",
-    havingValue = "dev")
-public class ProfileConf {
+@Profile("dev")
+@Component
+class ProfileDev {
 
    private final String QUERY_ALL_TABLES =
        "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE();";
    private final String QUERY_COUNT_ROWS = "SELECT COUNT(*) FROM %s;";
-
+   private Logger logger = LogManager.getLogger(ProfileDev.class);
    @Autowired
    private SessionFactory sessionFactory;
 
    @Value("${socialnetwork.test-data-SQL}")
    private Resource testDataSqlPath;
 
-   @Bean
-   public void fillTestData() {
+   void fillTestData() {
       try (Session session = sessionFactory.openSession()) {
          List<String> allTables =
              session.createSQLQuery(QUERY_ALL_TABLES).list();
@@ -46,12 +42,10 @@ public class ProfileConf {
             } catch (IOException e) {
                e.printStackTrace();
             }
-            //здесь планируется загрузка SQL с тестовыми данными
-/*            System.out.println(sql.toString());
+            logger.info(sql.toString());
             session.beginTransaction();
             session.createSQLQuery(sql.toString()).executeUpdate();
-
-            session.getTransaction().commit();*/
+            session.getTransaction().commit();
          }
       }
    }

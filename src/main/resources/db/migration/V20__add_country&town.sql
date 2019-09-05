@@ -36,7 +36,7 @@ CHANGE COLUMN `country` `country` INT NULL DEFAULT NULL ;
 INSERT INTO `country` (`title_short`, `title`) VALUES ('RU', 'Россия');
 INSERT INTO `city` (`country_id`, `title`) VALUES ('1', 'Москва');
 
-  UPDATE social_network.person
+  UPDATE person
   SET city = 1, country = 1 WHERE id < 5;
 
 

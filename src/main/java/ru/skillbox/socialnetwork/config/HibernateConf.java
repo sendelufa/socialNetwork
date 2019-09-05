@@ -38,7 +38,7 @@ public class HibernateConf {
     }
 
     @Bean
-    private DataSource dataSource() {
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setUrl(jdbcURl);
         dataSource.setUsername(dbUsername);

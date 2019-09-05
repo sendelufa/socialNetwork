@@ -1,5 +1,4 @@
-﻿
-CREATE TABLE `comment_like` (
+﻿CREATE TABLE `comment_like` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `time` TIMESTAMP NOT NULL,
   `person_id` INT NOT NULL,

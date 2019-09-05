@@ -46,6 +46,7 @@ public class FriendsService {
 
    public AbstractResponse addPersonAsFriendById(FriendsParameters parameters) {
       if (friendsDAO.addPersonAsFriendById(parameters)) {
+         friendsDAO.createNotification(parameters);
          return sendOk();
       } else {
          return sendError("Не удалось добавить друга");

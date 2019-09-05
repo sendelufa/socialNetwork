@@ -103,7 +103,7 @@ public class FriendsDAO {
          dstFriend.setSrcPerson(parameters.getTarget());
          dstFriend.setDstPerson(parameters.getPerson());
          getCurrentSession().save(dstFriend);
-         createNotification(parameters);
+         //createNotification(parameters);
       } //есть реквест или отказ
       else if (source.getCode().equals(FriendshipStatusCode.DECLINED) || source.getCode()
           .equals(FriendshipStatusCode.REQUEST)) {
@@ -220,7 +220,7 @@ public class FriendsDAO {
       }
    }
 
-   private void createNotification(FriendsParameters parameters) {
+   public void createNotification(FriendsParameters parameters) {
       Notification n = new Notification();
       n.setSentTime(new Date());
       n.setPerson(parameters.getTarget());

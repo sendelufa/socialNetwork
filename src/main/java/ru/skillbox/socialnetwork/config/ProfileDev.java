@@ -43,6 +43,7 @@ class ProfileDev {
                e.printStackTrace();
             }
             logger.info(sql.toString());
+            logger.info("\t\t\tSQL TEST DATA FINISH");
             session.beginTransaction();
             session.createSQLQuery(sql.toString()).executeUpdate();
             session.getTransaction().commit();

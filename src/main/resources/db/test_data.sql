@@ -87,11 +87,7 @@ UNLOCK TABLES;
 -- Dumping data for table `notification_type`
 --
 
-LOCK TABLES `notification_type` WRITE;
-/*!40000 ALTER TABLE `notification_type` DISABLE KEYS */;
-INSERT INTO `notification_type` VALUES (1,101,'FRIEND_BIRTHDAY'),(2,102,'POST_COMMENT'),(3,103,'COMMENT_COMMENT'),(4,104,'FRIEND_REQUEST'),(5,105,'MESSAGE');
-/*!40000 ALTER TABLE `notification_type` ENABLE KEYS */;
-UNLOCK TABLES;
+
 --
 -- Dumping data for table `person`
 --

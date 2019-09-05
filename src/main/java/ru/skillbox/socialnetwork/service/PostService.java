@@ -209,7 +209,8 @@ public class PostService {
    private PostApi fillPostApi(Post post) {
       PostApi postDataApi = postMapper.toApi(post);
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
-      if (likeDAO.getLikedPost(getCurrentPersonId(), post.getId()) == null) postDataApi.setMyLike(false);
+      if (likeDAO.getLikedPost(getCurrentPersonId(), post.getId()) == null)
+          postDataApi.setMyLike(false);
       else postDataApi.setMyLike(true);
       return postDataApi;
    }
@@ -217,7 +218,9 @@ public class PostService {
    private CommentApi fillCommentApi(PostComment comment) {
       CommentApi commentApi = postCommentMapper.toApi(comment);
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
-      if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null) commentApi.setMyLike(false);
+      commentApi.setLikes(postDAO.getLikesCountOfComment(comment.getId()));
+      if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null)
+          commentApi.setMyLike(false);
       else commentApi.setMyLike(true);
       return commentApi;
    }

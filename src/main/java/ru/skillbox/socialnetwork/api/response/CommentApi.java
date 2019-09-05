@@ -21,6 +21,7 @@ public class CommentApi extends AbstractResponse{
   private boolean isBlocked;
   @JsonProperty("my_like")
   private boolean myLike;
+  private long likes;
   @JsonProperty("sub_comments")
   private List<SubCommentApi> subComments;
 
@@ -102,5 +103,13 @@ public class CommentApi extends AbstractResponse{
 
   public void setSubComments(List<SubCommentApi> subComments) {
     this.subComments = subComments;
+  }
+
+  public long getLikes() {
+    return likes;
+  }
+
+  public void setLikes(long likes) {
+    this.likes = likes;
   }
 }

@@ -127,6 +127,11 @@ public class PostDAO {
       return (long) getCurrentSession().createQuery(query).uniqueResult();
    }
 
+   public long getLikesCountOfComment(int id) {
+      String query = String.format("select count(*) from CommentLike likes where likes.postComment=%d", id);
+      return (long) getCurrentSession().createQuery(query).uniqueResult();
+   }
+
    public PostComment getCommentById(int id) {
       return getCurrentSession().get(PostComment.class, id);
    }

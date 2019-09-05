@@ -2,16 +2,19 @@ package ru.skillbox.socialnetwork.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.skillbox.socialnetwork.api.request.RequestLikeApi;
 import ru.skillbox.socialnetwork.api.response.AbstractResponse;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.request.RequestLikeApi;
 import ru.skillbox.socialnetwork.api.response.LikeApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.LikeDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
 import ru.skillbox.socialnetwork.model.*;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class LikeService {
@@ -89,7 +92,6 @@ public class LikeService {
             PostLike postLike = new PostLike();
             postLike.setTime(new Date());
 
-
             Person person = accountService.getCurrentUser();
             postLike.setPerson(person);
 
@@ -101,12 +103,16 @@ public class LikeService {
                 return response;
             }
             postLike.setPost(post);
+
             List<PostLike> postLikes = likeDAO.getPostLikesListByPostId(post.getId());
-            postLikes.forEach(like -> {
-                if (person == like.getPerson())
-                    likeDAO.deletePostLike(like);
-                else likeDAO.addPostLike(postLike);
-            });
+            if(!postLikes.isEmpty())
+                postLikes.forEach(like -> {
+                    if (person == like.getPerson())
+                        likeDAO.deletePostLike(like);
+                    else likeDAO.addPostLike(postLike);
+                });
+            else likeDAO.addPostLike(postLike);
+
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;
@@ -127,12 +133,13 @@ public class LikeService {
             commentLike.setPostComment(postComment);
 
             List<CommentLike> commentLikes = likeDAO.getCommentLikesListByCommentId(postComment.getId());
-            commentLikes.forEach(l -> {
-                if (person == l.getPerson())
-                    likeDAO.deleteCommentLike(l);
-                else likeDAO.addCommentLike(commentLike);
-            });
-
+            if(!commentLikes.isEmpty())
+                commentLikes.forEach(l -> {
+                    if (person == l.getPerson())
+                        likeDAO.deleteCommentLike(l);
+                    else likeDAO.addCommentLike(commentLike);
+                });
+            else likeDAO.addCommentLike(commentLike);
             response = new ResponseApi("string", System.currentTimeMillis(), new LikeApi.BitLikes(1));
             response.setSuccess(true);
             return response;

@@ -60,10 +60,17 @@ public class PersonDAO {
       Date dateFrom;
       Criteria criteria = getCurrentSession().createCriteria(Person.class);
       if (!parameters.getFirst_name().isEmpty()) {
-         criteria.add(Restrictions.like("firstName", parameters.getFirst_name()));
+         criteria.add(Restrictions.like("firstName", "%" + parameters.getFirst_name() + "%"));
       }
       if (!parameters.getLast_name().isEmpty()) {
-         criteria.add(Restrictions.like("lastName", parameters.getLast_name()));
+         criteria.add(Restrictions.like("lastName", "%" + parameters.getLast_name() + "%"));
+      }
+      //TODO: Переделать когда с фронта будет приходить город и страна как название, а не id
+      if (false) {
+         criteria.add(Restrictions.like("country", "%" + parameters.getCountry_id() + "%"));
+      }
+      if (false) {
+         criteria.add(Restrictions.like("city", "%" + parameters.getCity_id() + "%"));
       }
 
       calendar = Calendar.getInstance();

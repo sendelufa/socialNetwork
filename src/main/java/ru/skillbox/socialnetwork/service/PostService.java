@@ -155,7 +155,7 @@ public class PostService {
 
   public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
 
-    notificationDAO.addNotification(createNotification(postCommentApi));
+
 
     PostComment postComment = new PostComment();
     postComment.setCommentText(postCommentApi.getComment_text());
@@ -165,7 +165,10 @@ public class PostService {
     postComment.setTime(date);
     postComment.setAuthor(accountService.getCurrentUser());
     postComment.setBlocked(postCommentApi.isIs_blocked());
+    postComment.setDeleted(postCommentApi.isIs_deleted());
     postDAO.addComment(postComment);
+
+    notificationDAO.addNotification(createNotification(postCommentApi));
     return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
   }
 
@@ -222,6 +225,7 @@ public class PostService {
       if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null)
           commentApi.setMyLike(false);
       else commentApi.setMyLike(true);
+      commentApi.setIs_deleted(comment.isDeleted());
       return commentApi;
    }
 

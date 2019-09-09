@@ -19,6 +19,7 @@ public class CommentApi extends AbstractResponse{
   private String commentText;
   @JsonProperty("is_blocked")
   private boolean isBlocked;
+  private boolean is_deleted;
   @JsonProperty("my_like")
   private boolean myLike;
   private long likes;
@@ -111,5 +112,13 @@ public class CommentApi extends AbstractResponse{
 
   public void setLikes(long likes) {
     this.likes = likes;
+  }
+
+  public boolean isIs_deleted() {
+    return is_deleted;
+  }
+
+  public void setIs_deleted(boolean is_deleted) {
+    this.is_deleted = is_deleted;
   }
 }

@@ -10,6 +10,7 @@ public class PostCommentApi {
     private long time;
     private ru.skillbox.socialnetwork.api.response.PersonApi author;
     private boolean is_blocked;
+    private boolean is_deleted;
 
     public int getId() {
         return id;
@@ -57,5 +58,13 @@ public class PostCommentApi {
 
     public void setIs_blocked(boolean is_blocked) {
         this.is_blocked = is_blocked;
+    }
+
+    public boolean isIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
     }
 }

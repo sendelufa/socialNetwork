@@ -65,12 +65,11 @@ public class PersonDAO {
       if (!parameters.getLast_name().isEmpty()) {
          criteria.add(Restrictions.like("lastName", "%" + parameters.getLast_name() + "%"));
       }
-      //TODO: Переделать когда с фронта будет приходить город и страна как название, а не id
-      if (false) {
-         criteria.add(Restrictions.like("country", "%" + parameters.getCountry_id() + "%"));
+      if (!parameters.getCountry().isEmpty()) {
+         criteria.add(Restrictions.like("country", "%" + parameters.getCountry() + "%"));
       }
-      if (false) {
-         criteria.add(Restrictions.like("city", "%" + parameters.getCity_id() + "%"));
+      if (!parameters.getCity().isEmpty()) {
+         criteria.add(Restrictions.like("city", "%" + parameters.getCity() + "%"));
       }
 
       calendar = Calendar.getInstance();

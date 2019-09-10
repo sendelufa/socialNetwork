@@ -9,7 +9,6 @@ import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
-import ru.skillbox.socialnetwork.mapper.PersonMapper;
 import ru.skillbox.socialnetwork.model.*;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
@@ -29,9 +28,6 @@ public class ProfileService {
    private PostDAO postDAO;
    @Autowired
    private ModelMapper modelMapper;
-   //TODO: заглушка, чтобы отображались найденные польозователи
-   @Autowired
-   private PersonMapper personMapper;
 
    @Autowired
    private AccountService accountService;
@@ -211,7 +207,7 @@ public class ProfileService {
       List<Person> personsFromDB = personDAO.getPersonsByParameters(parameters);
       personListApi.setData(personsFromDB.stream()
                         //TODO: заглушка, чтобы отображались найденные польозователи
-                        .map(person -> personMapper.toApi(person))
+                        .map(person -> modelMapper.map(person, PersonApi.class))
                         .collect(Collectors.toList()));
       personListApi.setTotal(personsFromDB.size());
       personListApi.setOffset(parameters.getOffset());
@@ -254,18 +250,12 @@ public class ProfileService {
    public PersonApi map(Person person) {
       PersonApi personApi = modelMapper.map(person, PersonApi.class);
       try {
-         CityApi city = new CityApi();
-         city.setId(1);
-         city.setTitle(person.getCity());
-         personApi.setCity(city);
+         personApi.setCity(person.getCity());
       } catch (NullPointerException e) {
 
       }
       try {
-         CountryApi country = new CountryApi();
-         country.setId(1);
-         country.setTitle(person.getCountry());
-         personApi.setCountry(country);
+         personApi.setCountry(person.getCountry());
       } catch (NullPointerException e) {
 
       }

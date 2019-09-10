@@ -3,16 +3,6 @@ package ru.skillbox.socialnetwork.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -24,14 +14,23 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import ru.skillbox.socialnetwork.api.response.CityApi;
-import ru.skillbox.socialnetwork.api.response.CountryApi;
 import ru.skillbox.socialnetwork.api.response.ErrorApi;
 import ru.skillbox.socialnetwork.api.response.PersonApi;
 import ru.skillbox.socialnetwork.api.response.ResponseApi;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.model.Person;
 import ru.skillbox.socialnetwork.model.User;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Date;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class JwtUsernameAndPasswordAuthenticationFilter extends
     UsernamePasswordAuthenticationFilter {
@@ -136,12 +135,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends
             personApi.setPhoto(person.getPhoto());
             personApi.setAbout(person.getAbout());
             if (person.getCity() != null) {
-               personApi.setCity(
-                   new CityApi(1, person.getCity()));
+               personApi.setCity(person.getCity());
             }
             if (person.getCountry() != null) {
-               personApi.setCountry(
-                   new CountryApi(1, person.getCountry()));
+               personApi.setCountry(person.getCountry());
             }
             personApi.setMessages_permission(person.getMessagesPermission());
             Optional.ofNullable(person.getLastOnlineTime())

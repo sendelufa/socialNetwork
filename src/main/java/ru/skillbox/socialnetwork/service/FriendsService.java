@@ -1,23 +1,16 @@
 package ru.skillbox.socialnetwork.service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.skillbox.socialnetwork.api.dto.FriendsParameters;
-import ru.skillbox.socialnetwork.api.response.AbstractResponse;
-import ru.skillbox.socialnetwork.api.response.CityApi;
-import ru.skillbox.socialnetwork.api.response.CountryApi;
-import ru.skillbox.socialnetwork.api.response.ErrorApi;
-import ru.skillbox.socialnetwork.api.response.FriendsApi;
-import ru.skillbox.socialnetwork.api.response.FriendshipStatusApi;
-import ru.skillbox.socialnetwork.api.response.IsFriendsApi;
-import ru.skillbox.socialnetwork.api.response.PersonApi;
-import ru.skillbox.socialnetwork.api.response.ResponseApi;
+import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.model.Friendship;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FriendsService {
@@ -97,8 +90,8 @@ public class FriendsService {
       api.setPhone(f.getDstPerson().getPhone());
       api.setPhoto(f.getDstPerson().getPhoto());
       api.setAbout(f.getDstPerson().getAbout());
-      api.setCity(new CityApi(1, f.getDstPerson().getCity()));
-      api.setCountry(new CountryApi(1, f.getDstPerson().getCountry()));
+      api.setCity(f.getDstPerson().getCity());
+      api.setCountry(f.getDstPerson().getCountry());
       api.setMessages_permission(f.getDstPerson().getMessagesPermission());
       api.setLast_online_time(f.getDstPerson().getLastOnlineTime().getTime());
       api.setIs_blocked(f.getDstPerson().isBlocked());

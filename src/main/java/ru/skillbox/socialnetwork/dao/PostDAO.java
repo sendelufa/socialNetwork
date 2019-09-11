@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 @Repository
 @Transactional
@@ -25,8 +26,10 @@ public class PostDAO {
 
    @Autowired
    private SessionFactory sessionFactory;
+  @Autowired
+  private AccountService accountService;
 
-   public void addPost(Post post) {
+  public void addPost(Post post) {
       getCurrentSession().save(post);
    }
 
@@ -46,6 +49,11 @@ public class PostDAO {
       queryWhere += postParameters.getText() != null ?
           String.format(" locate('%s', p.postText, 1) > 0 AND ", postParameters.getText()) : "";
 
+      if (postParameters.getId() != accountService.getCurrentUser().getId()) {
+        queryWhere += " time < CURRENT_DATE() AND ";
+
+      }
+
       String query = String.format("from Post p where "
               + queryWhere
               + " p.isDeleted = false ORDER BY p.time DESC",
@@ -59,7 +67,8 @@ public class PostDAO {
    }
 
    public List<Post> getFeed(List<Integer> authorList, PostParameters postParameters) {
-      Query query = getCurrentSession().createQuery("from Post p where author_id in (:authorId) AND time < :nowDate ORDER BY p.time DESC");
+      Query query = getCurrentSession().createQuery("from Post p where  p.isDeleted = false AND "
+          + "author_id in (:authorId) AND time < :nowDate ORDER BY p.time DESC");
       query.setParameterList("authorId", authorList);
       query.setParameter("nowDate", new Date());
       query.setFirstResult(postParameters.getOffset());

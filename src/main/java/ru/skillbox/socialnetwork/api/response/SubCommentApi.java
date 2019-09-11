@@ -16,6 +16,9 @@ public class SubCommentApi extends AbstractResponse {
 
     private AuthorApi author;
 
+    @JsonProperty("is_deleted")
+    private boolean isDeleted;
+
     @JsonProperty("is_blocked")
     private Boolean isBlocked;
 
@@ -65,5 +68,13 @@ public class SubCommentApi extends AbstractResponse {
 
     public void setBlocked(Boolean blocked) {
         isBlocked = blocked;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 }

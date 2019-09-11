@@ -6,8 +6,8 @@ public class PersonParameters {
     private String last_name;
     private int age_from;
     private int age_to;
-    private int country_id;
-    private int city_id;
+    private String country;
+    private String city;
     private int offset;
 
     /**
@@ -21,13 +21,13 @@ public class PersonParameters {
     }
 
     public PersonParameters(String first_name, String last_name, int age_from, int age_to,
-        int country_id, int city_id, int offset, int itemPerPage) {
+                            String country, String city, int offset, int itemPerPage) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.age_from = age_from;
         this.age_to = age_to;
-        this.country_id = country_id;
-        this.city_id = city_id;
+        this.country = country;
+        this.city = city;
         this.offset = offset;
         this.itemPerPage = itemPerPage;
     }
@@ -65,20 +65,20 @@ public class PersonParameters {
         this.age_to = age_to;
     }
 
-    public int getCountry_id() {
-        return country_id;
+    public String getCountry() {
+        return country;
     }
 
-    public void setCountry_id(int country_id) {
-        this.country_id = country_id;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public int getCity_id() {
-        return city_id;
+    public String getCity() {
+        return city;
     }
 
-    public void setCity_id(int city_id) {
-        this.city_id = city_id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public int getOffset() {

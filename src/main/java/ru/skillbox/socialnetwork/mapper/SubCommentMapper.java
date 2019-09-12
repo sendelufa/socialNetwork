@@ -49,6 +49,9 @@ public class SubCommentMapper extends Mapper<PostComment, SubCommentApi> {
         if (!Objects.isNull(source.getAuthor())) {
             destination.setAuthor(modelMapper.map(source.getAuthor(), AuthorApi.class));
         }
+
+        destination.setDeleted(source.isDeleted());
+
     }
 
     @Override

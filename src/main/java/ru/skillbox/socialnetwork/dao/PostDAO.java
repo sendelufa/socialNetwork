@@ -154,6 +154,14 @@ public class PostDAO {
       getCurrentSession().update(comment);
    }
 
+   public PostComment getLastComment(int id){
+      String query = String.format("FROM PostComment comment where comment.author.id=%d ORDER BY id DESC", id);
+      TypedQuery<PostComment> q = getCurrentSession().createQuery(query, PostComment.class);
+      q.setMaxResults(1);
+
+      return q.getSingleResult();
+   }
+
    private Session getCurrentSession() {
       return sessionFactory.getCurrentSession();
    }

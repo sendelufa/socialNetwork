@@ -9,6 +9,7 @@ import ru.skillbox.socialnetwork.api.response.*;
 import ru.skillbox.socialnetwork.dao.FriendsDAO;
 import ru.skillbox.socialnetwork.dao.PersonDAO;
 import ru.skillbox.socialnetwork.dao.PostDAO;
+import ru.skillbox.socialnetwork.dao.TagDAO;
 import ru.skillbox.socialnetwork.model.*;
 import ru.skillbox.socialnetwork.model.enumeration.FriendshipStatusCode;
 
@@ -26,6 +27,8 @@ public class ProfileService {
    private FriendsDAO friendsDAO;
    @Autowired
    private PostDAO postDAO;
+   @Autowired
+   private TagDAO tagDAO;
    @Autowired
    private ModelMapper modelMapper;
 
@@ -181,7 +184,10 @@ public class ProfileService {
       post.setTime(date);
       post.setTags(newPost.getTags()
           .stream()
-          .map(Tag::new)
+          .map(tag -> {
+             Tag searchTag = tagDAO.getSearchTag(tag);
+             return searchTag == null ? new Tag(tag) : searchTag;
+          })
           .collect(Collectors.toList()));
       List<PostComment> comments = new ArrayList<>();
       post.setPostComments(comments);

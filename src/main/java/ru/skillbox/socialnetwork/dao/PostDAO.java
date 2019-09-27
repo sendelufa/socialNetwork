@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.skillbox.socialnetwork.api.dto.PostParameters;
 import ru.skillbox.socialnetwork.model.Post;
 import ru.skillbox.socialnetwork.model.PostComment;
+import ru.skillbox.socialnetwork.service.AccountService;
 
 @Repository
 @Transactional
@@ -25,8 +26,10 @@ public class PostDAO {
 
    @Autowired
    private SessionFactory sessionFactory;
+  @Autowired
+  private AccountService accountService;
 
-   public void addPost(Post post) {
+  public void addPost(Post post) {
       getCurrentSession().save(post);
    }
 
@@ -46,6 +49,11 @@ public class PostDAO {
       queryWhere += postParameters.getText() != null ?
           String.format(" locate('%s', p.postText, 1) > 0 AND ", postParameters.getText()) : "";
 
+      if (postParameters.getId() != accountService.getCurrentUser().getId()) {
+        queryWhere += " time < CURRENT_DATE() AND ";
+
+      }
+
       String query = String.format("from Post p where "
               + queryWhere
               + " p.isDeleted = false ORDER BY p.time DESC",
@@ -59,7 +67,8 @@ public class PostDAO {
    }
 
    public List<Post> getFeed(List<Integer> authorList, PostParameters postParameters) {
-      Query query = getCurrentSession().createQuery("from Post p where author_id in (:authorId) AND time < :nowDate ORDER BY p.time DESC");
+      Query query = getCurrentSession().createQuery("from Post p where  p.isDeleted = false AND "
+          + "author_id in (:authorId) AND time < :nowDate ORDER BY p.time DESC");
       query.setParameterList("authorId", authorList);
       query.setParameter("nowDate", new Date());
       query.setFirstResult(postParameters.getOffset());
@@ -127,6 +136,11 @@ public class PostDAO {
       return (long) getCurrentSession().createQuery(query).uniqueResult();
    }
 
+   public long getLikesCountOfComment(int id) {
+      String query = String.format("select count(*) from CommentLike likes where likes.postComment=%d", id);
+      return (long) getCurrentSession().createQuery(query).uniqueResult();
+   }
+
    public PostComment getCommentById(int id) {
       return getCurrentSession().get(PostComment.class, id);
    }
@@ -138,6 +152,14 @@ public class PostDAO {
    public void deleteComment(PostComment comment) {
       comment.setDeleted(true);
       getCurrentSession().update(comment);
+   }
+
+   public PostComment getLastComment(int id){
+      String query = String.format("FROM PostComment comment where comment.author.id=%d ORDER BY id DESC", id);
+      TypedQuery<PostComment> q = getCurrentSession().createQuery(query, PostComment.class);
+      q.setMaxResults(1);
+
+      return q.getSingleResult();
    }
 
    private Session getCurrentSession() {

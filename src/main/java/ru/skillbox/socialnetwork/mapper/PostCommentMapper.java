@@ -64,6 +64,7 @@ public class PostCommentMapper extends Mapper<PostComment, CommentApi> {
             destination.setAuthor(modelMapper.map(source.getAuthor(), AuthorApi.class));
         }
 
+        destination.setIs_deleted(source.isDeleted());
 
         if (!Objects.isNull(source.getPostComments())) {
             List<SubCommentApi> subCommentApiList = new ArrayList<>();

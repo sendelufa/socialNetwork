@@ -155,7 +155,7 @@ public class PostService {
 
   public ResponseApi createComment(Integer postId, PostCommentApi postCommentApi) {
 
-    notificationDAO.addNotification(createNotification(postCommentApi));
+    Person author = accountService.getCurrentUser();
 
     PostComment postComment = new PostComment();
     postComment.setCommentText(postCommentApi.getComment_text());
@@ -163,9 +163,13 @@ public class PostService {
     postComment.setPost(postDAO.getPostById(postId));
     Date date = new Date();
     postComment.setTime(date);
-    postComment.setAuthor(accountService.getCurrentUser());
+    postComment.setAuthor(author);
     postComment.setBlocked(postCommentApi.isIs_blocked());
+    postComment.setDeleted(postCommentApi.isIs_deleted());
     postDAO.addComment(postComment);
+
+    PostComment forNotification = postDAO.getLastComment(author.getId());
+    notificationDAO.addNotification(createNotification(forNotification));
     return new ResponseApi("none", new Date().getTime(), fillCommentApi(postComment));
   }
 
@@ -209,7 +213,8 @@ public class PostService {
    private PostApi fillPostApi(Post post) {
       PostApi postDataApi = postMapper.toApi(post);
       postDataApi.setLikes(postDAO.getLikesNumber(post.getId()));
-      if (likeDAO.getLikedPost(getCurrentPersonId(), post.getId()) == null) postDataApi.setMyLike(false);
+      if (likeDAO.getLikedPost(getCurrentPersonId(), post.getId()) == null)
+          postDataApi.setMyLike(false);
       else postDataApi.setMyLike(true);
       return postDataApi;
    }
@@ -217,23 +222,26 @@ public class PostService {
    private CommentApi fillCommentApi(PostComment comment) {
       CommentApi commentApi = postCommentMapper.toApi(comment);
       commentApi.setParentId(comment.getParent() == null ? null : comment.getParent().getId());
-      if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null) commentApi.setMyLike(false);
+      commentApi.setLikes(postDAO.getLikesCountOfComment(comment.getId()));
+      if (likeDAO.getLikedComment(getCurrentPersonId(), comment.getId()) == null)
+          commentApi.setMyLike(false);
       else commentApi.setMyLike(true);
+      commentApi.setIs_deleted(comment.isDeleted());
       return commentApi;
    }
 
-  private Notification createNotification(PostCommentApi api) {
+  private Notification createNotification(PostComment comment) {
     Notification n = new Notification();
     n.setSentTime(new Date());
     Person p = accountService.getCurrentUser();
     n.setPerson(p);
     n.setContact(p.getEmail());
-    if(api.getParent_id() == 0){
+    if(comment.getParent() == null || comment.getParent().getId() == 0){
       n.setNotificationType(notificationDAO.getNotificationTypeByName("POST_COMMENT"));
-      n.setEntityId(api.getId());
+      n.setEntityId(comment.getId());
     } else {
       n.setNotificationType(notificationDAO.getNotificationTypeByName("COMMENT_COMMENT"));
-      n.setEntityId(api.getParent_id());
+      n.setEntityId(comment.getId());
     }
     n.setReaded(false);
     return n;

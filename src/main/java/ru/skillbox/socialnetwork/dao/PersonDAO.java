@@ -60,10 +60,16 @@ public class PersonDAO {
       Date dateFrom;
       Criteria criteria = getCurrentSession().createCriteria(Person.class);
       if (!parameters.getFirst_name().isEmpty()) {
-         criteria.add(Restrictions.like("firstName", parameters.getFirst_name()));
+         criteria.add(Restrictions.like("firstName", "%" + parameters.getFirst_name() + "%"));
       }
       if (!parameters.getLast_name().isEmpty()) {
-         criteria.add(Restrictions.like("lastName", parameters.getLast_name()));
+         criteria.add(Restrictions.like("lastName", "%" + parameters.getLast_name() + "%"));
+      }
+      if (!parameters.getCountry().isEmpty()) {
+         criteria.add(Restrictions.like("country", "%" + parameters.getCountry() + "%"));
+      }
+      if (!parameters.getCity().isEmpty()) {
+         criteria.add(Restrictions.like("city", "%" + parameters.getCity() + "%"));
       }
 
       calendar = Calendar.getInstance();

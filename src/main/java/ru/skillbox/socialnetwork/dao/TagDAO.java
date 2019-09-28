@@ -25,6 +25,12 @@ public class TagDAO {
       return getCurrentSession().createQuery("from Tag t").list();
    }
 
+   public Tag getSearchTag(String tag) {
+      String query = "from Tag t where tag = '" + tag + "'";
+      List<Tag> list = getCurrentSession().createQuery(query).list();
+      return list.size() > 0 ? list.get(0) : null;
+   }
+
    public List<Post> getPostsbyTag(String tag) {
       String query = String.format("select t.posts Tag t where t.tag=%s", tag);
       Query q = getCurrentSession().createQuery(query);
